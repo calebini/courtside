@@ -1,0 +1,148 @@
+{
+  "action_taken": "injected_into_next_round_context",
+  "affected_sections": [
+    "Audit Configuration",
+    "Authoritative Result Corrections",
+    "Authorization",
+    "Authorization Configuration",
+    "Core Mutation Authority",
+    "Game Lifecycle",
+    "Game and Venue Configuration",
+    "General Lifecycle Failure Rule",
+    "Player Management Lifecycle",
+    "Season Configuration Lifecycle"
+  ],
+  "contract_families": [
+    "artifact/report-contract",
+    "failure-semantics",
+    "ordering/determinism",
+    "replay-contract",
+    "schema/data-contract",
+    "validation/error-contract"
+  ],
+  "detected": true,
+  "draft_hash": "d59bef233141db85dae6d2f1131adf97772dc543383119017b6e81d50c9758d8",
+  "generated_at": "2026-08-06T20:01:27.789411+00:00",
+  "lifecycle_status": "operator_review_recommended",
+  "next_round_number": 20,
+  "profile": "vertical",
+  "profile_rounds_observed": 4,
+  "recent_window": 4,
+  "recommendation": "synthesis_pass_recommended",
+  "requires_operator_action": true,
+  "resolution_round_number": null,
+  "round_evidence": [
+    {
+      "affected_sections": [
+        "Authorization",
+        "Authorization Configuration",
+        "Core Mutation Authority",
+        "Player Management Lifecycle"
+      ],
+      "blocker_count": 0,
+      "contract_families": [
+        "schema/data-contract",
+        "validation/error-contract"
+      ],
+      "major_count": 1,
+      "minor_count": 0,
+      "round_number": 4,
+      "serious_feedback_ids": [
+        "structural_integrity:fb_profile_fields_contract_001"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Audit Configuration",
+        "Authoritative Result Corrections",
+        "Season Configuration Lifecycle"
+      ],
+      "blocker_count": 0,
+      "contract_families": [
+        "artifact/report-contract",
+        "ordering/determinism",
+        "replay-contract",
+        "schema/data-contract"
+      ],
+      "major_count": 1,
+      "minor_count": 0,
+      "round_number": 8,
+      "serious_feedback_ids": [
+        "structural_integrity:fb_001"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Game Lifecycle",
+        "Game and Venue Configuration",
+        "General Lifecycle Failure Rule"
+      ],
+      "blocker_count": 0,
+      "contract_families": [
+        "artifact/report-contract",
+        "failure-semantics",
+        "ordering/determinism",
+        "schema/data-contract",
+        "validation/error-contract"
+      ],
+      "major_count": 1,
+      "minor_count": 0,
+      "round_number": 12,
+      "serious_feedback_ids": [
+        "operability:fb_operability_011_001"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Audit Configuration",
+        "Authoritative Result Corrections"
+      ],
+      "blocker_count": 0,
+      "contract_families": [
+        "artifact/report-contract",
+        "ordering/determinism",
+        "schema/data-contract"
+      ],
+      "major_count": 1,
+      "minor_count": 1,
+      "round_number": 19,
+      "serious_feedback_ids": [
+        "determinism:fb_det_017_001"
+      ]
+    }
+  ],
+  "round_number": 19,
+  "serious_recent_rounds": 4,
+  "suspected_feedback_ids": [
+    "structural_integrity:fb_profile_fields_contract_001",
+    "structural_integrity:fb_001",
+    "operability:fb_operability_011_001",
+    "determinism:fb_det_017_001"
+  ],
+  "synthesis_pass_executed": false,
+  "synthesis_scope": {
+    "contract_families": [
+      "artifact/report-contract",
+      "failure-semantics",
+      "ordering/determinism",
+      "replay-contract",
+      "schema/data-contract",
+      "validation/error-contract"
+    ],
+    "instruction": "Suspend narrow patching for this surface. Ask the Editor for a bounded synthesis pass over the listed sections and contract families, preserving the full draft output contract.",
+    "sections": [
+      "Audit Configuration",
+      "Authoritative Result Corrections",
+      "Authorization",
+      "Authorization Configuration",
+      "Core Mutation Authority",
+      "Game Lifecycle",
+      "Game and Venue Configuration",
+      "General Lifecycle Failure Rule",
+      "Player Management Lifecycle",
+      "Season Configuration Lifecycle"
+    ]
+  },
+  "terminal_effect": "none",
+  "type": "EXPANDING_CONTRACT_SURFACE"
+}

@@ -1,0 +1,126 @@
+{
+  "draft_hash": "1b3087bbf7918b47cb40a3d650feb39329f2297a78452b0f4255b4bf148e9b22",
+  "feedback": [
+    {
+      "affected_sections": [
+        "specs/lifecycle.md: Season Configuration Lifecycle",
+        "specs/config.md: Playoff Configuration",
+        "specs/config.md: Authorization Configuration"
+      ],
+      "authority_impact": "major",
+      "baseline_severity": "major",
+      "claim": "Frozen Season configuration amendments are authorized and versioned, but the draft does not define legal amendment boundaries or invalid-amendment handling when an amended result-affecting configuration would conflict with existing authoritative playoff state.",
+      "determinism_impact": "major",
+      "evidence": "The Season Configuration Lifecycle says a League Administrator may amend frozen configuration by creating a new version and Audit Record, and that recalculation under an amended version applies to every affected derived projection. The same section defines result-affecting configuration to include playoff Round structure, aggregate advancement, and aggregate-tiebreak policies. Playoff correction conflicts caused by Game-result corrections have explicit reject-or-resolve handling, but no equivalent rule states whether a frozen configuration amendment that changes bracket structure, configured Games per Matchup, slot sources, advancement rule, or tiebreak policy after authoritative playoff Games is rejected, accepted with a resolution report, or allowed to halt advancement.",
+      "feedback_id": "structural_integrity:fb_001",
+      "in_scope": true,
+      "invariant_violated": "state_legality",
+      "issue_fingerprint": "da8309e8d3e4e5397393725bc4af8fca2bbe560519875aa9e68d5073229e3360",
+      "issue_id": "iss_da8309e8d3e4e539",
+      "issue_type": "state_machine_legality",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Add a legality rule for frozen result-affecting configuration amendments after authoritative outcomes exist. At minimum, specify which playoff-affecting amendments are prohibited once dependent authoritative Games exist, and require any permitted amendment that changes participant slots, Matchup completion, aggregate outcome, or downstream advancement to use the same preserve-state rejection or same-action administrative resolution semantics already defined for playoff correction conflicts.",
+      "rubric_impact": "major",
+      "severity_rationale": "This is in scope under the frozen-configuration amendment and correction-cascade surface. It is major because the main authority and versioning model exists, but this missing transition rule can cause divergent implementations or corrupt derived playoff state during an authorized administrative amendment."
+    },
+    {
+      "affected_sections": [
+        "specs/lifecycle.md#Season Configuration Lifecycle",
+        "specs/config.md#Authority and Precedence",
+        "specs/invariants.md#Configuration and Reproducibility"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "major",
+      "claim": "The configuration-freeze rule does not define idempotent or concurrent behavior when the first authoritative Season Game outcome is accepted, so repeated or concurrent finalization attempts could create different frozen configuration versions for the same Season.",
+      "determinism_impact": "major",
+      "evidence": "The draft says, \"The first transition of any Season Game to `final` or `forfeit` freezes a versioned snapshot\" and \"The first authoritative Season Game outcome freezes all result-affecting values into a versioned Season snapshot.\" It does not specify that the freeze is single-per-Season, that retries reuse the existing snapshot, or what happens when two Game transitions race while no frozen version exists. The scope contract includes frozen configuration amendment and correction cascades, deterministic calculations, configuration versioning, and obvious domain failure categories as in scope.",
+      "feedback_id": "determinism:fb_det_001",
+      "in_scope": true,
+      "invariant_violated": "replay_idempotency",
+      "issue_fingerprint": "6c1c47735ed40d0e5fe776611b4d839562e96a33fdb0829169657fc41d736f5b",
+      "issue_id": "iss_6c1c47735ed40d0e",
+      "issue_type": "determinism_gap",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Define the freeze as an idempotent single Season operation: once any `final` or `forfeit` transition has accepted and created the frozen result-affecting configuration version, all later or retried authoritative Game transitions for that Season must reference that same frozen version. Specify concurrent first-freeze handling, such as accepting exactly one snapshot creation and requiring competing attempts to either reuse the created snapshot if their submitted configuration basis matches or reject without mutating authoritative state if they depended on a different mutable configuration state.",
+      "rubric_impact": "major",
+      "severity_rationale": "This affects an in-scope core flow and can cause divergent configuration version lineage, standings, and playoff replay results across implementations under retries or concurrent finalization."
+    },
+    {
+      "affected_sections": [
+        "specs/lifecycle.md#Standings Lifecycle",
+        "specs/config.md#Standings Configuration"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "major",
+      "claim": "The stable random-draw tie-context identity depends on comparing Season Team canonical identities by \"normalized codepoint order,\" but the normalization rule is undefined, leaving tie-context identity and draw reuse non-portable across implementers.",
+      "determinism_impact": "major",
+      "evidence": "The draft says canonical tie order is \"the ascending order of each Season Team's immutable canonical domain identity as assigned when the Season Team is created, compared by normalized codepoint order\" and that the tie-context identity is composed from that order. It also says the identity must not depend on display name, creation timestamp, storage order, locale collation, or mutable seed position. However, it does not define the normalization form, allowed identity character set, case handling, byte encoding, or comparison algorithm. The scope contract places standings inputs, ranking, random draw, and reproducibility in scope.",
+      "feedback_id": "determinism:fb_det_002",
+      "in_scope": true,
+      "invariant_violated": "deterministic_behavior",
+      "issue_fingerprint": "a81267ad27177372508f579d9e7d8c6d3bef96eb680249fd52ef3f574769f71d",
+      "issue_id": "iss_a81267ad27177372",
+      "issue_type": "determinism_gap",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Make the canonical identity comparison rule fully deterministic. For example, require immutable Season Team canonical domain identities used in tie-context ordering to be ASCII-only opaque identifiers compared byte-for-byte in ascending order, or specify an exact Unicode normalization form, encoding, case-sensitivity rule, and codepoint comparison algorithm. Then state that the stable tie-context identity uses this canonical ordered list exactly for replay, deduplication, and duplicate draw rejection.",
+      "rubric_impact": "major",
+      "severity_rationale": "Random-draw reuse and duplicate rejection are in the MVP determinism surface. Ambiguous identity ordering can cause two correct-looking implementations to compute different stable tie contexts and perform different persisted draws."
+    },
+    {
+      "affected_sections": [
+        "General Lifecycle Failure Rule",
+        "Core Mutation Authority",
+        "Authorization"
+      ],
+      "authority_impact": "major",
+      "baseline_severity": "major",
+      "claim": "Unauthorized mutation attempts are required to be rejected, but the draft does not define the required rejection report contents for authorization failures, leaving operators without a deterministic handoff record for denied mutations.",
+      "determinism_impact": "minor",
+      "evidence": "The General Lifecycle Failure Rule defines report fields for invalid lifecycle transitions and in-scope invariant/configuration validation failures, including entity, current state or condition, requested mutation, actor, violated rule, and state preservation. The Authorization invariant later says unauthorized mutation attempts are rejected without mutating authoritative state, but it does not require an equivalent rejection report identifying the actor, scope, attempted authority, denied rule, and preservation outcome. The scope contract keeps scoped authorization and obvious domain failure categories in scope at required_fields depth.",
+      "feedback_id": "operability:fb_operability_001",
+      "in_scope": true,
+      "invariant_violated": "failure_handling",
+      "issue_fingerprint": "3a37f4f668606e2501e627a3a430ec28fed33b2dbadf882df7da6f906b0fd0f8",
+      "issue_id": "iss_3a37f4f668606e25",
+      "issue_type": "missing_failure_report",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Add authorization failures to the General Lifecycle Failure Rule or Authorization section with the same preserve-state reporting semantics: identify the actor, affected League/Season/Season Team/Player/Game scope, attempted mutation, missing or insufficient authority, violated authority rule, and confirmation that authoritative state and derived projections remain unchanged.",
+      "rubric_impact": "major",
+      "severity_rationale": "Authority rejection behavior is clear enough to reject the operation, so this does not block implementation, but missing terminal reporting for denied administrative mutations creates meaningful operability and handoff risk in an in-scope core authority surface."
+    },
+    {
+      "affected_sections": [
+        "Game Lifecycle",
+        "Audit Configuration",
+        "Venues, Media, and Audit"
+      ],
+      "authority_impact": "minor",
+      "baseline_severity": "minor",
+      "claim": "The draft requires rescheduling to preserve history but does not define whether schedule/status changes are audited or what minimum history must be retained.",
+      "determinism_impact": "minor",
+      "evidence": "Game Lifecycle says, \"Rescheduling preserves the history required by the audit policy.\" Audit Configuration lists mandatory audit records for result corrections, material Player-stat changes, roster changes, relationship approvals/revocations, role assignment changes, frozen configuration amendments, persisted random draws, and playoff correction resolutions, but does not mention scheduling, rescheduling, postponement, cancellation, or start transitions. The overview also says simple audit records cover material administrative changes, leaving schedule-history persistence ambiguous.",
+      "feedback_id": "operability:fb_operability_002",
+      "in_scope": true,
+      "invariant_violated": "artifact_integrity",
+      "issue_fingerprint": "bfe41a107f82bd328fcc84695bd88acfa33f4888fd167c445755324a6aeeaa2c",
+      "issue_id": "iss_bfe41a107f82bd32",
+      "issue_type": "undefined_audit_history",
+      "normalized_severity": "minor",
+      "oscillation_key": null,
+      "recommended_change": "Define the minimum operational history for Game scheduling changes without prescribing storage: for example, require actor, timestamp, action, previous scheduled instant/status, new scheduled instant/status, optional reason when applicable, and clarify whether the record is an Audit Record or separate schedule history. If this is intentionally deferred, replace the audit-policy reference with an explicit deferral boundary and state the minimum history needed for Phase 1.",
+      "rubric_impact": "minor",
+      "severity_rationale": "This affects an in-scope lifecycle surface, but it does not prevent the core finalize/forfeit/correct/recompute flow from being built because authoritative result audit behavior is already explicit."
+    }
+  ],
+  "profile": "vertical",
+  "reviewer": {
+    "model": "orchestrator",
+    "name": "whetstone-vertical-merge",
+    "version": "1.0"
+  },
+  "round_number": 12
+}

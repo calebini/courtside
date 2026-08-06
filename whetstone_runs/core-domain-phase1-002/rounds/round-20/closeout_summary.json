@@ -1,0 +1,10 @@
+{
+  "draft_after_hash": "d59bef233141db85dae6d2f1131adf97772dc543383119017b6e81d50c9758d8",
+  "draft_before_hash": "d59bef233141db85dae6d2f1131adf97772dc543383119017b6e81d50c9758d8",
+  "editor_invoked": false,
+  "note": "Reviewer-only closeout; editor_summary.json is a compatibility no-op and no Editor client was invoked.",
+  "phase": "phase_1",
+  "profile": "structural_integrity",
+  "round_kind": "review_only",
+  "round_number": 20
+}

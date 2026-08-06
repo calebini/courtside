@@ -1,0 +1,83 @@
+{
+  "client": {
+    "command": "codex",
+    "model": "gpt-5.5",
+    "name": "codex",
+    "version": "0.142.0"
+  },
+  "config_snapshot": {
+    "reference_context": {
+      "files": []
+    },
+    "rubric_label": null,
+    "rubric_manifest_path": null,
+    "rubric_profile": "mvp-v1",
+    "rubric_source": "builtin",
+    "scope_contract": {
+      "approved": true,
+      "content_hash": "09d4026cb34dfc8a5ff42a081cccf733f57b2df6e4edbb9cf3bef5c30a4a7b4f",
+      "path": "rounds/intake/scope_contract.json",
+      "readiness_target": "mvp",
+      "status": "approved"
+    },
+    "target_mode": "strict",
+    "target_phase": "mid",
+    "workflow": "mvp"
+  },
+  "context_files": [
+    {
+      "label": "draft_before",
+      "path": "rounds/round-27/context/draft_before.md",
+      "sha256": "d7e18213592c216ddcc684aa483760608dbdff686d1c0596a33543fa8ee70c11"
+    },
+    {
+      "label": "reviewer_feedback",
+      "path": "rounds/round-27/context/reviewer_feedback.json",
+      "sha256": "47fcf6afe3fd857fb68843432cdbea27c21a812e1f565b8021e769b244b761b1"
+    },
+    {
+      "label": "scope_contract",
+      "path": "rounds/round-27/context/scope_contract.json",
+      "sha256": "37bd9058274086b49f6decce85ff42201c0164165bf692988d7e991200e97f81"
+    },
+    {
+      "label": "contract_surface_report",
+      "path": "rounds/round-27/context/contract_surface_report.json",
+      "sha256": "58ef30dea77904849f538c61d1362b34468c1a6de18ec0e9c9ec13c0ecda41c0"
+    }
+  ],
+  "draft_after_hash": "beb3ecc982171b343cc67263419544e9879445c94e1a6aa6bd0205bf27299aa9",
+  "draft_hash": "d49538000719fbe67bc083394959c142b95083f3ea4eb4f13a7b4cad6c0fe00e",
+  "editor_client": {
+    "command": "codex",
+    "model": "gpt-5.5",
+    "name": "codex",
+    "version": "0.142.0"
+  },
+  "editor_prompt_text": "You are the Whetstone editor.\nApply or decline feedback according to the spec authority model.\nUse only the Draft and Reviewer feedback JSON provided in this prompt or in the listed context files.\nIf context files are listed, you MUST read those files and may inspect only those files.\nWhen needed, use read-only client-native file access or read-only shell commands only for the listed context file paths.\nDo not inspect unrelated repository files, use web search, or call tools for anything except reading listed context files.\nDo not rely on external documents, ambient workspace context, or prior run artifacts.\n\nReturn only a single JSON object matching editor_summary.json.\nDo not return markdown, explanation, fenced code, an editor object, or a decisions array.\nThe top-level object MUST set round_number to 27.\nThe draft_before_hash MUST be d49538000719fbe67bc083394959c142b95083f3ea4eb4f13a7b4cad6c0fe00e.\n\nScope contract rules:\n- The scope contract is authoritative for this run.\n- Do not implement feedback that exceeds the approved scope contract.\n- Decline out-of-scope feedback with decline_reason out_of_scope.\n- Decline deferred feedback with deferred_to_later_round when the scope contract defers it to a later phase or profile.\n- Preserve operator intent; do not silently promote deferred surfaces into scope.\n\nTimeout-aware bounded synthesis guidance:\n- The previous Editor attempt timed out or this profile shows EXPANDING_CONTRACT_SURFACE.\n- Read the contract surface report listed in context files.\n- Prefer a bounded synthesis over the report's listed sections and contract families instead of broad unrelated rewriting.\n- Preserve global coherence and still return draft_after_content as the complete revised draft text.\n- Do not omit unrelated sections from draft_after_content.\nThis live round may mutate the draft after validation.\nIn mutating mode, draft_after_content MUST be a string; do not return null.\nIf you change the draft, include draft_after_content as the complete revised draft text.\nIf you make no draft changes, set draft_after_content to the original draft text.\nIf any feedback is accepted, modified, or resolved, draft_after_content MUST contain the complete resulting draft.\nWhetstone computes draft_after_hash from draft_after_content; set draft_after_hash to null if no explicit hash was provided above.\nThe top-level object MUST include exactly these fields:\n- round_number\n- draft_before_hash\n- draft_after_hash\n- accepted_feedback_ids\n- modified_feedback_ids\n- declined_feedback\n- created_conflict_ids\n- resolved_issue_ids\n- unresolved_issue_ids\n- draft_after_content\n\nUse accepted_feedback_ids for feedback accepted as written.\nUse modified_feedback_ids for feedback accepted in substance but implemented differently.\nUse declined_feedback only for feedback declined under the allowed decline taxonomy.\nUse resolved_issue_ids only when the current draft_after resolves the issue.\nUse unresolved_issue_ids for issues still unresolved in the current draft_after.\nIf there are no entries for an array field, return an empty array for that field.\n\nContext files:\n- Read the files listed in this section before producing the JSON response.\n- Do not read any unlisted file.\n- Reviewer feedback JSON path: rounds/round-27/context/reviewer_feedback.json\n- Draft path: rounds/round-27/context/draft_before.md\n- Contract surface report path: rounds/round-27/context/contract_surface_report.json\n- Scope contract path: rounds/round-27/context/scope_contract.json\nUse the listed context files as authoritative input content.",
+  "model": "gpt-5.5",
+  "phase": "phase_1",
+  "profile": "vertical",
+  "prompt_text": null,
+  "reference_context": {
+    "files": []
+  },
+  "reviewer_prompt_text": null,
+  "rubric_content_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "rubric_label": null,
+  "rubric_manifest_path": null,
+  "rubric_profile": "mvp-v1",
+  "rubric_source": "builtin",
+  "scope_contract": {
+    "approved": true,
+    "content_hash": "09d4026cb34dfc8a5ff42a081cccf733f57b2df6e4edbb9cf3bef5c30a4a7b4f",
+    "path": "rounds/intake/scope_contract.json",
+    "readiness_target": "mvp",
+    "status": "approved"
+  },
+  "scope_contract_hash": "09d4026cb34dfc8a5ff42a081cccf733f57b2df6e4edbb9cf3bef5c30a4a7b4f",
+  "semantic_change_hash": "7a0d5bfe07aea34af9295cb0ab645e2a8ae59ac88ea9d56b79f55d58a495f8db",
+  "timestamp": "2026-08-05T04:37:30.598722+00:00",
+  "version": "0.142.0",
+  "workflow": "mvp"
+}

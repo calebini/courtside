@@ -1,0 +1,21 @@
+{
+  "attempt_count": 1,
+  "by_client_role": {
+    "reviewer": {
+      "attempt_count": 1,
+      "missing_usage_attempts": 0,
+      "total_api_duration_ms": null,
+      "total_cost_usd": null,
+      "total_duration_ms": 38009,
+      "total_tokens": 29427
+    }
+  },
+  "generated_at": "2026-08-06T19:49:57.006383+00:00",
+  "missing_usage_attempts": 0,
+  "round_number": 11,
+  "total_api_duration_ms": null,
+  "total_cost_usd": null,
+  "total_duration_ms": 38009,
+  "total_tokens": 29427,
+  "warnings": []
+}

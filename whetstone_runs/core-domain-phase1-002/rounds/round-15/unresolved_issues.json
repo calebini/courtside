@@ -1,0 +1,31 @@
+{
+  "draft_hash": "18e7e47f9e7e53bcdf0ad9e31e8345a967162c7b518f9a4084a3fda2028645d5",
+  "round_number": 15,
+  "unresolved_issues": [
+    {
+      "affected_sections": [
+        "Core Mutation Authority",
+        "Audit Configuration"
+      ],
+      "blocking_acceptance": true,
+      "claim": "Accepted Player profile updates require history in lifecycle prose, but the operational history surface is not made mandatory in Audit Configuration or otherwise given a named persistence/reporting contract.",
+      "in_scope": true,
+      "issue_fingerprint": "c07eac936a17962672956f28d8d48840bd478d2791aef105d2ddc68e54e041c7",
+      "issue_id": "iss_c07eac936a179626",
+      "normalized_severity": "major"
+    },
+    {
+      "affected_sections": [
+        "Roster Membership Lifecycle",
+        "Game Lifecycle",
+        "Player Stat Line Lifecycle"
+      ],
+      "blocking_acceptance": true,
+      "claim": "Roster eligibility anchoring is normative, but the draft does not require the chosen competition eligibility anchor to be persisted or exposed in validation/rejection reporting, making later stat attribution and operator recovery hard to verify.",
+      "in_scope": true,
+      "issue_fingerprint": "c2f0898a784999ec99203bced946e6c5d8575a9ec3bca047b977550f7d29f684",
+      "issue_id": "iss_c2f0898a784999ec",
+      "normalized_severity": "major"
+    }
+  ]
+}

@@ -1,0 +1,894 @@
+{
+  "checkpoint_count": 21,
+  "checkpoints": [
+    {
+      "affected_sections": [
+        "Courtside Core Domain \u2014 Isolated Phase 1.04 Composite"
+      ],
+      "checkpoint_id": "chk_bf7411ff85934478",
+      "evidence_lines": [
+        "# Courtside Core Domain \u2014 Isolated Phase 1.04 Composite"
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Courtside Core Domain \u2014 Isolated Phase 1.04 Composite` adopt this change (scope change): # Courtside Core Domain \u2014 Isolated Phase 1.04 Composite",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 16,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_1289e4edc3fe5f82"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "Role Assignment"
+      ],
+      "checkpoint_id": "chk_8168de60491bd0aa",
+      "evidence_lines": [
+        "- after the initial League Administrator bootstrap boundary for a League, an existing League Administrator assigns, reassigns, and revokes League Administrator assignments for that League;"
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Role Assignment` adopt this change (choose policy): after the initial League Administrator bootstrap boundary for a League, an existing League Administrator assigns, reassigns, and revokes League Administrator assignments for that League;",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 16,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_b7a3417059b45745"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "operator_policy_choice"
+    },
+    {
+      "affected_sections": [
+        "Role Assignment"
+      ],
+      "checkpoint_id": "chk_750dd9c59353cc69",
+      "evidence_lines": [
+        "- the initial League Administrator bootstrap boundary is outside Phase 1 domain mutation semantics and cannot be inferred from ordinary role-assignment authority; and"
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Role Assignment` adopt this change (choose policy, scope change): the initial League Administrator bootstrap boundary is outside Phase 1 domain mutation semantics and cannot be inferred from ordinary role-assignment authority; and",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 16,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_61623aefa2b99397"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "Core Mutation Authority"
+      ],
+      "checkpoint_id": "chk_07b988825ac7de14",
+      "evidence_lines": [
+        "- League Administrators may create, schedule, reschedule, postpone, cancel, start, finalize, forfeit, and correct Games; create, end, and transfer Roster Memberships; create, update, confirm, and correct Player Stat Lines; approve and revoke Player Management Relationships; assign, reassign, and revoke League Administrator and Team Captain role assignments; amend frozen Season configuration; and resolve playoff correction conflicts."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Core Mutation Authority` adopt this change (relax requirement, scope change): League Administrators may create, schedule, reschedule, postpone, cancel, start, finalize, forfeit, and correct Games; create, end, and transfer Roster Memberships; create, update, confirm, and correct Player Stat Lines; approve and revoke Player Management Relationships; assign, reassign, and revoke League Administrator and Team Captain role assignments; amend frozen Season configuration; and resolve playoff correction conflicts.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 16,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_7f0493aed90b8c71"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "Core Mutation Authority"
+      ],
+      "checkpoint_id": "chk_7708121beb96f845",
+      "evidence_lines": [
+        "- Ordinary League Administrator assignment mutation is performed only by an existing League Administrator for the affected League. The initial League Administrator bootstrap boundary for a League is outside Phase 1 domain mutation semantics and does not create a general unauthenticated role-assignment path."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Core Mutation Authority` adopt this change (choose policy, scope change): Ordinary League Administrator assignment mutation is performed only by an existing League Administrator for the affected League. The initial League Administrator bootstrap boundary for a League is outside Phase 1 domain mutation semantics and does not create a general unauthenticated role-assignment path.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 16,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_834c1d37698f3552"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "Season Configuration Lifecycle"
+      ],
+      "checkpoint_id": "chk_6cf2f6164df3576b",
+      "evidence_lines": [
+        "For first-freeze duplicate detection, the result-affecting configuration basis is the canonical content identity of the exact result-affecting values that would be captured in the frozen Season configuration version. It includes standings point values, ordered ranking criteria, eligible Game phase and status rules, standings adjustment enablement, forfeit treatment, playoff Round identities and order, participant slot sources, configured Games per Matchup, advancement rule, aggregate-tiebreak policies, and any later accepted result-affecting field. It excludes League timezone, localization, Venue, Media, display text, and other values that this specification says do not affect standings or playoff outcomes. The canonical basis identity is derived from normalized domain values, not from serialization format, storage order, display labels, or implementation-specific identifiers except stable canonical domain identities where the specification requires them. Collections use their configured order when order is result-affecting and canonical identity order otherwise. Equal canonical basis identities mean the attempted freeze depends on the same result-affecting value set and must reuse the existing frozen version. Unequal canonical basis identities mean the attempted freeze depends on a different mutable configuration basis and must be rejected without mutating authoritative state, persisted projections, or configuration versions."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Season Configuration Lifecycle` adopt this change (tighten requirement, choose policy, scope change): For first-freeze duplicate detection, the result-affecting configuration basis is the canonical content identity of the exact result-affecting values that would be captured in the frozen Season configuration version. It includes standings point values, ordered ranking criteria, eligible Game phase and status rules, standings adjustment enablement, forfeit treatment, playoff Round identities and order, participant slot sources, configured Games per Matchup, advancement rule, aggregate-tiebreak policies, and any later accepted result-affecting field. It excludes League timezone, localization, Venue, Media, display text, and other values that this specification says do not affect standings or playoff outcomes. The canonical basis identity is derived from normalized domain values, not from serialization format, storage order, display labels, or implementation-specific identifiers except stable canonical domain identities where the specification requires them. Collections use their configured order when order is result-affecting and canonical identity order otherwise. Equal canonical basis identities mean the attempted freeze depends on the same result-affecting value set and must reuse the existing frozen version. Unequal canonical basis identities mean the attempted freeze depends on a different mutable configuration basis and must be rejected without mutating authoritative state, persisted projections, or configuration versions.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 16,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_54afa060aa790ad0"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "Role Assignment Lifecycle"
+      ],
+      "checkpoint_id": "chk_da2b9b7e9ae0e3f7",
+      "evidence_lines": [
+        "- After the initial League Administrator bootstrap boundary for a League, League Administrators assign, reassign, and revoke League Administrator assignments for that League."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Role Assignment Lifecycle` adopt this change (choose policy): After the initial League Administrator bootstrap boundary for a League, League Administrators assign, reassign, and revoke League Administrator assignments for that League.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 16,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_df864f80e7c88266"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "operator_policy_choice"
+    },
+    {
+      "affected_sections": [
+        "Role Assignment Lifecycle"
+      ],
+      "checkpoint_id": "chk_c1845b80d45f50d8",
+      "evidence_lines": [
+        "- The initial League Administrator bootstrap boundary is outside Phase 1 domain mutation semantics and cannot be inferred from ordinary role-assignment authority."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Role Assignment Lifecycle` adopt this change (choose policy, scope change): The initial League Administrator bootstrap boundary is outside Phase 1 domain mutation semantics and cannot be inferred from ordinary role-assignment authority.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 16,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_493d6f1cb3f0d122"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "Authorization"
+      ],
+      "checkpoint_id": "chk_52aa1c703a765345",
+      "evidence_lines": [
+        "2. Ordinary League Administrator assignment mutation is performed only by an existing League Administrator for the affected League after the initial League Administrator bootstrap boundary, which is outside Phase 1 domain mutation semantics."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Authorization` adopt this change (choose policy, scope change): 2. Ordinary League Administrator assignment mutation is performed only by an existing League Administrator for the affected League after the initial League Administrator bootstrap boundary, which is outside Phase 1 domain mutation semantics.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 16,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_81bd72cf13dc8659"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "Authorization"
+      ],
+      "checkpoint_id": "chk_0ec28267f0f8b6d4",
+      "evidence_lines": [
+        "3. Team Captain authority is scoped to exactly one Season Team."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Authorization` adopt this change (choose policy): 3. Team Captain authority is scoped to exactly one Season Team.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 16,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_51ee2970000a365c"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "operator_policy_choice"
+    },
+    {
+      "affected_sections": [
+        "Authorization"
+      ],
+      "checkpoint_id": "chk_01fafc8439c53a9f",
+      "evidence_lines": [
+        "4. Only a League Administrator may approve Player Management Relationships, correct authoritative Game results, amend frozen Season configuration, assign, reassign, or revoke League Administrator authority after bootstrap, assign, reassign, or revoke Team Captain authority, mutate Game lifecycle status, create or change Roster Memberships, create or materially change Player Stat Lines, or resolve playoff correction conflicts."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Authorization` adopt this change (relax requirement, choose policy): 4. Only a League Administrator may approve Player Management Relationships, correct authoritative Game results, amend frozen Season configuration, assign, reassign, or revoke League Administrator authority after bootstrap, assign, reassign, or revoke Team Captain authority, mutate Game lifecycle status, create or change Roster Memberships, create or materially change Player Stat Lines, or resolve playoff correction conflicts.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 16,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_2100b8f8b24c5dfd"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "operator_policy_choice"
+    },
+    {
+      "affected_sections": [
+        "Authorization"
+      ],
+      "checkpoint_id": "chk_ef44ed43c5ac0847",
+      "evidence_lines": [
+        "5. An approved Player Management Relationship grants Player-profile management authority only; it does not grant authority over rosters, Game outcomes, standings, playoff advancement, Season configuration, or role assignment."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Authorization` adopt this change (choose policy, scope change): 5. An approved Player Management Relationship grants Player-profile management authority only; it does not grant authority over rosters, Game outcomes, standings, playoff advancement, Season configuration, or role assignment.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 16,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_7974eebca254b065"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "Authorization"
+      ],
+      "checkpoint_id": "chk_111e0c1b69115f3d",
+      "evidence_lines": [
+        "6. Team Captain authority is an auditable scoped role marker in Phase 1 and grants no independent core mutation authority until a later accepted specification defines such permissions."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Authorization` adopt this change (choose policy, scope change): 6. Team Captain authority is an auditable scoped role marker in Phase 1 and grants no independent core mutation authority until a later accepted specification defines such permissions.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 16,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_216b43e10fb3bf52"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "Authorization"
+      ],
+      "checkpoint_id": "chk_80f43870c3a7a7d9",
+      "evidence_lines": [
+        "7. Role and management-relationship changes are audited."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Authorization` adopt this change (scope change): 7. Role and management-relationship changes are audited.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 16,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_72579a9b35b52a5b"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "Authorization"
+      ],
+      "checkpoint_id": "chk_2e6c1a11e097d7ed",
+      "evidence_lines": [
+        "8. Unauthorized mutation attempts and lifecycle transitions not explicitly permitted by the lifecycle specification are rejected without mutating authoritative state and must produce the required rejection report."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Authorization` adopt this change (tighten requirement, choose policy): 8. Unauthorized mutation attempts and lifecycle transitions not explicitly permitted by the lifecycle specification are rejected without mutating authoritative state and must produce the required rejection report.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 16,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_59f23e80802e9100"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "Configuration and Reproducibility"
+      ],
+      "checkpoint_id": "chk_178fd72099496361",
+      "evidence_lines": [
+        "2. Concurrent or retried first-freeze attempts compare the canonical result-affecting configuration basis identity; equal identities reuse the existing frozen version, and unequal identities are rejected without mutating authoritative state, persisted projections, or configuration versions."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Configuration and Reproducibility` adopt this change (choose policy): 2. Concurrent or retried first-freeze attempts compare the canonical result-affecting configuration basis identity; equal identities reuse the existing frozen version, and unequal identities are rejected without mutating authoritative state, persisted projections, or configuration versions.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 16,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_6a08adb38bd15f72"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "operator_policy_choice"
+    },
+    {
+      "affected_sections": [
+        "Configuration and Reproducibility"
+      ],
+      "checkpoint_id": "chk_a0e2282a947f9343",
+      "evidence_lines": [
+        "3. Later amendments require League Administrator authority and an Audit Record."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Configuration and Reproducibility` adopt this change (choose policy): 3. Later amendments require League Administrator authority and an Audit Record.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 16,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_38d7db1a1edb11db"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "operator_policy_choice"
+    },
+    {
+      "affected_sections": [
+        "Configuration and Reproducibility"
+      ],
+      "checkpoint_id": "chk_57196930f89898b0",
+      "evidence_lines": [
+        "4. A result-affecting amendment that conflicts with existing authoritative Game outcomes or playoff state must preserve authoritative state through rejection or same-action administrative resolution."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Configuration and Reproducibility` adopt this change (tighten requirement, choose policy): 4. A result-affecting amendment that conflicts with existing authoritative Game outcomes or playoff state must preserve authoritative state through rejection or same-action administrative resolution.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 16,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_050796bb6761ba78"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "operator_policy_choice"
+    },
+    {
+      "affected_sections": [
+        "Configuration and Reproducibility"
+      ],
+      "checkpoint_id": "chk_26ac6627cae5fd74",
+      "evidence_lines": [
+        "6. Given the same authoritative outcomes, adjustment records, persisted random draws, and configuration version, standings and playoff advancement are deterministic."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Configuration and Reproducibility` adopt this change (choose policy): 6. Given the same authoritative outcomes, adjustment records, persisted random draws, and configuration version, standings and playoff advancement are deterministic.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 16,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_95261629f7294b5b"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "operator_policy_choice"
+    },
+    {
+      "affected_sections": [
+        "Authority and Precedence"
+      ],
+      "checkpoint_id": "chk_1d295aa3968c7826",
+      "evidence_lines": [
+        "The result-affecting configuration basis identity used for concurrent or retried first-freeze comparison is the canonical content identity of the values that would be captured in the frozen Season configuration version. It covers standings point values, ordered ranking criteria, eligible Game phase and status rules, standings adjustment enablement, forfeit treatment, playoff Round identities and order, participant slot sources, configured Games per Matchup, advancement rule, aggregate-tiebreak policies, and any later accepted result-affecting field. It excludes timezone, localization, Venue, Media, display text, and other non-result-affecting values. Equal basis identities reuse the existing frozen version. Unequal basis identities are rejected without mutating authoritative state, persisted projections, or configuration versions."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Authority and Precedence` adopt this change (choose policy, scope change): The result-affecting configuration basis identity used for concurrent or retried first-freeze comparison is the canonical content identity of the values that would be captured in the frozen Season configuration version. It covers standings point values, ordered ranking criteria, eligible Game phase and status rules, standings adjustment enablement, forfeit treatment, playoff Round identities and order, participant slot sources, configured Games per Matchup, advancement rule, aggregate-tiebreak policies, and any later accepted result-affecting field. It excludes timezone, localization, Venue, Media, display text, and other non-result-affecting values. Equal basis identities reuse the existing frozen version. Unequal basis identities are rejected without mutating authoritative state, persisted projections, or configuration versions.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 16,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_569730ddc780404e"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "Authorization Configuration"
+      ],
+      "checkpoint_id": "chk_e2a236c63bd0f4f8",
+      "evidence_lines": [
+        "After the initial League Administrator bootstrap boundary for a League, existing League Administrators assign, reassign, and revoke League Administrator authority for that League. The bootstrap boundary is outside Phase 1 domain mutation semantics and cannot be inferred from ordinary role-assignment authority. League Administrators assign, reassign, and revoke Team Captain authority and approve or revoke Player Management Relationships. League Administrators also hold Phase 1 authority for core Game lifecycle mutations, authoritative result corrections, Roster Membership changes, Player Stat Line creation and material changes, frozen Season configuration amendments, and playoff correction conflict resolution. Persisted random-draw duplicate or conflict attempts are handled only by deterministic reuse or rejection under the stable tie-context rule; League Administrators do not replace or override an existing draw result in Phase 1. Team Captain authority is a scoped role marker in Phase 1 and does not add independent mutation permissions unless a later accepted specification defines them. Adding roles or changing their authority requires an accepted specification update."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Authorization Configuration` adopt this change (choose policy, scope change): After the initial League Administrator bootstrap boundary for a League, existing League Administrators assign, reassign, and revoke League Administrator authority for that League. The bootstrap boundary is outside Phase 1 domain mutation semantics and cannot be inferred from ordinary role-assignment authority. League Administrators assign, reassign, and revoke Team Captain authority and approve or revoke Player Management Relationships. League Administrators also hold Phase 1 authority for core Game lifecycle mutations, authoritative result corrections, Roster Membership changes, Player Stat Line creation and material changes, frozen Season configuration amendments, and playoff correction conflict resolution. Persisted random-draw duplicate or conflict attempts are handled only by deterministic reuse or rejection under the stable tie-context rule; League Administrators do not replace or override an existing draw result in Phase 1. Team Captain authority is a scoped role marker in Phase 1 and does not add independent mutation permissions unless a later accepted specification defines them. Adding roles or changing their authority requires an accepted specification update.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 16,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_a9fc4e431b1e9aed"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "deferable_scope_boundary"
+    }
+  ],
+  "default_action": "continue_without_operator_input",
+  "draft_hash": "f6850d2448634a0d2aa1099b7e21b6f8db60faee35f453b03f42fcc323203c32",
+  "generated_at": "2026-08-05T04:24:36.291116+00:00",
+  "mode": "artifact_only",
+  "profile": "vertical",
+  "round_number": 16,
+  "runtime_effect": "none"
+}

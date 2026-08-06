@@ -1,0 +1,18 @@
+{
+  "draft_hash": "d49538000719fbe67bc083394959c142b95083f3ea4eb4f13a7b4cad6c0fe00e",
+  "round_number": 26,
+  "unresolved_issues": [
+    {
+      "affected_sections": [
+        "specs/lifecycle.md / Authoritative Result Corrections",
+        "specs/config.md / Audit Configuration"
+      ],
+      "blocking_acceptance": true,
+      "claim": "Accepted playoff correction resolution retries have deterministic projection identity, but the draft does not define idempotent audit persistence for repeated submissions with the same resolution identity, so implementations may diverge by appending duplicate Audit Records or reusing the original record.",
+      "in_scope": true,
+      "issue_fingerprint": "16ab6344baf4a75b5fa99a690f16a046e9e946c5ba962cb783889477fc30e7d1",
+      "issue_id": "iss_16ab6344baf4a75b",
+      "normalized_severity": "major"
+    }
+  ]
+}

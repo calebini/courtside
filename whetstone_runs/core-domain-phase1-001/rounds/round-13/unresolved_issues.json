@@ -1,0 +1,20 @@
+{
+  "draft_hash": "79166ffebeb45392b52ac3f34aee90b3e9be99b2852a349b07027572c5f3227d",
+  "round_number": 13,
+  "unresolved_issues": [
+    {
+      "affected_sections": [
+        "specs/lifecycle.md / Core Mutation Authority",
+        "specs/lifecycle.md / Role Assignment Lifecycle",
+        "specs/invariants.md / Authorization",
+        "specs/config.md / Authorization Configuration"
+      ],
+      "blocking_acceptance": true,
+      "claim": "The draft is inconsistent about whether League Administrators can assign, reassign, or revoke League Administrator assignments, leaving mutation authority for the top-level administrative role ambiguous.",
+      "in_scope": true,
+      "issue_fingerprint": "706b3b0c4dff5c6cd62421363e525a815709bf3751f614f08f4711ec669734d6",
+      "issue_id": "iss_706b3b0c4dff5c6c",
+      "normalized_severity": "major"
+    }
+  ]
+}

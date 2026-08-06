@@ -1,0 +1,11 @@
+{
+  "draft_hash": "7c9d87eca9704660bfa15f6d19c1ce223d67c294380309f58786494bb00ccc3a",
+  "feedback": [],
+  "profile": "structural_integrity",
+  "reviewer": {
+    "model": "gpt-5-codex",
+    "name": "codex-structural-integrity-reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 21
+}

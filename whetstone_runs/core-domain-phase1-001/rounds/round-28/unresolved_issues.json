@@ -1,0 +1,33 @@
+{
+  "draft_hash": "beb3ecc982171b343cc67263419544e9879445c94e1a6aa6bd0205bf27299aa9",
+  "round_number": 28,
+  "unresolved_issues": [
+    {
+      "affected_sections": [
+        "specs/lifecycle.md / Core Mutation Authority",
+        "specs/lifecycle.md / Game Lifecycle"
+      ],
+      "blocking_acceptance": true,
+      "claim": "The draft grants League Administrators authority to reschedule Games but does not define the legal state mutation for rescheduling a Game that is already `scheduled`.",
+      "in_scope": true,
+      "issue_fingerprint": "940d480e1200b981672e8f5276ab2d39480b180d8f3d84a5e1bf7cb2ddaa1988",
+      "issue_id": "iss_940d480e1200b981",
+      "normalized_severity": "major"
+    },
+    {
+      "affected_sections": [
+        "specs/overview.md / Canonical Concepts",
+        "specs/lifecycle.md / Core Mutation Authority",
+        "specs/lifecycle.md / Player Management Lifecycle",
+        "specs/invariants.md / Authorization",
+        "specs/config.md / Authorization Configuration"
+      ],
+      "blocking_acceptance": true,
+      "claim": "The draft defines approved Player Management Relationships as granting Player-profile management authority, but does not define the mutation surface or boundary of that authority.",
+      "in_scope": true,
+      "issue_fingerprint": "8c02c75c7505f35b8ce3095d96e29eb08b4f692829d602add641e1347b2f138b",
+      "issue_id": "iss_8c02c75c7505f35b",
+      "normalized_severity": "major"
+    }
+  ]
+}

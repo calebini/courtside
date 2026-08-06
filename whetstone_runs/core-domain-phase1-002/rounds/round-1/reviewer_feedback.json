@@ -1,0 +1,36 @@
+{
+  "draft_hash": "0a83555eb37b080270442e32a33a9ed43e51d1def06e604137a25e959bb85426",
+  "feedback": [
+    {
+      "affected_sections": [
+        "Core Mutation Authority",
+        "Player Management Lifecycle",
+        "Authorization",
+        "Authorization Configuration"
+      ],
+      "authority_impact": "major",
+      "baseline_severity": "major",
+      "claim": "The approved Player Management mutation surface names `display_name` and `profile_photo` as the only manager-editable Player fields, but the draft does not define the domain-level contract for those mutable fields well enough to implement the in-scope profile update flow without guessing.",
+      "determinism_impact": "minor",
+      "evidence": "The scope contract marks flow-2 as must: verify the approved Player Management surface for display name and profile photo, including self-service photo updates. The draft states that an approved Player Management Relationship grants authority to update only `display_name` and `profile_photo`, but it does not define whether `profile_photo` is an optional Player attribute, a Media reference, an external link, an uploaded photo identity, or removable value; it also does not state the required validation or persistence semantics for changing or clearing that field. Media is defined separately as optional photo records or YouTube links associated with Games or the League Gallery, but Player profile photos are not tied to or distinguished from that Media concept.",
+      "feedback_id": "fb_profile_fields_contract_001",
+      "in_scope": true,
+      "invariant_violated": "artifact_integrity",
+      "issue_fingerprint": "a6e94a5de4b1e88f869087c7e66396a50ab15e3fdf6c6769abed7a6be754343a",
+      "issue_id": "iss_a6e94a5de4b1e88f",
+      "issue_type": "missing_required_data_contract",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Add a technology-neutral Player profile field contract for the approved management surface. Define `display_name` and `profile_photo` at domain level, including whether each is required or optional, whether `profile_photo` can be cleared, whether it references Media or a distinct photo identity, the minimum validation/rejection rule for unsupported values, and the required audit or history behavior for accepted updates. Do not prescribe schema, API, storage, media host, or UI details, which remain deferred by the scope contract.",
+      "rubric_impact": "major",
+      "severity_rationale": "This is in scope because flow-2 specifically requires the approved Player Management surface. It is major rather than blocker because the authority boundary is clear, but implementers would still have to invent the domain contract for one of the two required mutable fields."
+    }
+  ],
+  "profile": "structural_integrity",
+  "reviewer": {
+    "model": "GPT-5 Codex",
+    "name": "Codex Whetstone Structural Integrity Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 1
+}

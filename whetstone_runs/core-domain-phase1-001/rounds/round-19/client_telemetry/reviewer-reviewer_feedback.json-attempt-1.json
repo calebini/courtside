@@ -1,0 +1,40 @@
+{
+  "artifact_name": "reviewer_feedback.json",
+  "attempt_number": 1,
+  "client": {
+    "command": "codex",
+    "configured_version": "0.142.0",
+    "model": "gpt-5.5",
+    "name": "codex",
+    "observed_version": null
+  },
+  "client_role": "reviewer",
+  "duration_api_ms": null,
+  "duration_ms": 31257,
+  "exit_code": 0,
+  "finished_at": "2026-08-05T04:26:27.929327+00:00",
+  "generated_at": "2026-08-05T04:26:27.934531+00:00",
+  "model_usage": null,
+  "num_turns": null,
+  "phase": "phase_1",
+  "profile": "operability",
+  "raw_envelope_path": null,
+  "round_number": 19,
+  "session_id": null,
+  "started_at": "2026-08-05T04:25:56.671873+00:00",
+  "stderr_path": "rounds/round-19/client_telemetry/reviewer-reviewer_feedback.json-attempt-1-stderr.txt",
+  "stdout_path": "rounds/round-19/client_telemetry/reviewer-reviewer_feedback.json-attempt-1-stdout.txt",
+  "stop_reason": null,
+  "telemetry_source": "codex_stdout",
+  "terminal_reason": null,
+  "timed_out": false,
+  "total_cost_usd": null,
+  "usage": {
+    "cache_creation_input_tokens": null,
+    "cache_read_input_tokens": null,
+    "input_tokens": null,
+    "output_tokens": null,
+    "provider_raw": null,
+    "total_tokens": 24108
+  }
+}

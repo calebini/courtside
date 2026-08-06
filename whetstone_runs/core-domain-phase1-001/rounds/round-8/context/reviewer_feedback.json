@@ -1,0 +1,131 @@
+{
+  "draft_hash": "15c3ca6a2aba64d8e2410a84ee37d59f28ca454e0805eefb3a40cf7eb88746c1",
+  "feedback": [
+    {
+      "affected_sections": [
+        "Core Mutation Authority",
+        "Standings Lifecycle",
+        "Standings Configuration",
+        "Authorization Configuration"
+      ],
+      "authority_impact": "major",
+      "baseline_severity": "major",
+      "claim": "The draft introduces League Administrator authority for persisted random-draw conflict resolution without defining what conflict can be administratively resolved or how that authority interacts with the deterministic one-result-per-tie-context rule.",
+      "determinism_impact": "major",
+      "evidence": "Standings Lifecycle and Standings Configuration say exactly one persisted draw result may exist for a stable tie context, duplicate attempts return the existing result or are rejected as a deterministic conflict without another draw. Authorization Configuration then says League Administrators hold Phase 1 authority for persisted random-draw conflict resolution, but no lifecycle, invariant, or configuration section defines a random-draw conflict-resolution state, permitted administrative outcomes, mutation limits, or audit semantics beyond the initial persisted draw audit.",
+      "feedback_id": "structural_integrity:fb_round5_structural_001",
+      "in_scope": true,
+      "invariant_violated": "authority_boundary",
+      "issue_fingerprint": "7a425af225dc0a55fbf17f78e265ad15851ac161b3ba0135498921a8482fe577",
+      "issue_id": "iss_7a425af225dc0a55",
+      "issue_type": "authority_boundary_ambiguity",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Either remove persisted random-draw conflict resolution from League Administrator authority and state that duplicate or conflicting random-draw writes are only rejected/reused under the deterministic tie-context rule, or add a bounded lifecycle for administrative resolution that preserves replay determinism, identifies the conflict artifact, permitted resolution outcomes, audit requirements, and whether the original draw result may ever be changed.",
+      "rubric_impact": "major",
+      "severity_rationale": "Random draw is an in-scope standings and reproducibility surface. Leaving an administrative override named but undefined creates divergent implementations for a deterministic standings tiebreak artifact, though the normal standings path remains otherwise buildable."
+    },
+    {
+      "affected_sections": [
+        "Player Management Lifecycle",
+        "Core Mutation Authority",
+        "Authorization",
+        "Authorization Configuration"
+      ],
+      "authority_impact": "major",
+      "baseline_severity": "major",
+      "claim": "The Player Management Relationship lifecycle defines `requested -> approved -> revoked` but does not define who may create or submit the initial `requested` relationship, leaving the entry transition and mutation authority undefined.",
+      "determinism_impact": "minor",
+      "evidence": "Player Management Lifecycle lists the states and says only approved grants authority, League Administrators approve and revoke relationships, and revoked is terminal. Core Mutation Authority and Authorization Configuration also give League Administrators approval and revocation authority, but none of the sections identify the actor authorized to create a requested relationship or the required rejection behavior for unauthorized or duplicate requests.",
+      "feedback_id": "structural_integrity:fb_round5_structural_002",
+      "in_scope": true,
+      "invariant_violated": "state_legality",
+      "issue_fingerprint": "51f06739eb4069ce2c53e484b253af641cebfea34ef4367af64e34bed4613238",
+      "issue_id": "iss_51f06739eb4069ce",
+      "issue_type": "state_machine_gap",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Add the entry rule for Player Management Relationships: identify who may create a `requested` relationship, whether League Administrators may create one directly as approved or must approve a request, how duplicate active requested/approved relationships for the same User Account and Player are handled, and confirm invalid entry attempts are rejected under the general lifecycle failure rule.",
+      "rubric_impact": "major",
+      "severity_rationale": "Scoped authorization and minimum audit behavior are in scope. Approval and revocation are defined, but the initial lifecycle transition is a required state-machine edge for the relationship to exist in an MVP implementation plan."
+    },
+    {
+      "affected_sections": [
+        "specs/lifecycle.md: Standings Lifecycle",
+        "specs/config.md: Standings Configuration",
+        "specs/invariants.md: Standings"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "major",
+      "claim": "The stable random-draw tie context depends on 'canonical identity order', but the draft does not define the canonical ordering rule implementations must use for Season Team identities.",
+      "determinism_impact": "major",
+      "evidence": "The draft says a random-draw tie context includes 'the tied Season Teams in canonical identity order before the draw' and that each draw records 'the canonical tied-participant order before the draw'. No section defines how canonical identity order is derived, while database schema and concrete identifiers are explicitly deferred. The scope contract keeps 'standings inputs, ranking, random draw, and reproducibility' in scope at required_fields depth.",
+      "feedback_id": "determinism:fb_round6_det_001",
+      "in_scope": true,
+      "invariant_violated": "deterministic_behavior",
+      "issue_fingerprint": "2484d272d633c8bf418c1c2cbdb661bd419f9cbea2a01eb175441e55dde9d428",
+      "issue_id": "iss_2484d272d633c8bf",
+      "issue_type": "underspecified_deterministic_ordering",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Define a technology-neutral canonical ordering rule for Season Team identities, such as ordering by each Season Team's immutable canonical domain identity using bytewise/codepoint ordering after a specified normalization, or define another stable total order that does not depend on display names, creation order, storage engine order, or locale collation.",
+      "rubric_impact": "major",
+      "severity_rationale": "Random-draw replay and deduplication are otherwise well specified, but an undefined canonical participant order can produce different tie-context identities or audit records across implementers. This is meaningful MVP implementation risk for an in-scope reproducibility surface, but it does not make the whole core flow unbuildable."
+    },
+    {
+      "affected_sections": [
+        "specs/lifecycle.md: Authoritative Result Corrections",
+        "specs/lifecycle.md: Playoff Matchup Lifecycle",
+        "specs/invariants.md: Games and Results"
+      ],
+      "authority_impact": "minor",
+      "baseline_severity": "major",
+      "claim": "The playoff correction-conflict path alternates between requiring atomic correction-plus-resolution and allowing an unresolved blocked state, leaving replay and retry behavior ambiguous for the same administrative correction.",
+      "determinism_impact": "major",
+      "evidence": "The Authoritative Result Corrections section says a correction that would change a playoff participant after downstream authoritative outcomes 'must either be rejected before it is recorded or recorded with an explicit League Administrator resolution in the same administrative action.' The next sentence says 'Until that resolution is recorded, affected playoff advancement projections are blocked from further automatic advancement,' and later says 'the bracket is not internally consistent until the chosen resolution has been applied to every affected downstream participant slot.' The Playoff Matchup Lifecycle also references 'a blocked participant-resolution conflict' as a condition that prevents automatic advancement.",
+      "feedback_id": "determinism:fb_round6_det_002",
+      "in_scope": true,
+      "invariant_violated": "state_legality",
+      "issue_fingerprint": "8b9e7c3ed028076cd01ee62672a085551b49064e07249aea5ac0b061b72d4e64",
+      "issue_id": "iss_8b9e7c3ed028076c",
+      "issue_type": "conflicting_state_transition_semantics",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Choose and state one legal model. Either require the correction and resolution to be atomic, with failed or incomplete resolution rejected without mutating authoritative state, or define an explicit pending participant-resolution conflict state with its producer, allowed retries, idempotency key or duplicate-submission behavior, permitted reads, blocked writes, and terminal resolutions.",
+      "rubric_impact": "major",
+      "severity_rationale": "Correction cascades and deterministic playoff advancement are in scope. The draft gives strong surrounding rules, but this conflict leaves implementers to decide whether an unresolved correction-conflict state can exist and how retries behave, creating material divergence risk without fully blocking a first implementation."
+    },
+    {
+      "affected_sections": [
+        "General Lifecycle Failure Rule",
+        "Identity and Participation",
+        "Configuration and Reproducibility",
+        "Game and Venue Configuration",
+        "Localization Configuration"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "major",
+      "claim": "The draft defines rejection reporting for illegal lifecycle transitions, but it does not uniformly define reject-and-report behavior for core invariant and configuration validation failures that are required for safe MVP operation.",
+      "determinism_impact": "major",
+      "evidence": "The General Lifecycle Failure Rule requires a rejection report only for lifecycle-bearing entities when a transition is not explicitly permitted. Core non-transition constraints still define illegal states, such as 'At most one Season Team connects the same Team and Season,' 'A Player may not have overlapping effective Roster Memberships,' 'The League default is exactly one supported language,' and 'Every scheduled instant is interpreted in the League's configured IANA timezone and stored as an unambiguous instant.' The draft does not state the operational failure category, terminal report contents, or preserve-state behavior for attempts that would violate those constraints.",
+      "feedback_id": "operability:fb_operability_001",
+      "in_scope": true,
+      "invariant_violated": "failure_handling",
+      "issue_fingerprint": "cb60314a866055cf7ab072b108486b07ece6b14c00d60f534d6c649589b2f4d3",
+      "issue_id": "iss_cb60314a866055cf",
+      "issue_type": "missing_failure_reporting",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Add a compact domain validation failure rule covering in-scope invariant and configuration violations: reject without mutating authoritative state, report the entity or configuration surface, submitted value or attempted mutation, actor when applicable, violated rule, and whether any existing projections or persisted records remain unchanged. Keep this as a category-level rule rather than an exhaustive error-code registry, consistent with scope contract rule-2.",
+      "rubric_impact": "major",
+      "severity_rationale": "This is within the scope surface for obvious domain failure categories and acceptance criteria. It does not require implementation-specific retry, timeout, or runbook design, but without a uniform rejection/report rule for core constraints, schema and API planners can diverge on whether invalid domain input is rejected, normalized, partially accepted, or silently ignored."
+    }
+  ],
+  "profile": "vertical",
+  "reviewer": {
+    "model": "orchestrator",
+    "name": "whetstone-vertical-merge",
+    "version": "1.0"
+  },
+  "round_number": 8
+}

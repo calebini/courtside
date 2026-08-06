@@ -1,0 +1,80 @@
+{
+  "decision_points": [
+    {
+      "affected_sections": [
+        "Courtside Core Domain \u2014 Phase 1.01 Follow-up Candidate"
+      ],
+      "decision_id": "dec_aa501cdd2297e2c2",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "scope_change",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "# Courtside Core Domain \u2014 Phase 1.01 Follow-up Candidate"
+      ],
+      "options_considered": [
+        {
+          "description": "# Courtside Core Domain \u2014 Phase 1.01 Follow-up Candidate",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Courtside Core Domain \u2014 Phase 1.01 Follow-up Candidate` adopt this change (scope change): # Courtside Core Domain \u2014 Phase 1.01 Follow-up Candidate",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_profile_fields_contract_001"
+      ],
+      "trigger_types": [
+        "scope_change"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Core Mutation Authority"
+      ],
+      "decision_id": "dec_eb288bc65d9dd4d9",
+      "decision_status": "deferred_scope_decision",
+      "decision_type": "tighten_requirement",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "For the approved Player profile surface, `display_name` is the required League-visible Player name used for ordinary display and administrative identification. An accepted `display_name` update replaces the prior value, must preserve a non-empty language-neutral proper name value, and must reject unsupported or blank values without mutation. `profile_photo` is an optional Player profile-photo reference distinct from the reusable Media items associated with Games or the League Gallery. It may be set, replaced, or cleared by an actor authorized for the linked Player profile. An accepted `profile_photo` update stores a stable reference to a supported uploaded or externally hosted photo identity without implying any Game or Gallery Media association; unsupported reference forms, non-photo references, or values that cannot be retained as a stable Player profile-photo identity are rejected without mutation. Accepted updates to either field preserve the prior and new value in audit or equivalent profile-change history with actor, timestamp, action, and optional reason."
+      ],
+      "options_considered": [
+        {
+          "description": "For the approved Player profile surface, `display_name` is the required League-visible Player name used for ordinary display and administrative identification. An accepted `display_name` update replaces the prior value, must preserve a non-empty language-neutral proper name value, and must reject unsupported or blank values without mutation. `profile_photo` is an optional Player profile-photo reference distinct from the reusable Media items associated with Games or the League Gallery. It may be set, replaced, or cleared by an actor authorized for the linked Player profile. An accepted `profile_photo` update stores a stable reference to a supported uploaded or externally hosted photo identity without implying any Game or Gallery Media association; unsupported reference forms, non-photo references, or values that cannot be retained as a stable Player profile-photo identity are rejected without mutation. Accepted updates to either field preserve the prior and new value in audit or equivalent profile-change history with actor, timestamp, action, and optional reason.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Core Mutation Authority` adopt this change (tighten requirement): For the approved Player profile surface, `display_name` is the required League-visible Player name used for ordinary display and administrative identification. An accepted `display_name` update replaces the prior value, must preserve a non-empty language-neutral proper name value, and must reject unsupported or blank values without mutation. `profile_photo` is an optional Player profile-photo reference distinct from the reusable Media items associated with Games or the League Gallery. It may be set, replaced, or cleared by an actor authorized for the linked Player profile. An accepted `profile_photo` update stores a stable reference to a supported uploaded or externally hosted photo identity without implying any Game or Gallery Media association; unsupported reference forms, non-photo references, or values that cannot be retained as a stable Player profile-photo identity are rejected without mutation. Accepted updates to either field preserve the prior and new value in audit or equivalent profile-change history with actor, timestamp, action, and optional reason.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_profile_fields_contract_001"
+      ],
+      "trigger_types": [
+        "tighten_requirement"
+      ]
+    }
+  ],
+  "draft_hash": "93f4864f3387fb05ce3cdd584a04d9bea7785c429d3b668c394405a65160cee4",
+  "round_number": 4
+}

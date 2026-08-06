@@ -1,0 +1,71 @@
+{
+  "action_taken": "none",
+  "behavior": "observability_only",
+  "components": [
+    {
+      "byte_count": 34400,
+      "char_count": 34246,
+      "estimated_tokens": 8562,
+      "exists": true,
+      "kind": "mutable_draft",
+      "label": "draft_before",
+      "path": "rounds/round-4/context/draft_before.md",
+      "read_error": "",
+      "required": true,
+      "role": "draft",
+      "sha256": "1860708481fdf4b052209615947ee13f6abe8be9eda3165d513bca2aedff43e9"
+    },
+    {
+      "byte_count": 12646,
+      "char_count": 12646,
+      "estimated_tokens": 3162,
+      "exists": true,
+      "kind": "reviewer_feedback",
+      "label": "reviewer_feedback",
+      "path": "rounds/round-4/context/reviewer_feedback.json",
+      "read_error": "",
+      "required": true,
+      "role": "reviewer_feedback",
+      "sha256": "8ef4562bd9dc0b136e7f3172ddc9064eb26dda9b002babd33c60465be5ef510e"
+    },
+    {
+      "byte_count": 15268,
+      "char_count": 15268,
+      "estimated_tokens": 3817,
+      "exists": true,
+      "kind": "scope_contract",
+      "label": "scope_contract",
+      "path": "rounds/round-4/context/scope_contract.json",
+      "read_error": "",
+      "required": true,
+      "role": "scope_contract",
+      "sha256": "37bd9058274086b49f6decce85ff42201c0164165bf692988d7e991200e97f81"
+    }
+  ],
+  "estimate_method": "ceil(char_count / 4); advisory only, not provider tokenizer output",
+  "generated_at": "2026-08-05T04:06:33.306804+00:00",
+  "phase": "phase_1",
+  "profile": "vertical",
+  "referenced_context": {
+    "reference_count": 0,
+    "references": []
+  },
+  "report_scope": "round_prompt_context",
+  "root": "/Users/Shared/Agent-Workspace/repos/personal/courtside/whetstone_runs/core-domain-phase1-001",
+  "round_number": 4,
+  "schema_version": "context-pressure-v1",
+  "thresholds": {
+    "component_warning_bytes": 300000,
+    "reference_count_warning": 8,
+    "total_warning_bytes": 800000
+  },
+  "totals": {
+    "byte_count": 62314,
+    "char_count": 62160,
+    "component_count": 3,
+    "estimated_tokens": 15541,
+    "existing_component_count": 3,
+    "reference_context_count": 0
+  },
+  "warnings": []
+}

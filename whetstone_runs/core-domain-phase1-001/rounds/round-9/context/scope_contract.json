@@ -1,0 +1,248 @@
+{
+  "acceptance_floor": {
+    "may_defer": [
+      "Exhaustive error-code registries",
+      "Non-core operational runbooks",
+      "Post-MVP recovery branches"
+    ],
+    "minimum_buildable_result": "Phase 1 is good enough when the composite has no unresolved blocker or major findings across structural integrity, determinism, and operability; all accepted edits remain within the scope contract; any requirement-strength, authority, scope, enum, or error-vocabulary change is surfaced as an operator decision; and the resulting candidate is explicit enough to plan schema and API work without selecting those implementations.",
+    "must_answer": [
+      "What is the core MVP flow?",
+      "What inputs, outputs, artifacts, and obvious failure categories are required?"
+    ]
+  },
+  "approval": {
+    "approved": true,
+    "approved_at": "2026-08-05T03:49:36.011079+00:00",
+    "approved_by": "operator"
+  },
+  "core_flows": [
+    {
+      "description": "Preserve durable League, Team, Player, and User Account identity while representing Season Team and Roster Membership participation without historical rewrites.",
+      "id": "flow-1",
+      "priority": "must"
+    },
+    {
+      "description": "Finalize, forfeit, correct, and recompute Game-derived standings and playoff advancement deterministically under a frozen versioned Season configuration.",
+      "id": "flow-2",
+      "priority": "must"
+    },
+    {
+      "description": "Record partial Player Stat Lines while preserving unknown versus known zero and provisional versus confirmed status independently.",
+      "id": "flow-3",
+      "priority": "must"
+    },
+    {
+      "description": "Resolve fixed-bracket aggregate-points playoff Matchups, including aggregate overtime in the final configured Game.",
+      "id": "flow-4",
+      "priority": "must"
+    },
+    {
+      "description": "Preserve scoped League Administrator, Team Captain, and approved Player Management authority with the required audit trail.",
+      "id": "flow-5",
+      "priority": "should"
+    },
+    {
+      "description": "Preserve League timezone, English/French fallback, simple Venue, and reusable Media boundaries without expanding their implementation surface.",
+      "id": "flow-6",
+      "priority": "should"
+    }
+  ],
+  "core_outcome": "Stabilize the proposed Courtside core domain so an engineer can produce schema and API implementation plans without guessing about domain identity, state legality, authority, deterministic derivation, or obvious failure behavior.",
+  "deferral_rules": [
+    {
+      "action": "defer",
+      "decline_reason": "out_of_scope",
+      "id": "rule-1",
+      "rationale": "Defer reviewer requests that prescribe schema, API, framework, vendor, deployment, or UI choices.",
+      "trigger": "Defer reviewer requests that prescribe schema, API, framework, vendor, deployment, or UI choices."
+    },
+    {
+      "action": "defer",
+      "decline_reason": "out_of_scope",
+      "id": "rule-2",
+      "rationale": "Defer exhaustive error matrices and runbooks unless a missing failure category prevents domain determinism or safe administrative behavior.",
+      "trigger": "Defer exhaustive error matrices and runbooks unless a missing failure category prevents domain determinism or safe administrative behavior."
+    },
+    {
+      "action": "allow_if_core",
+      "decline_reason": "deferred_to_later_round",
+      "id": "rule-3",
+      "rationale": "Allow reviewer pressure on canonical terms, source-of-truth rules, legal transitions, correction cascades, deterministic calculations, configuration versioning, authorization boundaries, and acceptance criteria.",
+      "trigger": "Allow reviewer pressure on canonical terms, source-of-truth rules, legal transitions, correction cascades, deterministic calculations, configuration versioning, authorization boundaries, and acceptance criteria."
+    },
+    {
+      "action": "allow_if_core",
+      "decline_reason": "deferred_to_later_round",
+      "id": "rule-4",
+      "rationale": "Require an operator decision before adding a new persistent domain concept, lifecycle state, role, ranking criterion, playoff policy, or authority boundary.",
+      "trigger": "Require an operator decision before adding a new persistent domain concept, lifecycle state, role, ranking criterion, playoff policy, or authority boundary."
+    },
+    {
+      "action": "allow_if_core",
+      "decline_reason": "deferred_to_later_round",
+      "id": "rule-5",
+      "rationale": "Preserve every explicit product decision recorded in ADR 0001 unless a contradiction makes implementation impossible.",
+      "trigger": "Preserve every explicit product decision recorded in ADR 0001 unless a contradiction makes implementation impossible."
+    }
+  ],
+  "generated_at": "2026-08-05T03:49:36.011079+00:00",
+  "operator_decisions": [
+    {
+      "answer": "# Whetstone MVP Scope Notes\n\n## Core Outcome\n\nStabilize the proposed Courtside core domain so an engineer can produce schema and API implementation plans without guessing about domain identity, state legality, authority, deterministic derivation, or obvious failure behavior.\n\n## Primary Actor Or Consumer\n\nAn engineer designing the first Courtside schema and API boundary from the ratified domain specifications.\n\n## Core Flows\n\n- must: Preserve durable League, Team, Player, and User Account identity while representing Season Team and Roster Membership participation without historical rewrites.\n- must: Finalize, forfeit, correct, and recompute Game-derived standings and playoff advancement deterministically under a frozen versioned Season configuration.\n- must: Record partial Player Stat Lines while preserving unknown versus known zero and provisional versus confirmed status independently.\n- must: Resolve fixed-bracket aggregate-points playoff Matchups, including aggregate overtime in the final configured Game.\n- should: Preserve scoped League Administrator, Team Captain, and approved Player Management authority with the required audit trail.\n- should: Preserve League timezone, English/French fallback, simple Venue, and reusable Media boundaries without expanding their implementation surface.\n\n## In Scope\n\n- canonical domain terminology and ownership: required_fields\n- identity and participation boundaries: required_fields\n- lifecycle states and legal authority transitions: required_fields\n- standings inputs, ranking, random draw, and reproducibility: required_fields\n- playoff aggregate calculation and tiebreak behavior: required_fields\n- frozen configuration amendment and correction cascades: required_fields\n- partial statistics semantics: required_fields\n- scoped authorization and minimum audit behavior: required_fields\n- localization, timezone, Venue, and Media domain boundaries: mention\n- obvious domain failure categories and acceptance criteria: required_fields\n\n## Deferred / Out Of Scope\n\n- database schema and indexes\n- API endpoints, transports, and event schemas\n- programming language, framework, authentication provider, hosting, and deployment\n- complete basketball statistics vocabulary\n- UI layout and editorial translation workflow\n- divisions, conferences, inter-league competition, and cross-league Player identity\n- exhaustive error-code registry and operational runbooks\n- implementation-specific observability, retry, timeout, and recovery design\n- Phase 2 convergence declaration\n- mutation of original Courtside source specifications\n\n## Expansion Rules\n\n- Defer reviewer requests that prescribe schema, API, framework, vendor, deployment, or UI choices.\n- Defer exhaustive error matrices and runbooks unless a missing failure category prevents domain determinism or safe administrative behavior.\n- Allow reviewer pressure on canonical terms, source-of-truth rules, legal transitions, correction cascades, deterministic calculations, configuration versioning, authorization boundaries, and acceptance criteria.\n- Require an operator decision before adding a new persistent domain concept, lifecycle state, role, ranking criterion, playoff policy, or authority boundary.\n- Preserve every explicit product decision recorded in ADR 0001 unless a contradiction makes implementation impossible.\n\n## Good Enough\n\nPhase 1 is good enough when the composite has no unresolved blocker or major findings across structural integrity, determinism, and operability; all accepted edits remain within the scope contract; any requirement-strength, authority, scope, enum, or error-vocabulary change is surfaced as an operator decision; and the resulting candidate is explicit enough to plan schema and API work without selecting those implementations.",
+      "question": "What operator intent did the notes provide?",
+      "rationale": "Preserve original scope notes beside canonical fields."
+    }
+  ],
+  "primary_actor_or_consumer": "An engineer designing the first Courtside schema and API boundary from the ratified domain specifications.",
+  "readiness_target": "mvp",
+  "review_pressure_limits": {
+    "expansion_policy": "conservative",
+    "max_depth_default": "required_fields"
+  },
+  "schema_version": "scope-contract-v1",
+  "scope_surfaces": [
+    {
+      "id": "canonical-domain-terminology-and-ownership",
+      "name": "canonical domain terminology and ownership",
+      "rationale": "canonical domain terminology and ownership: required_fields",
+      "required_depth": "required_fields",
+      "status": "in_scope"
+    },
+    {
+      "id": "identity-and-participation-boundaries",
+      "name": "identity and participation boundaries",
+      "rationale": "identity and participation boundaries: required_fields",
+      "required_depth": "required_fields",
+      "status": "in_scope"
+    },
+    {
+      "id": "lifecycle-states-and-legal-authority-transitions",
+      "name": "lifecycle states and legal authority transitions",
+      "rationale": "lifecycle states and legal authority transitions: required_fields",
+      "required_depth": "required_fields",
+      "status": "in_scope"
+    },
+    {
+      "id": "standings-inputs-ranking-random-draw-and-reproducibility",
+      "name": "standings inputs, ranking, random draw, and reproducibility",
+      "rationale": "standings inputs, ranking, random draw, and reproducibility: required_fields",
+      "required_depth": "required_fields",
+      "status": "in_scope"
+    },
+    {
+      "id": "playoff-aggregate-calculation-and-tiebreak-behavior",
+      "name": "playoff aggregate calculation and tiebreak behavior",
+      "rationale": "playoff aggregate calculation and tiebreak behavior: required_fields",
+      "required_depth": "required_fields",
+      "status": "in_scope"
+    },
+    {
+      "id": "frozen-configuration-amendment-and-correction-cascades",
+      "name": "frozen configuration amendment and correction cascades",
+      "rationale": "frozen configuration amendment and correction cascades: required_fields",
+      "required_depth": "required_fields",
+      "status": "in_scope"
+    },
+    {
+      "id": "partial-statistics-semantics",
+      "name": "partial statistics semantics",
+      "rationale": "partial statistics semantics: required_fields",
+      "required_depth": "required_fields",
+      "status": "in_scope"
+    },
+    {
+      "id": "scoped-authorization-and-minimum-audit-behavior",
+      "name": "scoped authorization and minimum audit behavior",
+      "rationale": "scoped authorization and minimum audit behavior: required_fields",
+      "required_depth": "required_fields",
+      "status": "in_scope"
+    },
+    {
+      "id": "localization-timezone-venue-and-media-domain-boundaries",
+      "name": "localization, timezone, Venue, and Media domain boundaries",
+      "rationale": "localization, timezone, Venue, and Media domain boundaries: mention",
+      "required_depth": "mention",
+      "status": "in_scope"
+    },
+    {
+      "id": "obvious-domain-failure-categories-and-acceptance-criteria",
+      "name": "obvious domain failure categories and acceptance criteria",
+      "rationale": "obvious domain failure categories and acceptance criteria: required_fields",
+      "required_depth": "required_fields",
+      "status": "in_scope"
+    },
+    {
+      "id": "database-schema-and-indexes",
+      "name": "database schema and indexes",
+      "rationale": "database schema and indexes",
+      "required_depth": "mention",
+      "status": "deferred"
+    },
+    {
+      "id": "api-endpoints-transports-and-event-schemas",
+      "name": "API endpoints, transports, and event schemas",
+      "rationale": "API endpoints, transports, and event schemas",
+      "required_depth": "mention",
+      "status": "deferred"
+    },
+    {
+      "id": "programming-language-framework-authentication-provider-hosting-and-deployment",
+      "name": "programming language, framework, authentication provider, hosting, and deployment",
+      "rationale": "programming language, framework, authentication provider, hosting, and deployment",
+      "required_depth": "mention",
+      "status": "deferred"
+    },
+    {
+      "id": "complete-basketball-statistics-vocabulary",
+      "name": "complete basketball statistics vocabulary",
+      "rationale": "complete basketball statistics vocabulary",
+      "required_depth": "mention",
+      "status": "deferred"
+    },
+    {
+      "id": "ui-layout-and-editorial-translation-workflow",
+      "name": "UI layout and editorial translation workflow",
+      "rationale": "UI layout and editorial translation workflow",
+      "required_depth": "mention",
+      "status": "deferred"
+    },
+    {
+      "id": "divisions-conferences-inter-league-competition-and-cross-league-player-identity",
+      "name": "divisions, conferences, inter-league competition, and cross-league Player identity",
+      "rationale": "divisions, conferences, inter-league competition, and cross-league Player identity",
+      "required_depth": "mention",
+      "status": "deferred"
+    },
+    {
+      "id": "exhaustive-error-code-registry-and-operational-runbooks",
+      "name": "exhaustive error-code registry and operational runbooks",
+      "rationale": "exhaustive error-code registry and operational runbooks",
+      "required_depth": "mention",
+      "status": "deferred"
+    },
+    {
+      "id": "implementation-specific-observability-retry-timeout-and-recovery-design",
+      "name": "implementation-specific observability, retry, timeout, and recovery design",
+      "rationale": "implementation-specific observability, retry, timeout, and recovery design",
+      "required_depth": "mention",
+      "status": "deferred"
+    },
+    {
+      "id": "phase-2-convergence-declaration",
+      "name": "Phase 2 convergence declaration",
+      "rationale": "Phase 2 convergence declaration",
+      "required_depth": "mention",
+      "status": "deferred"
+    },
+    {
+      "id": "mutation-of-original-courtside-source-specifications",
+      "name": "mutation of original Courtside source specifications",
+      "rationale": "mutation of original Courtside source specifications",
+      "required_depth": "mention",
+      "status": "deferred"
+    }
+  ],
+  "source_notes_path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/whetstone_runs/core-domain-phase1-001/scope-notes.md",
+  "status": "approved"
+}

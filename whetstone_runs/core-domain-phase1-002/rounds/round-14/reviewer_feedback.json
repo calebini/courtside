@@ -1,0 +1,35 @@
+{
+  "draft_hash": "18e7e47f9e7e53bcdf0ad9e31e8345a967162c7b518f9a4084a3fda2028645d5",
+  "feedback": [
+    {
+      "affected_sections": [
+        "Authoritative Result Corrections",
+        "Venues, Media, and Audit",
+        "Audit Configuration"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "major",
+      "claim": "The accepted playoff result-correction resolution identity can collide across distinct material corrections because it includes the target corrected value but not the correction's current source value, authoritative revision, or correction basis.",
+      "determinism_impact": "major",
+      "evidence": "The draft defines the deterministic identity of an accepted correction resolution as composed of \"the corrected Game, corrected authoritative value, affected participant slots, downstream authoritative Games that create the conflict, and chosen resolution type\" and says later attempts with the same identity reuse the prior accepted correction and Audit Record. The same draft also requires corrections to preserve previous value and new value in append-only audit history. If a Game is corrected to value B, later corrected to C, and then corrected back to B with the same affected slots, downstream Games, and resolution type, the specified identity matches the prior B correction even though the material previous value and audit event are different.",
+      "feedback_id": "fb_round14_determinism_001",
+      "in_scope": true,
+      "invariant_violated": "replay_idempotency",
+      "issue_fingerprint": "27d32c3d781227c99ecc15e283422bb7a85a2072e73d1e1bb5b4653cfe99cd12",
+      "issue_id": "iss_27d32c3d781227c9",
+      "issue_type": "idempotency_identity_collision",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Include the correction basis in the correction-resolution identity, such as the current authoritative score/winner or immutable authoritative result revision being corrected from, and state that reuse applies only when both the basis and target correction identity match. Distinct basis-to-target corrections should append distinct material Audit Records while exact retries of the same accepted basis-to-target correction reuse the existing artifact identities.",
+      "rubric_impact": "major",
+      "severity_rationale": "This is in scope under flow-5 and the scope rule allowing pressure on deterministic identity and idempotency. It does not prevent a first implementation outright, but it creates meaningful replay/idempotency ambiguity and can cause loss of required append-only audit history across repeated corrections."
+    }
+  ],
+  "profile": "determinism",
+  "reviewer": {
+    "model": "gpt-5-codex",
+    "name": "Codex Determinism Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 14
+}

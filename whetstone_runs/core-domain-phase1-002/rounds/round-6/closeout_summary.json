@@ -1,0 +1,10 @@
+{
+  "draft_after_hash": "93f4864f3387fb05ce3cdd584a04d9bea7785c429d3b668c394405a65160cee4",
+  "draft_before_hash": "93f4864f3387fb05ce3cdd584a04d9bea7785c429d3b668c394405a65160cee4",
+  "editor_invoked": false,
+  "note": "Reviewer-only closeout; editor_summary.json is a compatibility no-op and no Editor client was invoked.",
+  "phase": "phase_1",
+  "profile": "determinism",
+  "round_kind": "review_only",
+  "round_number": 6
+}

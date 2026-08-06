@@ -1,0 +1,134 @@
+{
+  "active_profile": null,
+  "budget_extensions": [],
+  "configured_convergence_profile_budgets": {},
+  "configured_review_profile_budgets": {},
+  "convergence_profile_budgets": {
+    "adversarial": 4,
+    "convergence_strict_check": 6
+  },
+  "convergence_round_budget": 16,
+  "current_absolute_round": 30,
+  "current_draft_hash": "beb3ecc982171b343cc67263419544e9879445c94e1a6aa6bd0205bf27299aa9",
+  "current_phase_round": 30,
+  "current_round": 30,
+  "effective_run_config": {
+    "contract_surface_policy": {
+      "action": "recommend_synthesis",
+      "enabled": true,
+      "min_contract_families": 2,
+      "min_profile_rounds": 4,
+      "min_recent_serious_rounds": 3,
+      "recent_window": 4
+    },
+    "convergence_profile_budgets": {
+      "adversarial": 4,
+      "convergence_strict_check": 6
+    },
+    "decision_points": {
+      "enabled": true,
+      "intervention_thresholds": {
+        "severities": [
+          "blocker",
+          "major"
+        ],
+        "trigger_on_authority_boundary_change": true,
+        "trigger_on_new_enum_or_error_code": true,
+        "trigger_on_requirement_strength_change": true,
+        "trigger_on_scope_change": true
+      },
+      "mode": "end_of_cycle"
+    },
+    "reference_context": {
+      "files": {}
+    },
+    "review_budget_exhaustion_policy": "hard",
+    "review_mode": "vertical",
+    "review_profile_budgets": {
+      "determinism": 7,
+      "operability": 6,
+      "structural_integrity": 7
+    },
+    "review_profile_set": "balanced_mvp",
+    "scope_contract": {
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/whetstone_runs/core-domain-phase1-001/rounds/intake/scope_contract.json"
+    },
+    "timeouts": {
+      "editor_seconds": 1200,
+      "reviewer_seconds": 420
+    }
+  },
+  "last_accepted_draft_hash": "beb3ecc982171b343cc67263419544e9879445c94e1a6aa6bd0205bf27299aa9",
+  "phase": "phase_1",
+  "phase_1_rounds_completed": 30,
+  "phase_2_rounds_completed": 0,
+  "ready_for_phase_2": false,
+  "resumable": true,
+  "review_budget_exhaustion_policy": "hard",
+  "review_mode": "vertical",
+  "review_profile_budgets": {
+    "determinism": 7,
+    "operability": 6,
+    "structural_integrity": 7
+  },
+  "review_profile_set": "balanced_mvp",
+  "review_round_budget": 27,
+  "run_artifact_pointers": {
+    "context_pressure_report": {
+      "exists": true,
+      "path": "rounds/context_pressure_report.json",
+      "sha256": "1cf7d91150fc4f4f81855338e80d37ba5d35add83e45341efdf1a8be7bcb92f7"
+    },
+    "context_pressure_report_markdown": {
+      "exists": true,
+      "path": "rounds/context_pressure_report.md",
+      "sha256": "068a6d689ad416ffa5af2283b7ccac14ad0ad1c4ebd7caa56b05644d7c308a39"
+    },
+    "job_descriptor": {
+      "candidate_paths": [
+        "whetstone_job.json",
+        "job_descriptor.json",
+        "rounds/whetstone_job.json",
+        "rounds/job_descriptor.json",
+        "rounds/intake/whetstone_job.json",
+        "rounds/intake/job_descriptor.json"
+      ],
+      "exists": false,
+      "path": null,
+      "sha256": null
+    },
+    "scope_contract": {
+      "exists": true,
+      "path": "rounds/intake/scope_contract.json",
+      "sha256": "37bd9058274086b49f6decce85ff42201c0164165bf692988d7e991200e97f81"
+    }
+  },
+  "run_mode": "phase_1",
+  "seen_draft_hashes": [
+    "aca84978b693a31840c33c8a378473494cb9c3fd25449d8c605cef021c8062e6",
+    "15c3ca6a2aba64d8e2410a84ee37d59f28ca454e0805eefb3a40cf7eb88746c1",
+    "1b3087bbf7918b47cb40a3d650feb39329f2297a78452b0f4255b4bf148e9b22",
+    "79166ffebeb45392b52ac3f34aee90b3e9be99b2852a349b07027572c5f3227d",
+    "f6850d2448634a0d2aa1099b7e21b6f8db60faee35f453b03f42fcc323203c32",
+    "7c9d87eca9704660bfa15f6d19c1ce223d67c294380309f58786494bb00ccc3a",
+    "d49538000719fbe67bc083394959c142b95083f3ea4eb4f13a7b4cad6c0fe00e",
+    "beb3ecc982171b343cc67263419544e9879445c94e1a6aa6bd0205bf27299aa9"
+  ],
+  "telemetry_totals": {
+    "attempt_count": 30,
+    "missing_usage_attempts": 0,
+    "round_count": 30,
+    "total_api_duration_ms": null,
+    "total_cost_usd": null,
+    "total_duration_ms": 2072136,
+    "total_tokens": 937242,
+    "warning_count": 0
+  },
+  "terminal_state": "TARGET_NOT_REACHED",
+  "timeouts": {
+    "editor_seconds": 1200,
+    "reviewer_seconds": 420
+  },
+  "total_absolute_round_budget": 43,
+  "updated_at": "2026-08-05T04:39:20.712724+00:00"
+}

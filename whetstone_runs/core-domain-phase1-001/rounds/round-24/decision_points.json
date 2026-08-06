@@ -1,0 +1,156 @@
+{
+  "decision_points": [
+    {
+      "affected_sections": [
+        "Courtside Core Domain \u2014 Isolated Phase 1.06 Composite"
+      ],
+      "decision_id": "dec_7702e5cdcee83f8a",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "scope_change",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "# Courtside Core Domain \u2014 Isolated Phase 1.06 Composite"
+      ],
+      "options_considered": [
+        {
+          "description": "# Courtside Core Domain \u2014 Isolated Phase 1.06 Composite",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Courtside Core Domain \u2014 Isolated Phase 1.06 Composite` adopt this change (scope change): # Courtside Core Domain \u2014 Isolated Phase 1.06 Composite",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 24,
+      "source_feedback_ids": [
+        "determinism:fb_001"
+      ],
+      "trigger_types": [
+        "scope_change"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Authoritative Result Corrections"
+      ],
+      "decision_id": "dec_516b588d462bd569",
+      "decision_status": "deferred_scope_decision",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "The deterministic identity of an accepted correction resolution is composed of the corrected Game, the corrected authoritative value, the affected participant slots, the downstream authoritative Games that create the conflict, and the chosen resolution type. Affected participant slots are canonicalized by their fixed bracket path or immutable slot identity, and downstream authoritative Games are canonicalized by immutable canonical Game identity within the fixed bracket order. Identity equality is based on that canonicalized content, not on traversal order, storage order, report ordering, discovery order, display labels, or mutable implementation identifiers. Retries, replays, or concurrent recomputations for the same resolution identity must return the same projection effect and resolution report. They must not create an alternate participant projection, silently consume historically visible conflicted Games for advancement, or require an operator to resolve the same accepted halt again."
+      ],
+      "options_considered": [
+        {
+          "description": "The deterministic identity of an accepted correction resolution is composed of the corrected Game, the corrected authoritative value, the affected participant slots, the downstream authoritative Games that create the conflict, and the chosen resolution type. Affected participant slots are canonicalized by their fixed bracket path or immutable slot identity, and downstream authoritative Games are canonicalized by immutable canonical Game identity within the fixed bracket order. Identity equality is based on that canonicalized content, not on traversal order, storage order, report ordering, discovery order, display labels, or mutable implementation identifiers. Retries, replays, or concurrent recomputations for the same resolution identity must return the same projection effect and resolution report. They must not create an alternate participant projection, silently consume historically visible conflicted Games for advancement, or require an operator to resolve the same accepted halt again.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Authoritative Result Corrections` adopt this change (tighten requirement, choose policy): The deterministic identity of an accepted correction resolution is composed of the corrected Game, the corrected authoritative value, the affected participant slots, the downstream authoritative Games that create the conflict, and the chosen resolution type. Affected participant slots are canonicalized by their fixed bracket path or immutable slot identity, and downstream authoritative Games are canonicalized by immutable canonical Game identity within the fixed bracket order. Identity equality is based on that canonicalized content, not on traversal order, storage order, report ordering, discovery order, display labels, or mutable implementation identifiers. Retries, replays, or concurrent recomputations for the same resolution identity must return the same projection effect and resolution report. They must not create an alternate participant projection, silently consume historically visible conflicted Games for advancement, or require an operator to resolve the same accepted halt again.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 24,
+      "source_feedback_ids": [
+        "determinism:fb_001"
+      ],
+      "trigger_types": [
+        "tighten_requirement",
+        "choose_policy"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Playoffs"
+      ],
+      "decision_id": "dec_1ed80b2032539eb6",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "11. Accepted correction resolutions that halt advancement are deterministic by their canonicalized resolution identity; retries and replays return the same halted projection and report until replacement authoritative outcomes satisfy the resume condition."
+      ],
+      "options_considered": [
+        {
+          "description": "11. Accepted correction resolutions that halt advancement are deterministic by their canonicalized resolution identity; retries and replays return the same halted projection and report until replacement authoritative outcomes satisfy the resume condition.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Playoffs` adopt this change (choose policy): 11. Accepted correction resolutions that halt advancement are deterministic by their canonicalized resolution identity; retries and replays return the same halted projection and report until replacement authoritative outcomes satisfy the resume condition.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 24,
+      "source_feedback_ids": [
+        "determinism:fb_001"
+      ],
+      "trigger_types": [
+        "choose_policy"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Audit Configuration"
+      ],
+      "decision_id": "dec_8f64646be1cd8e18",
+      "decision_status": "deferred_scope_decision",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "An Audit Record for a playoff correction conflict resolution must include the resolution type, affected participant slots, conflicted downstream authoritative Games, canonicalized resolution identity, and whether affected advancement is halted or an existing downstream participant path is affirmed as an administrative exception. The corresponding resolution report must expose the same information needed to reproduce retry behavior and operator handoff."
+      ],
+      "options_considered": [
+        {
+          "description": "An Audit Record for a playoff correction conflict resolution must include the resolution type, affected participant slots, conflicted downstream authoritative Games, canonicalized resolution identity, and whether affected advancement is halted or an existing downstream participant path is affirmed as an administrative exception. The corresponding resolution report must expose the same information needed to reproduce retry behavior and operator handoff.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Audit Configuration` adopt this change (tighten requirement, choose policy): An Audit Record for a playoff correction conflict resolution must include the resolution type, affected participant slots, conflicted downstream authoritative Games, canonicalized resolution identity, and whether affected advancement is halted or an existing downstream participant path is affirmed as an administrative exception. The corresponding resolution report must expose the same information needed to reproduce retry behavior and operator handoff.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 24,
+      "source_feedback_ids": [
+        "determinism:fb_001"
+      ],
+      "trigger_types": [
+        "tighten_requirement",
+        "choose_policy"
+      ]
+    }
+  ],
+  "draft_hash": "d49538000719fbe67bc083394959c142b95083f3ea4eb4f13a7b4cad6c0fe00e",
+  "round_number": 24
+}

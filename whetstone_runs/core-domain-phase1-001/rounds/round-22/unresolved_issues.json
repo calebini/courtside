@@ -1,0 +1,19 @@
+{
+  "draft_hash": "7c9d87eca9704660bfa15f6d19c1ce223d67c294380309f58786494bb00ccc3a",
+  "round_number": 22,
+  "unresolved_issues": [
+    {
+      "affected_sections": [
+        "specs/lifecycle.md#Authoritative Result Corrections",
+        "specs/invariants.md#Playoffs",
+        "specs/config.md#Audit Configuration"
+      ],
+      "blocking_acceptance": true,
+      "claim": "The accepted playoff correction resolution identity is declared deterministic, but its multi-item components are not given a canonical ordering or equality rule, so retries or independent recomputations can derive different identities for the same correction conflict.",
+      "in_scope": true,
+      "issue_fingerprint": "8ce309b59049ade14f0edc7e17a23571ce50eabd876e68a30f312a4693aaf77b",
+      "issue_id": "iss_8ce309b59049ade1",
+      "normalized_severity": "major"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "draft_hash": "18e7e47f9e7e53bcdf0ad9e31e8345a967162c7b518f9a4084a3fda2028645d5",
+  "feedback": [
+    {
+      "affected_sections": [
+        "Authoritative Result Corrections",
+        "Audit Configuration"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "major",
+      "claim": "The accepted playoff correction-resolution identity can conflate distinct later corrections because it includes the corrected Game and new corrected authoritative value, but not the prior authoritative value, prior result version, or correction sequence being changed from.",
+      "determinism_impact": "major",
+      "evidence": "The scope contract makes both audited downstream playoff-correction resolutions a must-flow and allows pressure on deterministic identity and idempotency. In `Authoritative Result Corrections`, the draft says a correction preserves previous value in audit history, then defines the deterministic identity as `the corrected Game, corrected authoritative value, affected participant slots, downstream authoritative Games that create the conflict, and chosen resolution type`. In `Audit Configuration`, that canonicalized resolution identity is also the idempotency key for authoritative correction-resolution audit persistence. If the same Game is legitimately corrected to value B, later changed away from B, and then corrected back to B with the same affected slots and resolution type, the identity collides with the earlier accepted correction even though the required previous value and audit history are different.",
+      "feedback_id": "fb_det_017_001",
+      "in_scope": true,
+      "invariant_violated": "replay_idempotency",
+      "issue_fingerprint": "4a02ddfd66aa6e14ff188465f099f60f6fbd16d6168fea367f8ac06952d7e408",
+      "issue_id": "iss_4a02ddfd66aa6e14",
+      "issue_type": "determinism_gap",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Extend the correction-resolution identity to include the prior authoritative result identity/version being corrected, or an immutable correction request/version lineage that distinguishes separate material corrections while still allowing exact retries of the same correction action to reuse the prior correction, projection, Audit Record, and report.",
+      "rubric_impact": "major",
+      "severity_rationale": "This is in scope under the required playoff-correction resolution flow and the determinism/idempotency surfaces. It does not make the entire MVP impossible to build, but it creates a meaningful replay and audit-identity ambiguity for a core deterministic correction path."
+    }
+  ],
+  "profile": "determinism",
+  "reviewer": {
+    "model": "gpt-5-codex",
+    "name": "Codex Whetstone Determinism Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 17
+}

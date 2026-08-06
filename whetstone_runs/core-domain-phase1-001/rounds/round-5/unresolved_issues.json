@@ -1,0 +1,34 @@
+{
+  "draft_hash": "15c3ca6a2aba64d8e2410a84ee37d59f28ca454e0805eefb3a40cf7eb88746c1",
+  "round_number": 5,
+  "unresolved_issues": [
+    {
+      "affected_sections": [
+        "Core Mutation Authority",
+        "Standings Lifecycle",
+        "Standings Configuration",
+        "Authorization Configuration"
+      ],
+      "blocking_acceptance": true,
+      "claim": "The draft introduces League Administrator authority for persisted random-draw conflict resolution without defining what conflict can be administratively resolved or how that authority interacts with the deterministic one-result-per-tie-context rule.",
+      "in_scope": true,
+      "issue_fingerprint": "7a425af225dc0a55fbf17f78e265ad15851ac161b3ba0135498921a8482fe577",
+      "issue_id": "iss_7a425af225dc0a55",
+      "normalized_severity": "major"
+    },
+    {
+      "affected_sections": [
+        "Player Management Lifecycle",
+        "Core Mutation Authority",
+        "Authorization",
+        "Authorization Configuration"
+      ],
+      "blocking_acceptance": true,
+      "claim": "The Player Management Relationship lifecycle defines `requested -> approved -> revoked` but does not define who may create or submit the initial `requested` relationship, leaving the entry transition and mutation authority undefined.",
+      "in_scope": true,
+      "issue_fingerprint": "51f06739eb4069ce2c53e484b253af641cebfea34ef4367af64e34bed4613238",
+      "issue_id": "iss_51f06739eb4069ce",
+      "normalized_severity": "major"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "draft_hash": "1b3087bbf7918b47cb40a3d650feb39329f2297a78452b0f4255b4bf148e9b22",
+  "feedback": [
+    {
+      "affected_sections": [
+        "specs/lifecycle.md#Season Configuration Lifecycle",
+        "specs/config.md#Authority and Precedence",
+        "specs/invariants.md#Configuration and Reproducibility"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "major",
+      "claim": "The configuration-freeze rule does not define idempotent or concurrent behavior when the first authoritative Season Game outcome is accepted, so repeated or concurrent finalization attempts could create different frozen configuration versions for the same Season.",
+      "determinism_impact": "major",
+      "evidence": "The draft says, \"The first transition of any Season Game to `final` or `forfeit` freezes a versioned snapshot\" and \"The first authoritative Season Game outcome freezes all result-affecting values into a versioned Season snapshot.\" It does not specify that the freeze is single-per-Season, that retries reuse the existing snapshot, or what happens when two Game transitions race while no frozen version exists. The scope contract includes frozen configuration amendment and correction cascades, deterministic calculations, configuration versioning, and obvious domain failure categories as in scope.",
+      "feedback_id": "fb_det_001",
+      "in_scope": true,
+      "invariant_violated": "replay_idempotency",
+      "issue_fingerprint": "6c1c47735ed40d0e5fe776611b4d839562e96a33fdb0829169657fc41d736f5b",
+      "issue_id": "iss_6c1c47735ed40d0e",
+      "issue_type": "determinism_gap",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Define the freeze as an idempotent single Season operation: once any `final` or `forfeit` transition has accepted and created the frozen result-affecting configuration version, all later or retried authoritative Game transitions for that Season must reference that same frozen version. Specify concurrent first-freeze handling, such as accepting exactly one snapshot creation and requiring competing attempts to either reuse the created snapshot if their submitted configuration basis matches or reject without mutating authoritative state if they depended on a different mutable configuration state.",
+      "rubric_impact": "major",
+      "severity_rationale": "This affects an in-scope core flow and can cause divergent configuration version lineage, standings, and playoff replay results across implementations under retries or concurrent finalization."
+    },
+    {
+      "affected_sections": [
+        "specs/lifecycle.md#Standings Lifecycle",
+        "specs/config.md#Standings Configuration"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "major",
+      "claim": "The stable random-draw tie-context identity depends on comparing Season Team canonical identities by \"normalized codepoint order,\" but the normalization rule is undefined, leaving tie-context identity and draw reuse non-portable across implementers.",
+      "determinism_impact": "major",
+      "evidence": "The draft says canonical tie order is \"the ascending order of each Season Team's immutable canonical domain identity as assigned when the Season Team is created, compared by normalized codepoint order\" and that the tie-context identity is composed from that order. It also says the identity must not depend on display name, creation timestamp, storage order, locale collation, or mutable seed position. However, it does not define the normalization form, allowed identity character set, case handling, byte encoding, or comparison algorithm. The scope contract places standings inputs, ranking, random draw, and reproducibility in scope.",
+      "feedback_id": "fb_det_002",
+      "in_scope": true,
+      "invariant_violated": "deterministic_behavior",
+      "issue_fingerprint": "a81267ad27177372508f579d9e7d8c6d3bef96eb680249fd52ef3f574769f71d",
+      "issue_id": "iss_a81267ad27177372",
+      "issue_type": "determinism_gap",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Make the canonical identity comparison rule fully deterministic. For example, require immutable Season Team canonical domain identities used in tie-context ordering to be ASCII-only opaque identifiers compared byte-for-byte in ascending order, or specify an exact Unicode normalization form, encoding, case-sensitivity rule, and codepoint comparison algorithm. Then state that the stable tie-context identity uses this canonical ordered list exactly for replay, deduplication, and duplicate draw rejection.",
+      "rubric_impact": "major",
+      "severity_rationale": "Random-draw reuse and duplicate rejection are in the MVP determinism surface. Ambiguous identity ordering can cause two correct-looking implementations to compute different stable tie contexts and perform different persisted draws."
+    }
+  ],
+  "profile": "determinism",
+  "reviewer": {
+    "model": "GPT-5 Codex",
+    "name": "Codex Whetstone Determinism Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 10
+}

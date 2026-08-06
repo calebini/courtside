@@ -1,0 +1,35 @@
+{
+  "draft_hash": "f6850d2448634a0d2aa1099b7e21b6f8db60faee35f453b03f42fcc323203c32",
+  "feedback": [
+    {
+      "affected_sections": [
+        "specs/lifecycle.md :: Authoritative Result Corrections",
+        "specs/invariants.md :: Games and Results",
+        "specs/config.md :: Audit Configuration"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "major",
+      "claim": "The accepted playoff correction path can halt downstream advancement, but the draft does not define the observable halted condition or recovery handoff needed to resume operation safely.",
+      "determinism_impact": "major",
+      "evidence": "The draft permits an accepted correction to 'apply the correction and halt affected downstream advancement until replacement authoritative outcomes are recorded under the corrected bracket participants' and requires a resolution report. It also says downstream authoritative Game records remain historically visible and are not silently changed. However, it does not say what projection, Matchup condition, participant-slot condition, or operator-visible terminal report represents the halted advancement after the action, what records are excluded from future advancement calculations, or what exact condition clears the halt when replacement authoritative outcomes are recorded. This is in scope under the scope contract surfaces for frozen configuration amendment and correction cascades, playoff aggregate calculation and tiebreak behavior, and obvious domain failure categories and acceptance criteria.",
+      "feedback_id": "fb_001",
+      "in_scope": true,
+      "invariant_violated": "failure_handling",
+      "issue_fingerprint": "20e6858438375fe644f912e70af8a03733e490061379f2b1583f99dcc689fe68",
+      "issue_id": "iss_20e6858438375fe6",
+      "issue_type": "underspecified_recovery_behavior",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Define the minimum domain-level halted-advancement semantics for the accepted correction resolution: the affected Matchups or participant slots that must be marked or reported as halted, how historically visible downstream Games are treated by recomputation while halted, the operator-facing handoff/report fields after the halt, and the precise condition that resumes advancement. If adding a new persistent lifecycle state is desired, surface it as an operator decision under scope rule 4; otherwise specify the observable projection/report semantics without introducing a new state.",
+      "rubric_impact": "major",
+      "severity_rationale": "This does not block the whole MVP because an implementation can still reject unresolved correction conflicts, but the spec explicitly permits an accepted halt resolution. Without defined recovery semantics, implementations can diverge on how to stop, report, and resume playoff advancement after an accepted correction."
+    }
+  ],
+  "profile": "operability",
+  "reviewer": {
+    "model": "gpt-5-codex",
+    "name": "Codex Whetstone Operability Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 19
+}

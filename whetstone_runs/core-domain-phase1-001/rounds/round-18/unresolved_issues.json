@@ -1,0 +1,19 @@
+{
+  "draft_hash": "f6850d2448634a0d2aa1099b7e21b6f8db60faee35f453b03f42fcc323203c32",
+  "round_number": 18,
+  "unresolved_issues": [
+    {
+      "affected_sections": [
+        "Authoritative Result Corrections",
+        "Playoff Matchup Lifecycle",
+        "Configuration and Reproducibility"
+      ],
+      "blocking_acceptance": true,
+      "claim": "The accepted playoff-correction resolution that halts downstream advancement does not define the persisted replay state or projection semantics needed for deterministic recomputation and retries.",
+      "in_scope": true,
+      "issue_fingerprint": "0e555f08ffa37a74e833c8d90091b9157cb7dbffd19bb7df2abf407f1c523a1d",
+      "issue_id": "iss_0e555f08ffa37a74",
+      "normalized_severity": "major"
+    }
+  ]
+}

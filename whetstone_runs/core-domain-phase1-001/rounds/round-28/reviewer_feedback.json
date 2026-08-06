@@ -1,0 +1,59 @@
+{
+  "draft_hash": "beb3ecc982171b343cc67263419544e9879445c94e1a6aa6bd0205bf27299aa9",
+  "feedback": [
+    {
+      "affected_sections": [
+        "specs/lifecycle.md / Core Mutation Authority",
+        "specs/lifecycle.md / Game Lifecycle"
+      ],
+      "authority_impact": "minor",
+      "baseline_severity": "major",
+      "claim": "The draft grants League Administrators authority to reschedule Games but does not define the legal state mutation for rescheduling a Game that is already `scheduled`.",
+      "determinism_impact": "major",
+      "evidence": "Core Mutation Authority says League Administrators may \"schedule, reschedule\" Games. Game Lifecycle says a `scheduled` Game may become `postponed`, `cancelled`, `in_progress`, or `forfeit`, and a `postponed` Game may return to `scheduled` with a revised scheduled instant. The only schedule-history rule says scheduling changes must preserve operational history, but it does not state whether a `scheduled` Game may remain `scheduled` with a revised instant or must first transition through `postponed`. This is in scope under the lifecycle states and legal authority transitions surface.",
+      "feedback_id": "fb_round28_structural_001",
+      "in_scope": true,
+      "invariant_violated": "state_legality",
+      "issue_fingerprint": "940d480e1200b981672e8f5276ab2d39480b180d8f3d84a5e1bf7cb2ddaa1988",
+      "issue_id": "iss_940d480e1200b981",
+      "issue_type": "state_machine_legality",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Add an explicit legal rescheduling rule: either permit `scheduled` -> `scheduled` with a revised scheduled instant and required schedule history, or require `scheduled` -> `postponed` -> `scheduled` for all reschedules. State the invalid-transition behavior for the rejected alternative.",
+      "rubric_impact": "major",
+      "severity_rationale": "This does not prevent all MVP implementation, but it creates a meaningful legality and replay risk for a core Game scheduling mutation that the authority section explicitly exposes."
+    },
+    {
+      "affected_sections": [
+        "specs/overview.md / Canonical Concepts",
+        "specs/lifecycle.md / Core Mutation Authority",
+        "specs/lifecycle.md / Player Management Lifecycle",
+        "specs/invariants.md / Authorization",
+        "specs/config.md / Authorization Configuration"
+      ],
+      "authority_impact": "major",
+      "baseline_severity": "major",
+      "claim": "The draft defines approved Player Management Relationships as granting Player-profile management authority, but does not define the mutation surface or boundary of that authority.",
+      "determinism_impact": "minor",
+      "evidence": "Overview says an approved Player Management Relationship authorizes a User Account to manage a Player profile. Core Mutation Authority says approved relationships grant Player-profile management authority only, while League Administrators retain authority over rosters, Player Stat Lines, Game outcomes, configuration, and playoff conflicts. Player Management Lifecycle defines request, approval, revocation, and duplicate handling, but never states which Player-profile fields or mutations an approved account may perform, whether League Administrators share or override that profile authority, or how unauthorized profile-management attempts are rejected. This is in scope under scoped authorization and minimum audit behavior.",
+      "feedback_id": "fb_round28_structural_002",
+      "in_scope": true,
+      "invariant_violated": "authority_boundary",
+      "issue_fingerprint": "8c02c75c7505f35b8ce3095d96e29eb08b4f692829d602add641e1347b2f138b",
+      "issue_id": "iss_8c02c75c7505f35b",
+      "issue_type": "authority_boundary",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Define the Phase 1 Player-profile management surface at required-field depth, even if narrow. For example, state that approved accounts may update only non-competition Player profile metadata, list any fields intentionally included or deferred, state whether League Administrators may perform the same profile mutations, and apply the general unauthorized-mutation rejection report to attempts outside that surface.",
+      "rubric_impact": "major",
+      "severity_rationale": "The approval lifecycle is clear, but the authority it grants is not. That can cause divergent API and schema planning around who may mutate Player data, while not blocking the core standings/playoff/stat-result flows."
+    }
+  ],
+  "profile": "structural_integrity",
+  "reviewer": {
+    "model": "gpt-5-codex",
+    "name": "Codex Structural Integrity Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 28
+}

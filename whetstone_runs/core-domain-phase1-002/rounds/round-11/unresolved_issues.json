@@ -1,0 +1,19 @@
+{
+  "draft_hash": "32a234d838a061270e2d31ff65dab7efb01e5acfb14896bcfb460485aad3de93",
+  "round_number": 11,
+  "unresolved_issues": [
+    {
+      "affected_sections": [
+        "Game Lifecycle",
+        "Game and Venue Configuration",
+        "General Lifecycle Failure Rule"
+      ],
+      "blocking_acceptance": true,
+      "claim": "The core scheduled-Game rescheduling flow requires unambiguous scheduled instants but does not define the validation and rejection behavior for ambiguous or nonexistent local times at daylight-saving boundaries.",
+      "in_scope": true,
+      "issue_fingerprint": "46103881129b289e53028391248b0fe5bea3759a40e547b025266df52119fa27",
+      "issue_id": "iss_46103881129b289e",
+      "normalized_severity": "major"
+    }
+  ]
+}

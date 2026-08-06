@@ -1,0 +1,34 @@
+{
+  "audit_notes_hash": "6489cea66063acfa818e5bfd89fa84cd87971ff266b4499de54ca1bc9188f677",
+  "audit_notes_path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/whetstone_runs/core-domain-spec-audit-001/audit-notes.md",
+  "client": {
+    "model": "gpt-5.5",
+    "name": "codex",
+    "version": "unknown"
+  },
+  "generated_at": "2026-08-05T03:40:39.262222+00:00",
+  "profile": "consistency",
+  "schema_version": "change-audit-manifest-v1",
+  "specs": [
+    {
+      "hash": "21b351b6c284e5e274b40f0cd74f86cbe03bbffb4fab6899b581a5155c8d9497",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/overview.md"
+    },
+    {
+      "hash": "37ee506355d89fe613721948549de9922d69aaad7ce46753fd73d4dede1534ca",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/lifecycle.md"
+    },
+    {
+      "hash": "5b28ce7886a57ca2ea00147093a4fcec1796fda41f9fb375a09032eb8ed9834b",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/invariants.md"
+    },
+    {
+      "hash": "0b63a1f65a28f0835c1f78691b5d86765e6f93d6a47cd423b772982c16942485",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/config.md"
+    },
+    {
+      "hash": "e49f90cea91947db851f88512b781f3c8e1cbbc2bb498430ce7219a21667fa7b",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/decisions/0001-ratify-core-domain.md"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "draft_hash": "79166ffebeb45392b52ac3f34aee90b3e9be99b2852a349b07027572c5f3227d",
+  "round_number": 14,
+  "unresolved_issues": [
+    {
+      "affected_sections": [
+        "Season Configuration Lifecycle",
+        "Authority and Precedence",
+        "Configuration and Reproducibility"
+      ],
+      "blocking_acceptance": true,
+      "claim": "Concurrent first-freeze behavior depends on whether attempts use the same result-affecting configuration basis, but the draft does not define a canonical identity or equality rule for that basis.",
+      "in_scope": true,
+      "issue_fingerprint": "ede46b5848d2efd2c5b83c9c0030406cd1d54a104c2d47629afdd2f532c644d6",
+      "issue_id": "iss_ede46b5848d2efd2",
+      "normalized_severity": "major"
+    }
+  ]
+}

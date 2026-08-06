@@ -1,0 +1,600 @@
+{
+  "checkpoint_count": 14,
+  "checkpoints": [
+    {
+      "affected_sections": [
+        "Courtside Core Domain \u2014 Isolated Phase 1.02 Composite"
+      ],
+      "checkpoint_id": "chk_be3eb11f4ca23fb9",
+      "evidence_lines": [
+        "# Courtside Core Domain \u2014 Isolated Phase 1.02 Composite"
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Courtside Core Domain \u2014 Isolated Phase 1.02 Composite` adopt this change (scope change): # Courtside Core Domain \u2014 Isolated Phase 1.02 Composite",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 8,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_98fe0bad87fd75d5"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "General Lifecycle Failure Rule"
+      ],
+      "checkpoint_id": "chk_5b5ed45288b3abe9",
+      "evidence_lines": [
+        "In-scope invariant and configuration validation failures are rejected under the same preserve-state rule. The rejection report must identify the affected entity or configuration surface, the submitted value or attempted mutation, the actor when applicable, the violated invariant or configuration rule, and confirm that existing authoritative records, persisted projections, and configuration versions remain unchanged."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `General Lifecycle Failure Rule` adopt this change (tighten requirement, choose policy, scope change): In-scope invariant and configuration validation failures are rejected under the same preserve-state rule. The rejection report must identify the affected entity or configuration surface, the submitted value or attempted mutation, the actor when applicable, the violated invariant or configuration rule, and confirm that existing authoritative records, persisted projections, and configuration versions remain unchanged.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 8,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_0462ed3015c05d71"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "Authoritative Result Corrections"
+      ],
+      "checkpoint_id": "chk_1a2da5611caf6829",
+      "evidence_lines": [
+        "If a correction would change a playoff participant after downstream Games already have authoritative outcomes, automated destructive propagation is prohibited. The correction must either be rejected before it is recorded or recorded with an explicit League Administrator resolution in the same administrative action. A correction action that cannot resolve every affected downstream participant slot is rejected without mutating authoritative state, and no unresolved participant-resolution conflict state is persisted. Existing downstream authoritative Game records remain historically visible and are not silently changed."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Authoritative Result Corrections` adopt this change (tighten requirement, choose policy): If a correction would change a playoff participant after downstream Games already have authoritative outcomes, automated destructive propagation is prohibited. The correction must either be rejected before it is recorded or recorded with an explicit League Administrator resolution in the same administrative action. A correction action that cannot resolve every affected downstream participant slot is rejected without mutating authoritative state, and no unresolved participant-resolution conflict state is persisted. Existing downstream authoritative Game records remain historically visible and are not silently changed.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 8,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_d1a2e298829a73d3"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "Authoritative Result Corrections"
+      ],
+      "checkpoint_id": "chk_4fa98892e9462fb5",
+      "evidence_lines": [
+        "The resolution report for an accepted correction must identify the corrected Game, the affected Matchups and participant slots, downstream authoritative Games that create the conflict, the recalculated participant that would have advanced, the participant currently present downstream, and the League Administrator actor and reason. The permitted accepted resolutions are:"
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Authoritative Result Corrections` adopt this change (tighten requirement, choose policy): The resolution report for an accepted correction must identify the corrected Game, the affected Matchups and participant slots, downstream authoritative Games that create the conflict, the recalculated participant that would have advanced, the participant currently present downstream, and the League Administrator actor and reason. The permitted accepted resolutions are:",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 8,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_713b3bb41c4eb557"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "Player Management Lifecycle"
+      ],
+      "checkpoint_id": "chk_350d557f3124843b",
+      "evidence_lines": [
+        "- A User Account may create a `requested` relationship for itself and a Player."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Player Management Lifecycle` adopt this change (relax requirement): A User Account may create a `requested` relationship for itself and a Player.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 8,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_0fca561d8be8427a"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "operator_policy_choice"
+    },
+    {
+      "affected_sections": [
+        "Player Management Lifecycle"
+      ],
+      "checkpoint_id": "chk_9c4597fde27d4343",
+      "evidence_lines": [
+        "- A League Administrator may create a `requested` relationship on behalf of a User Account and Player, or create and approve the relationship in one audited administrative action."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Player Management Lifecycle` adopt this change (relax requirement): A League Administrator may create a `requested` relationship on behalf of a User Account and Player, or create and approve the relationship in one audited administrative action.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 8,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_6acbf05b63785080"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "operator_policy_choice"
+    },
+    {
+      "affected_sections": [
+        "Player Management Lifecycle"
+      ],
+      "checkpoint_id": "chk_ede642f8d6bed27b",
+      "evidence_lines": [
+        "- Duplicate active `requested` or `approved` relationships for the same User Account and Player are rejected without mutating authoritative state."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Player Management Lifecycle` adopt this change (choose policy): Duplicate active `requested` or `approved` relationships for the same User Account and Player are rejected without mutating authoritative state.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 8,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_4502eaeec3bc9713"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "operator_policy_choice"
+    },
+    {
+      "affected_sections": [
+        "Standings Lifecycle"
+      ],
+      "checkpoint_id": "chk_bedfb8e44ac48619",
+      "evidence_lines": [
+        "A random-draw tie context has a stable identity composed of the Season, the frozen Season configuration version, the ranking step or criterion that invoked `random_draw`, the tied Season Teams in canonical identity order before the draw, and the equal preceding criterion values that made the tie unresolved. Canonical identity order is the ascending order of each Season Team's immutable canonical domain identity as assigned when the Season Team is created, compared by normalized codepoint order. It must not depend on display name, Team name, creation timestamp, storage order, locale collation, or mutable seed position. Exactly one persisted draw result may exist for a tie context. Retries, replays, concurrent recalculations, or duplicate requests for the same tie context must return the existing result. Attempting to create another draw result for the same tie context is rejected as a deterministic conflict without performing another draw. League Administrators do not override or replace the persisted draw for that tie context in Phase 1."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Standings Lifecycle` adopt this change (tighten requirement, choose policy, scope change): A random-draw tie context has a stable identity composed of the Season, the frozen Season configuration version, the ranking step or criterion that invoked `random_draw`, the tied Season Teams in canonical identity order before the draw, and the equal preceding criterion values that made the tie unresolved. Canonical identity order is the ascending order of each Season Team's immutable canonical domain identity as assigned when the Season Team is created, compared by normalized codepoint order. It must not depend on display name, Team name, creation timestamp, storage order, locale collation, or mutable seed position. Exactly one persisted draw result may exist for a tie context. Retries, replays, concurrent recalculations, or duplicate requests for the same tie context must return the existing result. Attempting to create another draw result for the same tie context is rejected as a deterministic conflict without performing another draw. League Administrators do not override or replace the persisted draw for that tie context in Phase 1.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 8,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_1cc5dd899890c4c3"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "Playoff Matchup Lifecycle"
+      ],
+      "checkpoint_id": "chk_544551838c91c932",
+      "evidence_lines": [
+        "Playoff Games use the ordinary Game lifecycle. Playoff outcomes do not contribute to regular-season standings. A Matchup with incomplete configured Games, a tied aggregate after all permitted tiebreak handling, or an unknown tiebreak policy must not advance automatically and must report the violated rule. An attempted correction that would create an unresolved participant-resolution conflict is rejected before authoritative state changes."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Playoff Matchup Lifecycle` adopt this change (tighten requirement, choose policy): Playoff Games use the ordinary Game lifecycle. Playoff outcomes do not contribute to regular-season standings. A Matchup with incomplete configured Games, a tied aggregate after all permitted tiebreak handling, or an unknown tiebreak policy must not advance automatically and must report the violated rule. An attempted correction that would create an unresolved participant-resolution conflict is rejected before authoritative state changes.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 8,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_259578897028488c"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "Games and Results"
+      ],
+      "checkpoint_id": "chk_8f6f4a5231c3aed4",
+      "evidence_lines": [
+        "10. A playoff correction conflict caused by an authoritative result correction must be resolved in the same administrative action as the correction; otherwise the correction is rejected without mutating authoritative state."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Games and Results` adopt this change (tighten requirement, choose policy): 10. A playoff correction conflict caused by an authoritative result correction must be resolved in the same administrative action as the correction; otherwise the correction is rejected without mutating authoritative state.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 8,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_f6dfe02d56733bc1"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "operator_policy_choice"
+    },
+    {
+      "affected_sections": [
+        "Standings"
+      ],
+      "checkpoint_id": "chk_d188d42eff521386",
+      "evidence_lines": [
+        "8. Exactly one persisted random-draw result may exist for a stable tie context, and duplicate attempts for that tie context must reuse the existing result or be rejected without performing another draw. League Administrators do not replace or override that result in Phase 1."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Standings` adopt this change (tighten requirement, scope change): 8. Exactly one persisted random-draw result may exist for a stable tie context, and duplicate attempts for that tie context must reuse the existing result or be rejected without performing another draw. League Administrators do not replace or override that result in Phase 1.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 8,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_b494663745cced37"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "Playoffs"
+      ],
+      "checkpoint_id": "chk_b1abd1a9f3e20177",
+      "evidence_lines": [
+        "10. A playoff Matchup with incomplete authoritative Game outcomes must not advance automatically, and an attempted correction that would create an unresolved participant conflict is rejected before authoritative state changes."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Playoffs` adopt this change (tighten requirement, choose policy): 10. A playoff Matchup with incomplete authoritative Game outcomes must not advance automatically, and an attempted correction that would create an unresolved participant conflict is rejected before authoritative state changes.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 8,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_5192111936c3ec16"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "Standings Configuration"
+      ],
+      "checkpoint_id": "chk_eaecc194b5145182",
+      "evidence_lines": [
+        "The stable tie-context identity is composed of the Season, frozen Season configuration version, ranking step or criterion, tied Season Team identities in canonical order, and the equal preceding criterion values. Canonical identity order is the ascending order of each Season Team's immutable canonical domain identity as assigned when the Season Team is created, compared by normalized codepoint order. It must not depend on display name, Team name, creation timestamp, storage order, locale collation, or mutable seed position. Exactly one persisted draw result may exist for a tie context. Retries, replays, concurrent recalculations, or duplicate requests for the same tie context return the existing result. Attempting to create a second result for the same tie context is rejected as a deterministic conflict and must not perform another draw. League Administrators do not override or replace the persisted draw for that tie context in Phase 1."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Standings Configuration` adopt this change (tighten requirement, choose policy, scope change): The stable tie-context identity is composed of the Season, frozen Season configuration version, ranking step or criterion, tied Season Team identities in canonical order, and the equal preceding criterion values. Canonical identity order is the ascending order of each Season Team's immutable canonical domain identity as assigned when the Season Team is created, compared by normalized codepoint order. It must not depend on display name, Team name, creation timestamp, storage order, locale collation, or mutable seed position. Exactly one persisted draw result may exist for a tie context. Retries, replays, concurrent recalculations, or duplicate requests for the same tie context return the existing result. Attempting to create a second result for the same tie context is rejected as a deterministic conflict and must not perform another draw. League Administrators do not override or replace the persisted draw for that tie context in Phase 1.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 8,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_459efa1c71a33e2f"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "Authorization Configuration"
+      ],
+      "checkpoint_id": "chk_fe021eb074e61c9a",
+      "evidence_lines": [
+        "League Administrators assign, reassign, and revoke Team Captain authority and approve or revoke Player Management Relationships. League Administrators also hold Phase 1 authority for core Game lifecycle mutations, authoritative result corrections, Roster Membership changes, Player Stat Line creation and material changes, frozen Season configuration amendments, and playoff correction conflict resolution. Persisted random-draw duplicate or conflict attempts are handled only by deterministic reuse or rejection under the stable tie-context rule; League Administrators do not replace or override an existing draw result in Phase 1. Team Captain authority is a scoped role marker in Phase 1 and does not add independent mutation permissions unless a later accepted specification defines them. Adding roles or changing their authority requires an accepted specification update."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Authorization Configuration` adopt this change (choose policy, scope change): League Administrators assign, reassign, and revoke Team Captain authority and approve or revoke Player Management Relationships. League Administrators also hold Phase 1 authority for core Game lifecycle mutations, authoritative result corrections, Roster Membership changes, Player Stat Line creation and material changes, frozen Season configuration amendments, and playoff correction conflict resolution. Persisted random-draw duplicate or conflict attempts are handled only by deterministic reuse or rejection under the stable tie-context rule; League Administrators do not replace or override an existing draw result in Phase 1. Team Captain authority is a scoped role marker in Phase 1 and does not add independent mutation permissions unless a later accepted specification defines them. Adding roles or changing their authority requires an accepted specification update.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 8,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_2e90b2c3c654e99c"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "deferable_scope_boundary"
+    }
+  ],
+  "default_action": "continue_without_operator_input",
+  "draft_hash": "1b3087bbf7918b47cb40a3d650feb39329f2297a78452b0f4255b4bf148e9b22",
+  "generated_at": "2026-08-05T04:14:16.366363+00:00",
+  "mode": "artifact_only",
+  "profile": "vertical",
+  "round_number": 8,
+  "runtime_effect": "none"
+}

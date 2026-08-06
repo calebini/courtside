@@ -1,0 +1,390 @@
+{
+  "checkpoint_count": 9,
+  "checkpoints": [
+    {
+      "affected_sections": [
+        "Courtside Core Domain \u2014 Isolated Phase 1.05 Composite"
+      ],
+      "checkpoint_id": "chk_12bb6b05519fa07f",
+      "evidence_lines": [
+        "# Courtside Core Domain \u2014 Isolated Phase 1.05 Composite"
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Courtside Core Domain \u2014 Isolated Phase 1.05 Composite` adopt this change (scope change): # Courtside Core Domain \u2014 Isolated Phase 1.05 Composite",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 20,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_57ae79b979531725"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "Roster Membership Lifecycle"
+      ],
+      "checkpoint_id": "chk_4ce540e8b69f60f1",
+      "evidence_lines": [
+        "A Game evaluates roster eligibility at its competition eligibility anchor. For a Game that enters `in_progress`, the anchor is the first accepted start instant for that Game. For a Game that becomes `forfeit` from `scheduled` or `postponed` without entering `in_progress`, the anchor is the official forfeit decision instant recorded with the forfeiture. A cancelled Game has no competition eligibility anchor for Player Stat Line attribution. Rescheduling or postponement before the anchor may change when the Game is expected to occur, but it does not create Player Stat Line eligibility until the anchor is established. Finalization and later authoritative result corrections do not change the anchor or rewrite existing Player Stat Line attribution. A Player Stat Line is valid only when its referenced Roster Membership was effective for one of the Game's participating Season Teams at the competition eligibility anchor."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Roster Membership Lifecycle` adopt this change (relax requirement, choose policy): A Game evaluates roster eligibility at its competition eligibility anchor. For a Game that enters `in_progress`, the anchor is the first accepted start instant for that Game. For a Game that becomes `forfeit` from `scheduled` or `postponed` without entering `in_progress`, the anchor is the official forfeit decision instant recorded with the forfeiture. A cancelled Game has no competition eligibility anchor for Player Stat Line attribution. Rescheduling or postponement before the anchor may change when the Game is expected to occur, but it does not create Player Stat Line eligibility until the anchor is established. Finalization and later authoritative result corrections do not change the anchor or rewrite existing Player Stat Line attribution. A Player Stat Line is valid only when its referenced Roster Membership was effective for one of the Game's participating Season Teams at the competition eligibility anchor.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 20,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_1192d9a364be600d"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "operator_policy_choice"
+    },
+    {
+      "affected_sections": [
+        "Competition Transitions"
+      ],
+      "checkpoint_id": "chk_85d9f14d928c54c7",
+      "evidence_lines": [
+        "- A Game may become `forfeit` only from `scheduled`, `postponed`, or `in_progress`, and only with an explicit winning team and an official non-tied score. That official score is the source for standings and aggregate calculations."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Competition Transitions` adopt this change (relax requirement): A Game may become `forfeit` only from `scheduled`, `postponed`, or `in_progress`, and only with an explicit winning team and an official non-tied score. That official score is the source for standings and aggregate calculations.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 20,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_cddefa59eaccf28d"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "operator_policy_choice"
+    },
+    {
+      "affected_sections": [
+        "Authoritative Result Corrections"
+      ],
+      "checkpoint_id": "chk_8a8ac0043f9ea6ea",
+      "evidence_lines": [
+        "When the chosen resolution halts affected downstream advancement, the halted condition is observable in the current playoff projection and resolution report rather than as a new Matchup lifecycle state. The projection must mark each affected participant slot or dependent Matchup as halted by the accepted correction resolution, identify the corrected participant source that must be replayed, and exclude conflicted downstream authoritative Games from current advancement calculations for the corrected path while retaining those Games as historical authoritative records. A halted path resumes only when replacement authoritative outcomes exist for every affected configured downstream Game whose participant slots match the corrected bracket participants and fixed slot sources. Recomputations before that condition is satisfied must continue to report the same halted slots and must not advance through them."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Authoritative Result Corrections` adopt this change (tighten requirement, choose policy): When the chosen resolution halts affected downstream advancement, the halted condition is observable in the current playoff projection and resolution report rather than as a new Matchup lifecycle state. The projection must mark each affected participant slot or dependent Matchup as halted by the accepted correction resolution, identify the corrected participant source that must be replayed, and exclude conflicted downstream authoritative Games from current advancement calculations for the corrected path while retaining those Games as historical authoritative records. A halted path resumes only when replacement authoritative outcomes exist for every affected configured downstream Game whose participant slots match the corrected bracket participants and fixed slot sources. Recomputations before that condition is satisfied must continue to report the same halted slots and must not advance through them.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 20,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_9436dc1608134290"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "Authoritative Result Corrections"
+      ],
+      "checkpoint_id": "chk_4429d50d90e1bb21",
+      "evidence_lines": [
+        "The deterministic identity of an accepted correction resolution is composed of the corrected Game, the corrected authoritative value, the affected participant slots, the downstream authoritative Games that create the conflict, and the chosen resolution type. Retries, replays, or concurrent recomputations for the same resolution identity must return the same projection effect and resolution report. They must not create an alternate participant projection, silently consume historically visible conflicted Games for advancement, or require an operator to resolve the same accepted halt again."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Authoritative Result Corrections` adopt this change (tighten requirement, choose policy): The deterministic identity of an accepted correction resolution is composed of the corrected Game, the corrected authoritative value, the affected participant slots, the downstream authoritative Games that create the conflict, and the chosen resolution type. Retries, replays, or concurrent recomputations for the same resolution identity must return the same projection effect and resolution report. They must not create an alternate participant projection, silently consume historically visible conflicted Games for advancement, or require an operator to resolve the same accepted halt again.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 20,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_a76f9b5b75bc904a"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "operator_policy_choice"
+    },
+    {
+      "affected_sections": [
+        "Games and Results"
+      ],
+      "checkpoint_id": "chk_efaeff1c4678488b",
+      "evidence_lines": [
+        "12. An accepted halted playoff correction resolution makes affected slots or Matchups halted in the current projection, excludes conflicted downstream authoritative Games from current corrected-path advancement calculations while preserving them historically, and resumes only when replacement authoritative outcomes exist under the corrected bracket participants."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Games and Results` adopt this change (choose policy): 12. An accepted halted playoff correction resolution makes affected slots or Matchups halted in the current projection, excludes conflicted downstream authoritative Games from current corrected-path advancement calculations while preserving them historically, and resumes only when replacement authoritative outcomes exist under the corrected bracket participants.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 20,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_3fe36ccbd7d86bf0"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "operator_policy_choice"
+    },
+    {
+      "affected_sections": [
+        "Playoffs"
+      ],
+      "checkpoint_id": "chk_45b89292a02fe023",
+      "evidence_lines": [
+        "11. Accepted correction resolutions that halt advancement are deterministic by their resolution identity; retries and replays return the same halted projection and report until replacement authoritative outcomes satisfy the resume condition."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Playoffs` adopt this change (choose policy): 11. Accepted correction resolutions that halt advancement are deterministic by their resolution identity; retries and replays return the same halted projection and report until replacement authoritative outcomes satisfy the resume condition.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 20,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_1d890fe73d53f25f"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "operator_policy_choice"
+    },
+    {
+      "affected_sections": [
+        "Configuration and Reproducibility"
+      ],
+      "checkpoint_id": "chk_880047b3aa8330f6",
+      "evidence_lines": [
+        "6. Given the same authoritative outcomes, adjustment records, persisted random draws, accepted correction resolutions, and configuration version, standings and playoff advancement are deterministic."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Configuration and Reproducibility` adopt this change (choose policy): 6. Given the same authoritative outcomes, adjustment records, persisted random draws, accepted correction resolutions, and configuration version, standings and playoff advancement are deterministic.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 20,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_b01a5bdacdba2fe8"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "operator_policy_choice"
+    },
+    {
+      "affected_sections": [
+        "Audit Configuration"
+      ],
+      "checkpoint_id": "chk_0f73c23755363729",
+      "evidence_lines": [
+        "An Audit Record for a playoff correction conflict resolution must include the resolution type, affected participant slots, conflicted downstream authoritative Games, resolution identity, and whether affected advancement is halted or an existing downstream participant path is affirmed as an administrative exception. The corresponding resolution report must expose the same information needed to reproduce retry behavior and operator handoff."
+      ],
+      "options": [
+        {
+          "description": "Treat the Editor's selected option as acceptable operator intent for now.",
+          "label": "Accept editor choice",
+          "option_id": "accept_editor_choice",
+          "recommended": true
+        },
+        {
+          "description": "Ask the next Editor pass to rewrite the decision using different operator intent.",
+          "label": "Revise policy",
+          "option_id": "revise_policy",
+          "recommended": false
+        },
+        {
+          "description": "Mark this behavior as outside the current scope unless it is required for correctness.",
+          "label": "Defer from scope",
+          "option_id": "defer_from_scope",
+          "recommended": false
+        }
+      ],
+      "profile": "vertical",
+      "question": "Should `Audit Configuration` adopt this change (tighten requirement, choose policy): An Audit Record for a playoff correction conflict resolution must include the resolution type, affected participant slots, conflicted downstream authoritative Games, resolution identity, and whether affected advancement is halted or an existing downstream participant path is affirmed as an administrative exception. The corresponding resolution report must expose the same information needed to reproduce retry behavior and operator handoff.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 20,
+      "runtime_effect": "none",
+      "severity": null,
+      "source_ids": [
+        "dec_b4a9722339a0e68d"
+      ],
+      "source_type": "decision_point",
+      "status": "candidate",
+      "trigger_reason": "deferable_scope_boundary"
+    }
+  ],
+  "default_action": "continue_without_operator_input",
+  "draft_hash": "7c9d87eca9704660bfa15f6d19c1ce223d67c294380309f58786494bb00ccc3a",
+  "generated_at": "2026-08-05T04:29:09.577756+00:00",
+  "mode": "artifact_only",
+  "profile": "vertical",
+  "round_number": 20,
+  "runtime_effect": "none"
+}

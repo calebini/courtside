@@ -1,0 +1,35 @@
+{
+  "draft_hash": "79166ffebeb45392b52ac3f34aee90b3e9be99b2852a349b07027572c5f3227d",
+  "feedback": [
+    {
+      "affected_sections": [
+        "Season Configuration Lifecycle",
+        "Authority and Precedence",
+        "Configuration and Reproducibility"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "major",
+      "claim": "Concurrent first-freeze behavior depends on whether attempts use the same result-affecting configuration basis, but the draft does not define a canonical identity or equality rule for that basis.",
+      "determinism_impact": "major",
+      "evidence": "The Season Configuration Lifecycle says a competing first-freeze attempt must reuse the created snapshot when it depends on the same result-affecting configuration basis, or be rejected when it depends on a different mutable configuration basis. Authority and Precedence repeats this rule, but neither section defines how the configuration basis is canonically compared, hashed, or otherwise identified for replay and concurrent duplicate detection. The scope contract explicitly allows pressure on deterministic calculations and configuration versioning.",
+      "feedback_id": "fb_round14_det_001",
+      "in_scope": true,
+      "invariant_violated": "deterministic_behavior",
+      "issue_fingerprint": "ede46b5848d2efd2c5b83c9c0030406cd1d54a104c2d47629afdd2f532c644d6",
+      "issue_id": "iss_ede46b5848d2efd2",
+      "issue_type": "determinism_gap",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Define the result-affecting configuration basis as an exact canonical value set or content identity for the in-scope result-affecting fields, and require concurrent/retried freeze attempts to compare that canonical basis identity. State that equal canonical basis identities reuse the existing frozen version and unequal basis identities are rejected without mutating authoritative state.",
+      "rubric_impact": "major",
+      "severity_rationale": "The first freeze is part of the core finalize/forfeit flow and determines which configuration version all later standings and playoff calculations replay. Without a deterministic basis identity, implementers can diverge under retries or concurrency."
+    }
+  ],
+  "profile": "determinism",
+  "reviewer": {
+    "model": "gpt-5-codex",
+    "name": "Codex Whetstone Determinism Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 14
+}

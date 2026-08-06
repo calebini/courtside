@@ -1,0 +1,35 @@
+{
+  "draft_hash": "7c9d87eca9704660bfa15f6d19c1ce223d67c294380309f58786494bb00ccc3a",
+  "feedback": [
+    {
+      "affected_sections": [
+        "specs/lifecycle.md#Authoritative Result Corrections",
+        "specs/invariants.md#Playoffs",
+        "specs/config.md#Audit Configuration"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "major",
+      "claim": "The accepted playoff correction resolution identity is declared deterministic, but its multi-item components are not given a canonical ordering or equality rule, so retries or independent recomputations can derive different identities for the same correction conflict.",
+      "determinism_impact": "major",
+      "evidence": "The draft says the deterministic identity is composed of the corrected Game, corrected authoritative value, affected participant slots, downstream authoritative Games, and chosen resolution type, and that retries, replays, or concurrent recomputations for the same resolution identity must return the same projection effect. Unlike the Season configuration basis and random-draw tie context, this section does not specify how affected participant slots or downstream authoritative Games are ordered or compared when there are multiple items. The scope contract keeps frozen configuration amendment and correction cascades, playoff aggregate behavior, deterministic calculations, and acceptance criteria in scope.",
+      "feedback_id": "fb_001",
+      "in_scope": true,
+      "invariant_violated": "replay_idempotency",
+      "issue_fingerprint": "8ce309b59049ade14f0edc7e17a23571ce50eabd876e68a30f312a4693aaf77b",
+      "issue_id": "iss_8ce309b59049ade1",
+      "issue_type": "deterministic_identity_ordering_gap",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Define canonicalization for correction resolution identity components: order affected participant slots by stable bracket path or slot identity, order downstream authoritative Games by immutable canonical Game identity or fixed bracket order, and state that identity equality is based on the canonicalized content rather than traversal, storage, report, or discovery order.",
+      "rubric_impact": "major",
+      "severity_rationale": "This is not a full blocker because the correction-resolution flow and preserve-state behavior are otherwise defined, but it creates meaningful replay, retry, deduplication, and audit-identity drift risk in an in-scope core playoff correction path."
+    }
+  ],
+  "profile": "determinism",
+  "reviewer": {
+    "model": "GPT-5",
+    "name": "Codex Whetstone Determinism Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 22
+}

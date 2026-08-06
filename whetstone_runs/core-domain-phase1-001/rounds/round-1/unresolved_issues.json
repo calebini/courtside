@@ -1,0 +1,35 @@
+{
+  "draft_hash": "aca84978b693a31840c33c8a378473494cb9c3fd25449d8c605cef021c8062e6",
+  "round_number": 1,
+  "unresolved_issues": [
+    {
+      "affected_sections": [
+        "specs/lifecycle.md#Game Lifecycle",
+        "specs/lifecycle.md#Roster Membership Lifecycle",
+        "specs/lifecycle.md#Player Stat Line Lifecycle",
+        "specs/config.md#Authorization Configuration",
+        "specs/invariants.md#Authorization"
+      ],
+      "blocking_acceptance": true,
+      "claim": "The draft defines scoped roles and identifies a few League Administrator-only actions, but it does not define mutation authority for core lifecycle operations such as scheduling, postponing, cancelling, starting, finalizing, forfeiting Games, changing Roster Memberships, or creating/updating Player Stat Lines.",
+      "in_scope": true,
+      "issue_fingerprint": "568c0861d499c2e175d176dbaebc751273826dab39913cda41e5c5de12a5aa2e",
+      "issue_id": "iss_568c0861d499c2e1",
+      "normalized_severity": "major"
+    },
+    {
+      "affected_sections": [
+        "specs/lifecycle.md#Game Lifecycle",
+        "specs/lifecycle.md#Player Stat Line Lifecycle",
+        "specs/lifecycle.md#Player Management Lifecycle",
+        "specs/invariants.md#Games and Results"
+      ],
+      "blocking_acceptance": true,
+      "claim": "The draft lists legal lifecycle transitions but does not consistently declare terminal states or invalid-transition handling for lifecycle-bearing MVP components.",
+      "in_scope": true,
+      "issue_fingerprint": "495b1e8033ffd37fcfa101e0d8e5eecaec43d1f49af7e6c8449c58a86c524779",
+      "issue_id": "iss_495b1e8033ffd37f",
+      "normalized_severity": "major"
+    }
+  ]
+}

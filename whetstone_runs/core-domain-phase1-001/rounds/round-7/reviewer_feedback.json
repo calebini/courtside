@@ -1,0 +1,37 @@
+{
+  "draft_hash": "15c3ca6a2aba64d8e2410a84ee37d59f28ca454e0805eefb3a40cf7eb88746c1",
+  "feedback": [
+    {
+      "affected_sections": [
+        "General Lifecycle Failure Rule",
+        "Identity and Participation",
+        "Configuration and Reproducibility",
+        "Game and Venue Configuration",
+        "Localization Configuration"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "major",
+      "claim": "The draft defines rejection reporting for illegal lifecycle transitions, but it does not uniformly define reject-and-report behavior for core invariant and configuration validation failures that are required for safe MVP operation.",
+      "determinism_impact": "major",
+      "evidence": "The General Lifecycle Failure Rule requires a rejection report only for lifecycle-bearing entities when a transition is not explicitly permitted. Core non-transition constraints still define illegal states, such as 'At most one Season Team connects the same Team and Season,' 'A Player may not have overlapping effective Roster Memberships,' 'The League default is exactly one supported language,' and 'Every scheduled instant is interpreted in the League's configured IANA timezone and stored as an unambiguous instant.' The draft does not state the operational failure category, terminal report contents, or preserve-state behavior for attempts that would violate those constraints.",
+      "feedback_id": "fb_operability_001",
+      "in_scope": true,
+      "invariant_violated": "failure_handling",
+      "issue_fingerprint": "cb60314a866055cf7ab072b108486b07ece6b14c00d60f534d6c649589b2f4d3",
+      "issue_id": "iss_cb60314a866055cf",
+      "issue_type": "missing_failure_reporting",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Add a compact domain validation failure rule covering in-scope invariant and configuration violations: reject without mutating authoritative state, report the entity or configuration surface, submitted value or attempted mutation, actor when applicable, violated rule, and whether any existing projections or persisted records remain unchanged. Keep this as a category-level rule rather than an exhaustive error-code registry, consistent with scope contract rule-2.",
+      "rubric_impact": "major",
+      "severity_rationale": "This is within the scope surface for obvious domain failure categories and acceptance criteria. It does not require implementation-specific retry, timeout, or runbook design, but without a uniform rejection/report rule for core constraints, schema and API planners can diverge on whether invalid domain input is rejected, normalized, partially accepted, or silently ignored."
+    }
+  ],
+  "profile": "operability",
+  "reviewer": {
+    "model": "GPT-5 Codex",
+    "name": "Codex Whetstone Operability Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 7
+}

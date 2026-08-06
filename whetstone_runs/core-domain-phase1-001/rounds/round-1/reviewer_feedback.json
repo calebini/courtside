@@ -1,0 +1,61 @@
+{
+  "draft_hash": "aca84978b693a31840c33c8a378473494cb9c3fd25449d8c605cef021c8062e6",
+  "feedback": [
+    {
+      "affected_sections": [
+        "specs/lifecycle.md#Game Lifecycle",
+        "specs/lifecycle.md#Roster Membership Lifecycle",
+        "specs/lifecycle.md#Player Stat Line Lifecycle",
+        "specs/config.md#Authorization Configuration",
+        "specs/invariants.md#Authorization"
+      ],
+      "authority_impact": "major",
+      "baseline_severity": "major",
+      "claim": "The draft defines scoped roles and identifies a few League Administrator-only actions, but it does not define mutation authority for core lifecycle operations such as scheduling, postponing, cancelling, starting, finalizing, forfeiting Games, changing Roster Memberships, or creating/updating Player Stat Lines.",
+      "determinism_impact": "minor",
+      "evidence": "The Authorization invariants state only that a League Administrator may approve Player Management Relationships, correct authoritative Game results, amend frozen Season configuration, or assign Team Captain authority. The Game, Roster Membership, and Player Stat Line lifecycle sections define legal state changes and audit requirements but do not identify which role or approved relationship may initiate each mutation. This is in scope under the scope contract surfaces 'lifecycle states and legal authority transitions' and 'scoped authorization and minimum audit behavior'.",
+      "feedback_id": "fb_001",
+      "in_scope": true,
+      "invariant_violated": "authority_boundary",
+      "issue_fingerprint": "568c0861d499c2e175d176dbaebc751273826dab39913cda41e5c5de12a5aa2e",
+      "issue_id": "iss_568c0861d499c2e1",
+      "issue_type": "missing_authority_boundary",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Add a technology-neutral authority matrix or lifecycle bullets naming the actor classes permitted to initiate each core domain mutation, especially Game status changes, forfeit/final result entry, roster membership changes, Player Stat Line creation/update/confirmation, and Player management requests. If Team Captain authority is intentionally only a marker in Phase 1, state that explicitly and defer detailed permissions by scope decision.",
+      "rubric_impact": "major",
+      "severity_rationale": "This does not make the domain model unusable, but it creates meaningful implementation drift for the first schema/API planning pass because multiple actors and relationships exist without clear mutation authority for state-bearing core records."
+    },
+    {
+      "affected_sections": [
+        "specs/lifecycle.md#Game Lifecycle",
+        "specs/lifecycle.md#Player Stat Line Lifecycle",
+        "specs/lifecycle.md#Player Management Lifecycle",
+        "specs/invariants.md#Games and Results"
+      ],
+      "authority_impact": "minor",
+      "baseline_severity": "major",
+      "claim": "The draft lists legal lifecycle transitions but does not consistently declare terminal states or invalid-transition handling for lifecycle-bearing MVP components.",
+      "determinism_impact": "major",
+      "evidence": "The Game Lifecycle defines transitions from scheduled, postponed, and in_progress, and says final and forfeit are authoritative outcome statuses, but it does not explicitly state whether cancelled, final, and forfeit are terminal, whether final/forfeit can return to in_progress or cancelled, or how invalid transition attempts are handled. Player Management lists requested -> approved -> revoked but does not say whether revoked is terminal or whether re-requesting requires a new relationship. The rubric classifies missing terminal states or invalid-transition behavior for lifecycle-bearing MVP components as structurally significant. The scope contract explicitly includes 'lifecycle states and legal authority transitions'.",
+      "feedback_id": "fb_002",
+      "in_scope": true,
+      "invariant_violated": "state_legality",
+      "issue_fingerprint": "495b1e8033ffd37fcfa101e0d8e5eecaec43d1f49af7e6c8449c58a86c524779",
+      "issue_id": "iss_495b1e8033ffd37f",
+      "issue_type": "incomplete_state_machine",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "For each normative lifecycle, add a short rule that transitions not listed are rejected, name terminal states, and describe any permitted post-terminal mutation separately, such as authoritative result correction preserving final/forfeit status. For Player Management, state whether revoked relationships are terminal and whether later access requires a new requested relationship.",
+      "rubric_impact": "major",
+      "severity_rationale": "The main states are present, so this is not a blocker, but absent terminal and invalid-transition rules can lead to divergent state machines and unsafe replay or audit behavior."
+    }
+  ],
+  "profile": "structural_integrity",
+  "reviewer": {
+    "model": "gpt-5-codex",
+    "name": "Codex Whetstone Structural Integrity Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 1
+}

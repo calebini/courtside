@@ -1,0 +1,18 @@
+{
+  "draft_hash": "18e7e47f9e7e53bcdf0ad9e31e8345a967162c7b518f9a4084a3fda2028645d5",
+  "round_number": 18,
+  "unresolved_issues": [
+    {
+      "affected_sections": [
+        "Core Mutation Authority",
+        "Audit Configuration"
+      ],
+      "blocking_acceptance": false,
+      "claim": "Accepted Player profile updates require history, but the draft leaves the operational artifact ambiguous by allowing either an Audit Record or an equivalent profile-change history without tying that history into the audit configuration surface.",
+      "in_scope": true,
+      "issue_fingerprint": "d2d2e020692d09ab754c91ab4d4b1783c5b06b0666449727f2858a0aaba33e84",
+      "issue_id": "iss_d2d2e020692d09ab",
+      "normalized_severity": "minor"
+    }
+  ]
+}

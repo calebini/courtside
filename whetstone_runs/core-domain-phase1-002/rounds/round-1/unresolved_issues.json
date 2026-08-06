@@ -1,0 +1,20 @@
+{
+  "draft_hash": "0a83555eb37b080270442e32a33a9ed43e51d1def06e604137a25e959bb85426",
+  "round_number": 1,
+  "unresolved_issues": [
+    {
+      "affected_sections": [
+        "Core Mutation Authority",
+        "Player Management Lifecycle",
+        "Authorization",
+        "Authorization Configuration"
+      ],
+      "blocking_acceptance": true,
+      "claim": "The approved Player Management mutation surface names `display_name` and `profile_photo` as the only manager-editable Player fields, but the draft does not define the domain-level contract for those mutable fields well enough to implement the in-scope profile update flow without guessing.",
+      "in_scope": true,
+      "issue_fingerprint": "a6e94a5de4b1e88f869087c7e66396a50ab15e3fdf6c6769abed7a6be754343a",
+      "issue_id": "iss_a6e94a5de4b1e88f",
+      "normalized_severity": "major"
+    }
+  ]
+}

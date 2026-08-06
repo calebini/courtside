@@ -1,0 +1,157 @@
+{
+  "active_profile": null,
+  "budget_extensions": [
+    {
+      "added_rounds_per_profile": 3,
+      "event_id": "bxe_2880015541dfccbb",
+      "generated_at": "2026-08-06T19:55:34.307662+00:00",
+      "new_review_profile_budgets": {
+        "determinism": 7,
+        "operability": 7,
+        "structural_integrity": 7
+      },
+      "phase": "phase_1",
+      "previous_current_round": 15,
+      "previous_review_profile_budgets": {
+        "determinism": 3,
+        "operability": 3,
+        "structural_integrity": 3
+      },
+      "previous_terminal_state": "TARGET_NOT_REACHED",
+      "reason": "operator_requested_resume_budget_extension"
+    }
+  ],
+  "configured_convergence_profile_budgets": {
+    "adversarial": 4,
+    "convergence_strict_check": 6
+  },
+  "configured_review_profile_budgets": {
+    "determinism": 7,
+    "operability": 7,
+    "structural_integrity": 7
+  },
+  "convergence_profile_budgets": {
+    "adversarial": 4,
+    "convergence_strict_check": 6
+  },
+  "convergence_round_budget": 16,
+  "current_absolute_round": 22,
+  "current_draft_hash": "d59bef233141db85dae6d2f1131adf97772dc543383119017b6e81d50c9758d8",
+  "current_phase_round": 22,
+  "current_round": 22,
+  "effective_run_config": {
+    "contract_surface_policy": {
+      "action": "recommend_synthesis",
+      "enabled": true,
+      "min_contract_families": 2,
+      "min_profile_rounds": 3,
+      "min_recent_serious_rounds": 2,
+      "recent_window": 4
+    },
+    "convergence_profile_budgets": {
+      "adversarial": 4,
+      "convergence_strict_check": 6
+    },
+    "decision_points": {
+      "enabled": true,
+      "intervention_thresholds": {
+        "severities": [
+          "blocker",
+          "major"
+        ],
+        "trigger_on_authority_boundary_change": true,
+        "trigger_on_new_enum_or_error_code": true,
+        "trigger_on_requirement_strength_change": true,
+        "trigger_on_scope_change": true
+      },
+      "mode": "end_of_cycle"
+    },
+    "reference_context": {
+      "files": {}
+    },
+    "review_budget_exhaustion_policy": "hard",
+    "review_mode": "vertical",
+    "review_profile_budgets": {
+      "determinism": 7,
+      "operability": 7,
+      "structural_integrity": 7
+    },
+    "review_profile_set": "balanced_mvp",
+    "scope_contract": {
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/whetstone_runs/core-domain-phase1-002/rounds/intake/scope_contract.json"
+    },
+    "timeouts": {
+      "editor_seconds": 1200,
+      "reviewer_seconds": 420
+    }
+  },
+  "last_accepted_draft_hash": "d59bef233141db85dae6d2f1131adf97772dc543383119017b6e81d50c9758d8",
+  "phase": "phase_1",
+  "phase_1_rounds_completed": 22,
+  "phase_2_rounds_completed": 0,
+  "ready_for_phase_2": true,
+  "resumable": false,
+  "review_budget_exhaustion_policy": "hard",
+  "review_mode": "vertical",
+  "review_profile_budgets": {
+    "determinism": 7,
+    "operability": 7,
+    "structural_integrity": 7
+  },
+  "review_profile_set": "balanced_mvp",
+  "review_round_budget": 28,
+  "run_artifact_pointers": {
+    "context_pressure_report": {
+      "exists": true,
+      "path": "rounds/context_pressure_report.json",
+      "sha256": "112b84ee0ab7c3e936cf7ae01eca74d953c499900c37609d525f98e68911b7be"
+    },
+    "context_pressure_report_markdown": {
+      "exists": true,
+      "path": "rounds/context_pressure_report.md",
+      "sha256": "0455ec863dab4f95ab92b4a4d737e5ec2dfac66906a5c2e8bbeffd4dd7ffaa7c"
+    },
+    "job_descriptor": {
+      "candidate_paths": [
+        "whetstone_job.json",
+        "job_descriptor.json",
+        "rounds/whetstone_job.json",
+        "rounds/job_descriptor.json",
+        "rounds/intake/whetstone_job.json",
+        "rounds/intake/job_descriptor.json"
+      ],
+      "exists": false,
+      "path": null,
+      "sha256": null
+    },
+    "scope_contract": {
+      "exists": true,
+      "path": "rounds/intake/scope_contract.json",
+      "sha256": "218ca6aebefd4c55de9de48309749b8f58f782265bdac1e1dc1c080a368f2400"
+    }
+  },
+  "seen_draft_hashes": [
+    "0a83555eb37b080270442e32a33a9ed43e51d1def06e604137a25e959bb85426",
+    "93f4864f3387fb05ce3cdd584a04d9bea7785c429d3b668c394405a65160cee4",
+    "32a234d838a061270e2d31ff65dab7efb01e5acfb14896bcfb460485aad3de93",
+    "18e7e47f9e7e53bcdf0ad9e31e8345a967162c7b518f9a4084a3fda2028645d5",
+    "d59bef233141db85dae6d2f1131adf97772dc543383119017b6e81d50c9758d8"
+  ],
+  "telemetry_totals": {
+    "attempt_count": 22,
+    "missing_usage_attempts": 0,
+    "round_count": 22,
+    "total_api_duration_ms": null,
+    "total_cost_usd": null,
+    "total_duration_ms": 1425260,
+    "total_tokens": 818313,
+    "warning_count": 0
+  },
+  "terminal_state": "PHASE_1_STABLE",
+  "timeouts": {
+    "editor_seconds": 1200,
+    "reviewer_seconds": 420
+  },
+  "total_absolute_round_budget": 44,
+  "updated_at": "2026-08-06T20:02:51.160629+00:00"
+}

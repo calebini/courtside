@@ -1,0 +1,631 @@
+{
+  "decision_points": [
+    {
+      "affected_sections": [
+        "Courtside Core Domain \u2014 Isolated Phase 1.03 Composite"
+      ],
+      "decision_id": "dec_301afd202ce14c37",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "scope_change",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "# Courtside Core Domain \u2014 Isolated Phase 1.03 Composite"
+      ],
+      "options_considered": [
+        {
+          "description": "# Courtside Core Domain \u2014 Isolated Phase 1.03 Composite",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Courtside Core Domain \u2014 Isolated Phase 1.03 Composite` adopt this change (scope change): # Courtside Core Domain \u2014 Isolated Phase 1.03 Composite",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 12,
+      "source_feedback_ids": [
+        "structural_integrity:fb_001",
+        "determinism:fb_det_001",
+        "determinism:fb_det_002",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002"
+      ],
+      "trigger_types": [
+        "scope_change"
+      ]
+    },
+    {
+      "affected_sections": [
+        "General Lifecycle Failure Rule"
+      ],
+      "decision_id": "dec_b43483a0db72b5f3",
+      "decision_status": "deferred_scope_decision",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "Authorization failures are rejected under the same preserve-state reporting semantics. The rejection report must identify the actor, affected League, Season, Season Team, Player, or Game scope when applicable, attempted mutation, missing or insufficient authority, violated authority rule, and confirmation that authoritative state and derived projections remain unchanged."
+      ],
+      "options_considered": [
+        {
+          "description": "Authorization failures are rejected under the same preserve-state reporting semantics. The rejection report must identify the actor, affected League, Season, Season Team, Player, or Game scope when applicable, attempted mutation, missing or insufficient authority, violated authority rule, and confirmation that authoritative state and derived projections remain unchanged.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `General Lifecycle Failure Rule` adopt this change (tighten requirement, choose policy, scope change): Authorization failures are rejected under the same preserve-state reporting semantics. The rejection report must identify the actor, affected League, Season, Season Team, Player, or Game scope when applicable, attempted mutation, missing or insufficient authority, violated authority rule, and confirmation that authoritative state and derived projections remain unchanged.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 12,
+      "source_feedback_ids": [
+        "structural_integrity:fb_001",
+        "determinism:fb_det_001",
+        "determinism:fb_det_002",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002"
+      ],
+      "trigger_types": [
+        "tighten_requirement",
+        "choose_policy",
+        "scope_change"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Season Configuration Lifecycle"
+      ],
+      "decision_id": "dec_f7d82017388c166c",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "3. The freeze operation is idempotent per Season. Later or retried authoritative Game transitions for that Season must reference the existing frozen version rather than creating another first version."
+      ],
+      "options_considered": [
+        {
+          "description": "3. The freeze operation is idempotent per Season. Later or retried authoritative Game transitions for that Season must reference the existing frozen version rather than creating another first version.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Season Configuration Lifecycle` adopt this change (tighten requirement, choose policy): 3. The freeze operation is idempotent per Season. Later or retried authoritative Game transitions for that Season must reference the existing frozen version rather than creating another first version.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 12,
+      "source_feedback_ids": [
+        "structural_integrity:fb_001",
+        "determinism:fb_det_001",
+        "determinism:fb_det_002",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002"
+      ],
+      "trigger_types": [
+        "tighten_requirement",
+        "choose_policy"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Season Configuration Lifecycle"
+      ],
+      "decision_id": "dec_08d324d71c332ba0",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "4. If concurrent first-freeze attempts occur, exactly one snapshot creation is accepted. A competing attempt must reuse the created snapshot when it depends on the same result-affecting configuration basis, or be rejected without mutating authoritative state when it depends on a different mutable configuration basis."
+      ],
+      "options_considered": [
+        {
+          "description": "4. If concurrent first-freeze attempts occur, exactly one snapshot creation is accepted. A competing attempt must reuse the created snapshot when it depends on the same result-affecting configuration basis, or be rejected without mutating authoritative state when it depends on a different mutable configuration basis.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Season Configuration Lifecycle` adopt this change (tighten requirement, choose policy): 4. If concurrent first-freeze attempts occur, exactly one snapshot creation is accepted. A competing attempt must reuse the created snapshot when it depends on the same result-affecting configuration basis, or be rejected without mutating authoritative state when it depends on a different mutable configuration basis.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 12,
+      "source_feedback_ids": [
+        "structural_integrity:fb_001",
+        "determinism:fb_det_001",
+        "determinism:fb_det_002",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002"
+      ],
+      "trigger_types": [
+        "tighten_requirement",
+        "choose_policy"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Season Configuration Lifecycle"
+      ],
+      "decision_id": "dec_57aa1f55221f8a3d",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "relax_requirement",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "6. A League Administrator may amend frozen configuration only by creating a new version and an Audit Record."
+      ],
+      "options_considered": [
+        {
+          "description": "6. A League Administrator may amend frozen configuration only by creating a new version and an Audit Record.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Season Configuration Lifecycle` adopt this change (relax requirement): 6. A League Administrator may amend frozen configuration only by creating a new version and an Audit Record.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 12,
+      "source_feedback_ids": [
+        "structural_integrity:fb_001",
+        "determinism:fb_det_001",
+        "determinism:fb_det_002",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002"
+      ],
+      "trigger_types": [
+        "relax_requirement"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Season Configuration Lifecycle"
+      ],
+      "decision_id": "dec_5bc5102579e48f8f",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "After any dependent authoritative Game outcome exists, a frozen result-affecting configuration amendment is legal only if it preserves existing authoritative state or resolves every affected derived-state conflict in the same administrative action. Amendments that change playoff Round structure, configured Games per Matchup, participant slot sources, advancement rule, or aggregate-tiebreak policy are prohibited once dependent authoritative playoff Games exist unless the same action can apply the amendment through the playoff conflict-resolution semantics already required for authoritative result corrections. An amendment action that would change participant slots, Matchup completion, aggregate outcome, or downstream advancement without either preserving the existing authoritative path as an audited administrative exception or halting affected downstream advancement until replacement authoritative outcomes are recorded is rejected without mutating authoritative state."
+      ],
+      "options_considered": [
+        {
+          "description": "After any dependent authoritative Game outcome exists, a frozen result-affecting configuration amendment is legal only if it preserves existing authoritative state or resolves every affected derived-state conflict in the same administrative action. Amendments that change playoff Round structure, configured Games per Matchup, participant slot sources, advancement rule, or aggregate-tiebreak policy are prohibited once dependent authoritative playoff Games exist unless the same action can apply the amendment through the playoff conflict-resolution semantics already required for authoritative result corrections. An amendment action that would change participant slots, Matchup completion, aggregate outcome, or downstream advancement without either preserving the existing authoritative path as an audited administrative exception or halting affected downstream advancement until replacement authoritative outcomes are recorded is rejected without mutating authoritative state.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Season Configuration Lifecycle` adopt this change (choose policy): After any dependent authoritative Game outcome exists, a frozen result-affecting configuration amendment is legal only if it preserves existing authoritative state or resolves every affected derived-state conflict in the same administrative action. Amendments that change playoff Round structure, configured Games per Matchup, participant slot sources, advancement rule, or aggregate-tiebreak policy are prohibited once dependent authoritative playoff Games exist unless the same action can apply the amendment through the playoff conflict-resolution semantics already required for authoritative result corrections. An amendment action that would change participant slots, Matchup completion, aggregate outcome, or downstream advancement without either preserving the existing authoritative path as an audited administrative exception or halting affected downstream advancement until replacement authoritative outcomes are recorded is rejected without mutating authoritative state.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 12,
+      "source_feedback_ids": [
+        "structural_integrity:fb_001",
+        "determinism:fb_det_001",
+        "determinism:fb_det_002",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002"
+      ],
+      "trigger_types": [
+        "choose_policy"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Scheduling Transitions"
+      ],
+      "decision_id": "dec_5c2a62f2fd7c92bc",
+      "decision_status": "deferred_scope_decision",
+      "decision_type": "tighten_requirement",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "Every scheduled instant is interpreted in the League's configured IANA timezone and stored as an unambiguous instant. Scheduling changes must preserve operational history containing actor, timestamp, action, previous scheduled instant and status when present, new scheduled instant and status when present, and optional reason. This history may be represented as an Audit Record or as separate schedule history, but it must be available to explain rescheduling, postponement, cancellation, and start transitions."
+      ],
+      "options_considered": [
+        {
+          "description": "Every scheduled instant is interpreted in the League's configured IANA timezone and stored as an unambiguous instant. Scheduling changes must preserve operational history containing actor, timestamp, action, previous scheduled instant and status when present, new scheduled instant and status when present, and optional reason. This history may be represented as an Audit Record or as separate schedule history, but it must be available to explain rescheduling, postponement, cancellation, and start transitions.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Scheduling Transitions` adopt this change (tighten requirement): Every scheduled instant is interpreted in the League's configured IANA timezone and stored as an unambiguous instant. Scheduling changes must preserve operational history containing actor, timestamp, action, previous scheduled instant and status when present, new scheduled instant and status when present, and optional reason. This history may be represented as an Audit Record or as separate schedule history, but it must be available to explain rescheduling, postponement, cancellation, and start transitions.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 12,
+      "source_feedback_ids": [
+        "structural_integrity:fb_001",
+        "determinism:fb_det_001",
+        "determinism:fb_det_002",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002"
+      ],
+      "trigger_types": [
+        "tighten_requirement"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Standings Lifecycle"
+      ],
+      "decision_id": "dec_d12db48235ffc659",
+      "decision_status": "deferred_scope_decision",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "A random-draw tie context has a stable identity composed of the Season, the frozen Season configuration version, the ranking step or criterion that invoked `random_draw`, the tied Season Teams in canonical identity order before the draw, and the equal preceding criterion values that made the tie unresolved. Canonical identity order is the ascending byte order of each Season Team's immutable canonical domain identity as assigned when the Season Team is created. A canonical domain identity used for this ordering must be an ASCII-only opaque identifier, is case-sensitive, and is compared byte-for-byte without locale collation, Unicode normalization, or display-name transformation. It must not depend on display name, Team name, creation timestamp, storage order, locale collation, or mutable seed position. Exactly one persisted draw result may exist for a tie context. Retries, replays, concurrent recalculations, or duplicate requests for the same tie context must return the existing result. Attempting to create another draw result for the same tie context is rejected as a deterministic conflict without performing another draw. League Administrators do not override or replace the persisted draw for that tie context in Phase 1."
+      ],
+      "options_considered": [
+        {
+          "description": "A random-draw tie context has a stable identity composed of the Season, the frozen Season configuration version, the ranking step or criterion that invoked `random_draw`, the tied Season Teams in canonical identity order before the draw, and the equal preceding criterion values that made the tie unresolved. Canonical identity order is the ascending byte order of each Season Team's immutable canonical domain identity as assigned when the Season Team is created. A canonical domain identity used for this ordering must be an ASCII-only opaque identifier, is case-sensitive, and is compared byte-for-byte without locale collation, Unicode normalization, or display-name transformation. It must not depend on display name, Team name, creation timestamp, storage order, locale collation, or mutable seed position. Exactly one persisted draw result may exist for a tie context. Retries, replays, concurrent recalculations, or duplicate requests for the same tie context must return the existing result. Attempting to create another draw result for the same tie context is rejected as a deterministic conflict without performing another draw. League Administrators do not override or replace the persisted draw for that tie context in Phase 1.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Standings Lifecycle` adopt this change (tighten requirement, choose policy, scope change): A random-draw tie context has a stable identity composed of the Season, the frozen Season configuration version, the ranking step or criterion that invoked `random_draw`, the tied Season Teams in canonical identity order before the draw, and the equal preceding criterion values that made the tie unresolved. Canonical identity order is the ascending byte order of each Season Team's immutable canonical domain identity as assigned when the Season Team is created. A canonical domain identity used for this ordering must be an ASCII-only opaque identifier, is case-sensitive, and is compared byte-for-byte without locale collation, Unicode normalization, or display-name transformation. It must not depend on display name, Team name, creation timestamp, storage order, locale collation, or mutable seed position. Exactly one persisted draw result may exist for a tie context. Retries, replays, concurrent recalculations, or duplicate requests for the same tie context must return the existing result. Attempting to create another draw result for the same tie context is rejected as a deterministic conflict without performing another draw. League Administrators do not override or replace the persisted draw for that tie context in Phase 1.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 12,
+      "source_feedback_ids": [
+        "structural_integrity:fb_001",
+        "determinism:fb_det_001",
+        "determinism:fb_det_002",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002"
+      ],
+      "trigger_types": [
+        "tighten_requirement",
+        "choose_policy",
+        "scope_change"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Authorization"
+      ],
+      "decision_id": "dec_0d2360f616cc1584",
+      "decision_status": "deferred_scope_decision",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "7. Unauthorized mutation attempts and lifecycle transitions not explicitly permitted by the lifecycle specification are rejected without mutating authoritative state and must produce the required rejection report."
+      ],
+      "options_considered": [
+        {
+          "description": "7. Unauthorized mutation attempts and lifecycle transitions not explicitly permitted by the lifecycle specification are rejected without mutating authoritative state and must produce the required rejection report.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Authorization` adopt this change (tighten requirement, choose policy): 7. Unauthorized mutation attempts and lifecycle transitions not explicitly permitted by the lifecycle specification are rejected without mutating authoritative state and must produce the required rejection report.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 12,
+      "source_feedback_ids": [
+        "structural_integrity:fb_001",
+        "determinism:fb_det_001",
+        "determinism:fb_det_002",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002"
+      ],
+      "trigger_types": [
+        "tighten_requirement",
+        "choose_policy"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Configuration and Reproducibility"
+      ],
+      "decision_id": "dec_ce15ed7a376afce9",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "1. The first accepted `final` or `forfeit` Game freezes a single versioned snapshot of result-affecting Season configuration, and retries or later authoritative outcomes for the same Season reuse that frozen version."
+      ],
+      "options_considered": [
+        {
+          "description": "1. The first accepted `final` or `forfeit` Game freezes a single versioned snapshot of result-affecting Season configuration, and retries or later authoritative outcomes for the same Season reuse that frozen version.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Configuration and Reproducibility` adopt this change (choose policy): 1. The first accepted `final` or `forfeit` Game freezes a single versioned snapshot of result-affecting Season configuration, and retries or later authoritative outcomes for the same Season reuse that frozen version.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 12,
+      "source_feedback_ids": [
+        "structural_integrity:fb_001",
+        "determinism:fb_det_001",
+        "determinism:fb_det_002",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002"
+      ],
+      "trigger_types": [
+        "choose_policy"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Configuration and Reproducibility"
+      ],
+      "decision_id": "dec_b570408d2fccb971",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "3. A result-affecting amendment that conflicts with existing authoritative Game outcomes or playoff state must preserve authoritative state through rejection or same-action administrative resolution."
+      ],
+      "options_considered": [
+        {
+          "description": "3. A result-affecting amendment that conflicts with existing authoritative Game outcomes or playoff state must preserve authoritative state through rejection or same-action administrative resolution.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Configuration and Reproducibility` adopt this change (tighten requirement, choose policy): 3. A result-affecting amendment that conflicts with existing authoritative Game outcomes or playoff state must preserve authoritative state through rejection or same-action administrative resolution.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 12,
+      "source_feedback_ids": [
+        "structural_integrity:fb_001",
+        "determinism:fb_det_001",
+        "determinism:fb_det_002",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002"
+      ],
+      "trigger_types": [
+        "tighten_requirement",
+        "choose_policy"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Configuration and Reproducibility"
+      ],
+      "decision_id": "dec_a6bce6501c4fe7b3",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "5. Given the same authoritative outcomes, adjustment records, persisted random draws, and configuration version, standings and playoff advancement are deterministic."
+      ],
+      "options_considered": [
+        {
+          "description": "5. Given the same authoritative outcomes, adjustment records, persisted random draws, and configuration version, standings and playoff advancement are deterministic.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Configuration and Reproducibility` adopt this change (choose policy): 5. Given the same authoritative outcomes, adjustment records, persisted random draws, and configuration version, standings and playoff advancement are deterministic.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 12,
+      "source_feedback_ids": [
+        "structural_integrity:fb_001",
+        "determinism:fb_det_001",
+        "determinism:fb_det_002",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002"
+      ],
+      "trigger_types": [
+        "choose_policy"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Authority and Precedence"
+      ],
+      "decision_id": "dec_74614ad29be05e35",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "More specific values override less specific values only where this specification permits customization. The first accepted authoritative Season Game outcome freezes all result-affecting values into a single versioned Season snapshot. Later, retried, or concurrent authoritative outcome transitions for that Season reuse the existing snapshot or are rejected under the lifecycle freeze rule when they depend on a different mutable configuration basis."
+      ],
+      "options_considered": [
+        {
+          "description": "More specific values override less specific values only where this specification permits customization. The first accepted authoritative Season Game outcome freezes all result-affecting values into a single versioned Season snapshot. Later, retried, or concurrent authoritative outcome transitions for that Season reuse the existing snapshot or are rejected under the lifecycle freeze rule when they depend on a different mutable configuration basis.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Authority and Precedence` adopt this change (choose policy): More specific values override less specific values only where this specification permits customization. The first accepted authoritative Season Game outcome freezes all result-affecting values into a single versioned Season snapshot. Later, retried, or concurrent authoritative outcome transitions for that Season reuse the existing snapshot or are rejected under the lifecycle freeze rule when they depend on a different mutable configuration basis.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 12,
+      "source_feedback_ids": [
+        "structural_integrity:fb_001",
+        "determinism:fb_det_001",
+        "determinism:fb_det_002",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002"
+      ],
+      "trigger_types": [
+        "choose_policy"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Standings Configuration"
+      ],
+      "decision_id": "dec_233fe79790aea2a8",
+      "decision_status": "deferred_scope_decision",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "The stable tie-context identity is composed of the Season, frozen Season configuration version, ranking step or criterion, tied Season Team identities in canonical order, and the equal preceding criterion values. Canonical identity order is the ascending byte order of each Season Team's immutable canonical domain identity as assigned when the Season Team is created. A canonical domain identity used for this ordering must be an ASCII-only opaque identifier, is case-sensitive, and is compared byte-for-byte without locale collation, Unicode normalization, or display-name transformation. It must not depend on display name, Team name, creation timestamp, storage order, locale collation, or mutable seed position. Exactly one persisted draw result may exist for a tie context. Retries, replays, concurrent recalculations, or duplicate requests for the same tie context return the existing result. Attempting to create a second result for the same tie context is rejected as a deterministic conflict and must not perform another draw. League Administrators do not override or replace the persisted draw for that tie context in Phase 1."
+      ],
+      "options_considered": [
+        {
+          "description": "The stable tie-context identity is composed of the Season, frozen Season configuration version, ranking step or criterion, tied Season Team identities in canonical order, and the equal preceding criterion values. Canonical identity order is the ascending byte order of each Season Team's immutable canonical domain identity as assigned when the Season Team is created. A canonical domain identity used for this ordering must be an ASCII-only opaque identifier, is case-sensitive, and is compared byte-for-byte without locale collation, Unicode normalization, or display-name transformation. It must not depend on display name, Team name, creation timestamp, storage order, locale collation, or mutable seed position. Exactly one persisted draw result may exist for a tie context. Retries, replays, concurrent recalculations, or duplicate requests for the same tie context return the existing result. Attempting to create a second result for the same tie context is rejected as a deterministic conflict and must not perform another draw. League Administrators do not override or replace the persisted draw for that tie context in Phase 1.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Standings Configuration` adopt this change (tighten requirement, choose policy, scope change): The stable tie-context identity is composed of the Season, frozen Season configuration version, ranking step or criterion, tied Season Team identities in canonical order, and the equal preceding criterion values. Canonical identity order is the ascending byte order of each Season Team's immutable canonical domain identity as assigned when the Season Team is created. A canonical domain identity used for this ordering must be an ASCII-only opaque identifier, is case-sensitive, and is compared byte-for-byte without locale collation, Unicode normalization, or display-name transformation. It must not depend on display name, Team name, creation timestamp, storage order, locale collation, or mutable seed position. Exactly one persisted draw result may exist for a tie context. Retries, replays, concurrent recalculations, or duplicate requests for the same tie context return the existing result. Attempting to create a second result for the same tie context is rejected as a deterministic conflict and must not perform another draw. League Administrators do not override or replace the persisted draw for that tie context in Phase 1.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 12,
+      "source_feedback_ids": [
+        "structural_integrity:fb_001",
+        "determinism:fb_det_001",
+        "determinism:fb_det_002",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002"
+      ],
+      "trigger_types": [
+        "tighten_requirement",
+        "choose_policy",
+        "scope_change"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Playoff Configuration"
+      ],
+      "decision_id": "dec_b7ed569df9de0b5a",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "Round structure and policies become part of the frozen result-affecting Season configuration. After dependent authoritative playoff Games exist, amendments to Round structure, configured Games per Matchup, slot sources, advancement rule, or aggregate-tiebreak policy are subject to the frozen configuration amendment legality rule in `lifecycle.md`."
+      ],
+      "options_considered": [
+        {
+          "description": "Round structure and policies become part of the frozen result-affecting Season configuration. After dependent authoritative playoff Games exist, amendments to Round structure, configured Games per Matchup, slot sources, advancement rule, or aggregate-tiebreak policy are subject to the frozen configuration amendment legality rule in `lifecycle.md`.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Playoff Configuration` adopt this change (choose policy): Round structure and policies become part of the frozen result-affecting Season configuration. After dependent authoritative playoff Games exist, amendments to Round structure, configured Games per Matchup, slot sources, advancement rule, or aggregate-tiebreak policy are subject to the frozen configuration amendment legality rule in `lifecycle.md`.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 12,
+      "source_feedback_ids": [
+        "structural_integrity:fb_001",
+        "determinism:fb_det_001",
+        "determinism:fb_det_002",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002"
+      ],
+      "trigger_types": [
+        "choose_policy"
+      ]
+    }
+  ],
+  "draft_hash": "79166ffebeb45392b52ac3f34aee90b3e9be99b2852a349b07027572c5f3227d",
+  "round_number": 12
+}

@@ -1,0 +1,1972 @@
+{
+  "checkpoint_count": 148,
+  "clusters": {
+    "by_section": [
+      {
+        "affected_sections": [
+          "Audit Configuration"
+        ],
+        "checkpoint_count": 4,
+        "checkpoint_ids": [
+          "chk_0f73c23755363729",
+          "chk_834c720148b738fd",
+          "chk_488d2423f61db350",
+          "chk_9bc1b6dfe9363ca6"
+        ],
+        "cluster_key": "Audit Configuration",
+        "cluster_label": "Audit Configuration",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Audit Configuration` adopt this change (tighten requirement, choose policy): An Audit Record for a playoff correction conflict resolution must include the resolution type, affected participant slots, conflicted downstream authoritative Games, resolution identity, and whether affected advancement is halted or an existing downstream participant path is affirmed as an administrative exception. The corresponding resolution report must expose the same information needed to reproduce retry behavior and operator handoff.",
+          "Should `Audit Configuration` adopt this change (tighten requirement, choose policy): An Audit Record for a playoff correction conflict resolution must include the resolution type, affected participant slots, conflicted downstream authoritative Games, canonicalized resolution identity, and whether affected advancement is halted or an existing downstream participant path is affirmed as an administrative exception. The corresponding resolution report must expose the same information needed to reproduce retry behavior and operator handoff.",
+          "Should `Audit Configuration` adopt this change (tighten requirement, choose policy): An Audit Record for a playoff correction conflict resolution must include resolution type, affected participant slots, conflicted downstream authoritative Games, canonicalized resolution identity, and whether affected advancement is halted or an existing downstream participant path is affirmed as an administrative exception. The canonicalized resolution identity is also the idempotency key for authoritative correction-resolution audit persistence: once accepted, duplicate submissions, retries, replays, and concurrent recomputations reuse the existing Audit Record identity and do not append another material Audit Record for the same accepted resolution. The corresponding resolution report must expose the same information needed to reproduce retry behavior and operator handoff, including whether the request created a new accepted resolution or returned the prior acceptance."
+        ],
+        "round_numbers": [
+          20,
+          24,
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary",
+          "operator_policy_choice"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Authoritative Result Corrections"
+        ],
+        "checkpoint_count": 13,
+        "checkpoint_ids": [
+          "chk_02565b8c9242b371",
+          "chk_9d5d306677877e5c",
+          "chk_b326ece3d5d16868",
+          "chk_cd2ba896d68b3186",
+          "chk_1a2da5611caf6829",
+          "chk_4fa98892e9462fb5",
+          "chk_4429d50d90e1bb21",
+          "chk_8a8ac0043f9ea6ea",
+          "chk_25329c1aaa20597c",
+          "chk_354dcbc302caeab6",
+          "chk_6b19bcdc477f315f",
+          "chk_b479601f52a04364",
+          "chk_f7e3ba0bfc07dc56"
+        ],
+        "cluster_key": "Authoritative Result Corrections",
+        "cluster_label": "Authoritative Result Corrections",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Authoritative Result Corrections` adopt this change (choose policy): apply the correction and halt affected downstream advancement until replacement authoritative outcomes are recorded under the corrected bracket participants; or",
+          "Should `Authoritative Result Corrections` adopt this change (choose policy): abandon the correction and preserve the prior authoritative result;",
+          "Should `Authoritative Result Corrections` adopt this change (tighten requirement, choose policy): The resolution report must identify the corrected Game, the affected Matchups and participant slots, downstream authoritative Games that create the conflict, the recalculated participant that would have advanced, the participant currently present downstream, and the League Administrator actor and reason. The permitted resolutions are:"
+        ],
+        "round_numbers": [
+          4,
+          8,
+          20,
+          24,
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary",
+          "operator_policy_choice"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Authority and Precedence"
+        ],
+        "checkpoint_count": 4,
+        "checkpoint_ids": [
+          "chk_9552404ea35ed3f0",
+          "chk_1d295aa3968c7826",
+          "chk_044ba98066d6daf3",
+          "chk_f6e9c165fb710591"
+        ],
+        "cluster_key": "Authority and Precedence",
+        "cluster_label": "Authority and Precedence",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Authority and Precedence` adopt this change (choose policy): More specific values override less specific values only where this specification permits customization. The first accepted authoritative Season Game outcome freezes all result-affecting values into a single versioned Season snapshot. Later, retried, or concurrent authoritative outcome transitions for that Season reuse the existing snapshot or are rejected under the lifecycle freeze rule when they depend on a different mutable configuration basis.",
+          "Should `Authority and Precedence` adopt this change (choose policy, scope change): The result-affecting configuration basis identity used for concurrent or retried first-freeze comparison is the canonical content identity of the values that would be captured in the frozen Season configuration version. It covers standings point values, ordered ranking criteria, eligible Game phase and status rules, standings adjustment enablement, forfeit treatment, playoff Round identities and order, participant slot sources, configured Games per Matchup, advancement rule, aggregate-tiebreak policies, and any later accepted result-affecting field. It excludes timezone, localization, Venue, Media, display text, and other non-result-affecting values. Equal basis identities reuse the existing frozen version. Unequal basis identities are rejected without mutating authoritative state, persisted projections, or configuration versions.",
+          "Should `Authority and Precedence` adopt this change (scope change): The result-affecting configuration basis identity used for first-freeze comparison is canonical content identity of values captured in the frozen version. It covers standings point values, ordered ranking criteria, eligible Game phase and status rules, standings adjustment enablement, forfeit treatment, playoff Round identities and order, participant slot sources, configured Games per Matchup, advancement rule, aggregate-tiebreak policies, and any later accepted result-affecting field. It excludes timezone, localization, Venue, Media, display text, and other non-result-affecting values."
+        ],
+        "round_numbers": [
+          12,
+          16,
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary",
+          "operator_policy_choice"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Authorization"
+        ],
+        "checkpoint_count": 14,
+        "checkpoint_ids": [
+          "chk_6b71c80b35b12c65",
+          "chk_7b9cf3023460674c",
+          "chk_9db3daf3dbf553b1",
+          "chk_bd2a850f89fe90b7",
+          "chk_d7a8406898038dd5",
+          "chk_f5417d35effa335f",
+          "chk_01fafc8439c53a9f",
+          "chk_0ec28267f0f8b6d4",
+          "chk_111e0c1b69115f3d",
+          "chk_2e6c1a11e097d7ed",
+          "chk_52aa1c703a765345",
+          "chk_80f43870c3a7a7d9",
+          "chk_ef44ed43c5ac0847",
+          "chk_6cb40f495a604286"
+        ],
+        "cluster_key": "Authorization",
+        "cluster_label": "Authorization",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Authorization` adopt this change (choose policy): 7. Unauthorized mutation attempts and lifecycle transitions not explicitly permitted by the lifecycle specification are rejected without mutating authoritative state.",
+          "Should `Authorization` adopt this change (scope change): 6. Role and management-relationship changes are audited.",
+          "Should `Authorization` adopt this change (choose policy, scope change): 5. Team Captain authority is an auditable scoped role marker in Phase 1 and grants no independent core mutation authority until a later accepted specification defines such permissions."
+        ],
+        "round_numbers": [
+          4,
+          12,
+          16,
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary",
+          "operator_policy_choice"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Authorization Configuration"
+        ],
+        "checkpoint_count": 4,
+        "checkpoint_ids": [
+          "chk_36a6e12e480596e3",
+          "chk_fe021eb074e61c9a",
+          "chk_e2a236c63bd0f4f8",
+          "chk_841df734049b8b9f"
+        ],
+        "cluster_key": "Authorization Configuration",
+        "cluster_label": "Authorization Configuration",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Authorization Configuration` adopt this change (choose policy, scope change): League Administrators assign, reassign, and revoke Team Captain authority and approve or revoke Player Management Relationships. League Administrators also hold Phase 1 authority for core Game lifecycle mutations, authoritative result corrections, Roster Membership changes, Player Stat Line creation and material changes, frozen Season configuration amendments, persisted random-draw conflict resolution, and playoff correction conflict resolution. Team Captain authority is a scoped role marker in Phase 1 and does not add independent mutation permissions unless a later accepted specification defines them. Adding roles or changing their authority requires an accepted specification update.",
+          "Should `Authorization Configuration` adopt this change (choose policy, scope change): League Administrators assign, reassign, and revoke Team Captain authority and approve or revoke Player Management Relationships. League Administrators also hold Phase 1 authority for core Game lifecycle mutations, authoritative result corrections, Roster Membership changes, Player Stat Line creation and material changes, frozen Season configuration amendments, and playoff correction conflict resolution. Persisted random-draw duplicate or conflict attempts are handled only by deterministic reuse or rejection under the stable tie-context rule; League Administrators do not replace or override an existing draw result in Phase 1. Team Captain authority is a scoped role marker in Phase 1 and does not add independent mutation permissions unless a later accepted specification defines them. Adding roles or changing their authority requires an accepted specification update.",
+          "Should `Authorization Configuration` adopt this change (choose policy, scope change): After the initial League Administrator bootstrap boundary for a League, existing League Administrators assign, reassign, and revoke League Administrator authority for that League. The bootstrap boundary is outside Phase 1 domain mutation semantics and cannot be inferred from ordinary role-assignment authority. League Administrators assign, reassign, and revoke Team Captain authority and approve or revoke Player Management Relationships. League Administrators also hold Phase 1 authority for core Game lifecycle mutations, authoritative result corrections, Roster Membership changes, Player Stat Line creation and material changes, frozen Season configuration amendments, and playoff correction conflict resolution. Persisted random-draw duplicate or conflict attempts are handled only by deterministic reuse or rejection under the stable tie-context rule; League Administrators do not replace or override an existing draw result in Phase 1. Team Captain authority is a scoped role marker in Phase 1 and does not add independent mutation permissions unless a later accepted specification defines them. Adding roles or changing their authority requires an accepted specification update."
+        ],
+        "round_numbers": [
+          4,
+          8,
+          16,
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Canonical Concepts"
+        ],
+        "checkpoint_count": 11,
+        "checkpoint_ids": [
+          "chk_05c966998be80a92",
+          "chk_198d59333ba2172d",
+          "chk_454b9366eaba05fd",
+          "chk_73a8326924a0fdce",
+          "chk_a0332bd78b9e808b",
+          "chk_b00ec36ad7c79cf5",
+          "chk_cb5f2a10c19547aa",
+          "chk_d6438e2ec5d19fcc",
+          "chk_e1ce288a8f8a7af1",
+          "chk_f39a6e54b57a66f3",
+          "chk_f61de14affe60e32"
+        ],
+        "cluster_key": "Canonical Concepts",
+        "cluster_label": "Canonical Concepts",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Canonical Concepts` adopt this change (choose policy, scope change): A Game is a scheduled basketball match between two distinct Season Teams in the same Season. It records schedule, venue, competition phase, lifecycle status, authoritative score when available, optional Player Stat Lines, and optional Media associations. Regular-season and playoff Games share the same Game concept.",
+          "Should `Canonical Concepts` adopt this change (relax requirement): A Roster Membership is a Player membership in one Season Team over an effective period. Transfers close the prior membership and open a new one without rewriting historical Games or Player Stat Lines. A Player may not have overlapping active memberships in more than one Season Team in the same Season.",
+          "Should `Canonical Concepts` adopt this change (choose policy): Team Statistics are derived Season-Team performance calculated from authoritative Game results and, where explicitly needed, aggregated Player Stat Lines. The authoritative Game score remains the source for points for, points against, and result-based standings calculations."
+        ],
+        "round_numbers": [
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary",
+          "operator_policy_choice"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Competition Transitions"
+        ],
+        "checkpoint_count": 1,
+        "checkpoint_ids": [
+          "chk_85d9f14d928c54c7"
+        ],
+        "cluster_key": "Competition Transitions",
+        "cluster_label": "Competition Transitions",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Competition Transitions` adopt this change (relax requirement): A Game may become `forfeit` only from `scheduled`, `postponed`, or `in_progress`, and only with an explicit winning team and an official non-tied score. That official score is the source for standings and aggregate calculations."
+        ],
+        "round_numbers": [
+          20
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "operator_policy_choice"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Configuration and Reproducibility"
+        ],
+        "checkpoint_count": 9,
+        "checkpoint_ids": [
+          "chk_15516a59b42106cc",
+          "chk_842abdd611b20e21",
+          "chk_b7b547dc966be29f",
+          "chk_178fd72099496361",
+          "chk_26ac6627cae5fd74",
+          "chk_57196930f89898b0",
+          "chk_a0e2282a947f9343",
+          "chk_880047b3aa8330f6",
+          "chk_953601ac12a4f650"
+        ],
+        "cluster_key": "Configuration and Reproducibility",
+        "cluster_label": "Configuration and Reproducibility",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Configuration and Reproducibility` adopt this change (choose policy): 5. Given the same authoritative outcomes, adjustment records, persisted random draws, and configuration version, standings and playoff advancement are deterministic.",
+          "Should `Configuration and Reproducibility` adopt this change (tighten requirement, choose policy): 3. A result-affecting amendment that conflicts with existing authoritative Game outcomes or playoff state must preserve authoritative state through rejection or same-action administrative resolution.",
+          "Should `Configuration and Reproducibility` adopt this change (choose policy): 1. The first accepted `final` or `forfeit` Game freezes a single versioned snapshot of result-affecting Season configuration, and retries or later authoritative outcomes for the same Season reuse that frozen version."
+        ],
+        "round_numbers": [
+          12,
+          16,
+          20,
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary",
+          "operator_policy_choice"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Consequences"
+        ],
+        "checkpoint_count": 1,
+        "checkpoint_ids": [
+          "chk_d0fb3d750b78c6f3"
+        ],
+        "cluster_key": "Consequences",
+        "cluster_label": "Consequences",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Consequences` adopt this change (tighten requirement): Schema and API work must preserve participation history instead of placing a mutable team reference directly on Player. Derived standings and playoff advancement require reproducible configuration versions and audit-aware recomputation. Statistics representations must preserve missingness and verification separately. Playoff Matchups cannot use conventional games-won best-of logic. Interfaces and contracts may be designed later without reopening these concepts unless new requirements create a genuine domain conflict. No implementation, contract, or public protocol directories are created by this decision alone."
+        ],
+        "round_numbers": [
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Context"
+        ],
+        "checkpoint_count": 1,
+        "checkpoint_ids": [
+          "chk_e6991f3fcbbd5976"
+        ],
+        "cluster_key": "Context",
+        "cluster_label": "Context",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Context` adopt this change (choose policy): Courtside needs a stable conceptual boundary before schema, API, framework, or deployment decisions. Without explicit domain authority, implementations are likely to collapse User Account and Player identity, lose roster history, treat playoff Games as a separate type, make standings depend on incomplete statistics, or encode one League policy as inflexible implementation rules."
+        ],
+        "round_numbers": [
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "operator_policy_choice"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Core Mutation Authority"
+        ],
+        "checkpoint_count": 10,
+        "checkpoint_ids": [
+          "chk_0c728c360efb05b8",
+          "chk_5c52a836557b08f0",
+          "chk_70bce51a37b27e69",
+          "chk_8ce5375afe063a68",
+          "chk_9265e5b6a15c7db5",
+          "chk_93b383d2a9da99bc",
+          "chk_b69074a544e818a2",
+          "chk_07b988825ac7de14",
+          "chk_7708121beb96f845",
+          "chk_d83c7da3b02f657a"
+        ],
+        "cluster_key": "Core Mutation Authority",
+        "cluster_label": "Core Mutation Authority",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Core Mutation Authority` adopt this change (choose policy): ## Core Mutation Authority",
+          "Should `Core Mutation Authority` adopt this change (choose policy): Derived standings, Season-Team result statistics, playoff aggregates, and playoff advancement are produced by deterministic recomputation from authoritative inputs. They are not directly edited by any actor.",
+          "Should `Core Mutation Authority` adopt this change (scope change): Team Captain assignments are scoped to one Season Team and are auditable role assignments. In Phase 1 they do not independently authorize core domain mutations unless a later accepted specification grants a specific Team Captain permission."
+        ],
+        "round_numbers": [
+          4,
+          16,
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary",
+          "operator_policy_choice"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Courtside Core Domain \u2014 Isolated Phase 1.01 Composite"
+        ],
+        "checkpoint_count": 1,
+        "checkpoint_ids": [
+          "chk_bd468f49c98c78bc"
+        ],
+        "cluster_key": "Courtside Core Domain \u2014 Isolated Phase 1.01 Composite",
+        "cluster_label": "Courtside Core Domain \u2014 Isolated Phase 1.01 Composite",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Courtside Core Domain \u2014 Isolated Phase 1.01 Composite` adopt this change (scope change): # Courtside Core Domain \u2014 Isolated Phase 1.01 Composite"
+        ],
+        "round_numbers": [
+          4
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Courtside Core Domain \u2014 Isolated Phase 1.02 Composite"
+        ],
+        "checkpoint_count": 1,
+        "checkpoint_ids": [
+          "chk_be3eb11f4ca23fb9"
+        ],
+        "cluster_key": "Courtside Core Domain \u2014 Isolated Phase 1.02 Composite",
+        "cluster_label": "Courtside Core Domain \u2014 Isolated Phase 1.02 Composite",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Courtside Core Domain \u2014 Isolated Phase 1.02 Composite` adopt this change (scope change): # Courtside Core Domain \u2014 Isolated Phase 1.02 Composite"
+        ],
+        "round_numbers": [
+          8
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Courtside Core Domain \u2014 Isolated Phase 1.03 Composite"
+        ],
+        "checkpoint_count": 1,
+        "checkpoint_ids": [
+          "chk_8114d978ed174234"
+        ],
+        "cluster_key": "Courtside Core Domain \u2014 Isolated Phase 1.03 Composite",
+        "cluster_label": "Courtside Core Domain \u2014 Isolated Phase 1.03 Composite",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Courtside Core Domain \u2014 Isolated Phase 1.03 Composite` adopt this change (scope change): # Courtside Core Domain \u2014 Isolated Phase 1.03 Composite"
+        ],
+        "round_numbers": [
+          12
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Courtside Core Domain \u2014 Isolated Phase 1.04 Composite"
+        ],
+        "checkpoint_count": 1,
+        "checkpoint_ids": [
+          "chk_bf7411ff85934478"
+        ],
+        "cluster_key": "Courtside Core Domain \u2014 Isolated Phase 1.04 Composite",
+        "cluster_label": "Courtside Core Domain \u2014 Isolated Phase 1.04 Composite",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Courtside Core Domain \u2014 Isolated Phase 1.04 Composite` adopt this change (scope change): # Courtside Core Domain \u2014 Isolated Phase 1.04 Composite"
+        ],
+        "round_numbers": [
+          16
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Courtside Core Domain \u2014 Isolated Phase 1.05 Composite"
+        ],
+        "checkpoint_count": 1,
+        "checkpoint_ids": [
+          "chk_12bb6b05519fa07f"
+        ],
+        "cluster_key": "Courtside Core Domain \u2014 Isolated Phase 1.05 Composite",
+        "cluster_label": "Courtside Core Domain \u2014 Isolated Phase 1.05 Composite",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Courtside Core Domain \u2014 Isolated Phase 1.05 Composite` adopt this change (scope change): # Courtside Core Domain \u2014 Isolated Phase 1.05 Composite"
+        ],
+        "round_numbers": [
+          20
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Courtside Core Domain \u2014 Isolated Phase 1.06 Composite"
+        ],
+        "checkpoint_count": 1,
+        "checkpoint_ids": [
+          "chk_4a80d01b495200ba"
+        ],
+        "cluster_key": "Courtside Core Domain \u2014 Isolated Phase 1.06 Composite",
+        "cluster_label": "Courtside Core Domain \u2014 Isolated Phase 1.06 Composite",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Courtside Core Domain \u2014 Isolated Phase 1.06 Composite` adopt this change (scope change): # Courtside Core Domain \u2014 Isolated Phase 1.06 Composite"
+        ],
+        "round_numbers": [
+          24
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Courtside Core Domain \u2014 Isolated Phase 1.07 Composite"
+        ],
+        "checkpoint_count": 1,
+        "checkpoint_ids": [
+          "chk_be964f3cf8f77cc7"
+        ],
+        "cluster_key": "Courtside Core Domain \u2014 Isolated Phase 1.07 Composite",
+        "cluster_label": "Courtside Core Domain \u2014 Isolated Phase 1.07 Composite",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Courtside Core Domain \u2014 Isolated Phase 1.07 Composite` adopt this change (scope change): # Courtside Core Domain \u2014 Isolated Phase 1.07 Composite"
+        ],
+        "round_numbers": [
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Decision"
+        ],
+        "checkpoint_count": 1,
+        "checkpoint_ids": [
+          "chk_eefaacb3ccee0aa4"
+        ],
+        "cluster_key": "Decision",
+        "cluster_label": "Decision",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Decision` adopt this change (relax requirement, choose policy): Adopt the domain defined by overview, lifecycle, invariants, and configuration. The ratified direction is that Season is the competition container while Team and Player identities persist across Seasons; Season Team and Roster Membership preserve Season participation and transfers historically; User Account and Player remain separate and connected through many-to-many approved management relationships; League Administrator authority persists across Seasons; Team Captain authority is scoped to one Season Team; Games use `scheduled`, `postponed`, `cancelled`, `in_progress`, `final`, and `forfeit`; tied authoritative outcomes are prohibited; League Administrators may correct authoritative outcomes with append-only audit and mandatory reason; Player-stat values distinguish unknown from known zero and may be partial and independently provisional or confirmed; standings derive from authoritative regular-season results under customizable versioned configuration; playoffs use fixed aggregate-points brackets with configurable aggregate-tiebreak defaulting to overtime in the final configured Game; result-affecting Season configuration freezes at first final or forfeited Game and changes only by versioned audited League Administrator amendment; the League owns timezone, reusable Venues, English/French language configuration, default language, localizable UI and authored content, and reusable Media identity; and material administrative changes use the minimum audit fields defined in configuration."
+        ],
+        "round_numbers": [
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "operator_policy_choice"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Derived Data Authority"
+        ],
+        "checkpoint_count": 1,
+        "checkpoint_ids": [
+          "chk_06e7764ce2a78bf6"
+        ],
+        "cluster_key": "Derived Data Authority",
+        "cluster_label": "Derived Data Authority",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Derived Data Authority` adopt this change (tighten requirement, choose policy): Authoritative Game outcomes produce regular-season standings, Season-Team result statistics, playoff aggregate scores, and playoff advancement. Player Stat Lines produce Player game logs and optional detailed Team Statistics. Player-stat availability or completeness must never block an authoritative Game result, standings recomputation, or playoff advancement."
+        ],
+        "round_numbers": [
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Game Lifecycle"
+        ],
+        "checkpoint_count": 3,
+        "checkpoint_ids": [
+          "chk_33e091c88413b5bf",
+          "chk_c7459be39f678ab9",
+          "chk_fb6aa605672eff91"
+        ],
+        "cluster_key": "Game Lifecycle",
+        "cluster_label": "Game Lifecycle",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Game Lifecycle` adopt this change (tighten requirement): Every scheduled instant is interpreted in the League configured IANA timezone and stored as an unambiguous instant. Scheduling changes must preserve operational history containing actor, timestamp, action, previous scheduled instant and status when present, new scheduled instant and status when present, and optional reason. This history may be represented as an Audit Record or as separate schedule history.",
+          "Should `Game Lifecycle` adopt this change (relax requirement, choose policy): An `in_progress` Game may become `final` after an authoritative non-tied score is recorded. An `in_progress` Game tied at the end of regulation continues through overtime until one team wins. A Game may become `forfeit` only from `scheduled`, `postponed`, or `in_progress`, and only with an explicit winning team and official non-tied score. `final` and `forfeit` are authoritative terminal outcome statuses and do not return to prior statuses. Detailed Player statistics are not required for `final` or `forfeit`.",
+          "Should `Game Lifecycle` adopt this change (relax requirement, choose policy): A new Game begins as `scheduled`. A `scheduled` Game may become `postponed`, `cancelled`, `in_progress`, or `forfeit`. A `postponed` Game may return to `scheduled` with a revised scheduled instant, become `cancelled`, or become `forfeit`. A `cancelled` Game has no authoritative competitive outcome and does not affect standings or playoff aggregates. `cancelled` is terminal and replacement competition requires a new or separately scheduled Game."
+        ],
+        "round_numbers": [
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary",
+          "operator_policy_choice"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Game and Venue Configuration"
+        ],
+        "checkpoint_count": 1,
+        "checkpoint_ids": [
+          "chk_7782d6ff8a76be54"
+        ],
+        "cluster_key": "Game and Venue Configuration",
+        "cluster_label": "Game and Venue Configuration",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Game and Venue Configuration` adopt this change (tighten requirement, scope change): Every Game has scheduled instant, home and away Season Teams, competition phase, optional Venue reference, and optional Game-specific venue instructions. Every Venue has stable League-local identity, name, address, and optional notes. The League timezone supplies scheduling interpretation for administrative entry and default display. Stored scheduled instants must remain unambiguous across daylight-saving transitions."
+        ],
+        "round_numbers": [
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Games and Results"
+        ],
+        "checkpoint_count": 4,
+        "checkpoint_ids": [
+          "chk_8f177a36130f5461",
+          "chk_8f6f4a5231c3aed4",
+          "chk_efaeff1c4678488b",
+          "chk_11436080234b2f3d"
+        ],
+        "cluster_key": "Games and Results",
+        "cluster_label": "Games and Results",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Games and Results` adopt this change (relax requirement, choose policy): 9. `cancelled`, `final`, and `forfeit` Game statuses are terminal lifecycle states, except that authoritative result corrections may modify the score or declared winner of `final` or `forfeit` Games while preserving status.",
+          "Should `Games and Results` adopt this change (tighten requirement, choose policy): 10. A playoff correction conflict caused by an authoritative result correction must be resolved in the same administrative action as the correction; otherwise the correction is rejected without mutating authoritative state.",
+          "Should `Games and Results` adopt this change (choose policy): 12. An accepted halted playoff correction resolution makes affected slots or Matchups halted in the current projection, excludes conflicted downstream authoritative Games from current corrected-path advancement calculations while preserving them historically, and resumes only when replacement authoritative outcomes exist under the corrected bracket participants."
+        ],
+        "round_numbers": [
+          4,
+          8,
+          20,
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary",
+          "operator_policy_choice"
+        ]
+      },
+      {
+        "affected_sections": [
+          "General Lifecycle Failure Rule"
+        ],
+        "checkpoint_count": 4,
+        "checkpoint_ids": [
+          "chk_5be0812ef2c7b3f2",
+          "chk_5b5ed45288b3abe9",
+          "chk_9dad9b29838b4f97",
+          "chk_f0f4bd2ec6f50c0b"
+        ],
+        "cluster_key": "General Lifecycle Failure Rule",
+        "cluster_label": "General Lifecycle Failure Rule",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `General Lifecycle Failure Rule` adopt this change (tighten requirement, choose policy, scope change): For every lifecycle-bearing Courtside domain entity, a transition that is not explicitly permitted by this specification must be rejected without mutating authoritative state. The rejection report must identify the entity, the current state or condition, the requested state or mutation, the actor, and the violated lifecycle rule. Auditing rejected attempts is not required by this Phase 1 domain specification unless the audit policy for that surface explicitly requires it.",
+          "Should `General Lifecycle Failure Rule` adopt this change (tighten requirement, choose policy, scope change): In-scope invariant and configuration validation failures are rejected under the same preserve-state rule. The rejection report must identify the affected entity or configuration surface, the submitted value or attempted mutation, the actor when applicable, the violated invariant or configuration rule, and confirm that existing authoritative records, persisted projections, and configuration versions remain unchanged.",
+          "Should `General Lifecycle Failure Rule` adopt this change (tighten requirement, choose policy, scope change): Authorization failures are rejected under the same preserve-state reporting semantics. The rejection report must identify the actor, affected League, Season, Season Team, Player, or Game scope when applicable, attempted mutation, missing or insufficient authority, violated authority rule, and confirmation that authoritative state and derived projections remain unchanged."
+        ],
+        "round_numbers": [
+          4,
+          8,
+          12,
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Identity and Participation"
+        ],
+        "checkpoint_count": 1,
+        "checkpoint_ids": [
+          "chk_5e6c2d122c6cedce"
+        ],
+        "cluster_key": "Identity and Participation",
+        "cluster_label": "Identity and Participation",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Identity and Participation` adopt this change (relax requirement, choose policy): A User Account and Player are distinct. A Player exists independently of User Accounts and team participation. A Team persists independently of any one Season. Season-specific roster, captain authority, Games, and performance attach to Season Team rather than directly to Team. At most one Season Team connects the same Team and Season. A Player may not have overlapping effective Roster Memberships for different Season Teams in the same Season. Transfers preserve historical membership, Game, and Player Stat Line attribution. A User Account may manage a Player only through an approved Player Management Relationship. Player management is many-to-many. Player Stat Line eligibility is evaluated against the Game competition eligibility anchor, and later scheduling, finalization, forfeiture, or result correction does not change historical attribution."
+        ],
+        "round_numbers": [
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "operator_policy_choice"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Localization Configuration"
+        ],
+        "checkpoint_count": 1,
+        "checkpoint_ids": [
+          "chk_62fa9d453c0eef0f"
+        ],
+        "cluster_key": "Localization Configuration",
+        "cluster_label": "Localization Configuration",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Localization Configuration` adopt this change (tighten requirement): Language selection follows saved supported User Account preference, then League default language. If requested authored-content translation is missing, Courtside renders the League-default variant. UI and authored content must be capable of English and French variants. Proper names are stored and rendered without automatic translation. Concrete storage and editorial workflow are deferred."
+        ],
+        "round_numbers": [
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Player Management Lifecycle"
+        ],
+        "checkpoint_count": 4,
+        "checkpoint_ids": [
+          "chk_350d557f3124843b",
+          "chk_9c4597fde27d4343",
+          "chk_ede642f8d6bed27b",
+          "chk_7f3bef0370103d7d"
+        ],
+        "cluster_key": "Player Management Lifecycle",
+        "cluster_label": "Player Management Lifecycle",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Player Management Lifecycle` adopt this change (relax requirement): A User Account may create a `requested` relationship for itself and a Player.",
+          "Should `Player Management Lifecycle` adopt this change (relax requirement): A League Administrator may create a `requested` relationship on behalf of a User Account and Player, or create and approve the relationship in one audited administrative action.",
+          "Should `Player Management Lifecycle` adopt this change (choose policy): Duplicate active `requested` or `approved` relationships for the same User Account and Player are rejected without mutating authoritative state."
+        ],
+        "round_numbers": [
+          8,
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "operator_policy_choice"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Player Stat Line Lifecycle"
+        ],
+        "checkpoint_count": 2,
+        "checkpoint_ids": [
+          "chk_6bb2e19255ead75c",
+          "chk_c32f13c6d3ed9992"
+        ],
+        "cluster_key": "Player Stat Line Lifecycle",
+        "cluster_label": "Player Stat Line Lifecycle",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Player Stat Line Lifecycle` adopt this change (relax requirement, choose policy): Verification and completeness are independent. A Player Stat Line may be created or updated as `provisional` before or after the Game result becomes authoritative. A line becomes `confirmed` when its currently known values have been verified. A confirmed line may remain partial. Updating a confirmed value returns the changed line to `provisional` unless the same authorized action explicitly verifies the replacement. `confirmed` is not terminal; the only permitted post-confirmation mutation is an authorized value update that returns the changed line to `provisional` unless explicitly verified in the same action.",
+          "Should `Player Stat Line Lifecycle` adopt this change (choose policy): Each statistical value is either known, including known zero, or unknown because it has not been recorded. Human-readable completeness labels are derived from which expected values are known and are not substitutes for field-level known/unknown state. Adding later details does not change Game-result authority. Material stat changes are audited with actor, timestamp, action, previous value, new value, and optional reason."
+        ],
+        "round_numbers": [
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "operator_policy_choice"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Player Statistics"
+        ],
+        "checkpoint_count": 1,
+        "checkpoint_ids": [
+          "chk_c78a03c413bfe995"
+        ],
+        "cluster_key": "Player Statistics",
+        "cluster_label": "Player Statistics",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Player Statistics` adopt this change (relax requirement, choose policy): A Player Stat Line belongs to exactly one Game, Player, and Roster Membership establishing eligibility. Unknown and known zero are distinct. Completeness and verification are independent. A Game result may become authoritative while Player Stat Lines are absent, provisional, partial, or unknown. Player-stat completeness never affects standings eligibility or playoff advancement. Team points for, points against, and result-derived Team Statistics use authoritative Game score, not the sum of Player Stat Lines. Corrected confirmed statistics return to provisional unless the replacement is explicitly verified in the same authorized action."
+        ],
+        "round_numbers": [
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "operator_policy_choice"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Playoff Configuration"
+        ],
+        "checkpoint_count": 2,
+        "checkpoint_ids": [
+          "chk_3890dd400fca0687",
+          "chk_e585511c7124ac02"
+        ],
+        "cluster_key": "Playoff Configuration",
+        "cluster_label": "Playoff Configuration",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Playoff Configuration` adopt this change (choose policy): Round structure and policies become part of the frozen result-affecting Season configuration. After dependent authoritative playoff Games exist, amendments to Round structure, configured Games per Matchup, slot sources, advancement rule, or aggregate-tiebreak policy are subject to the frozen configuration amendment legality rule in `lifecycle.md`.",
+          "Should `Playoff Configuration` adopt this change (tighten requirement, choose policy): Playoff structure is configurable per Round. Each Round defines stable Round identity and display order, fixed input slots from seeds or named prior-Matchup winners, number of Games in each Matchup, `aggregate_points` as advancement rule, and aggregate-tiebreak policy. Example Game counts are illustrative only. Every Season must provide actual Round list and Game count for each Round. `overtime` is the normative default aggregate-tiebreak policy and continues the final configured Game after regulation until the Matchup aggregate is no longer tied. Unknown policies are rejected rather than silently falling back. Round structure and policies are result-affecting frozen configuration and are subject to frozen amendment legality after dependent authoritative playoff Games exist."
+        ],
+        "round_numbers": [
+          12,
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "operator_policy_choice"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Playoff Matchup Lifecycle"
+        ],
+        "checkpoint_count": 3,
+        "checkpoint_ids": [
+          "chk_283503e9d866a579",
+          "chk_544551838c91c932",
+          "chk_0dceac2f71a603fe"
+        ],
+        "cluster_key": "Playoff Matchup Lifecycle",
+        "cluster_label": "Playoff Matchup Lifecycle",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Playoff Matchup Lifecycle` adopt this change (tighten requirement): Playoff Games use the ordinary Game lifecycle. Playoff outcomes do not contribute to regular-season standings. A Matchup with incomplete configured Games, a tied aggregate after all permitted tiebreak handling, an unknown tiebreak policy, or a blocked participant-resolution conflict must not advance automatically and must report the violated rule.",
+          "Should `Playoff Matchup Lifecycle` adopt this change (tighten requirement, choose policy): Playoff Games use the ordinary Game lifecycle. Playoff outcomes do not contribute to regular-season standings. A Matchup with incomplete configured Games, a tied aggregate after all permitted tiebreak handling, or an unknown tiebreak policy must not advance automatically and must report the violated rule. An attempted correction that would create an unresolved participant-resolution conflict is rejected before authoritative state changes.",
+          "Should `Playoff Matchup Lifecycle` adopt this change (tighten requirement, choose policy): Initial fixed-bracket Matchup slots resolve from configured Season seeds. Later Matchup slots resolve from winners of named prior Matchups. A Matchup contains the number of Games configured for its Round, and every configured Game must reach `final` or `forfeit` before normal advancement. The Matchup aggregate is the sum of authoritative scores. The team with greater aggregate advances through the fixed bracket. If aggregate scores are tied at the end of regulation in the final configured Game, that Game continues into aggregate-tiebreak overtime until the aggregate tie is broken, even when the regulation score of that individual Game was not tied. Overtime points remain part of the final Game score and therefore the Matchup aggregate. Playoff Games use the ordinary Game lifecycle. Playoff outcomes do not contribute to regular-season standings. A Matchup with incomplete configured Games, a tied aggregate after all permitted tiebreak handling, or unknown tiebreak policy must not advance automatically and must report the violated rule."
+        ],
+        "round_numbers": [
+          4,
+          8,
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Playoffs"
+        ],
+        "checkpoint_count": 5,
+        "checkpoint_ids": [
+          "chk_194a45334fa3c8f6",
+          "chk_b1abd1a9f3e20177",
+          "chk_45b89292a02fe023",
+          "chk_55f5a1790338eb3d",
+          "chk_d9368df018ae932e"
+        ],
+        "cluster_key": "Playoffs",
+        "cluster_label": "Playoffs",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Playoffs` adopt this change (tighten requirement, choose policy): 10. A playoff Matchup with incomplete authoritative Game outcomes or an unresolved participant conflict must not advance automatically.",
+          "Should `Playoffs` adopt this change (tighten requirement, choose policy): 10. A playoff Matchup with incomplete authoritative Game outcomes must not advance automatically, and an attempted correction that would create an unresolved participant conflict is rejected before authoritative state changes.",
+          "Should `Playoffs` adopt this change (choose policy): 11. Accepted correction resolutions that halt advancement are deterministic by their resolution identity; retries and replays return the same halted projection and report until replacement authoritative outcomes satisfy the resume condition."
+        ],
+        "round_numbers": [
+          4,
+          8,
+          20,
+          24,
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary",
+          "operator_policy_choice"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Role Assignment"
+        ],
+        "checkpoint_count": 3,
+        "checkpoint_ids": [
+          "chk_dd93d510c02fe8b4",
+          "chk_750dd9c59353cc69",
+          "chk_8168de60491bd0aa"
+        ],
+        "cluster_key": "Role Assignment",
+        "cluster_label": "Role Assignment",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Role Assignment` adopt this change (choose policy, scope change): For Phase 1, Team Captain is a scoped domain authority marker. It does not by itself grant independent authority over Game outcomes, rosters, Player Stat Lines, Player Management approvals, Season configuration amendments, or playoff conflict resolution unless a later accepted specification grants that authority.",
+          "Should `Role Assignment` adopt this change (choose policy, scope change): the initial League Administrator bootstrap boundary is outside Phase 1 domain mutation semantics and cannot be inferred from ordinary role-assignment authority; and",
+          "Should `Role Assignment` adopt this change (choose policy): after the initial League Administrator bootstrap boundary for a League, an existing League Administrator assigns, reassigns, and revokes League Administrator assignments for that League;"
+        ],
+        "round_numbers": [
+          4,
+          16
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary",
+          "operator_policy_choice"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Role Assignment Lifecycle"
+        ],
+        "checkpoint_count": 4,
+        "checkpoint_ids": [
+          "chk_976679f78207414b",
+          "chk_c1845b80d45f50d8",
+          "chk_da2b9b7e9ae0e3f7",
+          "chk_f3fdb47eb9f0fbc1"
+        ],
+        "cluster_key": "Role Assignment Lifecycle",
+        "cluster_label": "Role Assignment Lifecycle",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Role Assignment Lifecycle` adopt this change (choose policy, scope change): A revoked role assignment is terminal for that assignment. Later authority requires a new assignment or reassignment under League Administrator authority.",
+          "Should `Role Assignment Lifecycle` adopt this change (choose policy, scope change): The initial League Administrator bootstrap boundary is outside Phase 1 domain mutation semantics and cannot be inferred from ordinary role-assignment authority.",
+          "Should `Role Assignment Lifecycle` adopt this change (choose policy): After the initial League Administrator bootstrap boundary for a League, League Administrators assign, reassign, and revoke League Administrator assignments for that League."
+        ],
+        "round_numbers": [
+          4,
+          16,
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary",
+          "operator_policy_choice"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Roster Membership Lifecycle"
+        ],
+        "checkpoint_count": 3,
+        "checkpoint_ids": [
+          "chk_4ce540e8b69f60f1",
+          "chk_b4d407bf6d331df5",
+          "chk_e9e43ea908ef8662"
+        ],
+        "cluster_key": "Roster Membership Lifecycle",
+        "cluster_label": "Roster Membership Lifecycle",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Roster Membership Lifecycle` adopt this change (relax requirement, choose policy): A Game evaluates roster eligibility at its competition eligibility anchor. For a Game that enters `in_progress`, the anchor is the first accepted start instant for that Game. For a Game that becomes `forfeit` from `scheduled` or `postponed` without entering `in_progress`, the anchor is the official forfeit decision instant recorded with the forfeiture. A cancelled Game has no competition eligibility anchor for Player Stat Line attribution. Rescheduling or postponement before the anchor may change when the Game is expected to occur, but it does not create Player Stat Line eligibility until the anchor is established. Finalization and later authoritative result corrections do not change the anchor or rewrite existing Player Stat Line attribution. A Player Stat Line is valid only when its referenced Roster Membership was effective for one of the Game's participating Season Teams at the competition eligibility anchor.",
+          "Should `Roster Membership Lifecycle` adopt this change (tighten requirement): A Roster Membership has an effective start and may have an effective end. A Player becomes eligible for a Season Team when a membership becomes effective. A Player may not have overlapping effective memberships for different Season Teams in the same Season. A transfer ends the prior membership before the new membership begins. Ending or transferring a membership does not rewrite eligibility, attribution, or Player Stat Lines for Games played while the prior membership was effective. A Player Stat Line must reference the membership that established eligibility for that Game.",
+          "Should `Roster Membership Lifecycle` adopt this change (relax requirement, choose policy): A Game evaluates roster eligibility at its competition eligibility anchor. For a Game that enters `in_progress`, the anchor is the first accepted start instant. For a Game that becomes `forfeit` from `scheduled` or `postponed` without entering `in_progress`, the anchor is the official forfeit decision instant. A cancelled Game has no competition eligibility anchor for Player Stat Line attribution. Rescheduling or postponement before the anchor may change expected timing but does not create Player Stat Line eligibility. Finalization and later authoritative result corrections do not change the anchor or rewrite attribution. A closed membership interval is terminal; later participation requires a new non-overlapping interval."
+        ],
+        "round_numbers": [
+          20,
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary",
+          "operator_policy_choice"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Scheduling Transitions"
+        ],
+        "checkpoint_count": 1,
+        "checkpoint_ids": [
+          "chk_ccb0ab041c21b90e"
+        ],
+        "cluster_key": "Scheduling Transitions",
+        "cluster_label": "Scheduling Transitions",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Scheduling Transitions` adopt this change (tighten requirement): Every scheduled instant is interpreted in the League's configured IANA timezone and stored as an unambiguous instant. Scheduling changes must preserve operational history containing actor, timestamp, action, previous scheduled instant and status when present, new scheduled instant and status when present, and optional reason. This history may be represented as an Audit Record or as separate schedule history, but it must be available to explain rescheduling, postponement, cancellation, and start transitions."
+        ],
+        "round_numbers": [
+          12
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Scope"
+        ],
+        "checkpoint_count": 1,
+        "checkpoint_ids": [
+          "chk_7ecda855d6e900cd"
+        ],
+        "cluster_key": "Scope",
+        "cluster_label": "Scope",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Scope` adopt this change (choose policy): Courtside covers persistent league, team, player, and user-account identity; season-specific team participation, rosters, schedules, results, standings, and playoffs; provisional, partial, confirmed, and corrected player game statistics; configurable score-based standings and round-specific playoff series; league-scoped administration and season-team captain authority; simple venues and reusable media associations; English and French user-interface and authored-content localization; and simple audit records for material administrative changes."
+        ],
+        "round_numbers": [
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "operator_policy_choice"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Season Configuration Lifecycle"
+        ],
+        "checkpoint_count": 8,
+        "checkpoint_ids": [
+          "chk_0fa31f08ff648ae2",
+          "chk_a89e34dda4983afd",
+          "chk_b06c6ef4e97cd1cc",
+          "chk_e2821fbf730c9756",
+          "chk_6cf2f6164df3576b",
+          "chk_1d9225f06571254b",
+          "chk_a2c2aaecc510c476",
+          "chk_f7300f59ecdae430"
+        ],
+        "cluster_key": "Season Configuration Lifecycle",
+        "cluster_label": "Season Configuration Lifecycle",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Season Configuration Lifecycle` adopt this change (tighten requirement, choose policy): 4. If concurrent first-freeze attempts occur, exactly one snapshot creation is accepted. A competing attempt must reuse the created snapshot when it depends on the same result-affecting configuration basis, or be rejected without mutating authoritative state when it depends on a different mutable configuration basis.",
+          "Should `Season Configuration Lifecycle` adopt this change (tighten requirement, choose policy): 3. The freeze operation is idempotent per Season. Later or retried authoritative Game transitions for that Season must reference the existing frozen version rather than creating another first version.",
+          "Should `Season Configuration Lifecycle` adopt this change (relax requirement): 6. A League Administrator may amend frozen configuration only by creating a new version and an Audit Record."
+        ],
+        "round_numbers": [
+          12,
+          16,
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary",
+          "operator_policy_choice"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Standing Calculations"
+        ],
+        "checkpoint_count": 1,
+        "checkpoint_ids": [
+          "chk_81a12f2abb30bfe0"
+        ],
+        "cluster_key": "Standing Calculations",
+        "cluster_label": "Standing Calculations",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Standing Calculations` adopt this change (tighten requirement, choose policy): For each Season Team under default rules: wins are eligible authoritative Games won; losses are eligible authoritative Games lost; games played equals wins plus losses; league points equal configured win and loss points; points for and against are sums of official eligible Game scores; point differential is points for minus points against; points scored is points for. A forfeit contributes its explicit official score. If standings adjustments are enabled later, each adjustment must be an explicit audited record rather than direct edit to derived standings."
+        ],
+        "round_numbers": [
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Standings"
+        ],
+        "checkpoint_count": 3,
+        "checkpoint_ids": [
+          "chk_5dedc3de878248e6",
+          "chk_d188d42eff521386",
+          "chk_165e5d29fdfeae28"
+        ],
+        "cluster_key": "Standings",
+        "cluster_label": "Standings",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Standings` adopt this change (tighten requirement): 8. Exactly one persisted random-draw result may exist for a stable tie context, and duplicate attempts for that tie context must reuse the existing result or be rejected without performing another draw.",
+          "Should `Standings` adopt this change (tighten requirement, scope change): 8. Exactly one persisted random-draw result may exist for a stable tie context, and duplicate attempts for that tie context must reuse the existing result or be rejected without performing another draw. League Administrators do not replace or override that result in Phase 1.",
+          "Should `Standings` adopt this change (tighten requirement, choose policy): Standings are derived and cannot be directly edited. Only eligible authoritative regular-season Game outcomes and explicit configuration-permitted adjustment records may influence standings. Under defaults, games played equals wins plus losses, league points equal wins times two, and point differential equals points for minus points against. Default descending ranking order is league points, point differential, points scored, then random draw. A loss awards zero League Points. Random draw is used only when all earlier criteria remain tied. A random-draw result is persisted and audited and must not change because standings are viewed or recomputed from unchanged inputs. Exactly one persisted random-draw result may exist for a stable tie context, and duplicates reuse the existing result or are rejected without another draw. A standings projection identifies the frozen Season configuration version used. Playoff Games do not affect regular-season standings."
+        ],
+        "round_numbers": [
+          4,
+          8,
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary",
+          "operator_policy_choice"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Standings Configuration"
+        ],
+        "checkpoint_count": 5,
+        "checkpoint_ids": [
+          "chk_7ec05c85867f594f",
+          "chk_eaecc194b5145182",
+          "chk_8db3d98a2bdf9ba6",
+          "chk_01755340f7bb2246",
+          "chk_91e6e64bf84b1583"
+        ],
+        "cluster_key": "Standings Configuration",
+        "cluster_label": "Standings Configuration",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Standings Configuration` adopt this change (tighten requirement): The stable tie-context identity is composed of the Season, frozen Season configuration version, ranking step or criterion, tied Season Team identities in canonical order, and the equal preceding criterion values. Exactly one persisted draw result may exist for a tie context. Retries, replays, concurrent recalculations, or duplicate requests for the same tie context return the existing result. Attempting to create a second result for the same tie context is rejected as a deterministic conflict and must not perform another draw.",
+          "Should `Standings Configuration` adopt this change (tighten requirement, choose policy, scope change): The stable tie-context identity is composed of the Season, frozen Season configuration version, ranking step or criterion, tied Season Team identities in canonical order, and the equal preceding criterion values. Canonical identity order is the ascending order of each Season Team's immutable canonical domain identity as assigned when the Season Team is created, compared by normalized codepoint order. It must not depend on display name, Team name, creation timestamp, storage order, locale collation, or mutable seed position. Exactly one persisted draw result may exist for a tie context. Retries, replays, concurrent recalculations, or duplicate requests for the same tie context return the existing result. Attempting to create a second result for the same tie context is rejected as a deterministic conflict and must not perform another draw. League Administrators do not override or replace the persisted draw for that tie context in Phase 1.",
+          "Should `Standings Configuration` adopt this change (tighten requirement, choose policy, scope change): The stable tie-context identity is composed of the Season, frozen Season configuration version, ranking step or criterion, tied Season Team identities in canonical order, and the equal preceding criterion values. Canonical identity order is the ascending byte order of each Season Team's immutable canonical domain identity as assigned when the Season Team is created. A canonical domain identity used for this ordering must be an ASCII-only opaque identifier, is case-sensitive, and is compared byte-for-byte without locale collation, Unicode normalization, or display-name transformation. It must not depend on display name, Team name, creation timestamp, storage order, locale collation, or mutable seed position. Exactly one persisted draw result may exist for a tie context. Retries, replays, concurrent recalculations, or duplicate requests for the same tie context return the existing result. Attempting to create a second result for the same tie context is rejected as a deterministic conflict and must not perform another draw. League Administrators do not override or replace the persisted draw for that tie context in Phase 1."
+        ],
+        "round_numbers": [
+          4,
+          8,
+          12,
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary",
+          "operator_policy_choice"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Standings Lifecycle"
+        ],
+        "checkpoint_count": 5,
+        "checkpoint_ids": [
+          "chk_59f0ac408b67b931",
+          "chk_bedfb8e44ac48619",
+          "chk_f67269cea9338b09",
+          "chk_111f2de24885c0e8",
+          "chk_ac78f6a3be97b892"
+        ],
+        "cluster_key": "Standings Lifecycle",
+        "cluster_label": "Standings Lifecycle",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Standings Lifecycle` adopt this change (tighten requirement): A random-draw tie context has a stable identity composed of the Season, the frozen Season configuration version, the ranking step or criterion that invoked `random_draw`, the tied Season Teams in canonical identity order before the draw, and the equal preceding criterion values that made the tie unresolved. Exactly one persisted draw result may exist for a tie context. Retries, replays, concurrent recalculations, or duplicate requests for the same tie context must return the existing result. Attempting to create another draw result for the same tie context is rejected as a deterministic conflict without performing another draw.",
+          "Should `Standings Lifecycle` adopt this change (tighten requirement, choose policy, scope change): A random-draw tie context has a stable identity composed of the Season, the frozen Season configuration version, the ranking step or criterion that invoked `random_draw`, the tied Season Teams in canonical identity order before the draw, and the equal preceding criterion values that made the tie unresolved. Canonical identity order is the ascending order of each Season Team's immutable canonical domain identity as assigned when the Season Team is created, compared by normalized codepoint order. It must not depend on display name, Team name, creation timestamp, storage order, locale collation, or mutable seed position. Exactly one persisted draw result may exist for a tie context. Retries, replays, concurrent recalculations, or duplicate requests for the same tie context must return the existing result. Attempting to create another draw result for the same tie context is rejected as a deterministic conflict without performing another draw. League Administrators do not override or replace the persisted draw for that tie context in Phase 1.",
+          "Should `Standings Lifecycle` adopt this change (tighten requirement, choose policy, scope change): A random-draw tie context has a stable identity composed of the Season, the frozen Season configuration version, the ranking step or criterion that invoked `random_draw`, the tied Season Teams in canonical identity order before the draw, and the equal preceding criterion values that made the tie unresolved. Canonical identity order is the ascending byte order of each Season Team's immutable canonical domain identity as assigned when the Season Team is created. A canonical domain identity used for this ordering must be an ASCII-only opaque identifier, is case-sensitive, and is compared byte-for-byte without locale collation, Unicode normalization, or display-name transformation. It must not depend on display name, Team name, creation timestamp, storage order, locale collation, or mutable seed position. Exactly one persisted draw result may exist for a tie context. Retries, replays, concurrent recalculations, or duplicate requests for the same tie context must return the existing result. Attempting to create another draw result for the same tie context is rejected as a deterministic conflict without performing another draw. League Administrators do not override or replace the persisted draw for that tie context in Phase 1."
+        ],
+        "round_numbers": [
+          4,
+          8,
+          12,
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary",
+          "operator_policy_choice"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Statistics Configuration"
+        ],
+        "checkpoint_count": 1,
+        "checkpoint_ids": [
+          "chk_4a3b0ff0cefd37c3"
+        ],
+        "cluster_key": "Statistics Configuration",
+        "cluster_label": "Statistics Configuration",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Statistics Configuration` adopt this change (tighten requirement, choose policy): The concrete statistic vocabulary is deferred until the initial scorekeeping surface is specified. Any later vocabulary must preserve field-level known versus unknown state, known zero as valid value, line-level provisional or confirmed verification, confirmed partial lines, and independence between Player-stat completeness and Game-result authority. Points may be recorded before other statistics and must not imply unrecorded fields are zero."
+        ],
+        "round_numbers": [
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Venues, Media, and Audit"
+        ],
+        "checkpoint_count": 1,
+        "checkpoint_ids": [
+          "chk_dbc0dc0d21335450"
+        ],
+        "cluster_key": "Venues, Media, and Audit",
+        "cluster_label": "Venues, Media, and Audit",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Venues, Media, and Audit` adopt this change (relax requirement, choose policy): A Venue is reusable and League-owned; a Game may reference at most one Venue. A Media item may be associated with a Game, League Gallery, or both without duplicating Media identity. Every material Audit Record contains actor, timestamp, action, previous value, and new value. Audit reasons are optional except for authoritative Game-result corrections, where a reason is mandatory. Audit history is append-only. Required rejection reports identify entity, current state or condition, requested mutation, actor, violated rule, and state-preservation outcome. Accepted playoff correction resolution reports identify halted slots or Matchups, conflicted downstream Games retained as historical records, corrected-path records excluded from current advancement, resume condition, and canonicalized resolution identity used for deterministic retries."
+        ],
+        "round_numbers": [
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "operator_policy_choice"
+        ]
+      }
+    ],
+    "by_source_type": [
+      {
+        "affected_sections": [
+          "Audit Configuration",
+          "Authoritative Result Corrections",
+          "Authority and Precedence",
+          "Authorization",
+          "Authorization Configuration",
+          "Canonical Concepts",
+          "Competition Transitions",
+          "Configuration and Reproducibility",
+          "Consequences",
+          "Context",
+          "Core Mutation Authority",
+          "Courtside Core Domain \u2014 Isolated Phase 1.01 Composite",
+          "Courtside Core Domain \u2014 Isolated Phase 1.02 Composite",
+          "Courtside Core Domain \u2014 Isolated Phase 1.03 Composite",
+          "Courtside Core Domain \u2014 Isolated Phase 1.04 Composite",
+          "Courtside Core Domain \u2014 Isolated Phase 1.05 Composite",
+          "Courtside Core Domain \u2014 Isolated Phase 1.06 Composite",
+          "Courtside Core Domain \u2014 Isolated Phase 1.07 Composite",
+          "Decision",
+          "Derived Data Authority",
+          "Game Lifecycle",
+          "Game and Venue Configuration",
+          "Games and Results",
+          "General Lifecycle Failure Rule",
+          "Identity and Participation",
+          "Localization Configuration",
+          "Player Management Lifecycle",
+          "Player Stat Line Lifecycle",
+          "Player Statistics",
+          "Playoff Configuration",
+          "Playoff Matchup Lifecycle",
+          "Playoffs",
+          "Role Assignment",
+          "Role Assignment Lifecycle",
+          "Roster Membership Lifecycle",
+          "Scheduling Transitions",
+          "Scope",
+          "Season Configuration Lifecycle",
+          "Standing Calculations",
+          "Standings",
+          "Standings Configuration",
+          "Standings Lifecycle",
+          "Statistics Configuration",
+          "Venues, Media, and Audit"
+        ],
+        "checkpoint_count": 148,
+        "checkpoint_ids": [
+          "chk_02565b8c9242b371",
+          "chk_0c728c360efb05b8",
+          "chk_194a45334fa3c8f6",
+          "chk_283503e9d866a579",
+          "chk_36a6e12e480596e3",
+          "chk_59f0ac408b67b931",
+          "chk_5be0812ef2c7b3f2",
+          "chk_5c52a836557b08f0",
+          "chk_5dedc3de878248e6",
+          "chk_6b71c80b35b12c65",
+          "chk_70bce51a37b27e69",
+          "chk_7b9cf3023460674c",
+          "chk_7ec05c85867f594f",
+          "chk_8ce5375afe063a68",
+          "chk_8f177a36130f5461",
+          "chk_9265e5b6a15c7db5",
+          "chk_93b383d2a9da99bc",
+          "chk_976679f78207414b",
+          "chk_9d5d306677877e5c",
+          "chk_9db3daf3dbf553b1",
+          "chk_b326ece3d5d16868",
+          "chk_b69074a544e818a2",
+          "chk_bd2a850f89fe90b7",
+          "chk_bd468f49c98c78bc",
+          "chk_cd2ba896d68b3186",
+          "chk_d7a8406898038dd5",
+          "chk_dd93d510c02fe8b4",
+          "chk_1a2da5611caf6829",
+          "chk_350d557f3124843b",
+          "chk_4fa98892e9462fb5",
+          "chk_544551838c91c932",
+          "chk_5b5ed45288b3abe9",
+          "chk_8f6f4a5231c3aed4",
+          "chk_9c4597fde27d4343",
+          "chk_b1abd1a9f3e20177",
+          "chk_be3eb11f4ca23fb9",
+          "chk_bedfb8e44ac48619",
+          "chk_d188d42eff521386",
+          "chk_eaecc194b5145182",
+          "chk_ede642f8d6bed27b",
+          "chk_fe021eb074e61c9a",
+          "chk_0fa31f08ff648ae2",
+          "chk_15516a59b42106cc",
+          "chk_3890dd400fca0687",
+          "chk_8114d978ed174234",
+          "chk_842abdd611b20e21",
+          "chk_8db3d98a2bdf9ba6",
+          "chk_9552404ea35ed3f0",
+          "chk_9dad9b29838b4f97",
+          "chk_a89e34dda4983afd",
+          "chk_b06c6ef4e97cd1cc",
+          "chk_b7b547dc966be29f",
+          "chk_ccb0ab041c21b90e",
+          "chk_e2821fbf730c9756",
+          "chk_f5417d35effa335f",
+          "chk_f67269cea9338b09",
+          "chk_01fafc8439c53a9f",
+          "chk_07b988825ac7de14",
+          "chk_0ec28267f0f8b6d4",
+          "chk_111e0c1b69115f3d",
+          "chk_178fd72099496361",
+          "chk_1d295aa3968c7826",
+          "chk_26ac6627cae5fd74",
+          "chk_2e6c1a11e097d7ed",
+          "chk_52aa1c703a765345",
+          "chk_57196930f89898b0",
+          "chk_6cf2f6164df3576b",
+          "chk_750dd9c59353cc69",
+          "chk_7708121beb96f845",
+          "chk_80f43870c3a7a7d9",
+          "chk_8168de60491bd0aa",
+          "chk_a0e2282a947f9343",
+          "chk_bf7411ff85934478",
+          "chk_c1845b80d45f50d8",
+          "chk_da2b9b7e9ae0e3f7",
+          "chk_e2a236c63bd0f4f8",
+          "chk_ef44ed43c5ac0847",
+          "chk_0f73c23755363729",
+          "chk_12bb6b05519fa07f",
+          "chk_4429d50d90e1bb21",
+          "chk_45b89292a02fe023",
+          "chk_4ce540e8b69f60f1",
+          "chk_85d9f14d928c54c7",
+          "chk_880047b3aa8330f6",
+          "chk_8a8ac0043f9ea6ea",
+          "chk_efaeff1c4678488b",
+          "chk_25329c1aaa20597c",
+          "chk_4a80d01b495200ba",
+          "chk_55f5a1790338eb3d",
+          "chk_834c720148b738fd",
+          "chk_01755340f7bb2246",
+          "chk_044ba98066d6daf3",
+          "chk_05c966998be80a92",
+          "chk_06e7764ce2a78bf6",
+          "chk_0dceac2f71a603fe",
+          "chk_111f2de24885c0e8",
+          "chk_11436080234b2f3d",
+          "chk_165e5d29fdfeae28",
+          "chk_198d59333ba2172d",
+          "chk_1d9225f06571254b",
+          "chk_33e091c88413b5bf",
+          "chk_354dcbc302caeab6",
+          "chk_454b9366eaba05fd",
+          "chk_488d2423f61db350",
+          "chk_4a3b0ff0cefd37c3",
+          "chk_5e6c2d122c6cedce",
+          "chk_62fa9d453c0eef0f",
+          "chk_6b19bcdc477f315f",
+          "chk_6bb2e19255ead75c",
+          "chk_6cb40f495a604286",
+          "chk_73a8326924a0fdce",
+          "chk_7782d6ff8a76be54",
+          "chk_7ecda855d6e900cd",
+          "chk_7f3bef0370103d7d",
+          "chk_81a12f2abb30bfe0",
+          "chk_841df734049b8b9f",
+          "chk_91e6e64bf84b1583",
+          "chk_953601ac12a4f650",
+          "chk_9bc1b6dfe9363ca6",
+          "chk_a0332bd78b9e808b",
+          "chk_a2c2aaecc510c476",
+          "chk_ac78f6a3be97b892",
+          "chk_b00ec36ad7c79cf5",
+          "chk_b479601f52a04364",
+          "chk_b4d407bf6d331df5",
+          "chk_be964f3cf8f77cc7",
+          "chk_c32f13c6d3ed9992",
+          "chk_c7459be39f678ab9",
+          "chk_c78a03c413bfe995",
+          "chk_cb5f2a10c19547aa",
+          "chk_d0fb3d750b78c6f3",
+          "chk_d6438e2ec5d19fcc",
+          "chk_d83c7da3b02f657a",
+          "chk_d9368df018ae932e",
+          "chk_dbc0dc0d21335450",
+          "chk_e1ce288a8f8a7af1",
+          "chk_e585511c7124ac02",
+          "chk_e6991f3fcbbd5976",
+          "chk_e9e43ea908ef8662",
+          "chk_eefaacb3ccee0aa4",
+          "chk_f0f4bd2ec6f50c0b",
+          "chk_f39a6e54b57a66f3",
+          "chk_f3fdb47eb9f0fbc1",
+          "chk_f61de14affe60e32",
+          "chk_f6e9c165fb710591",
+          "chk_f7300f59ecdae430",
+          "chk_f7e3ba0bfc07dc56",
+          "chk_fb6aa605672eff91"
+        ],
+        "cluster_key": "decision_point",
+        "cluster_label": "decision_point",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Authoritative Result Corrections` adopt this change (choose policy): apply the correction and halt affected downstream advancement until replacement authoritative outcomes are recorded under the corrected bracket participants; or",
+          "Should `Core Mutation Authority` adopt this change (choose policy): ## Core Mutation Authority",
+          "Should `Playoffs` adopt this change (tighten requirement, choose policy): 10. A playoff Matchup with incomplete authoritative Game outcomes or an unresolved participant conflict must not advance automatically."
+        ],
+        "round_numbers": [
+          4,
+          8,
+          12,
+          16,
+          20,
+          24,
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary",
+          "operator_policy_choice"
+        ]
+      }
+    ],
+    "by_trigger_reason": [
+      {
+        "affected_sections": [
+          "Audit Configuration",
+          "Authoritative Result Corrections",
+          "Authority and Precedence",
+          "Authorization",
+          "Authorization Configuration",
+          "Canonical Concepts",
+          "Configuration and Reproducibility",
+          "Consequences",
+          "Core Mutation Authority",
+          "Courtside Core Domain \u2014 Isolated Phase 1.01 Composite",
+          "Courtside Core Domain \u2014 Isolated Phase 1.02 Composite",
+          "Courtside Core Domain \u2014 Isolated Phase 1.03 Composite",
+          "Courtside Core Domain \u2014 Isolated Phase 1.04 Composite",
+          "Courtside Core Domain \u2014 Isolated Phase 1.05 Composite",
+          "Courtside Core Domain \u2014 Isolated Phase 1.06 Composite",
+          "Courtside Core Domain \u2014 Isolated Phase 1.07 Composite",
+          "Derived Data Authority",
+          "Game Lifecycle",
+          "Game and Venue Configuration",
+          "Games and Results",
+          "General Lifecycle Failure Rule",
+          "Localization Configuration",
+          "Playoff Matchup Lifecycle",
+          "Playoffs",
+          "Role Assignment",
+          "Role Assignment Lifecycle",
+          "Roster Membership Lifecycle",
+          "Scheduling Transitions",
+          "Season Configuration Lifecycle",
+          "Standing Calculations",
+          "Standings",
+          "Standings Configuration",
+          "Standings Lifecycle",
+          "Statistics Configuration"
+        ],
+        "checkpoint_count": 78,
+        "checkpoint_ids": [
+          "chk_194a45334fa3c8f6",
+          "chk_283503e9d866a579",
+          "chk_36a6e12e480596e3",
+          "chk_5be0812ef2c7b3f2",
+          "chk_70bce51a37b27e69",
+          "chk_7b9cf3023460674c",
+          "chk_9265e5b6a15c7db5",
+          "chk_976679f78207414b",
+          "chk_9db3daf3dbf553b1",
+          "chk_b326ece3d5d16868",
+          "chk_bd468f49c98c78bc",
+          "chk_cd2ba896d68b3186",
+          "chk_d7a8406898038dd5",
+          "chk_dd93d510c02fe8b4",
+          "chk_1a2da5611caf6829",
+          "chk_4fa98892e9462fb5",
+          "chk_544551838c91c932",
+          "chk_5b5ed45288b3abe9",
+          "chk_b1abd1a9f3e20177",
+          "chk_be3eb11f4ca23fb9",
+          "chk_bedfb8e44ac48619",
+          "chk_d188d42eff521386",
+          "chk_eaecc194b5145182",
+          "chk_fe021eb074e61c9a",
+          "chk_8114d978ed174234",
+          "chk_8db3d98a2bdf9ba6",
+          "chk_9dad9b29838b4f97",
+          "chk_ccb0ab041c21b90e",
+          "chk_f5417d35effa335f",
+          "chk_f67269cea9338b09",
+          "chk_07b988825ac7de14",
+          "chk_111e0c1b69115f3d",
+          "chk_1d295aa3968c7826",
+          "chk_2e6c1a11e097d7ed",
+          "chk_52aa1c703a765345",
+          "chk_6cf2f6164df3576b",
+          "chk_750dd9c59353cc69",
+          "chk_7708121beb96f845",
+          "chk_80f43870c3a7a7d9",
+          "chk_bf7411ff85934478",
+          "chk_c1845b80d45f50d8",
+          "chk_e2a236c63bd0f4f8",
+          "chk_ef44ed43c5ac0847",
+          "chk_0f73c23755363729",
+          "chk_12bb6b05519fa07f",
+          "chk_8a8ac0043f9ea6ea",
+          "chk_25329c1aaa20597c",
+          "chk_4a80d01b495200ba",
+          "chk_834c720148b738fd",
+          "chk_01755340f7bb2246",
+          "chk_044ba98066d6daf3",
+          "chk_05c966998be80a92",
+          "chk_06e7764ce2a78bf6",
+          "chk_0dceac2f71a603fe",
+          "chk_111f2de24885c0e8",
+          "chk_11436080234b2f3d",
+          "chk_165e5d29fdfeae28",
+          "chk_1d9225f06571254b",
+          "chk_33e091c88413b5bf",
+          "chk_488d2423f61db350",
+          "chk_4a3b0ff0cefd37c3",
+          "chk_62fa9d453c0eef0f",
+          "chk_6b19bcdc477f315f",
+          "chk_6cb40f495a604286",
+          "chk_7782d6ff8a76be54",
+          "chk_81a12f2abb30bfe0",
+          "chk_841df734049b8b9f",
+          "chk_953601ac12a4f650",
+          "chk_b479601f52a04364",
+          "chk_b4d407bf6d331df5",
+          "chk_be964f3cf8f77cc7",
+          "chk_cb5f2a10c19547aa",
+          "chk_d0fb3d750b78c6f3",
+          "chk_d83c7da3b02f657a",
+          "chk_d9368df018ae932e",
+          "chk_f0f4bd2ec6f50c0b",
+          "chk_f3fdb47eb9f0fbc1",
+          "chk_f61de14affe60e32"
+        ],
+        "cluster_key": "deferable_scope_boundary",
+        "cluster_label": "deferable_scope_boundary",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Playoffs` adopt this change (tighten requirement, choose policy): 10. A playoff Matchup with incomplete authoritative Game outcomes or an unresolved participant conflict must not advance automatically.",
+          "Should `Playoff Matchup Lifecycle` adopt this change (tighten requirement): Playoff Games use the ordinary Game lifecycle. Playoff outcomes do not contribute to regular-season standings. A Matchup with incomplete configured Games, a tied aggregate after all permitted tiebreak handling, an unknown tiebreak policy, or a blocked participant-resolution conflict must not advance automatically and must report the violated rule.",
+          "Should `Authorization Configuration` adopt this change (choose policy, scope change): League Administrators assign, reassign, and revoke Team Captain authority and approve or revoke Player Management Relationships. League Administrators also hold Phase 1 authority for core Game lifecycle mutations, authoritative result corrections, Roster Membership changes, Player Stat Line creation and material changes, frozen Season configuration amendments, persisted random-draw conflict resolution, and playoff correction conflict resolution. Team Captain authority is a scoped role marker in Phase 1 and does not add independent mutation permissions unless a later accepted specification defines them. Adding roles or changing their authority requires an accepted specification update."
+        ],
+        "round_numbers": [
+          4,
+          8,
+          12,
+          16,
+          20,
+          24,
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "deferable_scope_boundary"
+        ]
+      },
+      {
+        "affected_sections": [
+          "Audit Configuration",
+          "Authoritative Result Corrections",
+          "Authority and Precedence",
+          "Authorization",
+          "Canonical Concepts",
+          "Competition Transitions",
+          "Configuration and Reproducibility",
+          "Context",
+          "Core Mutation Authority",
+          "Decision",
+          "Game Lifecycle",
+          "Games and Results",
+          "Identity and Participation",
+          "Player Management Lifecycle",
+          "Player Stat Line Lifecycle",
+          "Player Statistics",
+          "Playoff Configuration",
+          "Playoffs",
+          "Role Assignment",
+          "Role Assignment Lifecycle",
+          "Roster Membership Lifecycle",
+          "Scope",
+          "Season Configuration Lifecycle",
+          "Standings",
+          "Standings Configuration",
+          "Standings Lifecycle",
+          "Venues, Media, and Audit"
+        ],
+        "checkpoint_count": 70,
+        "checkpoint_ids": [
+          "chk_02565b8c9242b371",
+          "chk_0c728c360efb05b8",
+          "chk_59f0ac408b67b931",
+          "chk_5c52a836557b08f0",
+          "chk_5dedc3de878248e6",
+          "chk_6b71c80b35b12c65",
+          "chk_7ec05c85867f594f",
+          "chk_8ce5375afe063a68",
+          "chk_8f177a36130f5461",
+          "chk_93b383d2a9da99bc",
+          "chk_9d5d306677877e5c",
+          "chk_b69074a544e818a2",
+          "chk_bd2a850f89fe90b7",
+          "chk_350d557f3124843b",
+          "chk_8f6f4a5231c3aed4",
+          "chk_9c4597fde27d4343",
+          "chk_ede642f8d6bed27b",
+          "chk_0fa31f08ff648ae2",
+          "chk_15516a59b42106cc",
+          "chk_3890dd400fca0687",
+          "chk_842abdd611b20e21",
+          "chk_9552404ea35ed3f0",
+          "chk_a89e34dda4983afd",
+          "chk_b06c6ef4e97cd1cc",
+          "chk_b7b547dc966be29f",
+          "chk_e2821fbf730c9756",
+          "chk_01fafc8439c53a9f",
+          "chk_0ec28267f0f8b6d4",
+          "chk_178fd72099496361",
+          "chk_26ac6627cae5fd74",
+          "chk_57196930f89898b0",
+          "chk_8168de60491bd0aa",
+          "chk_a0e2282a947f9343",
+          "chk_da2b9b7e9ae0e3f7",
+          "chk_4429d50d90e1bb21",
+          "chk_45b89292a02fe023",
+          "chk_4ce540e8b69f60f1",
+          "chk_85d9f14d928c54c7",
+          "chk_880047b3aa8330f6",
+          "chk_efaeff1c4678488b",
+          "chk_55f5a1790338eb3d",
+          "chk_198d59333ba2172d",
+          "chk_354dcbc302caeab6",
+          "chk_454b9366eaba05fd",
+          "chk_5e6c2d122c6cedce",
+          "chk_6bb2e19255ead75c",
+          "chk_73a8326924a0fdce",
+          "chk_7ecda855d6e900cd",
+          "chk_7f3bef0370103d7d",
+          "chk_91e6e64bf84b1583",
+          "chk_9bc1b6dfe9363ca6",
+          "chk_a0332bd78b9e808b",
+          "chk_a2c2aaecc510c476",
+          "chk_ac78f6a3be97b892",
+          "chk_b00ec36ad7c79cf5",
+          "chk_c32f13c6d3ed9992",
+          "chk_c7459be39f678ab9",
+          "chk_c78a03c413bfe995",
+          "chk_d6438e2ec5d19fcc",
+          "chk_dbc0dc0d21335450",
+          "chk_e1ce288a8f8a7af1",
+          "chk_e585511c7124ac02",
+          "chk_e6991f3fcbbd5976",
+          "chk_e9e43ea908ef8662",
+          "chk_eefaacb3ccee0aa4",
+          "chk_f39a6e54b57a66f3",
+          "chk_f6e9c165fb710591",
+          "chk_f7300f59ecdae430",
+          "chk_f7e3ba0bfc07dc56",
+          "chk_fb6aa605672eff91"
+        ],
+        "cluster_key": "operator_policy_choice",
+        "cluster_label": "operator_policy_choice",
+        "profiles": [
+          "vertical"
+        ],
+        "representative_questions": [
+          "Should `Authoritative Result Corrections` adopt this change (choose policy): apply the correction and halt affected downstream advancement until replacement authoritative outcomes are recorded under the corrected bracket participants; or",
+          "Should `Core Mutation Authority` adopt this change (choose policy): ## Core Mutation Authority",
+          "Should `Standings Lifecycle` adopt this change (tighten requirement): A random-draw tie context has a stable identity composed of the Season, the frozen Season configuration version, the ranking step or criterion that invoked `random_draw`, the tied Season Teams in canonical identity order before the draw, and the equal preceding criterion values that made the tie unresolved. Exactly one persisted draw result may exist for a tie context. Retries, replays, concurrent recalculations, or duplicate requests for the same tie context must return the existing result. Attempting to create another draw result for the same tie context is rejected as a deterministic conflict without performing another draw."
+        ],
+        "round_numbers": [
+          4,
+          8,
+          12,
+          16,
+          20,
+          24,
+          27
+        ],
+        "source_types": [
+          "decision_point"
+        ],
+        "trigger_reasons": [
+          "operator_policy_choice"
+        ]
+      }
+    ]
+  },
+  "generated_at": "2026-08-05T04:39:20.753862+00:00",
+  "recommended_operator_review": [
+    {
+      "affected_sections": [
+        "Playoffs"
+      ],
+      "checkpoint_id": "chk_194a45334fa3c8f6",
+      "profile": "vertical",
+      "question": "Should `Playoffs` adopt this change (tighten requirement, choose policy): 10. A playoff Matchup with incomplete authoritative Game outcomes or an unresolved participant conflict must not advance automatically.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "severity": null,
+      "source_ids": [
+        "dec_89c222d2f6d01a99"
+      ],
+      "source_type": "decision_point",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "Playoff Matchup Lifecycle"
+      ],
+      "checkpoint_id": "chk_283503e9d866a579",
+      "profile": "vertical",
+      "question": "Should `Playoff Matchup Lifecycle` adopt this change (tighten requirement): Playoff Games use the ordinary Game lifecycle. Playoff outcomes do not contribute to regular-season standings. A Matchup with incomplete configured Games, a tied aggregate after all permitted tiebreak handling, an unknown tiebreak policy, or a blocked participant-resolution conflict must not advance automatically and must report the violated rule.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "severity": null,
+      "source_ids": [
+        "dec_274d60155ff4d68d"
+      ],
+      "source_type": "decision_point",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "Authorization Configuration"
+      ],
+      "checkpoint_id": "chk_36a6e12e480596e3",
+      "profile": "vertical",
+      "question": "Should `Authorization Configuration` adopt this change (choose policy, scope change): League Administrators assign, reassign, and revoke Team Captain authority and approve or revoke Player Management Relationships. League Administrators also hold Phase 1 authority for core Game lifecycle mutations, authoritative result corrections, Roster Membership changes, Player Stat Line creation and material changes, frozen Season configuration amendments, persisted random-draw conflict resolution, and playoff correction conflict resolution. Team Captain authority is a scoped role marker in Phase 1 and does not add independent mutation permissions unless a later accepted specification defines them. Adding roles or changing their authority requires an accepted specification update.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "severity": null,
+      "source_ids": [
+        "dec_fa4a5c2f87a82db1"
+      ],
+      "source_type": "decision_point",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "General Lifecycle Failure Rule"
+      ],
+      "checkpoint_id": "chk_5be0812ef2c7b3f2",
+      "profile": "vertical",
+      "question": "Should `General Lifecycle Failure Rule` adopt this change (tighten requirement, choose policy, scope change): For every lifecycle-bearing Courtside domain entity, a transition that is not explicitly permitted by this specification must be rejected without mutating authoritative state. The rejection report must identify the entity, the current state or condition, the requested state or mutation, the actor, and the violated lifecycle rule. Auditing rejected attempts is not required by this Phase 1 domain specification unless the audit policy for that surface explicitly requires it.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "severity": null,
+      "source_ids": [
+        "dec_21dcea43c59badc0"
+      ],
+      "source_type": "decision_point",
+      "trigger_reason": "deferable_scope_boundary"
+    },
+    {
+      "affected_sections": [
+        "Core Mutation Authority"
+      ],
+      "checkpoint_id": "chk_70bce51a37b27e69",
+      "profile": "vertical",
+      "question": "Should `Core Mutation Authority` adopt this change (scope change): Team Captain assignments are scoped to one Season Team and are auditable role assignments. In Phase 1 they do not independently authorize core domain mutations unless a later accepted specification grants a specific Team Captain permission.",
+      "recommended_option_id": "accept_editor_choice",
+      "risk_if_skipped": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "severity": null,
+      "source_ids": [
+        "dec_4d7a169b05856c47"
+      ],
+      "source_type": "decision_point",
+      "trigger_reason": "deferable_scope_boundary"
+    }
+  ],
+  "rounds_with_checkpoints": [
+    4,
+    8,
+    12,
+    16,
+    20,
+    24,
+    27
+  ],
+  "source_glob": "rounds/round-*/operator_decision_checkpoint.json",
+  "source_type_counts": {
+    "decision_point": 148
+  },
+  "summary_method": "mechanical_checkpoint_v1",
+  "terminal_state": "TARGET_NOT_REACHED",
+  "trigger_reason_counts": {
+    "deferable_scope_boundary": 78,
+    "operator_policy_choice": 70
+  }
+}

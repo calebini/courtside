@@ -1,0 +1,131 @@
+{
+  "draft_hash": "aca84978b693a31840c33c8a378473494cb9c3fd25449d8c605cef021c8062e6",
+  "feedback": [
+    {
+      "affected_sections": [
+        "specs/lifecycle.md#Game Lifecycle",
+        "specs/lifecycle.md#Roster Membership Lifecycle",
+        "specs/lifecycle.md#Player Stat Line Lifecycle",
+        "specs/config.md#Authorization Configuration",
+        "specs/invariants.md#Authorization"
+      ],
+      "authority_impact": "major",
+      "baseline_severity": "major",
+      "claim": "The draft defines scoped roles and identifies a few League Administrator-only actions, but it does not define mutation authority for core lifecycle operations such as scheduling, postponing, cancelling, starting, finalizing, forfeiting Games, changing Roster Memberships, or creating/updating Player Stat Lines.",
+      "determinism_impact": "minor",
+      "evidence": "The Authorization invariants state only that a League Administrator may approve Player Management Relationships, correct authoritative Game results, amend frozen Season configuration, or assign Team Captain authority. The Game, Roster Membership, and Player Stat Line lifecycle sections define legal state changes and audit requirements but do not identify which role or approved relationship may initiate each mutation. This is in scope under the scope contract surfaces 'lifecycle states and legal authority transitions' and 'scoped authorization and minimum audit behavior'.",
+      "feedback_id": "structural_integrity:fb_001",
+      "in_scope": true,
+      "invariant_violated": "authority_boundary",
+      "issue_fingerprint": "568c0861d499c2e175d176dbaebc751273826dab39913cda41e5c5de12a5aa2e",
+      "issue_id": "iss_568c0861d499c2e1",
+      "issue_type": "missing_authority_boundary",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Add a technology-neutral authority matrix or lifecycle bullets naming the actor classes permitted to initiate each core domain mutation, especially Game status changes, forfeit/final result entry, roster membership changes, Player Stat Line creation/update/confirmation, and Player management requests. If Team Captain authority is intentionally only a marker in Phase 1, state that explicitly and defer detailed permissions by scope decision.",
+      "rubric_impact": "major",
+      "severity_rationale": "This does not make the domain model unusable, but it creates meaningful implementation drift for the first schema/API planning pass because multiple actors and relationships exist without clear mutation authority for state-bearing core records."
+    },
+    {
+      "affected_sections": [
+        "specs/lifecycle.md#Game Lifecycle",
+        "specs/lifecycle.md#Player Stat Line Lifecycle",
+        "specs/lifecycle.md#Player Management Lifecycle",
+        "specs/invariants.md#Games and Results"
+      ],
+      "authority_impact": "minor",
+      "baseline_severity": "major",
+      "claim": "The draft lists legal lifecycle transitions but does not consistently declare terminal states or invalid-transition handling for lifecycle-bearing MVP components.",
+      "determinism_impact": "major",
+      "evidence": "The Game Lifecycle defines transitions from scheduled, postponed, and in_progress, and says final and forfeit are authoritative outcome statuses, but it does not explicitly state whether cancelled, final, and forfeit are terminal, whether final/forfeit can return to in_progress or cancelled, or how invalid transition attempts are handled. Player Management lists requested -> approved -> revoked but does not say whether revoked is terminal or whether re-requesting requires a new relationship. The rubric classifies missing terminal states or invalid-transition behavior for lifecycle-bearing MVP components as structurally significant. The scope contract explicitly includes 'lifecycle states and legal authority transitions'.",
+      "feedback_id": "structural_integrity:fb_002",
+      "in_scope": true,
+      "invariant_violated": "state_legality",
+      "issue_fingerprint": "495b1e8033ffd37fcfa101e0d8e5eecaec43d1f49af7e6c8449c58a86c524779",
+      "issue_id": "iss_495b1e8033ffd37f",
+      "issue_type": "incomplete_state_machine",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "For each normative lifecycle, add a short rule that transitions not listed are rejected, name terminal states, and describe any permitted post-terminal mutation separately, such as authoritative result correction preserving final/forfeit status. For Player Management, state whether revoked relationships are terminal and whether later access requires a new requested relationship.",
+      "rubric_impact": "major",
+      "severity_rationale": "The main states are present, so this is not a blocker, but absent terminal and invalid-transition rules can lead to divergent state machines and unsafe replay or audit behavior."
+    },
+    {
+      "affected_sections": [
+        "specs/lifecycle.md: Standings Lifecycle",
+        "specs/config.md: Standings Configuration",
+        "specs/invariants.md: Standings"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "major",
+      "claim": "Persisted random-draw tiebreaks are required to be reused, but the draft does not define an idempotent tie-context identity or duplicate-draw handling rule, so retries or concurrent recalculations can produce multiple valid draw records for the same standings tie.",
+      "determinism_impact": "major",
+      "evidence": "The draft says each draw result is persisted and audited, and that rendering or recalculating unchanged inputs reuses it rather than drawing again. Config also says each performed draw records tied participants, preceding equal criterion values, resulting order, actor or system initiator, timestamp, and applicable Season configuration version, and that the same unresolved tie context reuses the recorded result. However, it does not define the canonical identity of the tie context, canonical participant ordering before the draw, uniqueness of one draw per tie context, or the required outcome when two recalculations attempt the same draw. This falls inside the scope surface for standings inputs, ranking, random draw, and reproducibility.",
+      "feedback_id": "determinism:fb_random_draw_idempotency_001",
+      "in_scope": true,
+      "invariant_violated": "replay_idempotency",
+      "issue_fingerprint": "6d80c15b71f6e2c61306e77bf32406c21f02bdd1fa18c4f9d924992621f8885d",
+      "issue_id": "iss_6d80c15b71f6e2c6",
+      "issue_type": "determinism_gap",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Define the random-draw tie context as a stable identity, at minimum including Season, frozen configuration version, ranking step or criterion, tied Season Team identities in canonical order, and the equal preceding criterion values. Require exactly one persisted draw result per tie context, require retries or duplicate recalculations to return the existing result, and define duplicate creation as a deterministic conflict/reject condition rather than allowing another draw.",
+      "rubric_impact": "major",
+      "severity_rationale": "Major because normal-path random-draw persistence is present, but retry, replay, and duplicate handling are incomplete for an in-scope deterministic standings behavior. This can cause implementation drift and non-reproducible standings without fully blocking the rest of the MVP domain model."
+    },
+    {
+      "affected_sections": [
+        "specs/lifecycle.md#Game Lifecycle",
+        "specs/lifecycle.md#Player Stat Line Lifecycle",
+        "specs/lifecycle.md#Player Management Lifecycle",
+        "specs/lifecycle.md#Standings Lifecycle",
+        "specs/lifecycle.md#Playoff Matchup Lifecycle"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "major",
+      "claim": "The lifecycle sections define allowed transitions but do not state the required behavior for invalid transition attempts, leaving core state recovery and operator reporting ambiguous.",
+      "determinism_impact": "major",
+      "evidence": "The Game Lifecycle lists allowed transitions such as scheduled -> postponed/cancelled/in_progress/forfeit and in_progress -> final, while Player Management lists requested -> approved -> revoked and Player Stat Line lists provisional -> confirmed. The draft does not say whether disallowed transitions must be rejected, preserved without mutation, audited, surfaced to an operator, or reported with a validation failure category. The scope contract explicitly keeps lifecycle states and legal authority transitions plus obvious domain failure categories in scope, while deferring only exhaustive error registries and runbooks.",
+      "feedback_id": "operability:fb_operability_001",
+      "in_scope": true,
+      "invariant_violated": "failure_handling",
+      "issue_fingerprint": "a4c84919757d7f4c8ff815b6ea512af515230afe985381b613eeef89ccc1057b",
+      "issue_id": "iss_a4c84919757d7f4c",
+      "issue_type": "missing_failure_handling",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Add a technology-neutral failure rule for lifecycle-bearing entities: any transition not explicitly allowed by the lifecycle must be rejected without mutating authoritative state; the response/report must identify the entity, current state, requested state, actor, and violated lifecycle rule; audit failed attempts only if the audit policy intentionally requires it. Apply the rule consistently to Game, Player Stat Line verification, Player Management Relationship, role assignment, standings recomputation, and playoff advancement surfaces.",
+      "rubric_impact": "major",
+      "severity_rationale": "This is major because the legal states are mostly defined, but an implementer still must invent invalid-transition behavior for core MVP flows. It does not fully block implementation because the allowed transitions and authority owners are otherwise clear."
+    },
+    {
+      "affected_sections": [
+        "specs/lifecycle.md#Authoritative Result Corrections",
+        "specs/lifecycle.md#Playoff Matchup Lifecycle"
+      ],
+      "authority_impact": "major",
+      "baseline_severity": "major",
+      "claim": "The draft requires surfacing playoff correction conflicts after downstream authoritative outcomes, but it does not define the legal recovery states or permitted administrator resolutions.",
+      "determinism_impact": "major",
+      "evidence": "Authoritative Result Corrections says that if a correction would change a playoff participant after downstream Games already have authoritative outcomes, automated destructive propagation is prohibited and the conflict must be surfaced for explicit League Administrator resolution and audited before the bracket can be considered internally consistent. It does not specify whether the correction is accepted into a pending-inconsistent state, rejected until a resolution is supplied, whether downstream Games are suspended from further advancement, or what resolution options are legal. This is in scope under frozen configuration amendment and correction cascades, playoff aggregate calculation and tiebreak behavior, and obvious domain failure categories.",
+      "feedback_id": "operability:fb_operability_002",
+      "in_scope": true,
+      "invariant_violated": "failure_handling",
+      "issue_fingerprint": "434c828dbd791ff14f290f9992522b354fadb6ae8841bfc23d9739dd9c5a75c8",
+      "issue_id": "iss_434c828dbd791ff1",
+      "issue_type": "underspecified_recovery_behavior",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Define a minimal recovery contract for this conflict: the state entered when the conflict is detected, which derived projections or advancement decisions are halted, what information must be reported to the League Administrator, the allowed resolution choices, and the audit requirements for the chosen resolution. Keep it domain-level and avoid prescribing API or database implementation.",
+      "rubric_impact": "major",
+      "severity_rationale": "This is major because correction cascades are an in-scope core flow and the current text identifies the failure mode but leaves the operator handoff and recovery path undefined. It is not a blocker because the normal correction and recomputation path is defined."
+    }
+  ],
+  "profile": "vertical",
+  "reviewer": {
+    "model": "orchestrator",
+    "name": "whetstone-vertical-merge",
+    "version": "1.0"
+  },
+  "round_number": 4
+}

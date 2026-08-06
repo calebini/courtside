@@ -1,0 +1,33 @@
+{
+  "draft_hash": "aca84978b693a31840c33c8a378473494cb9c3fd25449d8c605cef021c8062e6",
+  "round_number": 3,
+  "unresolved_issues": [
+    {
+      "affected_sections": [
+        "specs/lifecycle.md#Game Lifecycle",
+        "specs/lifecycle.md#Player Stat Line Lifecycle",
+        "specs/lifecycle.md#Player Management Lifecycle",
+        "specs/lifecycle.md#Standings Lifecycle",
+        "specs/lifecycle.md#Playoff Matchup Lifecycle"
+      ],
+      "blocking_acceptance": true,
+      "claim": "The lifecycle sections define allowed transitions but do not state the required behavior for invalid transition attempts, leaving core state recovery and operator reporting ambiguous.",
+      "in_scope": true,
+      "issue_fingerprint": "a4c84919757d7f4c8ff815b6ea512af515230afe985381b613eeef89ccc1057b",
+      "issue_id": "iss_a4c84919757d7f4c",
+      "normalized_severity": "major"
+    },
+    {
+      "affected_sections": [
+        "specs/lifecycle.md#Authoritative Result Corrections",
+        "specs/lifecycle.md#Playoff Matchup Lifecycle"
+      ],
+      "blocking_acceptance": true,
+      "claim": "The draft requires surfacing playoff correction conflicts after downstream authoritative outcomes, but it does not define the legal recovery states or permitted administrator resolutions.",
+      "in_scope": true,
+      "issue_fingerprint": "434c828dbd791ff14f290f9992522b354fadb6ae8841bfc23d9739dd9c5a75c8",
+      "issue_id": "iss_434c828dbd791ff1",
+      "normalized_severity": "major"
+    }
+  ]
+}

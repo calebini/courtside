@@ -1,0 +1,35 @@
+{
+  "draft_hash": "93f4864f3387fb05ce3cdd584a04d9bea7785c429d3b668c394405a65160cee4",
+  "feedback": [
+    {
+      "affected_sections": [
+        "Season Configuration Lifecycle",
+        "Authoritative Result Corrections",
+        "Audit Configuration"
+      ],
+      "authority_impact": "major",
+      "baseline_severity": "major",
+      "claim": "Frozen playoff-configuration amendments are allowed to reuse playoff correction conflict-resolution semantics, but the referenced correction semantics are structurally keyed to a corrected Game and corrected authoritative value, leaving amendment-specific legal inputs, report fields, and idempotency identity undefined.",
+      "determinism_impact": "major",
+      "evidence": "Season Configuration Lifecycle says amendments that change playoff Round structure, configured Games per Matchup, participant slot sources, advancement rule, or aggregate-tiebreak policy are prohibited once dependent authoritative playoff Games exist unless the same action can apply the amendment through the playoff conflict-resolution semantics required for authoritative result corrections. Authoritative Result Corrections defines the accepted resolution report and deterministic identity around 'the corrected Game' and 'corrected authoritative value'. Audit Configuration likewise requires playoff correction conflict resolution audit fields, but does not define the corresponding artifact/report identity for a configuration amendment that creates the conflict instead of a Game-result correction.",
+      "feedback_id": "structural_integrity:fb_001",
+      "in_scope": true,
+      "invariant_violated": "state_legality",
+      "issue_fingerprint": "5c510e5ae9601e4f498d7271d0a0eafe8e739df478e1a99d236a8ef8765e2d5b",
+      "issue_id": "iss_5c510e5ae9601e4f",
+      "issue_type": "cross_spec_consistency",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Either prohibit result-affecting playoff-configuration amendments after dependent authoritative playoff Games for Phase 1, or define amendment-specific conflict-resolution semantics: the amendment artifact identity, affected slots/Matchups, conflicted downstream Games, chosen resolution type, required audit fields, deterministic identity components, retry/replay behavior, and rejection rule when every affected conflict cannot be resolved in the same action.",
+      "rubric_impact": "major",
+      "severity_rationale": "This is in scope under the structural completeness, deterministic identity, legal transition, and obvious safe failure surfaces. It does not block the primary Game-result correction flow, but it creates meaningful implementation risk for an explicitly permitted League Administrator amendment path that intersects playoff state and audit persistence."
+    }
+  ],
+  "profile": "vertical",
+  "reviewer": {
+    "model": "orchestrator",
+    "name": "whetstone-vertical-merge",
+    "version": "1.0"
+  },
+  "round_number": 8
+}

@@ -1,0 +1,59 @@
+{
+  "draft_hash": "f6850d2448634a0d2aa1099b7e21b6f8db60faee35f453b03f42fcc323203c32",
+  "feedback": [
+    {
+      "affected_sections": [
+        "Roster Membership Lifecycle",
+        "Player Stat Line Lifecycle",
+        "Game Lifecycle",
+        "Identity and Participation"
+      ],
+      "authority_impact": "minor",
+      "baseline_severity": "major",
+      "claim": "The draft does not define which Game time anchors roster eligibility when a Game is rescheduled, postponed, started, finalized, or corrected, leaving Player Stat Line attribution and transfer legality ambiguous.",
+      "determinism_impact": "major",
+      "evidence": "Roster Membership Lifecycle says a Player becomes eligible when a membership becomes effective and that Player Stat Lines must reference the membership that established eligibility for that Game. Game Lifecycle separately allows schedule changes and requires operational history, but no section states whether eligibility is evaluated against the originally scheduled instant, revised scheduled instant, actual start instant, authoritative outcome instant, or another canonical competition instant. The scope contract keeps identity and participation boundaries, lifecycle states, and partial statistics semantics in scope as required_fields.",
+      "feedback_id": "fb_round17_structural_001",
+      "in_scope": true,
+      "invariant_violated": "state_legality",
+      "issue_fingerprint": "1bc3be56010020da12103945728096f298eae30aa63448097241adc7e4d5f7d9",
+      "issue_id": "iss_1bc3be56010020da",
+      "issue_type": "state_model_ambiguity",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Add a normative eligibility anchor for Games, such as the effective membership at the Game's actual competition/start instant or another explicitly named domain instant, and state how rescheduling, postponement, cancellation, finalization, and later result correction affect or do not affect that anchor and existing Player Stat Line attribution.",
+      "rubric_impact": "major",
+      "severity_rationale": "This does not prevent all MVP planning, but it creates meaningful implementation divergence for transfers, rescheduled Games, and stat attribution in core flows 1 and 3."
+    },
+    {
+      "affected_sections": [
+        "Game Lifecycle",
+        "Competition Transitions",
+        "Scheduling Transitions"
+      ],
+      "authority_impact": "minor",
+      "baseline_severity": "minor",
+      "claim": "The allowed source states for transition to `forfeit` are less explicit than the rest of the Game lifecycle, which can cause inconsistent interpretation of whether an `in_progress` Game may become `forfeit`.",
+      "determinism_impact": "minor",
+      "evidence": "Scheduling Transitions explicitly permit `scheduled -> forfeit` and `postponed -> forfeit`. Competition Transitions then says, broadly, 'A Game may become `forfeit` only with an explicit winning team and an official non-tied score,' but does not name the source statuses for that transition. The General Lifecycle Failure Rule says transitions not explicitly permitted must be rejected, so this wording leaves room for divergent readings.",
+      "feedback_id": "fb_round17_structural_002",
+      "in_scope": true,
+      "invariant_violated": "state_legality",
+      "issue_fingerprint": "89e88887ffeb25d3481a6ee0663f884cb71f61c2778cc1004dceee281a6b0e4b",
+      "issue_id": "iss_89e88887ffeb25d3",
+      "issue_type": "state_transition_ambiguity",
+      "normalized_severity": "minor",
+      "oscillation_key": null,
+      "recommended_change": "List the exact legal source states for `forfeit` in one place, for example by stating whether only `scheduled` and `postponed` may become `forfeit`, or whether `in_progress` may also become `forfeit` when the official score and winner requirements are met.",
+      "rubric_impact": "minor",
+      "severity_rationale": "The core Game lifecycle is otherwise well specified, and a conservative implementation could reject unlisted transitions, so this is a contained ambiguity rather than a blocker."
+    }
+  ],
+  "profile": "structural_integrity",
+  "reviewer": {
+    "model": "gpt-5-codex",
+    "name": "Codex Whetstone Structural Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 17
+}

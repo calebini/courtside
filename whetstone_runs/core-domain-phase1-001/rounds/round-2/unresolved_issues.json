@@ -1,0 +1,19 @@
+{
+  "draft_hash": "aca84978b693a31840c33c8a378473494cb9c3fd25449d8c605cef021c8062e6",
+  "round_number": 2,
+  "unresolved_issues": [
+    {
+      "affected_sections": [
+        "specs/lifecycle.md: Standings Lifecycle",
+        "specs/config.md: Standings Configuration",
+        "specs/invariants.md: Standings"
+      ],
+      "blocking_acceptance": true,
+      "claim": "Persisted random-draw tiebreaks are required to be reused, but the draft does not define an idempotent tie-context identity or duplicate-draw handling rule, so retries or concurrent recalculations can produce multiple valid draw records for the same standings tie.",
+      "in_scope": true,
+      "issue_fingerprint": "6d80c15b71f6e2c61306e77bf32406c21f02bdd1fa18c4f9d924992621f8885d",
+      "issue_id": "iss_6d80c15b71f6e2c6",
+      "normalized_severity": "major"
+    }
+  ]
+}

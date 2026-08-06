@@ -1,0 +1,205 @@
+{
+  "closeout_findings_by_profile": [
+    {
+      "blocker_count": 0,
+      "clean": true,
+      "draft_hash": "18e7e47f9e7e53bcdf0ad9e31e8345a967162c7b518f9a4084a3fda2028645d5",
+      "feedback_ids": [],
+      "major_count": 0,
+      "profile": "structural_integrity",
+      "round_number": 13,
+      "unresolved_blockers": [],
+      "unresolved_major_issues": []
+    },
+    {
+      "blocker_count": 0,
+      "clean": false,
+      "draft_hash": "18e7e47f9e7e53bcdf0ad9e31e8345a967162c7b518f9a4084a3fda2028645d5",
+      "feedback_ids": [
+        "fb_round14_determinism_001"
+      ],
+      "major_count": 1,
+      "profile": "determinism",
+      "round_number": 14,
+      "unresolved_blockers": [],
+      "unresolved_major_issues": [
+        {
+          "affected_sections": [
+            "Authoritative Result Corrections",
+            "Venues, Media, and Audit",
+            "Audit Configuration"
+          ],
+          "claim": "The accepted playoff result-correction resolution identity can collide across distinct material corrections because it includes the target corrected value but not the correction's current source value, authoritative revision, or correction basis.",
+          "issue_fingerprint": "27d32c3d781227c99ecc15e283422bb7a85a2072e73d1e1bb5b4653cfe99cd12",
+          "issue_id": "iss_27d32c3d781227c9",
+          "normalized_severity": "major"
+        }
+      ]
+    },
+    {
+      "blocker_count": 0,
+      "clean": false,
+      "draft_hash": "18e7e47f9e7e53bcdf0ad9e31e8345a967162c7b518f9a4084a3fda2028645d5",
+      "feedback_ids": [
+        "fb_operability_001",
+        "fb_operability_002"
+      ],
+      "major_count": 2,
+      "profile": "operability",
+      "round_number": 15,
+      "unresolved_blockers": [],
+      "unresolved_major_issues": [
+        {
+          "affected_sections": [
+            "Core Mutation Authority",
+            "Audit Configuration"
+          ],
+          "claim": "Accepted Player profile updates require history in lifecycle prose, but the operational history surface is not made mandatory in Audit Configuration or otherwise given a named persistence/reporting contract.",
+          "issue_fingerprint": "c07eac936a17962672956f28d8d48840bd478d2791aef105d2ddc68e54e041c7",
+          "issue_id": "iss_c07eac936a179626",
+          "normalized_severity": "major"
+        },
+        {
+          "affected_sections": [
+            "Roster Membership Lifecycle",
+            "Game Lifecycle",
+            "Player Stat Line Lifecycle"
+          ],
+          "claim": "Roster eligibility anchoring is normative, but the draft does not require the chosen competition eligibility anchor to be persisted or exposed in validation/rejection reporting, making later stat attribution and operator recovery hard to verify.",
+          "issue_fingerprint": "c2f0898a784999ec99203bced946e6c5d8575a9ec3bca047b977550f7d29f684",
+          "issue_id": "iss_c2f0898a784999ec",
+          "normalized_severity": "major"
+        }
+      ]
+    }
+  ],
+  "current_draft_status": "accepted_unverified_profiles",
+  "draft_hash": "18e7e47f9e7e53bcdf0ad9e31e8345a967162c7b518f9a4084a3fda2028645d5",
+  "exit_reason": "Phase 1 vertical review mode exhausted before reviewer-verified stable draft",
+  "final_draft_path": "./spec.md",
+  "generated_at": "2026-08-06T19:55:05.014742+00:00",
+  "last_accepted_draft_hash": "18e7e47f9e7e53bcdf0ad9e31e8345a967162c7b518f9a4084a3fda2028645d5",
+  "last_draft_hash": "18e7e47f9e7e53bcdf0ad9e31e8345a967162c7b518f9a4084a3fda2028645d5",
+  "last_reviewer_findings": {
+    "blocker_count": 0,
+    "feedback_ids": [
+      "fb_operability_001",
+      "fb_operability_002"
+    ],
+    "major_count": 2,
+    "profile": "operability",
+    "round_number": 15
+  },
+  "profile_status": {
+    "exhausted_profiles": [
+      "determinism",
+      "operability"
+    ],
+    "profiles": [
+      {
+        "active": false,
+        "clean": true,
+        "exhausted": false,
+        "profile": "structural_integrity",
+        "residual_status": null,
+        "round_budget": 3,
+        "rounds_used": 4
+      },
+      {
+        "active": false,
+        "clean": false,
+        "exhausted": true,
+        "profile": "determinism",
+        "residual_status": "exhausted_with_residuals",
+        "round_budget": 3,
+        "rounds_used": 4
+      },
+      {
+        "active": false,
+        "clean": false,
+        "exhausted": true,
+        "profile": "operability",
+        "residual_status": "exhausted_with_residuals",
+        "round_budget": 3,
+        "rounds_used": 4
+      }
+    ],
+    "profiles_remaining": [],
+    "total_round_budget": 9,
+    "unverified_profiles": [
+      "determinism",
+      "operability"
+    ]
+  },
+  "ready_for_phase_2": false,
+  "recommendation": "manual_review_required",
+  "round_number": 15,
+  "run_artifact_pointers": {
+    "context_pressure_report": {
+      "exists": true,
+      "path": "rounds/context_pressure_report.json",
+      "sha256": "17bab2947e5768cc2e36279340ac5983de11eb44c47ba3b986524057795d17a2"
+    },
+    "context_pressure_report_markdown": {
+      "exists": true,
+      "path": "rounds/context_pressure_report.md",
+      "sha256": "04b34e355c95de65a66164720334c456f238cce2b98f5e584d3d808cd425ce02"
+    },
+    "job_descriptor": {
+      "candidate_paths": [
+        "whetstone_job.json",
+        "job_descriptor.json",
+        "rounds/whetstone_job.json",
+        "rounds/job_descriptor.json",
+        "rounds/intake/whetstone_job.json",
+        "rounds/intake/job_descriptor.json"
+      ],
+      "exists": false,
+      "path": null,
+      "sha256": null
+    },
+    "scope_contract": {
+      "exists": true,
+      "path": "rounds/intake/scope_contract.json",
+      "sha256": "218ca6aebefd4c55de9de48309749b8f58f782265bdac1e1dc1c080a368f2400"
+    }
+  },
+  "terminal_state": "TARGET_NOT_REACHED",
+  "unresolved_blockers": [],
+  "unresolved_conflicts": [],
+  "unresolved_major_issues": [
+    {
+      "affected_sections": [
+        "Authoritative Result Corrections",
+        "Venues, Media, and Audit",
+        "Audit Configuration"
+      ],
+      "claim": "The accepted playoff result-correction resolution identity can collide across distinct material corrections because it includes the target corrected value but not the correction's current source value, authoritative revision, or correction basis.",
+      "issue_fingerprint": "27d32c3d781227c99ecc15e283422bb7a85a2072e73d1e1bb5b4653cfe99cd12",
+      "issue_id": "iss_27d32c3d781227c9",
+      "normalized_severity": "major"
+    },
+    {
+      "affected_sections": [
+        "Core Mutation Authority",
+        "Audit Configuration"
+      ],
+      "claim": "Accepted Player profile updates require history in lifecycle prose, but the operational history surface is not made mandatory in Audit Configuration or otherwise given a named persistence/reporting contract.",
+      "issue_fingerprint": "c07eac936a17962672956f28d8d48840bd478d2791aef105d2ddc68e54e041c7",
+      "issue_id": "iss_c07eac936a179626",
+      "normalized_severity": "major"
+    },
+    {
+      "affected_sections": [
+        "Roster Membership Lifecycle",
+        "Game Lifecycle",
+        "Player Stat Line Lifecycle"
+      ],
+      "claim": "Roster eligibility anchoring is normative, but the draft does not require the chosen competition eligibility anchor to be persisted or exposed in validation/rejection reporting, making later stat attribution and operator recovery hard to verify.",
+      "issue_fingerprint": "c2f0898a784999ec99203bced946e6c5d8575a9ec3bca047b977550f7d29f684",
+      "issue_id": "iss_c2f0898a784999ec",
+      "normalized_severity": "major"
+    }
+  ],
+  "unresolved_oscillation": null
+}

@@ -1,0 +1,19 @@
+{
+  "draft_hash": "18e7e47f9e7e53bcdf0ad9e31e8345a967162c7b518f9a4084a3fda2028645d5",
+  "round_number": 14,
+  "unresolved_issues": [
+    {
+      "affected_sections": [
+        "Authoritative Result Corrections",
+        "Venues, Media, and Audit",
+        "Audit Configuration"
+      ],
+      "blocking_acceptance": true,
+      "claim": "The accepted playoff result-correction resolution identity can collide across distinct material corrections because it includes the target corrected value but not the correction's current source value, authoritative revision, or correction basis.",
+      "in_scope": true,
+      "issue_fingerprint": "27d32c3d781227c99ecc15e283422bb7a85a2072e73d1e1bb5b4653cfe99cd12",
+      "issue_id": "iss_27d32c3d781227c9",
+      "normalized_severity": "major"
+    }
+  ]
+}

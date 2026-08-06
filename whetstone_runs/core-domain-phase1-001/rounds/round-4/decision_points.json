@@ -1,0 +1,1126 @@
+{
+  "decision_points": [
+    {
+      "affected_sections": [
+        "Courtside Core Domain \u2014 Isolated Phase 1.01 Composite"
+      ],
+      "decision_id": "dec_63706f5931ad6c73",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "scope_change",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "# Courtside Core Domain \u2014 Isolated Phase 1.01 Composite"
+      ],
+      "options_considered": [
+        {
+          "description": "# Courtside Core Domain \u2014 Isolated Phase 1.01 Composite",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Courtside Core Domain \u2014 Isolated Phase 1.01 Composite` adopt this change (scope change): # Courtside Core Domain \u2014 Isolated Phase 1.01 Composite",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "scope_change"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Role Assignment"
+      ],
+      "decision_id": "dec_592757927bd6b275",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "For Phase 1, Team Captain is a scoped domain authority marker. It does not by itself grant independent authority over Game outcomes, rosters, Player Stat Lines, Player Management approvals, Season configuration amendments, or playoff conflict resolution unless a later accepted specification grants that authority."
+      ],
+      "options_considered": [
+        {
+          "description": "For Phase 1, Team Captain is a scoped domain authority marker. It does not by itself grant independent authority over Game outcomes, rosters, Player Stat Lines, Player Management approvals, Season configuration amendments, or playoff conflict resolution unless a later accepted specification grants that authority.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Role Assignment` adopt this change (choose policy, scope change): For Phase 1, Team Captain is a scoped domain authority marker. It does not by itself grant independent authority over Game outcomes, rosters, Player Stat Lines, Player Management approvals, Season configuration amendments, or playoff conflict resolution unless a later accepted specification grants that authority.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "choose_policy",
+        "scope_change"
+      ]
+    },
+    {
+      "affected_sections": [
+        "General Lifecycle Failure Rule"
+      ],
+      "decision_id": "dec_21dcea43c59badc0",
+      "decision_status": "deferred_scope_decision",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "For every lifecycle-bearing Courtside domain entity, a transition that is not explicitly permitted by this specification must be rejected without mutating authoritative state. The rejection report must identify the entity, the current state or condition, the requested state or mutation, the actor, and the violated lifecycle rule. Auditing rejected attempts is not required by this Phase 1 domain specification unless the audit policy for that surface explicitly requires it."
+      ],
+      "options_considered": [
+        {
+          "description": "For every lifecycle-bearing Courtside domain entity, a transition that is not explicitly permitted by this specification must be rejected without mutating authoritative state. The rejection report must identify the entity, the current state or condition, the requested state or mutation, the actor, and the violated lifecycle rule. Auditing rejected attempts is not required by this Phase 1 domain specification unless the audit policy for that surface explicitly requires it.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `General Lifecycle Failure Rule` adopt this change (tighten requirement, choose policy, scope change): For every lifecycle-bearing Courtside domain entity, a transition that is not explicitly permitted by this specification must be rejected without mutating authoritative state. The rejection report must identify the entity, the current state or condition, the requested state or mutation, the actor, and the violated lifecycle rule. Auditing rejected attempts is not required by this Phase 1 domain specification unless the audit policy for that surface explicitly requires it.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "tighten_requirement",
+        "choose_policy",
+        "scope_change"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Core Mutation Authority"
+      ],
+      "decision_id": "dec_98d1bf2436af91b4",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "## Core Mutation Authority"
+      ],
+      "options_considered": [
+        {
+          "description": "## Core Mutation Authority",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Core Mutation Authority` adopt this change (choose policy): ## Core Mutation Authority",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "choose_policy"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Core Mutation Authority"
+      ],
+      "decision_id": "dec_3c65d8a820455ea4",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "Mutation authority is evaluated at the time the mutation is requested and is scoped to the League, Season, Season Team, Player, or Game named by the affected record."
+      ],
+      "options_considered": [
+        {
+          "description": "Mutation authority is evaluated at the time the mutation is requested and is scoped to the League, Season, Season Team, Player, or Game named by the affected record.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Core Mutation Authority` adopt this change (choose policy): Mutation authority is evaluated at the time the mutation is requested and is scoped to the League, Season, Season Team, Player, or Game named by the affected record.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "choose_policy"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Core Mutation Authority"
+      ],
+      "decision_id": "dec_2347ff3d284afab8",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "scope_change",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "- League Administrators may create, schedule, reschedule, postpone, cancel, start, finalize, forfeit, and correct Games; create, end, and transfer Roster Memberships; create, update, confirm, and correct Player Stat Lines; approve and revoke Player Management Relationships; assign, reassign, and revoke role assignments; amend frozen Season configuration; and resolve playoff correction conflicts."
+      ],
+      "options_considered": [
+        {
+          "description": "- League Administrators may create, schedule, reschedule, postpone, cancel, start, finalize, forfeit, and correct Games; create, end, and transfer Roster Memberships; create, update, confirm, and correct Player Stat Lines; approve and revoke Player Management Relationships; assign, reassign, and revoke role assignments; amend frozen Season configuration; and resolve playoff correction conflicts.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Core Mutation Authority` adopt this change (relax requirement, scope change): League Administrators may create, schedule, reschedule, postpone, cancel, start, finalize, forfeit, and correct Games; create, end, and transfer Roster Memberships; create, update, confirm, and correct Player Stat Lines; approve and revoke Player Management Relationships; assign, reassign, and revoke role assignments; amend frozen Season configuration; and resolve playoff correction conflicts.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "relax_requirement",
+        "scope_change"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Core Mutation Authority"
+      ],
+      "decision_id": "dec_d2d016e14e3a8cff",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "- Approved Player Management Relationships grant authority to manage the associated Player profile within later interface specifications. They do not grant authority to approve relationships, change rosters, mutate Game lifecycle status, correct authoritative results, amend Season configuration, or resolve playoff conflicts."
+      ],
+      "options_considered": [
+        {
+          "description": "- Approved Player Management Relationships grant authority to manage the associated Player profile within later interface specifications. They do not grant authority to approve relationships, change rosters, mutate Game lifecycle status, correct authoritative results, amend Season configuration, or resolve playoff conflicts.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Core Mutation Authority` adopt this change (choose policy): Approved Player Management Relationships grant authority to manage the associated Player profile within later interface specifications. They do not grant authority to approve relationships, change rosters, mutate Game lifecycle status, correct authoritative results, amend Season configuration, or resolve playoff conflicts.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "choose_policy"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Core Mutation Authority"
+      ],
+      "decision_id": "dec_4d7a169b05856c47",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "scope_change",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "- Team Captain assignments are scoped to one Season Team and are auditable role assignments. In Phase 1 they do not independently authorize core domain mutations unless a later accepted specification grants a specific Team Captain permission."
+      ],
+      "options_considered": [
+        {
+          "description": "- Team Captain assignments are scoped to one Season Team and are auditable role assignments. In Phase 1 they do not independently authorize core domain mutations unless a later accepted specification grants a specific Team Captain permission.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Core Mutation Authority` adopt this change (scope change): Team Captain assignments are scoped to one Season Team and are auditable role assignments. In Phase 1 they do not independently authorize core domain mutations unless a later accepted specification grants a specific Team Captain permission.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "scope_change"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Core Mutation Authority"
+      ],
+      "decision_id": "dec_5e02c6ab62f54659",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "- Derived standings, Season-Team result statistics, playoff aggregates, and playoff advancement are produced by deterministic recomputation from authoritative inputs. They are not directly edited by any actor."
+      ],
+      "options_considered": [
+        {
+          "description": "- Derived standings, Season-Team result statistics, playoff aggregates, and playoff advancement are produced by deterministic recomputation from authoritative inputs. They are not directly edited by any actor.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Core Mutation Authority` adopt this change (choose policy): Derived standings, Season-Team result statistics, playoff aggregates, and playoff advancement are produced by deterministic recomputation from authoritative inputs. They are not directly edited by any actor.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "choose_policy"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Core Mutation Authority"
+      ],
+      "decision_id": "dec_bb050da881095598",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "relax_requirement",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "- System-initiated recomputation may update derived projections and may reuse or create persisted random-draw results only as allowed by the standings random-draw rules."
+      ],
+      "options_considered": [
+        {
+          "description": "- System-initiated recomputation may update derived projections and may reuse or create persisted random-draw results only as allowed by the standings random-draw rules.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Core Mutation Authority` adopt this change (relax requirement): System-initiated recomputation may update derived projections and may reuse or create persisted random-draw results only as allowed by the standings random-draw rules.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "relax_requirement"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Authoritative Result Corrections"
+      ],
+      "decision_id": "dec_ebf9e410b03355f3",
+      "decision_status": "deferred_scope_decision",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "If a correction would change a playoff participant after downstream Games already have authoritative outcomes, automated destructive propagation is prohibited. The correction must either be rejected before it is recorded or recorded with an explicit League Administrator resolution in the same administrative action. Until that resolution is recorded, affected playoff advancement projections are blocked from further automatic advancement, while existing downstream authoritative Game records remain historically visible and are not silently changed."
+      ],
+      "options_considered": [
+        {
+          "description": "If a correction would change a playoff participant after downstream Games already have authoritative outcomes, automated destructive propagation is prohibited. The correction must either be rejected before it is recorded or recorded with an explicit League Administrator resolution in the same administrative action. Until that resolution is recorded, affected playoff advancement projections are blocked from further automatic advancement, while existing downstream authoritative Game records remain historically visible and are not silently changed.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Authoritative Result Corrections` adopt this change (tighten requirement, choose policy): If a correction would change a playoff participant after downstream Games already have authoritative outcomes, automated destructive propagation is prohibited. The correction must either be rejected before it is recorded or recorded with an explicit League Administrator resolution in the same administrative action. Until that resolution is recorded, affected playoff advancement projections are blocked from further automatic advancement, while existing downstream authoritative Game records remain historically visible and are not silently changed.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "tighten_requirement",
+        "choose_policy"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Authoritative Result Corrections"
+      ],
+      "decision_id": "dec_adfe7e24ceda396d",
+      "decision_status": "deferred_scope_decision",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "The resolution report must identify the corrected Game, the affected Matchups and participant slots, downstream authoritative Games that create the conflict, the recalculated participant that would have advanced, the participant currently present downstream, and the League Administrator actor and reason. The permitted resolutions are:"
+      ],
+      "options_considered": [
+        {
+          "description": "The resolution report must identify the corrected Game, the affected Matchups and participant slots, downstream authoritative Games that create the conflict, the recalculated participant that would have advanced, the participant currently present downstream, and the League Administrator actor and reason. The permitted resolutions are:",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Authoritative Result Corrections` adopt this change (tighten requirement, choose policy): The resolution report must identify the corrected Game, the affected Matchups and participant slots, downstream authoritative Games that create the conflict, the recalculated participant that would have advanced, the participant currently present downstream, and the League Administrator actor and reason. The permitted resolutions are:",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "tighten_requirement",
+        "choose_policy"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Authoritative Result Corrections"
+      ],
+      "decision_id": "dec_ef2058ac05f6b76e",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "- abandon the correction and preserve the prior authoritative result;"
+      ],
+      "options_considered": [
+        {
+          "description": "- abandon the correction and preserve the prior authoritative result;",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Authoritative Result Corrections` adopt this change (choose policy): abandon the correction and preserve the prior authoritative result;",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "choose_policy"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Authoritative Result Corrections"
+      ],
+      "decision_id": "dec_e3d1365932d05380",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "- apply the correction and halt affected downstream advancement until replacement authoritative outcomes are recorded under the corrected bracket participants; or"
+      ],
+      "options_considered": [
+        {
+          "description": "- apply the correction and halt affected downstream advancement until replacement authoritative outcomes are recorded under the corrected bracket participants; or",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Authoritative Result Corrections` adopt this change (choose policy): apply the correction and halt affected downstream advancement until replacement authoritative outcomes are recorded under the corrected bracket participants; or",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "choose_policy"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Role Assignment Lifecycle"
+      ],
+      "decision_id": "dec_1039e8c0a2f9f9e5",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "- A revoked role assignment is terminal for that assignment. Later authority requires a new assignment or reassignment under League Administrator authority."
+      ],
+      "options_considered": [
+        {
+          "description": "- A revoked role assignment is terminal for that assignment. Later authority requires a new assignment or reassignment under League Administrator authority.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Role Assignment Lifecycle` adopt this change (choose policy, scope change): A revoked role assignment is terminal for that assignment. Later authority requires a new assignment or reassignment under League Administrator authority.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "choose_policy",
+        "scope_change"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Standings Lifecycle"
+      ],
+      "decision_id": "dec_5f9f24ee3e2ad848",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "tighten_requirement",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "A random-draw tie context has a stable identity composed of the Season, the frozen Season configuration version, the ranking step or criterion that invoked `random_draw`, the tied Season Teams in canonical identity order before the draw, and the equal preceding criterion values that made the tie unresolved. Exactly one persisted draw result may exist for a tie context. Retries, replays, concurrent recalculations, or duplicate requests for the same tie context must return the existing result. Attempting to create another draw result for the same tie context is rejected as a deterministic conflict without performing another draw."
+      ],
+      "options_considered": [
+        {
+          "description": "A random-draw tie context has a stable identity composed of the Season, the frozen Season configuration version, the ranking step or criterion that invoked `random_draw`, the tied Season Teams in canonical identity order before the draw, and the equal preceding criterion values that made the tie unresolved. Exactly one persisted draw result may exist for a tie context. Retries, replays, concurrent recalculations, or duplicate requests for the same tie context must return the existing result. Attempting to create another draw result for the same tie context is rejected as a deterministic conflict without performing another draw.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Standings Lifecycle` adopt this change (tighten requirement): A random-draw tie context has a stable identity composed of the Season, the frozen Season configuration version, the ranking step or criterion that invoked `random_draw`, the tied Season Teams in canonical identity order before the draw, and the equal preceding criterion values that made the tie unresolved. Exactly one persisted draw result may exist for a tie context. Retries, replays, concurrent recalculations, or duplicate requests for the same tie context must return the existing result. Attempting to create another draw result for the same tie context is rejected as a deterministic conflict without performing another draw.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "tighten_requirement"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Playoff Matchup Lifecycle"
+      ],
+      "decision_id": "dec_274d60155ff4d68d",
+      "decision_status": "deferred_scope_decision",
+      "decision_type": "tighten_requirement",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "Playoff Games use the ordinary Game lifecycle. Playoff outcomes do not contribute to regular-season standings. A Matchup with incomplete configured Games, a tied aggregate after all permitted tiebreak handling, an unknown tiebreak policy, or a blocked participant-resolution conflict must not advance automatically and must report the violated rule."
+      ],
+      "options_considered": [
+        {
+          "description": "Playoff Games use the ordinary Game lifecycle. Playoff outcomes do not contribute to regular-season standings. A Matchup with incomplete configured Games, a tied aggregate after all permitted tiebreak handling, an unknown tiebreak policy, or a blocked participant-resolution conflict must not advance automatically and must report the violated rule.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Playoff Matchup Lifecycle` adopt this change (tighten requirement): Playoff Games use the ordinary Game lifecycle. Playoff outcomes do not contribute to regular-season standings. A Matchup with incomplete configured Games, a tied aggregate after all permitted tiebreak handling, an unknown tiebreak policy, or a blocked participant-resolution conflict must not advance automatically and must report the violated rule.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "tighten_requirement"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Authorization"
+      ],
+      "decision_id": "dec_751927cc413ce89d",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "3. Only a League Administrator may approve Player Management Relationships, correct authoritative Game results, amend frozen Season configuration, assign Team Captain authority, mutate Game lifecycle status, create or change Roster Memberships, create or materially change Player Stat Lines, or resolve playoff correction conflicts."
+      ],
+      "options_considered": [
+        {
+          "description": "3. Only a League Administrator may approve Player Management Relationships, correct authoritative Game results, amend frozen Season configuration, assign Team Captain authority, mutate Game lifecycle status, create or change Roster Memberships, create or materially change Player Stat Lines, or resolve playoff correction conflicts.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Authorization` adopt this change (relax requirement, choose policy): 3. Only a League Administrator may approve Player Management Relationships, correct authoritative Game results, amend frozen Season configuration, assign Team Captain authority, mutate Game lifecycle status, create or change Roster Memberships, create or materially change Player Stat Lines, or resolve playoff correction conflicts.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "relax_requirement",
+        "choose_policy"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Authorization"
+      ],
+      "decision_id": "dec_728fe2ccd155a4c8",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "4. An approved Player Management Relationship grants Player-profile management authority only; it does not grant authority over rosters, Game outcomes, standings, playoff advancement, Season configuration, or role assignment."
+      ],
+      "options_considered": [
+        {
+          "description": "4. An approved Player Management Relationship grants Player-profile management authority only; it does not grant authority over rosters, Game outcomes, standings, playoff advancement, Season configuration, or role assignment.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Authorization` adopt this change (choose policy, scope change): 4. An approved Player Management Relationship grants Player-profile management authority only; it does not grant authority over rosters, Game outcomes, standings, playoff advancement, Season configuration, or role assignment.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "choose_policy",
+        "scope_change"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Authorization"
+      ],
+      "decision_id": "dec_929baca54335cbcb",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "5. Team Captain authority is an auditable scoped role marker in Phase 1 and grants no independent core mutation authority until a later accepted specification defines such permissions."
+      ],
+      "options_considered": [
+        {
+          "description": "5. Team Captain authority is an auditable scoped role marker in Phase 1 and grants no independent core mutation authority until a later accepted specification defines such permissions.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Authorization` adopt this change (choose policy, scope change): 5. Team Captain authority is an auditable scoped role marker in Phase 1 and grants no independent core mutation authority until a later accepted specification defines such permissions.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "choose_policy",
+        "scope_change"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Authorization"
+      ],
+      "decision_id": "dec_3f59aa530e1c9997",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "scope_change",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "6. Role and management-relationship changes are audited."
+      ],
+      "options_considered": [
+        {
+          "description": "6. Role and management-relationship changes are audited.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Authorization` adopt this change (scope change): 6. Role and management-relationship changes are audited.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "scope_change"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Authorization"
+      ],
+      "decision_id": "dec_5350d9cd676ffb78",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "7. Unauthorized mutation attempts and lifecycle transitions not explicitly permitted by the lifecycle specification are rejected without mutating authoritative state."
+      ],
+      "options_considered": [
+        {
+          "description": "7. Unauthorized mutation attempts and lifecycle transitions not explicitly permitted by the lifecycle specification are rejected without mutating authoritative state.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Authorization` adopt this change (choose policy): 7. Unauthorized mutation attempts and lifecycle transitions not explicitly permitted by the lifecycle specification are rejected without mutating authoritative state.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "choose_policy"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Games and Results"
+      ],
+      "decision_id": "dec_1631d54f6cb8351b",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "9. `cancelled`, `final`, and `forfeit` Game statuses are terminal lifecycle states, except that authoritative result corrections may modify the score or declared winner of `final` or `forfeit` Games while preserving status."
+      ],
+      "options_considered": [
+        {
+          "description": "9. `cancelled`, `final`, and `forfeit` Game statuses are terminal lifecycle states, except that authoritative result corrections may modify the score or declared winner of `final` or `forfeit` Games while preserving status.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Games and Results` adopt this change (relax requirement, choose policy): 9. `cancelled`, `final`, and `forfeit` Game statuses are terminal lifecycle states, except that authoritative result corrections may modify the score or declared winner of `final` or `forfeit` Games while preserving status.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "relax_requirement",
+        "choose_policy"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Standings"
+      ],
+      "decision_id": "dec_33a3ef95971c7458",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "tighten_requirement",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "8. Exactly one persisted random-draw result may exist for a stable tie context, and duplicate attempts for that tie context must reuse the existing result or be rejected without performing another draw."
+      ],
+      "options_considered": [
+        {
+          "description": "8. Exactly one persisted random-draw result may exist for a stable tie context, and duplicate attempts for that tie context must reuse the existing result or be rejected without performing another draw.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Standings` adopt this change (tighten requirement): 8. Exactly one persisted random-draw result may exist for a stable tie context, and duplicate attempts for that tie context must reuse the existing result or be rejected without performing another draw.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "tighten_requirement"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Playoffs"
+      ],
+      "decision_id": "dec_89c222d2f6d01a99",
+      "decision_status": "deferred_scope_decision",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "10. A playoff Matchup with incomplete authoritative Game outcomes or an unresolved participant conflict must not advance automatically."
+      ],
+      "options_considered": [
+        {
+          "description": "10. A playoff Matchup with incomplete authoritative Game outcomes or an unresolved participant conflict must not advance automatically.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Playoffs` adopt this change (tighten requirement, choose policy): 10. A playoff Matchup with incomplete authoritative Game outcomes or an unresolved participant conflict must not advance automatically.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "tighten_requirement",
+        "choose_policy"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Standings Configuration"
+      ],
+      "decision_id": "dec_589c0b19c1436af7",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "tighten_requirement",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "The stable tie-context identity is composed of the Season, frozen Season configuration version, ranking step or criterion, tied Season Team identities in canonical order, and the equal preceding criterion values. Exactly one persisted draw result may exist for a tie context. Retries, replays, concurrent recalculations, or duplicate requests for the same tie context return the existing result. Attempting to create a second result for the same tie context is rejected as a deterministic conflict and must not perform another draw."
+      ],
+      "options_considered": [
+        {
+          "description": "The stable tie-context identity is composed of the Season, frozen Season configuration version, ranking step or criterion, tied Season Team identities in canonical order, and the equal preceding criterion values. Exactly one persisted draw result may exist for a tie context. Retries, replays, concurrent recalculations, or duplicate requests for the same tie context return the existing result. Attempting to create a second result for the same tie context is rejected as a deterministic conflict and must not perform another draw.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Standings Configuration` adopt this change (tighten requirement): The stable tie-context identity is composed of the Season, frozen Season configuration version, ranking step or criterion, tied Season Team identities in canonical order, and the equal preceding criterion values. Exactly one persisted draw result may exist for a tie context. Retries, replays, concurrent recalculations, or duplicate requests for the same tie context return the existing result. Attempting to create a second result for the same tie context is rejected as a deterministic conflict and must not perform another draw.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "tighten_requirement"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Authorization Configuration"
+      ],
+      "decision_id": "dec_fa4a5c2f87a82db1",
+      "decision_status": "operator_review_recommended",
+      "decision_type": "choose_policy",
+      "editor_rationale": "Detected from the editor-produced draft diff.",
+      "editor_selected_option_id": "selected",
+      "evidence_lines": [
+        "League Administrators assign, reassign, and revoke Team Captain authority and approve or revoke Player Management Relationships. League Administrators also hold Phase 1 authority for core Game lifecycle mutations, authoritative result corrections, Roster Membership changes, Player Stat Line creation and material changes, frozen Season configuration amendments, persisted random-draw conflict resolution, and playoff correction conflict resolution. Team Captain authority is a scoped role marker in Phase 1 and does not add independent mutation permissions unless a later accepted specification defines them. Adding roles or changing their authority requires an accepted specification update."
+      ],
+      "options_considered": [
+        {
+          "description": "League Administrators assign, reassign, and revoke Team Captain authority and approve or revoke Player Management Relationships. League Administrators also hold Phase 1 authority for core Game lifecycle mutations, authoritative result corrections, Roster Membership changes, Player Stat Line creation and material changes, frozen Season configuration amendments, persisted random-draw conflict resolution, and playoff correction conflict resolution. Team Captain authority is a scoped role marker in Phase 1 and does not add independent mutation permissions unless a later accepted specification defines them. Adding roles or changing their authority requires an accepted specification update.",
+          "label": "Keep editor change",
+          "option_id": "selected"
+        },
+        {
+          "description": "Require human review before treating this choice as settled.",
+          "label": "Revisit decision",
+          "option_id": "revisit"
+        }
+      ],
+      "orchestrator_action": "present_at_end",
+      "profile": "vertical",
+      "question": "Should `Authorization Configuration` adopt this change (choose policy, scope change): League Administrators assign, reassign, and revoke Team Captain authority and approve or revoke Player Management Relationships. League Administrators also hold Phase 1 authority for core Game lifecycle mutations, authoritative result corrections, Roster Membership changes, Player Stat Line creation and material changes, frozen Season configuration amendments, persisted random-draw conflict resolution, and playoff correction conflict resolution. Team Captain authority is a scoped role marker in Phase 1 and does not add independent mutation permissions unless a later accepted specification defines them. Adding roles or changing their authority requires an accepted specification update.",
+      "requires_human_decision": true,
+      "risk_if_wrong": "The spec may silently encode a policy, scope, authority, or operational choice the owner did not intend.",
+      "round_number": 4,
+      "source_feedback_ids": [
+        "structural_integrity:fb_002",
+        "determinism:fb_random_draw_idempotency_001",
+        "operability:fb_operability_001",
+        "operability:fb_operability_002",
+        "structural_integrity:fb_001"
+      ],
+      "trigger_types": [
+        "choose_policy",
+        "scope_change"
+      ]
+    }
+  ],
+  "draft_hash": "15c3ca6a2aba64d8e2410a84ee37d59f28ca454e0805eefb3a40cf7eb88746c1",
+  "round_number": 4
+}

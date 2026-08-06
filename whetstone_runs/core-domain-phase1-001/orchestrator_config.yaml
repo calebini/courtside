@@ -1,0 +1,58 @@
+spec_path: ./spec.md
+history_path: ./spec.history.md
+rounds_dir: ./rounds
+declaration_path: ./convergence_declaration.md
+workflow: mvp
+
+clients:
+  reviewer:
+    name: codex
+    command: codex
+    version: "0.142.0"
+    model: gpt-5.5
+  editor:
+    name: codex
+    command: codex
+    version: "0.142.0"
+    model: gpt-5.5
+
+review:
+  mode: vertical
+  profile_set: balanced_mvp
+  budget_exhaustion_policy: hard
+
+convergence:
+  enabled: true
+  target_phase: mid
+  target_mode: strict
+  rubric_profile: mvp-v1
+  rubric_source: builtin
+
+decision_points:
+  enabled: true
+  mode: end_of_cycle
+  summary:
+    enabled: true
+    include_interpretive_summary: false
+  intervention_thresholds:
+    severities: [blocker, major]
+    trigger_on_requirement_strength_change: true
+    trigger_on_authority_boundary_change: true
+    trigger_on_scope_change: true
+    trigger_on_new_enum_or_error_code: true
+
+timeouts:
+  reviewer_seconds: 420
+  editor_seconds: 1200
+
+contract_surface_policy:
+  enabled: true
+  action: recommend_synthesis
+  min_profile_rounds: 4
+  recent_window: 4
+  min_recent_serious_rounds: 3
+  min_contract_families: 2
+
+scope_contract:
+  path: ./rounds/intake/scope_contract.json
+

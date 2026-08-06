@@ -1,0 +1,105 @@
+{
+  "draft_hash": "f6850d2448634a0d2aa1099b7e21b6f8db60faee35f453b03f42fcc323203c32",
+  "feedback": [
+    {
+      "affected_sections": [
+        "Roster Membership Lifecycle",
+        "Player Stat Line Lifecycle",
+        "Game Lifecycle",
+        "Identity and Participation"
+      ],
+      "authority_impact": "minor",
+      "baseline_severity": "major",
+      "claim": "The draft does not define which Game time anchors roster eligibility when a Game is rescheduled, postponed, started, finalized, or corrected, leaving Player Stat Line attribution and transfer legality ambiguous.",
+      "determinism_impact": "major",
+      "evidence": "Roster Membership Lifecycle says a Player becomes eligible when a membership becomes effective and that Player Stat Lines must reference the membership that established eligibility for that Game. Game Lifecycle separately allows schedule changes and requires operational history, but no section states whether eligibility is evaluated against the originally scheduled instant, revised scheduled instant, actual start instant, authoritative outcome instant, or another canonical competition instant. The scope contract keeps identity and participation boundaries, lifecycle states, and partial statistics semantics in scope as required_fields.",
+      "feedback_id": "structural_integrity:fb_round17_structural_001",
+      "in_scope": true,
+      "invariant_violated": "state_legality",
+      "issue_fingerprint": "1bc3be56010020da12103945728096f298eae30aa63448097241adc7e4d5f7d9",
+      "issue_id": "iss_1bc3be56010020da",
+      "issue_type": "state_model_ambiguity",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Add a normative eligibility anchor for Games, such as the effective membership at the Game's actual competition/start instant or another explicitly named domain instant, and state how rescheduling, postponement, cancellation, finalization, and later result correction affect or do not affect that anchor and existing Player Stat Line attribution.",
+      "rubric_impact": "major",
+      "severity_rationale": "This does not prevent all MVP planning, but it creates meaningful implementation divergence for transfers, rescheduled Games, and stat attribution in core flows 1 and 3."
+    },
+    {
+      "affected_sections": [
+        "Game Lifecycle",
+        "Competition Transitions",
+        "Scheduling Transitions"
+      ],
+      "authority_impact": "minor",
+      "baseline_severity": "minor",
+      "claim": "The allowed source states for transition to `forfeit` are less explicit than the rest of the Game lifecycle, which can cause inconsistent interpretation of whether an `in_progress` Game may become `forfeit`.",
+      "determinism_impact": "minor",
+      "evidence": "Scheduling Transitions explicitly permit `scheduled -> forfeit` and `postponed -> forfeit`. Competition Transitions then says, broadly, 'A Game may become `forfeit` only with an explicit winning team and an official non-tied score,' but does not name the source statuses for that transition. The General Lifecycle Failure Rule says transitions not explicitly permitted must be rejected, so this wording leaves room for divergent readings.",
+      "feedback_id": "structural_integrity:fb_round17_structural_002",
+      "in_scope": true,
+      "invariant_violated": "state_legality",
+      "issue_fingerprint": "89e88887ffeb25d3481a6ee0663f884cb71f61c2778cc1004dceee281a6b0e4b",
+      "issue_id": "iss_89e88887ffeb25d3",
+      "issue_type": "state_transition_ambiguity",
+      "normalized_severity": "minor",
+      "oscillation_key": null,
+      "recommended_change": "List the exact legal source states for `forfeit` in one place, for example by stating whether only `scheduled` and `postponed` may become `forfeit`, or whether `in_progress` may also become `forfeit` when the official score and winner requirements are met.",
+      "rubric_impact": "minor",
+      "severity_rationale": "The core Game lifecycle is otherwise well specified, and a conservative implementation could reject unlisted transitions, so this is a contained ambiguity rather than a blocker."
+    },
+    {
+      "affected_sections": [
+        "Authoritative Result Corrections",
+        "Playoff Matchup Lifecycle",
+        "Configuration and Reproducibility"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "major",
+      "claim": "The accepted playoff-correction resolution that halts downstream advancement does not define the persisted replay state or projection semantics needed for deterministic recomputation and retries.",
+      "determinism_impact": "major",
+      "evidence": "The draft permits a correction resolution to \"apply the correction and halt affected downstream advancement until replacement authoritative outcomes are recorded under the corrected bracket participants\" while also saying \"no unresolved participant-resolution conflict state is persisted\" and that existing downstream authoritative Game records remain historically visible. It does not specify whether halted downstream Games are excluded from current bracket projections, how the halted slots or Matchups are represented, how a retry recognizes the same accepted halt resolution, or what exact condition resumes advancement when replacement outcomes are recorded. The scope contract explicitly keeps frozen configuration amendment and correction cascades, playoff aggregate calculation and tiebreak behavior, and deterministic calculations in scope.",
+      "feedback_id": "determinism:fb_round18_det_001",
+      "in_scope": true,
+      "invariant_violated": "replay_idempotency",
+      "issue_fingerprint": "0e555f08ffa37a74e833c8d90091b9157cb7dbffd19bb7df2abf407f1c523a1d",
+      "issue_id": "iss_0e555f08ffa37a74",
+      "issue_type": "underspecified_replay_state",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Define the deterministic persisted effect of the halt resolution: the affected Matchup or slot state, whether existing downstream authoritative Games are ignored for current advancement or retained only as historical records, the identity used to make repeated correction-resolution attempts idempotent, and the exact replacement-outcome condition that resumes downstream advancement. If this requires a new lifecycle state or persistent domain concept, surface it as an operator decision under the scope contract.",
+      "rubric_impact": "major",
+      "severity_rationale": "This does not block the main finalize/recompute path, but it creates meaningful divergence for an in-scope core correction cascade: repeated recomputation after the same accepted correction can produce different bracket projections across implementations."
+    },
+    {
+      "affected_sections": [
+        "specs/lifecycle.md :: Authoritative Result Corrections",
+        "specs/invariants.md :: Games and Results",
+        "specs/config.md :: Audit Configuration"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "major",
+      "claim": "The accepted playoff correction path can halt downstream advancement, but the draft does not define the observable halted condition or recovery handoff needed to resume operation safely.",
+      "determinism_impact": "major",
+      "evidence": "The draft permits an accepted correction to 'apply the correction and halt affected downstream advancement until replacement authoritative outcomes are recorded under the corrected bracket participants' and requires a resolution report. It also says downstream authoritative Game records remain historically visible and are not silently changed. However, it does not say what projection, Matchup condition, participant-slot condition, or operator-visible terminal report represents the halted advancement after the action, what records are excluded from future advancement calculations, or what exact condition clears the halt when replacement authoritative outcomes are recorded. This is in scope under the scope contract surfaces for frozen configuration amendment and correction cascades, playoff aggregate calculation and tiebreak behavior, and obvious domain failure categories and acceptance criteria.",
+      "feedback_id": "operability:fb_001",
+      "in_scope": true,
+      "invariant_violated": "failure_handling",
+      "issue_fingerprint": "20e6858438375fe644f912e70af8a03733e490061379f2b1583f99dcc689fe68",
+      "issue_id": "iss_20e6858438375fe6",
+      "issue_type": "underspecified_recovery_behavior",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Define the minimum domain-level halted-advancement semantics for the accepted correction resolution: the affected Matchups or participant slots that must be marked or reported as halted, how historically visible downstream Games are treated by recomputation while halted, the operator-facing handoff/report fields after the halt, and the precise condition that resumes advancement. If adding a new persistent lifecycle state is desired, surface it as an operator decision under scope rule 4; otherwise specify the observable projection/report semantics without introducing a new state.",
+      "rubric_impact": "major",
+      "severity_rationale": "This does not block the whole MVP because an implementation can still reject unresolved correction conflicts, but the spec explicitly permits an accepted halt resolution. Without defined recovery semantics, implementations can diverge on how to stop, report, and resume playoff advancement after an accepted correction."
+    }
+  ],
+  "profile": "vertical",
+  "reviewer": {
+    "model": "orchestrator",
+    "name": "whetstone-vertical-merge",
+    "version": "1.0"
+  },
+  "round_number": 20
+}

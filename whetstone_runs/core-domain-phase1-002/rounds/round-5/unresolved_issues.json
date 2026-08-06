@@ -1,0 +1,19 @@
+{
+  "draft_hash": "93f4864f3387fb05ce3cdd584a04d9bea7785c429d3b668c394405a65160cee4",
+  "round_number": 5,
+  "unresolved_issues": [
+    {
+      "affected_sections": [
+        "Season Configuration Lifecycle",
+        "Authoritative Result Corrections",
+        "Audit Configuration"
+      ],
+      "blocking_acceptance": true,
+      "claim": "Frozen playoff-configuration amendments are allowed to reuse playoff correction conflict-resolution semantics, but the referenced correction semantics are structurally keyed to a corrected Game and corrected authoritative value, leaving amendment-specific legal inputs, report fields, and idempotency identity undefined.",
+      "in_scope": true,
+      "issue_fingerprint": "5c510e5ae9601e4f498d7271d0a0eafe8e739df478e1a99d236a8ef8765e2d5b",
+      "issue_id": "iss_5c510e5ae9601e4f",
+      "normalized_severity": "major"
+    }
+  ]
+}

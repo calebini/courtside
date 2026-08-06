@@ -1,0 +1,57 @@
+{
+  "draft_hash": "18e7e47f9e7e53bcdf0ad9e31e8345a967162c7b518f9a4084a3fda2028645d5",
+  "feedback": [
+    {
+      "affected_sections": [
+        "Core Mutation Authority",
+        "Audit Configuration"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "major",
+      "claim": "Accepted Player profile updates require history in lifecycle prose, but the operational history surface is not made mandatory in Audit Configuration or otherwise given a named persistence/reporting contract.",
+      "determinism_impact": null,
+      "evidence": "The Player profile surface says accepted `display_name` or `profile_photo` updates must preserve prior and new value in `audit or equivalent profile-change history` with actor, timestamp, action, and optional reason. However, Audit Configuration's mandatory audit list includes Game-result corrections, Player-stat changes, Roster Membership changes, Player Management Relationship approvals/revocations, role changes, frozen configuration amendments, random draws, playoff resolutions, and scheduling changes, but not accepted Player profile updates. Flow-2 is explicitly in scope: verify the approved Player Management surface for display name and profile photo, including self-service photo updates.",
+      "feedback_id": "fb_operability_001",
+      "in_scope": true,
+      "invariant_violated": "artifact_integrity",
+      "issue_fingerprint": "c07eac936a17962672956f28d8d48840bd478d2791aef105d2ddc68e54e041c7",
+      "issue_id": "iss_c07eac936a179626",
+      "issue_type": "missing_operational_history_surface",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Add accepted Player `display_name` and `profile_photo` updates to the required operational history surface, either by making them mandatory Audit Records or by defining the equivalent profile-change history as a named persisted artifact with producer, required fields, mutation rule, and how operators read it during support or review.",
+      "rubric_impact": "major",
+      "severity_rationale": "This is a core in-scope flow and creates meaningful implementation drift for observability and operator handoff, but the allowed mutation and validation behavior are otherwise defined enough to build a first version."
+    },
+    {
+      "affected_sections": [
+        "Roster Membership Lifecycle",
+        "Game Lifecycle",
+        "Player Stat Line Lifecycle"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "major",
+      "claim": "Roster eligibility anchoring is normative, but the draft does not require the chosen competition eligibility anchor to be persisted or exposed in validation/rejection reporting, making later stat attribution and operator recovery hard to verify.",
+      "determinism_impact": "major",
+      "evidence": "Roster Membership Lifecycle defines the anchor as the first accepted start instant for a Game that enters `in_progress`, or the official forfeit-decision instant for a pre-start forfeit, and says finalization and later corrections do not change the anchor. Player Stat Lines must reference the membership that established eligibility. The draft does not state that the resolved anchor, its source event, or its immutable value must be retained on the Game or emitted in Player Stat Line eligibility acceptance/rejection reports. Flow-5 is explicitly in scope: verify roster eligibility anchoring and downstream playoff correction resolutions.",
+      "feedback_id": "fb_operability_002",
+      "in_scope": true,
+      "invariant_violated": "artifact_integrity",
+      "issue_fingerprint": "c2f0898a784999ec99203bced946e6c5d8575a9ec3bca047b977550f7d29f684",
+      "issue_id": "iss_c2f0898a784999ec",
+      "issue_type": "missing_anchor_observability",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Require each Game to retain an immutable competition eligibility anchor once established, including the anchor instant and source event (`first_start` or `pre_start_forfeit_decision`). Require Player Stat Line eligibility validation failures to report the anchor used, attempted Player/Season Team attribution, referenced Roster Membership, violated eligibility rule, and preservation outcome.",
+      "rubric_impact": "major",
+      "severity_rationale": "The anchor rule exists, so this does not fully block the domain model, but missing persistence and reporting semantics create substantial operability and testability risk for an in-scope core flow involving reschedules, forfeits, and later corrections."
+    }
+  ],
+  "profile": "operability",
+  "reviewer": {
+    "model": "gpt-5-codex",
+    "name": "Codex Whetstone Operability Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 15
+}

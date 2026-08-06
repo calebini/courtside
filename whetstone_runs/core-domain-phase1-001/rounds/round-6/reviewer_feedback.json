@@ -1,0 +1,58 @@
+{
+  "draft_hash": "15c3ca6a2aba64d8e2410a84ee37d59f28ca454e0805eefb3a40cf7eb88746c1",
+  "feedback": [
+    {
+      "affected_sections": [
+        "specs/lifecycle.md: Standings Lifecycle",
+        "specs/config.md: Standings Configuration",
+        "specs/invariants.md: Standings"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "major",
+      "claim": "The stable random-draw tie context depends on 'canonical identity order', but the draft does not define the canonical ordering rule implementations must use for Season Team identities.",
+      "determinism_impact": "major",
+      "evidence": "The draft says a random-draw tie context includes 'the tied Season Teams in canonical identity order before the draw' and that each draw records 'the canonical tied-participant order before the draw'. No section defines how canonical identity order is derived, while database schema and concrete identifiers are explicitly deferred. The scope contract keeps 'standings inputs, ranking, random draw, and reproducibility' in scope at required_fields depth.",
+      "feedback_id": "fb_round6_det_001",
+      "in_scope": true,
+      "invariant_violated": "deterministic_behavior",
+      "issue_fingerprint": "2484d272d633c8bf418c1c2cbdb661bd419f9cbea2a01eb175441e55dde9d428",
+      "issue_id": "iss_2484d272d633c8bf",
+      "issue_type": "underspecified_deterministic_ordering",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Define a technology-neutral canonical ordering rule for Season Team identities, such as ordering by each Season Team's immutable canonical domain identity using bytewise/codepoint ordering after a specified normalization, or define another stable total order that does not depend on display names, creation order, storage engine order, or locale collation.",
+      "rubric_impact": "major",
+      "severity_rationale": "Random-draw replay and deduplication are otherwise well specified, but an undefined canonical participant order can produce different tie-context identities or audit records across implementers. This is meaningful MVP implementation risk for an in-scope reproducibility surface, but it does not make the whole core flow unbuildable."
+    },
+    {
+      "affected_sections": [
+        "specs/lifecycle.md: Authoritative Result Corrections",
+        "specs/lifecycle.md: Playoff Matchup Lifecycle",
+        "specs/invariants.md: Games and Results"
+      ],
+      "authority_impact": "minor",
+      "baseline_severity": "major",
+      "claim": "The playoff correction-conflict path alternates between requiring atomic correction-plus-resolution and allowing an unresolved blocked state, leaving replay and retry behavior ambiguous for the same administrative correction.",
+      "determinism_impact": "major",
+      "evidence": "The Authoritative Result Corrections section says a correction that would change a playoff participant after downstream authoritative outcomes 'must either be rejected before it is recorded or recorded with an explicit League Administrator resolution in the same administrative action.' The next sentence says 'Until that resolution is recorded, affected playoff advancement projections are blocked from further automatic advancement,' and later says 'the bracket is not internally consistent until the chosen resolution has been applied to every affected downstream participant slot.' The Playoff Matchup Lifecycle also references 'a blocked participant-resolution conflict' as a condition that prevents automatic advancement.",
+      "feedback_id": "fb_round6_det_002",
+      "in_scope": true,
+      "invariant_violated": "state_legality",
+      "issue_fingerprint": "8b9e7c3ed028076cd01ee62672a085551b49064e07249aea5ac0b061b72d4e64",
+      "issue_id": "iss_8b9e7c3ed028076c",
+      "issue_type": "conflicting_state_transition_semantics",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Choose and state one legal model. Either require the correction and resolution to be atomic, with failed or incomplete resolution rejected without mutating authoritative state, or define an explicit pending participant-resolution conflict state with its producer, allowed retries, idempotency key or duplicate-submission behavior, permitted reads, blocked writes, and terminal resolutions.",
+      "rubric_impact": "major",
+      "severity_rationale": "Correction cascades and deterministic playoff advancement are in scope. The draft gives strong surrounding rules, but this conflict leaves implementers to decide whether an unresolved correction-conflict state can exist and how retries behave, creating material divergence risk without fully blocking a first implementation."
+    }
+  ],
+  "profile": "determinism",
+  "reviewer": {
+    "model": "gpt-5-codex",
+    "name": "Codex Whetstone Determinism Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 6
+}

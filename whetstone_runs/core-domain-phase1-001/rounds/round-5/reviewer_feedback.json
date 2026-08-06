@@ -1,0 +1,60 @@
+{
+  "draft_hash": "15c3ca6a2aba64d8e2410a84ee37d59f28ca454e0805eefb3a40cf7eb88746c1",
+  "feedback": [
+    {
+      "affected_sections": [
+        "Core Mutation Authority",
+        "Standings Lifecycle",
+        "Standings Configuration",
+        "Authorization Configuration"
+      ],
+      "authority_impact": "major",
+      "baseline_severity": "major",
+      "claim": "The draft introduces League Administrator authority for persisted random-draw conflict resolution without defining what conflict can be administratively resolved or how that authority interacts with the deterministic one-result-per-tie-context rule.",
+      "determinism_impact": "major",
+      "evidence": "Standings Lifecycle and Standings Configuration say exactly one persisted draw result may exist for a stable tie context, duplicate attempts return the existing result or are rejected as a deterministic conflict without another draw. Authorization Configuration then says League Administrators hold Phase 1 authority for persisted random-draw conflict resolution, but no lifecycle, invariant, or configuration section defines a random-draw conflict-resolution state, permitted administrative outcomes, mutation limits, or audit semantics beyond the initial persisted draw audit.",
+      "feedback_id": "fb_round5_structural_001",
+      "in_scope": true,
+      "invariant_violated": "authority_boundary",
+      "issue_fingerprint": "7a425af225dc0a55fbf17f78e265ad15851ac161b3ba0135498921a8482fe577",
+      "issue_id": "iss_7a425af225dc0a55",
+      "issue_type": "authority_boundary_ambiguity",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Either remove persisted random-draw conflict resolution from League Administrator authority and state that duplicate or conflicting random-draw writes are only rejected/reused under the deterministic tie-context rule, or add a bounded lifecycle for administrative resolution that preserves replay determinism, identifies the conflict artifact, permitted resolution outcomes, audit requirements, and whether the original draw result may ever be changed.",
+      "rubric_impact": "major",
+      "severity_rationale": "Random draw is an in-scope standings and reproducibility surface. Leaving an administrative override named but undefined creates divergent implementations for a deterministic standings tiebreak artifact, though the normal standings path remains otherwise buildable."
+    },
+    {
+      "affected_sections": [
+        "Player Management Lifecycle",
+        "Core Mutation Authority",
+        "Authorization",
+        "Authorization Configuration"
+      ],
+      "authority_impact": "major",
+      "baseline_severity": "major",
+      "claim": "The Player Management Relationship lifecycle defines `requested -> approved -> revoked` but does not define who may create or submit the initial `requested` relationship, leaving the entry transition and mutation authority undefined.",
+      "determinism_impact": "minor",
+      "evidence": "Player Management Lifecycle lists the states and says only approved grants authority, League Administrators approve and revoke relationships, and revoked is terminal. Core Mutation Authority and Authorization Configuration also give League Administrators approval and revocation authority, but none of the sections identify the actor authorized to create a requested relationship or the required rejection behavior for unauthorized or duplicate requests.",
+      "feedback_id": "fb_round5_structural_002",
+      "in_scope": true,
+      "invariant_violated": "state_legality",
+      "issue_fingerprint": "51f06739eb4069ce2c53e484b253af641cebfea34ef4367af64e34bed4613238",
+      "issue_id": "iss_51f06739eb4069ce",
+      "issue_type": "state_machine_gap",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Add the entry rule for Player Management Relationships: identify who may create a `requested` relationship, whether League Administrators may create one directly as approved or must approve a request, how duplicate active requested/approved relationships for the same User Account and Player are handled, and confirm invalid entry attempts are rejected under the general lifecycle failure rule.",
+      "rubric_impact": "major",
+      "severity_rationale": "Scoped authorization and minimum audit behavior are in scope. Approval and revocation are defined, but the initial lifecycle transition is a required state-machine edge for the relationship to exist in an MVP implementation plan."
+    }
+  ],
+  "profile": "structural_integrity",
+  "reviewer": {
+    "model": "gpt-5-codex",
+    "name": "Codex Whetstone Structural Integrity Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 5
+}

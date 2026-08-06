@@ -1,0 +1,178 @@
+{
+  "action_taken": "injected_into_next_round_context",
+  "affected_sections": [
+    "Authoritative Result Corrections",
+    "Authority and Precedence",
+    "Configuration and Reproducibility",
+    "Game Lifecycle",
+    "Identity and Participation",
+    "Player Stat Line Lifecycle",
+    "Playoff Matchup Lifecycle",
+    "Roster Membership Lifecycle",
+    "Season Configuration Lifecycle",
+    "specs/config.md / Audit Configuration",
+    "specs/config.md / Authorization Configuration",
+    "specs/config.md :: Audit Configuration",
+    "specs/config.md#Audit Configuration",
+    "specs/invariants.md / Authorization",
+    "specs/invariants.md :: Games and Results",
+    "specs/invariants.md#Playoffs",
+    "specs/lifecycle.md / Authoritative Result Corrections",
+    "specs/lifecycle.md / Core Mutation Authority",
+    "specs/lifecycle.md / Role Assignment Lifecycle",
+    "specs/lifecycle.md :: Authoritative Result Corrections",
+    "specs/lifecycle.md#Authoritative Result Corrections"
+  ],
+  "contract_families": [
+    "artifact/report-contract",
+    "failure-semantics",
+    "mapping/precedence",
+    "ordering/determinism",
+    "replay-contract",
+    "schema/data-contract"
+  ],
+  "detected": true,
+  "draft_hash": "beb3ecc982171b343cc67263419544e9879445c94e1a6aa6bd0205bf27299aa9",
+  "generated_at": "2026-08-05T04:37:30.613287+00:00",
+  "lifecycle_status": "still_open",
+  "next_round_number": 28,
+  "profile": "vertical",
+  "profile_rounds_observed": 7,
+  "recent_window": 4,
+  "recommendation": "synthesis_pass_recommended",
+  "requires_operator_action": false,
+  "resolution_round_number": null,
+  "round_evidence": [
+    {
+      "affected_sections": [
+        "Authority and Precedence",
+        "Configuration and Reproducibility",
+        "Season Configuration Lifecycle",
+        "specs/config.md / Authorization Configuration",
+        "specs/invariants.md / Authorization",
+        "specs/lifecycle.md / Core Mutation Authority",
+        "specs/lifecycle.md / Role Assignment Lifecycle"
+      ],
+      "blocker_count": 0,
+      "contract_families": [
+        "mapping/precedence",
+        "ordering/determinism",
+        "replay-contract",
+        "schema/data-contract"
+      ],
+      "major_count": 2,
+      "minor_count": 0,
+      "round_number": 16,
+      "serious_feedback_ids": [
+        "structural_integrity:fb_round13_structural_001",
+        "determinism:fb_round14_det_001"
+      ]
+    },
+    {
+      "affected_sections": [
+        "Authoritative Result Corrections",
+        "Configuration and Reproducibility",
+        "Game Lifecycle",
+        "Identity and Participation",
+        "Player Stat Line Lifecycle",
+        "Playoff Matchup Lifecycle",
+        "Roster Membership Lifecycle",
+        "specs/config.md :: Audit Configuration",
+        "specs/invariants.md :: Games and Results",
+        "specs/lifecycle.md :: Authoritative Result Corrections"
+      ],
+      "blocker_count": 0,
+      "contract_families": [
+        "artifact/report-contract",
+        "failure-semantics",
+        "ordering/determinism",
+        "replay-contract",
+        "schema/data-contract"
+      ],
+      "major_count": 3,
+      "minor_count": 1,
+      "round_number": 20,
+      "serious_feedback_ids": [
+        "structural_integrity:fb_round17_structural_001",
+        "determinism:fb_round18_det_001",
+        "operability:fb_001"
+      ]
+    },
+    {
+      "affected_sections": [
+        "specs/config.md#Audit Configuration",
+        "specs/invariants.md#Playoffs",
+        "specs/lifecycle.md#Authoritative Result Corrections"
+      ],
+      "blocker_count": 0,
+      "contract_families": [
+        "artifact/report-contract",
+        "ordering/determinism",
+        "replay-contract"
+      ],
+      "major_count": 1,
+      "minor_count": 0,
+      "round_number": 24,
+      "serious_feedback_ids": [
+        "determinism:fb_001"
+      ]
+    },
+    {
+      "affected_sections": [
+        "specs/config.md / Audit Configuration",
+        "specs/lifecycle.md / Authoritative Result Corrections"
+      ],
+      "blocker_count": 0,
+      "contract_families": [
+        "artifact/report-contract",
+        "ordering/determinism",
+        "replay-contract"
+      ],
+      "major_count": 1,
+      "minor_count": 0,
+      "round_number": 27,
+      "serious_feedback_ids": [
+        "determinism:fb_round26_det_001"
+      ]
+    }
+  ],
+  "round_number": 27,
+  "serious_recent_rounds": 4,
+  "suspected_feedback_ids": [
+    "structural_integrity:fb_round13_structural_001",
+    "determinism:fb_round14_det_001",
+    "structural_integrity:fb_round17_structural_001",
+    "determinism:fb_round18_det_001",
+    "operability:fb_001",
+    "determinism:fb_001",
+    "determinism:fb_round26_det_001"
+  ],
+  "synthesis_pass_executed": false,
+  "synthesis_scope": {
+    "contract_families": [
+      "artifact/report-contract",
+      "failure-semantics",
+      "mapping/precedence",
+      "ordering/determinism",
+      "replay-contract",
+      "schema/data-contract"
+    ],
+    "instruction": "Suspend narrow patching for this surface. Ask the Editor for a bounded synthesis pass over the listed sections and contract families, preserving the full draft output contract.",
+    "sections": [
+      "Authoritative Result Corrections",
+      "Authority and Precedence",
+      "Configuration and Reproducibility",
+      "Game Lifecycle",
+      "Identity and Participation",
+      "Player Stat Line Lifecycle",
+      "Playoff Matchup Lifecycle",
+      "Roster Membership Lifecycle",
+      "Season Configuration Lifecycle",
+      "specs/config.md / Audit Configuration",
+      "specs/config.md / Authorization Configuration",
+      "specs/config.md :: Audit Configuration"
+    ]
+  },
+  "terminal_effect": "none",
+  "type": "EXPANDING_CONTRACT_SURFACE"
+}

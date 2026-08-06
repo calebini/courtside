@@ -1,0 +1,32 @@
+{
+  "draft_hash": "1b3087bbf7918b47cb40a3d650feb39329f2297a78452b0f4255b4bf148e9b22",
+  "round_number": 11,
+  "unresolved_issues": [
+    {
+      "affected_sections": [
+        "General Lifecycle Failure Rule",
+        "Core Mutation Authority",
+        "Authorization"
+      ],
+      "blocking_acceptance": true,
+      "claim": "Unauthorized mutation attempts are required to be rejected, but the draft does not define the required rejection report contents for authorization failures, leaving operators without a deterministic handoff record for denied mutations.",
+      "in_scope": true,
+      "issue_fingerprint": "3a37f4f668606e2501e627a3a430ec28fed33b2dbadf882df7da6f906b0fd0f8",
+      "issue_id": "iss_3a37f4f668606e25",
+      "normalized_severity": "major"
+    },
+    {
+      "affected_sections": [
+        "Game Lifecycle",
+        "Audit Configuration",
+        "Venues, Media, and Audit"
+      ],
+      "blocking_acceptance": false,
+      "claim": "The draft requires rescheduling to preserve history but does not define whether schedule/status changes are audited or what minimum history must be retained.",
+      "in_scope": true,
+      "issue_fingerprint": "bfe41a107f82bd328fcc84695bd88acfa33f4888fd167c445755324a6aeeaa2c",
+      "issue_id": "iss_bfe41a107f82bd32",
+      "normalized_severity": "minor"
+    }
+  ]
+}

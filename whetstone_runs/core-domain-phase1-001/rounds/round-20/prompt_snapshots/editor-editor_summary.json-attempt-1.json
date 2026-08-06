@@ -1,0 +1,49 @@
+{
+  "artifact_name": "editor_summary.json",
+  "attempt_number": 1,
+  "client": {
+    "model": "gpt-5.5",
+    "name": "codex",
+    "version": "0.142.0"
+  },
+  "client_role": "editor",
+  "config_snapshot": {
+    "reference_context": {
+      "files": []
+    },
+    "rubric_label": null,
+    "rubric_manifest_path": null,
+    "rubric_profile": "mvp-v1",
+    "rubric_source": "builtin",
+    "target_mode": "strict",
+    "target_phase": "mid",
+    "workflow": "mvp"
+  },
+  "context_files": [
+    {
+      "label": "draft_before",
+      "path": "rounds/round-20/context/draft_before.md",
+      "sha256": "f6850d2448634a0d2aa1099b7e21b6f8db60faee35f453b03f42fcc323203c32"
+    },
+    {
+      "label": "reviewer_feedback",
+      "path": "rounds/round-20/context/reviewer_feedback.json",
+      "sha256": "051a68043f9e769984d2a5e151b0d5baf4dce8333ef69380d8f058eee8dd4cc8"
+    },
+    {
+      "label": "scope_contract",
+      "path": "rounds/round-20/context/scope_contract.json",
+      "sha256": "37bd9058274086b49f6decce85ff42201c0164165bf692988d7e991200e97f81"
+    },
+    {
+      "label": "contract_surface_report",
+      "path": "rounds/round-20/context/contract_surface_report.json",
+      "sha256": "1a77639950756b350d7f08363b6f32361cae188e67378ec589cecaf7c007f028"
+    }
+  ],
+  "phase": "phase_1",
+  "profile": "vertical",
+  "prompt_text": "You are the Whetstone editor.\nApply or decline feedback according to the spec authority model.\nUse only the Draft and Reviewer feedback JSON provided in this prompt or in the listed context files.\nIf context files are listed, you MUST read those files and may inspect only those files.\nWhen needed, use read-only client-native file access or read-only shell commands only for the listed context file paths.\nDo not inspect unrelated repository files, use web search, or call tools for anything except reading listed context files.\nDo not rely on external documents, ambient workspace context, or prior run artifacts.\n\nReturn only a single JSON object matching editor_summary.json.\nDo not return markdown, explanation, fenced code, an editor object, or a decisions array.\nThe top-level object MUST set round_number to 20.\nThe draft_before_hash MUST be f6850d2448634a0d2aa1099b7e21b6f8db60faee35f453b03f42fcc323203c32.\n\nScope contract rules:\n- The scope contract is authoritative for this run.\n- Do not implement feedback that exceeds the approved scope contract.\n- Decline out-of-scope feedback with decline_reason out_of_scope.\n- Decline deferred feedback with deferred_to_later_round when the scope contract defers it to a later phase or profile.\n- Preserve operator intent; do not silently promote deferred surfaces into scope.\n\nTimeout-aware bounded synthesis guidance:\n- The previous Editor attempt timed out or this profile shows EXPANDING_CONTRACT_SURFACE.\n- Read the contract surface report listed in context files.\n- Prefer a bounded synthesis over the report's listed sections and contract families instead of broad unrelated rewriting.\n- Preserve global coherence and still return draft_after_content as the complete revised draft text.\n- Do not omit unrelated sections from draft_after_content.\nThis live round may mutate the draft after validation.\nIn mutating mode, draft_after_content MUST be a string; do not return null.\nIf you change the draft, include draft_after_content as the complete revised draft text.\nIf you make no draft changes, set draft_after_content to the original draft text.\nIf any feedback is accepted, modified, or resolved, draft_after_content MUST contain the complete resulting draft.\nWhetstone computes draft_after_hash from draft_after_content; set draft_after_hash to null if no explicit hash was provided above.\nThe top-level object MUST include exactly these fields:\n- round_number\n- draft_before_hash\n- draft_after_hash\n- accepted_feedback_ids\n- modified_feedback_ids\n- declined_feedback\n- created_conflict_ids\n- resolved_issue_ids\n- unresolved_issue_ids\n- draft_after_content\n\nUse accepted_feedback_ids for feedback accepted as written.\nUse modified_feedback_ids for feedback accepted in substance but implemented differently.\nUse declined_feedback only for feedback declined under the allowed decline taxonomy.\nUse resolved_issue_ids only when the current draft_after resolves the issue.\nUse unresolved_issue_ids for issues still unresolved in the current draft_after.\nIf there are no entries for an array field, return an empty array for that field.\n\nContext files:\n- Read the files listed in this section before producing the JSON response.\n- Do not read any unlisted file.\n- Reviewer feedback JSON path: rounds/round-20/context/reviewer_feedback.json\n- Draft path: rounds/round-20/context/draft_before.md\n- Contract surface report path: rounds/round-20/context/contract_surface_report.json\n- Scope contract path: rounds/round-20/context/scope_contract.json\nUse the listed context files as authoritative input content.",
+  "timestamp": "2026-08-05T04:26:27.953994+00:00",
+  "validation_errors": []
+}

@@ -1,0 +1,58 @@
+{
+  "draft_hash": "beb3ecc982171b343cc67263419544e9879445c94e1a6aa6bd0205bf27299aa9",
+  "feedback": [
+    {
+      "affected_sections": [
+        "Season Configuration Lifecycle",
+        "Authority and Precedence",
+        "Configuration and Reproducibility"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "major",
+      "claim": "The frozen Season configuration basis identity is required for replay and concurrent first-freeze behavior, but the draft does not define enough canonicalization rules to ensure two implementations hash the same result-affecting configuration content the same way.",
+      "determinism_impact": "major",
+      "evidence": "The draft says the first-freeze basis is the 'canonical content identity of exact result-affecting values' and lists included and excluded fields, but it does not define how defaults are materialized, how ordered versus unordered collections are normalized, how numeric values and enum tokens are represented, or how absent optional values differ from explicit defaults. The scope contract keeps 'standings inputs, ranking, random draw, and reproducibility' and 'frozen configuration amendment and correction cascades' in scope at required_fields depth.",
+      "feedback_id": "fb_round29_det_001",
+      "in_scope": true,
+      "invariant_violated": "version_lineage",
+      "issue_fingerprint": "df2874807753441808efaff5f5a4fd07c344927304152adc4aab4ac31da171ee",
+      "issue_id": "iss_df28748077534418",
+      "issue_type": "underdefined_canonical_identity",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Add technology-neutral canonicalization requirements for the result-affecting configuration basis: compute identity after resolving defaults and Season overrides, preserve explicitly ordered fields such as ranking criteria and playoff Rounds, sort unordered participant or adjustment sets by immutable canonical domain identity, normalize enum tokens and numeric score/point values, and specify whether absent values equal explicit defaults. The spec can still defer the concrete hash algorithm or serialization format.",
+      "rubric_impact": "major",
+      "severity_rationale": "The included field set is strong, so this does not block the MVP outright, but missing canonicalization rules can cause divergent freeze reuse or rejection decisions across implementers and replays."
+    },
+    {
+      "affected_sections": [
+        "Standings Lifecycle",
+        "Standings Configuration",
+        "Standings"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "major",
+      "claim": "Duplicate random-draw attempts are allowed to either return the existing draw result or be rejected as a deterministic conflict, which leaves replay behavior observably divergent for the same tie context.",
+      "determinism_impact": "major",
+      "evidence": "The draft states, 'Duplicate attempts return the existing result or are rejected as deterministic conflicts without another draw,' and the invariants similarly allow duplicates to 'reuse the existing result or are rejected without another draw.' Under the determinism profile, retries, replays, idempotency, and deterministic failure states must have a single required outcome or a precise distinction between replay and conflict cases.",
+      "feedback_id": "fb_round29_det_002",
+      "in_scope": true,
+      "invariant_violated": "replay_idempotency",
+      "issue_fingerprint": "579e9ba9badb20f61d009f308451539a3738b72a9465f705926dbddf79c5aaeb",
+      "issue_id": "iss_579e9ba9badb20f6",
+      "issue_type": "ambiguous_replay_outcome",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Replace the open 'return or reject' choice with a deterministic split, such as: an idempotent replay or recalculation for an existing tie context returns the persisted draw result and draw artifact identity; an attempt to create a different draw result for the same tie context is rejected as a deterministic conflict without drawing. Define the rejection report fields by reference to the general failure rule.",
+      "rubric_impact": "major",
+      "severity_rationale": "The persisted draw itself is stable, but replay callers can see different success-versus-rejection behavior across compliant implementations, which is a meaningful MVP determinism and idempotency risk."
+    }
+  ],
+  "profile": "determinism",
+  "reviewer": {
+    "model": "GPT-5",
+    "name": "Codex Whetstone Determinism Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 29
+}

@@ -1,0 +1,21 @@
+{
+  "draft_hash": "15c3ca6a2aba64d8e2410a84ee37d59f28ca454e0805eefb3a40cf7eb88746c1",
+  "round_number": 7,
+  "unresolved_issues": [
+    {
+      "affected_sections": [
+        "General Lifecycle Failure Rule",
+        "Identity and Participation",
+        "Configuration and Reproducibility",
+        "Game and Venue Configuration",
+        "Localization Configuration"
+      ],
+      "blocking_acceptance": true,
+      "claim": "The draft defines rejection reporting for illegal lifecycle transitions, but it does not uniformly define reject-and-report behavior for core invariant and configuration validation failures that are required for safe MVP operation.",
+      "in_scope": true,
+      "issue_fingerprint": "cb60314a866055cf7ab072b108486b07ece6b14c00d60f534d6c649589b2f4d3",
+      "issue_id": "iss_cb60314a866055cf",
+      "normalized_severity": "major"
+    }
+  ]
+}

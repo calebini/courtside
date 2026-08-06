@@ -1,0 +1,84 @@
+{
+  "action_taken": "none",
+  "behavior": "observability_only",
+  "components": [
+    {
+      "byte_count": 57684,
+      "char_count": 57530,
+      "estimated_tokens": 14383,
+      "exists": true,
+      "kind": "mutable_draft",
+      "label": "draft_before",
+      "path": "rounds/round-27/context/draft_before.md",
+      "read_error": "",
+      "required": true,
+      "role": "draft",
+      "sha256": "d7e18213592c216ddcc684aa483760608dbdff686d1c0596a33543fa8ee70c11"
+    },
+    {
+      "byte_count": 2801,
+      "char_count": 2801,
+      "estimated_tokens": 701,
+      "exists": true,
+      "kind": "reviewer_feedback",
+      "label": "reviewer_feedback",
+      "path": "rounds/round-27/context/reviewer_feedback.json",
+      "read_error": "",
+      "required": true,
+      "role": "reviewer_feedback",
+      "sha256": "47fcf6afe3fd857fb68843432cdbea27c21a812e1f565b8021e769b244b761b1"
+    },
+    {
+      "byte_count": 15268,
+      "char_count": 15268,
+      "estimated_tokens": 3817,
+      "exists": true,
+      "kind": "scope_contract",
+      "label": "scope_contract",
+      "path": "rounds/round-27/context/scope_contract.json",
+      "read_error": "",
+      "required": true,
+      "role": "scope_contract",
+      "sha256": "37bd9058274086b49f6decce85ff42201c0164165bf692988d7e991200e97f81"
+    },
+    {
+      "byte_count": 6896,
+      "char_count": 6896,
+      "estimated_tokens": 1724,
+      "exists": true,
+      "kind": "contract_surface_report",
+      "label": "contract_surface_report",
+      "path": "rounds/round-27/context/contract_surface_report.json",
+      "read_error": "",
+      "required": true,
+      "role": "contract_surface_report",
+      "sha256": "58ef30dea77904849f538c61d1362b34468c1a6de18ec0e9c9ec13c0ecda41c0"
+    }
+  ],
+  "estimate_method": "ceil(char_count / 4); advisory only, not provider tokenizer output",
+  "generated_at": "2026-08-05T04:34:48.798633+00:00",
+  "phase": "phase_1",
+  "profile": "vertical",
+  "referenced_context": {
+    "reference_count": 0,
+    "references": []
+  },
+  "report_scope": "round_prompt_context",
+  "root": "/Users/Shared/Agent-Workspace/repos/personal/courtside/whetstone_runs/core-domain-phase1-001",
+  "round_number": 27,
+  "schema_version": "context-pressure-v1",
+  "thresholds": {
+    "component_warning_bytes": 300000,
+    "reference_count_warning": 8,
+    "total_warning_bytes": 800000
+  },
+  "totals": {
+    "byte_count": 82649,
+    "char_count": 82495,
+    "component_count": 4,
+    "estimated_tokens": 20625,
+    "existing_component_count": 4,
+    "reference_context_count": 0
+  },
+  "warnings": []
+}

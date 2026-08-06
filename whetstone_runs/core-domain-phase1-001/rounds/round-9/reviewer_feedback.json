@@ -1,0 +1,35 @@
+{
+  "draft_hash": "1b3087bbf7918b47cb40a3d650feb39329f2297a78452b0f4255b4bf148e9b22",
+  "feedback": [
+    {
+      "affected_sections": [
+        "specs/lifecycle.md: Season Configuration Lifecycle",
+        "specs/config.md: Playoff Configuration",
+        "specs/config.md: Authorization Configuration"
+      ],
+      "authority_impact": "major",
+      "baseline_severity": "major",
+      "claim": "Frozen Season configuration amendments are authorized and versioned, but the draft does not define legal amendment boundaries or invalid-amendment handling when an amended result-affecting configuration would conflict with existing authoritative playoff state.",
+      "determinism_impact": "major",
+      "evidence": "The Season Configuration Lifecycle says a League Administrator may amend frozen configuration by creating a new version and Audit Record, and that recalculation under an amended version applies to every affected derived projection. The same section defines result-affecting configuration to include playoff Round structure, aggregate advancement, and aggregate-tiebreak policies. Playoff correction conflicts caused by Game-result corrections have explicit reject-or-resolve handling, but no equivalent rule states whether a frozen configuration amendment that changes bracket structure, configured Games per Matchup, slot sources, advancement rule, or tiebreak policy after authoritative playoff Games is rejected, accepted with a resolution report, or allowed to halt advancement.",
+      "feedback_id": "fb_001",
+      "in_scope": true,
+      "invariant_violated": "state_legality",
+      "issue_fingerprint": "da8309e8d3e4e5397393725bc4af8fca2bbe560519875aa9e68d5073229e3360",
+      "issue_id": "iss_da8309e8d3e4e539",
+      "issue_type": "state_machine_legality",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Add a legality rule for frozen result-affecting configuration amendments after authoritative outcomes exist. At minimum, specify which playoff-affecting amendments are prohibited once dependent authoritative Games exist, and require any permitted amendment that changes participant slots, Matchup completion, aggregate outcome, or downstream advancement to use the same preserve-state rejection or same-action administrative resolution semantics already defined for playoff correction conflicts.",
+      "rubric_impact": "major",
+      "severity_rationale": "This is in scope under the frozen-configuration amendment and correction-cascade surface. It is major because the main authority and versioning model exists, but this missing transition rule can cause divergent implementations or corrupt derived playoff state during an authorized administrative amendment."
+    }
+  ],
+  "profile": "structural_integrity",
+  "reviewer": {
+    "model": "gpt-5-codex",
+    "name": "Codex Structural Integrity Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 9
+}

@@ -1,0 +1,35 @@
+{
+  "draft_hash": "32a234d838a061270e2d31ff65dab7efb01e5acfb14896bcfb460485aad3de93",
+  "feedback": [
+    {
+      "affected_sections": [
+        "Game Lifecycle",
+        "Game and Venue Configuration",
+        "General Lifecycle Failure Rule"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "major",
+      "claim": "The core scheduled-Game rescheduling flow requires unambiguous scheduled instants but does not define the validation and rejection behavior for ambiguous or nonexistent local times at daylight-saving boundaries.",
+      "determinism_impact": "major",
+      "evidence": "The scope contract makes direct scheduled-Game rescheduling with required history and deterministic invalid-mutation handling a must core flow. The draft says every scheduled instant is interpreted in the League configured IANA timezone and stored as an unambiguous instant, and that stored scheduled instants must remain unambiguous across daylight-saving transitions. It does not say whether an administratively entered ambiguous or nonexistent local time is rejected, must include an explicit offset/disambiguator, or is resolved by a deterministic rule. The General Lifecycle Failure Rule covers validation failures only after a violated rule is identifiable.",
+      "feedback_id": "fb_operability_011_001",
+      "in_scope": true,
+      "invariant_violated": "failure_handling",
+      "issue_fingerprint": "46103881129b289e53028391248b0fe5bea3759a40e547b025266df52119fa27",
+      "issue_id": "iss_46103881129b289e",
+      "issue_type": "validation_failure",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Add an explicit scheduling validation rule for administrative scheduled-instant entry and rescheduling: define the accepted input condition for DST overlap/gap cases, require rejection without mutation when the input cannot identify one unambiguous instant, and require the rejection report to name the Game, attempted scheduled value, League timezone, actor, violated scheduling rule, and confirmation that schedule history and authoritative Game state were unchanged.",
+      "rubric_impact": "major",
+      "severity_rationale": "This is in scope because direct rescheduling and deterministic invalid-mutation handling are a must core flow. It is major rather than blocker because the draft already requires unambiguous persisted instants and general preserve-state rejection, but implementers still have to guess the operational validation behavior for a common scheduling failure mode explicitly surfaced by the timezone requirement."
+    }
+  ],
+  "profile": "operability",
+  "reviewer": {
+    "model": "gpt-5-codex",
+    "name": "Codex Whetstone Operability Reviewer",
+    "version": "1.0"
+  },
+  "round_number": 11
+}

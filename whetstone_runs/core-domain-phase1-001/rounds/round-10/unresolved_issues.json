@@ -1,0 +1,31 @@
+{
+  "draft_hash": "1b3087bbf7918b47cb40a3d650feb39329f2297a78452b0f4255b4bf148e9b22",
+  "round_number": 10,
+  "unresolved_issues": [
+    {
+      "affected_sections": [
+        "specs/lifecycle.md#Season Configuration Lifecycle",
+        "specs/config.md#Authority and Precedence",
+        "specs/invariants.md#Configuration and Reproducibility"
+      ],
+      "blocking_acceptance": true,
+      "claim": "The configuration-freeze rule does not define idempotent or concurrent behavior when the first authoritative Season Game outcome is accepted, so repeated or concurrent finalization attempts could create different frozen configuration versions for the same Season.",
+      "in_scope": true,
+      "issue_fingerprint": "6c1c47735ed40d0e5fe776611b4d839562e96a33fdb0829169657fc41d736f5b",
+      "issue_id": "iss_6c1c47735ed40d0e",
+      "normalized_severity": "major"
+    },
+    {
+      "affected_sections": [
+        "specs/lifecycle.md#Standings Lifecycle",
+        "specs/config.md#Standings Configuration"
+      ],
+      "blocking_acceptance": true,
+      "claim": "The stable random-draw tie-context identity depends on comparing Season Team canonical identities by \"normalized codepoint order,\" but the normalization rule is undefined, leaving tie-context identity and draw reuse non-portable across implementers.",
+      "in_scope": true,
+      "issue_fingerprint": "a81267ad27177372508f579d9e7d8c6d3bef96eb680249fd52ef3f574769f71d",
+      "issue_id": "iss_a81267ad27177372",
+      "normalized_severity": "major"
+    }
+  ]
+}

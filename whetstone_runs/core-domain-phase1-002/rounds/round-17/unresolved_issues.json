@@ -1,0 +1,18 @@
+{
+  "draft_hash": "18e7e47f9e7e53bcdf0ad9e31e8345a967162c7b518f9a4084a3fda2028645d5",
+  "round_number": 17,
+  "unresolved_issues": [
+    {
+      "affected_sections": [
+        "Authoritative Result Corrections",
+        "Audit Configuration"
+      ],
+      "blocking_acceptance": true,
+      "claim": "The accepted playoff correction-resolution identity can conflate distinct later corrections because it includes the corrected Game and new corrected authoritative value, but not the prior authoritative value, prior result version, or correction sequence being changed from.",
+      "in_scope": true,
+      "issue_fingerprint": "4a02ddfd66aa6e14ff188465f099f60f6fbd16d6168fea367f8ac06952d7e408",
+      "issue_id": "iss_4a02ddfd66aa6e14",
+      "normalized_severity": "major"
+    }
+  ]
+}

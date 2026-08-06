@@ -1,0 +1,56 @@
+{
+  "draft_hash": "bd4ea0b1adb0beaf5b8b79461cf64dfac8fa3d378ffaa9d4d60e6a345451efcb",
+  "feedback": [
+    {
+      "affected_sections": [
+        "Whetstone Change Audit Brief",
+        "Audit Notes / Audit Mode"
+      ],
+      "authority_impact": "minor",
+      "baseline_severity": "minor",
+      "claim": "The draft carries conflicting lifecycle labels for the requested review: the outer brief is being processed as Phase 1, while the included audit notes explicitly instruct the reviewer to run audit-change and not Phase 1.",
+      "determinism_impact": null,
+      "evidence": "The request metadata says `Phase: phase_1`, but the draft body says `Workflow: audit_change` and the audit notes say `Run a lightweight Whetstone multi-document seed-spec audit-change assessment, not Phase 1, Phase 2, convergence review, or an Editor workflow.`",
+      "feedback_id": "fb_001",
+      "in_scope": true,
+      "invariant_violated": "scope_control",
+      "issue_fingerprint": "a4e6911949f374586c53a9e215458f4b8964d78e9066190935c9f6bee08ebe9f",
+      "issue_id": "iss_a4e6911949f37458",
+      "issue_type": "artifact_reference_consistency",
+      "normalized_severity": "minor",
+      "oscillation_key": null,
+      "recommended_change": "Align the review lifecycle terminology in the brief so the same artifact is not simultaneously identified as Phase 1 and not Phase 1. If this is an audit-change run reviewed during a Phase 1 reviewer pass, name those as separate concepts, for example `Runner phase: phase_1 reviewer pass` and `Audit workflow: audit_change`.",
+      "rubric_impact": "minor",
+      "severity_rationale": "This directly affects the stated audit boundary and can cause reviewers or automation to apply the wrong scope, but it is a small terminology/artifact-label correction rather than a domain-policy change."
+    },
+    {
+      "affected_sections": [
+        "specs/lifecycle.md / Playoff Matchup Lifecycle",
+        "specs/invariants.md / Playoffs"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "minor",
+      "claim": "The aggregate overtime rule is clear in lifecycle.md but less precise in invariants.md, where `a tie after regulation in the final configured Game` can be read as an individual Game-score tie instead of the intended Matchup aggregate tie.",
+      "determinism_impact": "minor",
+      "evidence": "lifecycle.md says `If aggregate scores are tied at the end of regulation in the final configured Game, that Game continues... even when the regulation score of that individual Game was not tied.` invariants.md says `Under the default aggregate-tiebreak policy, a tie after regulation in the final configured Game is resolved...` without repeating that the tie is the Matchup aggregate tie.",
+      "feedback_id": "fb_002",
+      "in_scope": true,
+      "invariant_violated": "deterministic_behavior",
+      "issue_fingerprint": "365258ed4f48099c676c2433de31f764c0298b6b4642eea0fa753935be611dbe",
+      "issue_id": "iss_365258ed4f48099c",
+      "issue_type": "terminology_consistency",
+      "normalized_severity": "minor",
+      "oscillation_key": null,
+      "recommended_change": "Change the invariant wording to match lifecycle.md, for example: `Under the default aggregate-tiebreak policy, a Matchup aggregate tie after regulation in the final configured Game is resolved by continuing that Game through overtime until the aggregate tie is broken, even if the individual Game regulation score was not tied.`",
+      "rubric_impact": "minor",
+      "severity_rationale": "The intended policy is recoverable from lifecycle.md, but the invariant wording is a source-of-truth statement and should not leave room for a contradictory implementation trigger."
+    }
+  ],
+  "profile": "consistency",
+  "reviewer": {
+    "model": "gpt-5-codex",
+    "name": "Codex Whetstone Consistency Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 1
+}

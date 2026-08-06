@@ -1,0 +1,32 @@
+{
+  "draft_hash": "15c3ca6a2aba64d8e2410a84ee37d59f28ca454e0805eefb3a40cf7eb88746c1",
+  "round_number": 6,
+  "unresolved_issues": [
+    {
+      "affected_sections": [
+        "specs/lifecycle.md: Standings Lifecycle",
+        "specs/config.md: Standings Configuration",
+        "specs/invariants.md: Standings"
+      ],
+      "blocking_acceptance": true,
+      "claim": "The stable random-draw tie context depends on 'canonical identity order', but the draft does not define the canonical ordering rule implementations must use for Season Team identities.",
+      "in_scope": true,
+      "issue_fingerprint": "2484d272d633c8bf418c1c2cbdb661bd419f9cbea2a01eb175441e55dde9d428",
+      "issue_id": "iss_2484d272d633c8bf",
+      "normalized_severity": "major"
+    },
+    {
+      "affected_sections": [
+        "specs/lifecycle.md: Authoritative Result Corrections",
+        "specs/lifecycle.md: Playoff Matchup Lifecycle",
+        "specs/invariants.md: Games and Results"
+      ],
+      "blocking_acceptance": true,
+      "claim": "The playoff correction-conflict path alternates between requiring atomic correction-plus-resolution and allowing an unresolved blocked state, leaving replay and retry behavior ambiguous for the same administrative correction.",
+      "in_scope": true,
+      "issue_fingerprint": "8b9e7c3ed028076cd01ee62672a085551b49064e07249aea5ac0b061b72d4e64",
+      "issue_id": "iss_8b9e7c3ed028076c",
+      "normalized_severity": "major"
+    }
+  ]
+}

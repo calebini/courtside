@@ -1,0 +1,33 @@
+{
+  "draft_hash": "f6850d2448634a0d2aa1099b7e21b6f8db60faee35f453b03f42fcc323203c32",
+  "round_number": 17,
+  "unresolved_issues": [
+    {
+      "affected_sections": [
+        "Roster Membership Lifecycle",
+        "Player Stat Line Lifecycle",
+        "Game Lifecycle",
+        "Identity and Participation"
+      ],
+      "blocking_acceptance": true,
+      "claim": "The draft does not define which Game time anchors roster eligibility when a Game is rescheduled, postponed, started, finalized, or corrected, leaving Player Stat Line attribution and transfer legality ambiguous.",
+      "in_scope": true,
+      "issue_fingerprint": "1bc3be56010020da12103945728096f298eae30aa63448097241adc7e4d5f7d9",
+      "issue_id": "iss_1bc3be56010020da",
+      "normalized_severity": "major"
+    },
+    {
+      "affected_sections": [
+        "Game Lifecycle",
+        "Competition Transitions",
+        "Scheduling Transitions"
+      ],
+      "blocking_acceptance": false,
+      "claim": "The allowed source states for transition to `forfeit` are less explicit than the rest of the Game lifecycle, which can cause inconsistent interpretation of whether an `in_progress` Game may become `forfeit`.",
+      "in_scope": true,
+      "issue_fingerprint": "89e88887ffeb25d3481a6ee0663f884cb71f61c2778cc1004dceee281a6b0e4b",
+      "issue_id": "iss_89e88887ffeb25d3",
+      "normalized_severity": "minor"
+    }
+  ]
+}

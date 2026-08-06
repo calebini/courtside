@@ -1,0 +1,199 @@
+{
+  "acceptance_floor": {
+    "may_defer": [
+      "Exhaustive error-code registries",
+      "Non-core operational runbooks",
+      "Post-MVP recovery branches"
+    ],
+    "minimum_buildable_result": "The follow-up is good enough when all balanced_mvp Phase 1 profiles verify the same candidate without blocker or major findings, no approved product decision is silently changed, and Whetstone reports PHASE_1_STABLE.",
+    "must_answer": [
+      "What is the core MVP flow?",
+      "What inputs, outputs, artifacts, and obvious failure categories are required?"
+    ]
+  },
+  "approval": {
+    "approved": true,
+    "approved_at": "2026-08-05T14:14:06.659512+00:00",
+    "approved_by": "operator"
+  },
+  "core_flows": [
+    {
+      "description": "Verify direct scheduled-Game rescheduling with required history and deterministic invalid-mutation handling.",
+      "id": "flow-1",
+      "priority": "must"
+    },
+    {
+      "description": "Verify the approved Player Management surface for display name and profile photo, including self-service photo updates by linked individual members.",
+      "id": "flow-2",
+      "priority": "must"
+    },
+    {
+      "description": "Verify administrator bootstrap follow-on governance while preventing removal of the final active League Administrator.",
+      "id": "flow-3",
+      "priority": "must"
+    },
+    {
+      "description": "Verify deterministic frozen-configuration identity and idempotent random-draw replay.",
+      "id": "flow-4",
+      "priority": "must"
+    },
+    {
+      "description": "Verify roster eligibility anchoring and both audited downstream playoff-correction resolutions.",
+      "id": "flow-5",
+      "priority": "must"
+    },
+    {
+      "description": "Preserve every previously stabilized identity, lifecycle, standings, playoff, audit, localization, Venue, and Media boundary.",
+      "id": "flow-6",
+      "priority": "should"
+    }
+  ],
+  "core_outcome": "Verify that the operator-approved Courtside Phase 1 candidate is structurally complete, deterministic, and operable enough to plan schema and API work without guessing.",
+  "deferral_rules": [
+    {
+      "action": "defer",
+      "decline_reason": "out_of_scope",
+      "id": "rule-1",
+      "rationale": "Defer any request that prescribes schema, API, framework, vendor, deployment, or UI choices.",
+      "trigger": "Defer any request that prescribes schema, API, framework, vendor, deployment, or UI choices."
+    },
+    {
+      "action": "allow_if_core",
+      "decline_reason": "deferred_to_later_round",
+      "id": "rule-2",
+      "rationale": "Do not reopen operator-approved product policies unless they are internally contradictory or impossible to implement.",
+      "trigger": "Do not reopen operator-approved product policies unless they are internally contradictory or impossible to implement."
+    },
+    {
+      "action": "allow_if_core",
+      "decline_reason": "deferred_to_later_round",
+      "id": "rule-3",
+      "rationale": "Allow reviewer pressure on structural completeness, deterministic identity, idempotency, legal transitions, authorization boundaries, and obvious safe failure behavior.",
+      "trigger": "Allow reviewer pressure on structural completeness, deterministic identity, idempotency, legal transitions, authorization boundaries, and obvious safe failure behavior."
+    },
+    {
+      "action": "allow_if_core",
+      "decline_reason": "deferred_to_later_round",
+      "id": "rule-4",
+      "rationale": "Require operator review before adding any domain concept, lifecycle state, role, ranking criterion, playoff policy, or authority beyond the approved candidate.",
+      "trigger": "Require operator review before adding any domain concept, lifecycle state, role, ranking criterion, playoff policy, or authority beyond the approved candidate."
+    }
+  ],
+  "generated_at": "2026-08-05T14:14:06.659512+00:00",
+  "operator_decisions": [
+    {
+      "answer": "# Whetstone MVP Scope Notes\n\n## Core Outcome\n\nVerify that the operator-approved Courtside Phase 1 candidate is structurally complete, deterministic, and operable enough to plan schema and API work without guessing.\n\n## Primary Actor Or Consumer\n\nAn engineer designing the first Courtside schema and API boundary from the ratified domain specifications.\n\n## Core Flows\n\n- must: Verify direct scheduled-Game rescheduling with required history and deterministic invalid-mutation handling.\n- must: Verify the approved Player Management surface for display name and profile photo, including self-service photo updates by linked individual members.\n- must: Verify administrator bootstrap follow-on governance while preventing removal of the final active League Administrator.\n- must: Verify deterministic frozen-configuration identity and idempotent random-draw replay.\n- must: Verify roster eligibility anchoring and both audited downstream playoff-correction resolutions.\n- should: Preserve every previously stabilized identity, lifecycle, standings, playoff, audit, localization, Venue, and Media boundary.\n\n## In Scope\n\n- residual structural integrity findings from the prior run: required_fields\n- residual determinism findings from the prior run: required_fields\n- approved operator policy decisions: required_fields\n- obvious operability regressions introduced by the decisions: required_fields\n- preservation of the existing domain boundary: required_fields\n\n## Deferred / Out Of Scope\n\n- database schema and indexes\n- API endpoints, transports, and event schemas\n- programming language, framework, authentication provider, hosting, and deployment\n- complete basketball statistics vocabulary\n- UI layout and editorial translation workflow\n- divisions, conferences, inter-league competition, and cross-league Player identity\n- exhaustive error-code registry and operational runbooks\n- Phase 2 convergence declaration\n- mutation of original Courtside source specifications\n\n## Expansion Rules\n\n- Defer any request that prescribes schema, API, framework, vendor, deployment, or UI choices.\n- Do not reopen operator-approved product policies unless they are internally contradictory or impossible to implement.\n- Allow reviewer pressure on structural completeness, deterministic identity, idempotency, legal transitions, authorization boundaries, and obvious safe failure behavior.\n- Require operator review before adding any domain concept, lifecycle state, role, ranking criterion, playoff policy, or authority beyond the approved candidate.\n\n## Good Enough\n\nThe follow-up is good enough when all balanced_mvp Phase 1 profiles verify the same candidate without blocker or major findings, no approved product decision is silently changed, and Whetstone reports PHASE_1_STABLE.",
+      "question": "What operator intent did the notes provide?",
+      "rationale": "Preserve original scope notes beside canonical fields."
+    }
+  ],
+  "primary_actor_or_consumer": "An engineer designing the first Courtside schema and API boundary from the ratified domain specifications.",
+  "readiness_target": "mvp",
+  "review_pressure_limits": {
+    "expansion_policy": "conservative",
+    "max_depth_default": "required_fields"
+  },
+  "schema_version": "scope-contract-v1",
+  "scope_surfaces": [
+    {
+      "id": "residual-structural-integrity-findings-from-the-prior-run",
+      "name": "residual structural integrity findings from the prior run",
+      "rationale": "residual structural integrity findings from the prior run: required_fields",
+      "required_depth": "required_fields",
+      "status": "in_scope"
+    },
+    {
+      "id": "residual-determinism-findings-from-the-prior-run",
+      "name": "residual determinism findings from the prior run",
+      "rationale": "residual determinism findings from the prior run: required_fields",
+      "required_depth": "required_fields",
+      "status": "in_scope"
+    },
+    {
+      "id": "approved-operator-policy-decisions",
+      "name": "approved operator policy decisions",
+      "rationale": "approved operator policy decisions: required_fields",
+      "required_depth": "required_fields",
+      "status": "in_scope"
+    },
+    {
+      "id": "obvious-operability-regressions-introduced-by-the-decisions",
+      "name": "obvious operability regressions introduced by the decisions",
+      "rationale": "obvious operability regressions introduced by the decisions: required_fields",
+      "required_depth": "required_fields",
+      "status": "in_scope"
+    },
+    {
+      "id": "preservation-of-the-existing-domain-boundary",
+      "name": "preservation of the existing domain boundary",
+      "rationale": "preservation of the existing domain boundary: required_fields",
+      "required_depth": "required_fields",
+      "status": "in_scope"
+    },
+    {
+      "id": "database-schema-and-indexes",
+      "name": "database schema and indexes",
+      "rationale": "database schema and indexes",
+      "required_depth": "mention",
+      "status": "deferred"
+    },
+    {
+      "id": "api-endpoints-transports-and-event-schemas",
+      "name": "API endpoints, transports, and event schemas",
+      "rationale": "API endpoints, transports, and event schemas",
+      "required_depth": "mention",
+      "status": "deferred"
+    },
+    {
+      "id": "programming-language-framework-authentication-provider-hosting-and-deployment",
+      "name": "programming language, framework, authentication provider, hosting, and deployment",
+      "rationale": "programming language, framework, authentication provider, hosting, and deployment",
+      "required_depth": "mention",
+      "status": "deferred"
+    },
+    {
+      "id": "complete-basketball-statistics-vocabulary",
+      "name": "complete basketball statistics vocabulary",
+      "rationale": "complete basketball statistics vocabulary",
+      "required_depth": "mention",
+      "status": "deferred"
+    },
+    {
+      "id": "ui-layout-and-editorial-translation-workflow",
+      "name": "UI layout and editorial translation workflow",
+      "rationale": "UI layout and editorial translation workflow",
+      "required_depth": "mention",
+      "status": "deferred"
+    },
+    {
+      "id": "divisions-conferences-inter-league-competition-and-cross-league-player-identity",
+      "name": "divisions, conferences, inter-league competition, and cross-league Player identity",
+      "rationale": "divisions, conferences, inter-league competition, and cross-league Player identity",
+      "required_depth": "mention",
+      "status": "deferred"
+    },
+    {
+      "id": "exhaustive-error-code-registry-and-operational-runbooks",
+      "name": "exhaustive error-code registry and operational runbooks",
+      "rationale": "exhaustive error-code registry and operational runbooks",
+      "required_depth": "mention",
+      "status": "deferred"
+    },
+    {
+      "id": "phase-2-convergence-declaration",
+      "name": "Phase 2 convergence declaration",
+      "rationale": "Phase 2 convergence declaration",
+      "required_depth": "mention",
+      "status": "deferred"
+    },
+    {
+      "id": "mutation-of-original-courtside-source-specifications",
+      "name": "mutation of original Courtside source specifications",
+      "rationale": "mutation of original Courtside source specifications",
+      "required_depth": "mention",
+      "status": "deferred"
+    }
+  ],
+  "source_notes_path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/whetstone_runs/core-domain-phase1-002/scope-notes.md",
+  "status": "approved"
+}

@@ -1,0 +1,229 @@
+{
+  "closeout_findings_by_profile": [
+    {
+      "blocker_count": 0,
+      "clean": false,
+      "draft_hash": "beb3ecc982171b343cc67263419544e9879445c94e1a6aa6bd0205bf27299aa9",
+      "feedback_ids": [
+        "fb_round28_structural_001",
+        "fb_round28_structural_002"
+      ],
+      "major_count": 2,
+      "profile": "structural_integrity",
+      "round_number": 28,
+      "unresolved_blockers": [],
+      "unresolved_major_issues": [
+        {
+          "affected_sections": [
+            "specs/lifecycle.md / Core Mutation Authority",
+            "specs/lifecycle.md / Game Lifecycle"
+          ],
+          "claim": "The draft grants League Administrators authority to reschedule Games but does not define the legal state mutation for rescheduling a Game that is already `scheduled`.",
+          "issue_fingerprint": "940d480e1200b981672e8f5276ab2d39480b180d8f3d84a5e1bf7cb2ddaa1988",
+          "issue_id": "iss_940d480e1200b981",
+          "normalized_severity": "major"
+        },
+        {
+          "affected_sections": [
+            "specs/overview.md / Canonical Concepts",
+            "specs/lifecycle.md / Core Mutation Authority",
+            "specs/lifecycle.md / Player Management Lifecycle",
+            "specs/invariants.md / Authorization",
+            "specs/config.md / Authorization Configuration"
+          ],
+          "claim": "The draft defines approved Player Management Relationships as granting Player-profile management authority, but does not define the mutation surface or boundary of that authority.",
+          "issue_fingerprint": "8c02c75c7505f35b8ce3095d96e29eb08b4f692829d602add641e1347b2f138b",
+          "issue_id": "iss_8c02c75c7505f35b",
+          "normalized_severity": "major"
+        }
+      ]
+    },
+    {
+      "blocker_count": 0,
+      "clean": false,
+      "draft_hash": "beb3ecc982171b343cc67263419544e9879445c94e1a6aa6bd0205bf27299aa9",
+      "feedback_ids": [
+        "fb_round29_det_001",
+        "fb_round29_det_002"
+      ],
+      "major_count": 2,
+      "profile": "determinism",
+      "round_number": 29,
+      "unresolved_blockers": [],
+      "unresolved_major_issues": [
+        {
+          "affected_sections": [
+            "Season Configuration Lifecycle",
+            "Authority and Precedence",
+            "Configuration and Reproducibility"
+          ],
+          "claim": "The frozen Season configuration basis identity is required for replay and concurrent first-freeze behavior, but the draft does not define enough canonicalization rules to ensure two implementations hash the same result-affecting configuration content the same way.",
+          "issue_fingerprint": "df2874807753441808efaff5f5a4fd07c344927304152adc4aab4ac31da171ee",
+          "issue_id": "iss_df28748077534418",
+          "normalized_severity": "major"
+        },
+        {
+          "affected_sections": [
+            "Standings Lifecycle",
+            "Standings Configuration",
+            "Standings"
+          ],
+          "claim": "Duplicate random-draw attempts are allowed to either return the existing draw result or be rejected as a deterministic conflict, which leaves replay behavior observably divergent for the same tie context.",
+          "issue_fingerprint": "579e9ba9badb20f61d009f308451539a3738b72a9465f705926dbddf79c5aaeb",
+          "issue_id": "iss_579e9ba9badb20f6",
+          "normalized_severity": "major"
+        }
+      ]
+    },
+    {
+      "blocker_count": 0,
+      "clean": true,
+      "draft_hash": "beb3ecc982171b343cc67263419544e9879445c94e1a6aa6bd0205bf27299aa9",
+      "feedback_ids": [],
+      "major_count": 0,
+      "profile": "operability",
+      "round_number": 30,
+      "unresolved_blockers": [],
+      "unresolved_major_issues": []
+    }
+  ],
+  "current_draft_status": "accepted_unverified_profiles",
+  "draft_hash": "beb3ecc982171b343cc67263419544e9879445c94e1a6aa6bd0205bf27299aa9",
+  "exit_reason": "Phase 1 vertical review mode exhausted before reviewer-verified stable draft",
+  "final_draft_path": "./spec.md",
+  "generated_at": "2026-08-05T04:39:20.707772+00:00",
+  "last_accepted_draft_hash": "beb3ecc982171b343cc67263419544e9879445c94e1a6aa6bd0205bf27299aa9",
+  "last_draft_hash": "beb3ecc982171b343cc67263419544e9879445c94e1a6aa6bd0205bf27299aa9",
+  "last_reviewer_findings": {
+    "blocker_count": 0,
+    "feedback_ids": [],
+    "major_count": 0,
+    "profile": "operability",
+    "round_number": 30
+  },
+  "profile_status": {
+    "exhausted_profiles": [
+      "structural_integrity",
+      "determinism"
+    ],
+    "profiles": [
+      {
+        "active": false,
+        "clean": false,
+        "exhausted": true,
+        "profile": "structural_integrity",
+        "residual_status": "exhausted_with_residuals",
+        "round_budget": 7,
+        "rounds_used": 8
+      },
+      {
+        "active": false,
+        "clean": false,
+        "exhausted": true,
+        "profile": "determinism",
+        "residual_status": "exhausted_with_residuals",
+        "round_budget": 7,
+        "rounds_used": 8
+      },
+      {
+        "active": false,
+        "clean": true,
+        "exhausted": false,
+        "profile": "operability",
+        "residual_status": null,
+        "round_budget": 6,
+        "rounds_used": 7
+      }
+    ],
+    "profiles_remaining": [],
+    "total_round_budget": 20,
+    "unverified_profiles": [
+      "structural_integrity",
+      "determinism"
+    ]
+  },
+  "ready_for_phase_2": false,
+  "recommendation": "manual_review_required",
+  "round_number": 30,
+  "run_artifact_pointers": {
+    "context_pressure_report": {
+      "exists": true,
+      "path": "rounds/context_pressure_report.json",
+      "sha256": "1cf7d91150fc4f4f81855338e80d37ba5d35add83e45341efdf1a8be7bcb92f7"
+    },
+    "context_pressure_report_markdown": {
+      "exists": true,
+      "path": "rounds/context_pressure_report.md",
+      "sha256": "068a6d689ad416ffa5af2283b7ccac14ad0ad1c4ebd7caa56b05644d7c308a39"
+    },
+    "job_descriptor": {
+      "candidate_paths": [
+        "whetstone_job.json",
+        "job_descriptor.json",
+        "rounds/whetstone_job.json",
+        "rounds/job_descriptor.json",
+        "rounds/intake/whetstone_job.json",
+        "rounds/intake/job_descriptor.json"
+      ],
+      "exists": false,
+      "path": null,
+      "sha256": null
+    },
+    "scope_contract": {
+      "exists": true,
+      "path": "rounds/intake/scope_contract.json",
+      "sha256": "37bd9058274086b49f6decce85ff42201c0164165bf692988d7e991200e97f81"
+    }
+  },
+  "terminal_state": "TARGET_NOT_REACHED",
+  "unresolved_blockers": [],
+  "unresolved_conflicts": [],
+  "unresolved_major_issues": [
+    {
+      "affected_sections": [
+        "specs/lifecycle.md / Core Mutation Authority",
+        "specs/lifecycle.md / Game Lifecycle"
+      ],
+      "claim": "The draft grants League Administrators authority to reschedule Games but does not define the legal state mutation for rescheduling a Game that is already `scheduled`.",
+      "issue_fingerprint": "940d480e1200b981672e8f5276ab2d39480b180d8f3d84a5e1bf7cb2ddaa1988",
+      "issue_id": "iss_940d480e1200b981",
+      "normalized_severity": "major"
+    },
+    {
+      "affected_sections": [
+        "specs/overview.md / Canonical Concepts",
+        "specs/lifecycle.md / Core Mutation Authority",
+        "specs/lifecycle.md / Player Management Lifecycle",
+        "specs/invariants.md / Authorization",
+        "specs/config.md / Authorization Configuration"
+      ],
+      "claim": "The draft defines approved Player Management Relationships as granting Player-profile management authority, but does not define the mutation surface or boundary of that authority.",
+      "issue_fingerprint": "8c02c75c7505f35b8ce3095d96e29eb08b4f692829d602add641e1347b2f138b",
+      "issue_id": "iss_8c02c75c7505f35b",
+      "normalized_severity": "major"
+    },
+    {
+      "affected_sections": [
+        "Season Configuration Lifecycle",
+        "Authority and Precedence",
+        "Configuration and Reproducibility"
+      ],
+      "claim": "The frozen Season configuration basis identity is required for replay and concurrent first-freeze behavior, but the draft does not define enough canonicalization rules to ensure two implementations hash the same result-affecting configuration content the same way.",
+      "issue_fingerprint": "df2874807753441808efaff5f5a4fd07c344927304152adc4aab4ac31da171ee",
+      "issue_id": "iss_df28748077534418",
+      "normalized_severity": "major"
+    },
+    {
+      "affected_sections": [
+        "Standings Lifecycle",
+        "Standings Configuration",
+        "Standings"
+      ],
+      "claim": "Duplicate random-draw attempts are allowed to either return the existing draw result or be rejected as a deterministic conflict, which leaves replay behavior observably divergent for the same tie context.",
+      "issue_fingerprint": "579e9ba9badb20f61d009f308451539a3738b72a9465f705926dbddf79c5aaeb",
+      "issue_id": "iss_579e9ba9badb20f6",
+      "normalized_severity": "major"
+    }
+  ],
+  "unresolved_oscillation": null
+}

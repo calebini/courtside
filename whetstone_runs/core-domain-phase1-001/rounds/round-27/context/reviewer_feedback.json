@@ -1,0 +1,34 @@
+{
+  "draft_hash": "d49538000719fbe67bc083394959c142b95083f3ea4eb4f13a7b4cad6c0fe00e",
+  "feedback": [
+    {
+      "affected_sections": [
+        "specs/lifecycle.md / Authoritative Result Corrections",
+        "specs/config.md / Audit Configuration"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "major",
+      "claim": "Accepted playoff correction resolution retries have deterministic projection identity, but the draft does not define idempotent audit persistence for repeated submissions with the same resolution identity, so implementations may diverge by appending duplicate Audit Records or reusing the original record.",
+      "determinism_impact": "major",
+      "evidence": "The draft says every accepted correction resolution writes an Audit Record, and later says retries, replays, or concurrent recomputations for the same deterministic resolution identity must return the same projection effect and resolution report. In Audit Configuration, the resolution Audit Record must include the canonicalized resolution identity. It never states whether a retry or replay of an already accepted resolution identity creates another append-only Audit Record, reuses the original Audit Record, or is reported as a duplicate without mutation.",
+      "feedback_id": "determinism:fb_round26_det_001",
+      "in_scope": true,
+      "invariant_violated": "replay_idempotency",
+      "issue_fingerprint": "16ab6344baf4a75b5fa99a690f16a046e9e946c5ba962cb783889477fc30e7d1",
+      "issue_id": "iss_16ab6344baf4a75b",
+      "issue_type": "replay_idempotency_gap",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Add a replay rule for accepted playoff correction resolutions: for a canonicalized resolution identity that has already been accepted, retries, replays, duplicate submissions, and concurrent recomputations must reuse the existing correction/resolution artifact and Audit Record identity, must not append an additional material Audit Record, and must report the prior acceptance deterministically. If non-authoritative retry-attempt logging is allowed, explicitly separate it from the authoritative append-only Audit Record surface.",
+      "rubric_impact": "major",
+      "severity_rationale": "This is in scope under frozen configuration amendment and correction cascades, scoped authorization and minimum audit behavior, and obvious domain failure categories. It does not block projection implementation because the projection identity is defined, but it creates meaningful MVP replay and audit divergence for a core administrative correction path."
+    }
+  ],
+  "profile": "vertical",
+  "reviewer": {
+    "model": "orchestrator",
+    "name": "whetstone-vertical-merge",
+    "version": "1.0"
+  },
+  "round_number": 27
+}

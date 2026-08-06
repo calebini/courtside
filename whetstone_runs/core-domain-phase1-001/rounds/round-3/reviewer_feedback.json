@@ -1,0 +1,59 @@
+{
+  "draft_hash": "aca84978b693a31840c33c8a378473494cb9c3fd25449d8c605cef021c8062e6",
+  "feedback": [
+    {
+      "affected_sections": [
+        "specs/lifecycle.md#Game Lifecycle",
+        "specs/lifecycle.md#Player Stat Line Lifecycle",
+        "specs/lifecycle.md#Player Management Lifecycle",
+        "specs/lifecycle.md#Standings Lifecycle",
+        "specs/lifecycle.md#Playoff Matchup Lifecycle"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "major",
+      "claim": "The lifecycle sections define allowed transitions but do not state the required behavior for invalid transition attempts, leaving core state recovery and operator reporting ambiguous.",
+      "determinism_impact": "major",
+      "evidence": "The Game Lifecycle lists allowed transitions such as scheduled -> postponed/cancelled/in_progress/forfeit and in_progress -> final, while Player Management lists requested -> approved -> revoked and Player Stat Line lists provisional -> confirmed. The draft does not say whether disallowed transitions must be rejected, preserved without mutation, audited, surfaced to an operator, or reported with a validation failure category. The scope contract explicitly keeps lifecycle states and legal authority transitions plus obvious domain failure categories in scope, while deferring only exhaustive error registries and runbooks.",
+      "feedback_id": "fb_operability_001",
+      "in_scope": true,
+      "invariant_violated": "failure_handling",
+      "issue_fingerprint": "a4c84919757d7f4c8ff815b6ea512af515230afe985381b613eeef89ccc1057b",
+      "issue_id": "iss_a4c84919757d7f4c",
+      "issue_type": "missing_failure_handling",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Add a technology-neutral failure rule for lifecycle-bearing entities: any transition not explicitly allowed by the lifecycle must be rejected without mutating authoritative state; the response/report must identify the entity, current state, requested state, actor, and violated lifecycle rule; audit failed attempts only if the audit policy intentionally requires it. Apply the rule consistently to Game, Player Stat Line verification, Player Management Relationship, role assignment, standings recomputation, and playoff advancement surfaces.",
+      "rubric_impact": "major",
+      "severity_rationale": "This is major because the legal states are mostly defined, but an implementer still must invent invalid-transition behavior for core MVP flows. It does not fully block implementation because the allowed transitions and authority owners are otherwise clear."
+    },
+    {
+      "affected_sections": [
+        "specs/lifecycle.md#Authoritative Result Corrections",
+        "specs/lifecycle.md#Playoff Matchup Lifecycle"
+      ],
+      "authority_impact": "major",
+      "baseline_severity": "major",
+      "claim": "The draft requires surfacing playoff correction conflicts after downstream authoritative outcomes, but it does not define the legal recovery states or permitted administrator resolutions.",
+      "determinism_impact": "major",
+      "evidence": "Authoritative Result Corrections says that if a correction would change a playoff participant after downstream Games already have authoritative outcomes, automated destructive propagation is prohibited and the conflict must be surfaced for explicit League Administrator resolution and audited before the bracket can be considered internally consistent. It does not specify whether the correction is accepted into a pending-inconsistent state, rejected until a resolution is supplied, whether downstream Games are suspended from further advancement, or what resolution options are legal. This is in scope under frozen configuration amendment and correction cascades, playoff aggregate calculation and tiebreak behavior, and obvious domain failure categories.",
+      "feedback_id": "fb_operability_002",
+      "in_scope": true,
+      "invariant_violated": "failure_handling",
+      "issue_fingerprint": "434c828dbd791ff14f290f9992522b354fadb6ae8841bfc23d9739dd9c5a75c8",
+      "issue_id": "iss_434c828dbd791ff1",
+      "issue_type": "underspecified_recovery_behavior",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Define a minimal recovery contract for this conflict: the state entered when the conflict is detected, which derived projections or advancement decisions are halted, what information must be reported to the League Administrator, the allowed resolution choices, and the audit requirements for the chosen resolution. Keep it domain-level and avoid prescribing API or database implementation.",
+      "rubric_impact": "major",
+      "severity_rationale": "This is major because correction cascades are an in-scope core flow and the current text identifies the failure mode but leaves the operator handoff and recovery path undefined. It is not a blocker because the normal correction and recomputation path is defined."
+    }
+  ],
+  "profile": "operability",
+  "reviewer": {
+    "model": "gpt-5-codex",
+    "name": "Codex Whetstone Operability Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 3
+}

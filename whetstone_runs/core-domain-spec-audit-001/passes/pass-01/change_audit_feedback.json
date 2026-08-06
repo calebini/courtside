@@ -1,0 +1,33 @@
+{
+  "draft_hash": "37c93d322596b9d0fd48cccdacf25b1d12fd23b590406ea337dbb3cba926b464",
+  "feedback": [
+    {
+      "affected_sections": [
+        "specs/decisions/0001-ratify-core-domain.md#Decision"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "nit",
+      "claim": "The ADR names the Game lifecycle state as `in-progress`, while the lifecycle specification defines the normative status token as `in_progress`.",
+      "determinism_impact": null,
+      "evidence": "`specs/lifecycle.md` lists normative Game statuses as `scheduled`, `postponed`, `cancelled`, `in_progress`, `final`, and `forfeit`. ADR decision item 5 says: \"Games use scheduled, postponed, cancelled, in-progress, final, and forfeit lifecycle states\".",
+      "feedback_id": "fb_0000000000000001",
+      "in_scope": true,
+      "invariant_violated": "state_legality",
+      "issue_fingerprint": "b1a936f4058f15ef1ca53a587649ce85f18d527d81332a1554314b23b8e94172",
+      "issue_id": "iss_b1a936f4058f15ef",
+      "issue_type": "terminology_consistency",
+      "normalized_severity": "nit",
+      "oscillation_key": null,
+      "recommended_change": "Change ADR decision item 5 from `in-progress` to `in_progress`, or explicitly distinguish prose labels from normative status tokens if hyphenated display text is intended.",
+      "rubric_impact": null,
+      "severity_rationale": "This is a small terminology alignment issue, but it affects the consistency of lifecycle state names in the ratified domain bundle."
+    }
+  ],
+  "profile": "consistency",
+  "reviewer": {
+    "model": "gpt-5-codex",
+    "name": "Codex Whetstone Consistency Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 1
+}

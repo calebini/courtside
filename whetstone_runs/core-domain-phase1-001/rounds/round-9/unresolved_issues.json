@@ -1,0 +1,19 @@
+{
+  "draft_hash": "1b3087bbf7918b47cb40a3d650feb39329f2297a78452b0f4255b4bf148e9b22",
+  "round_number": 9,
+  "unresolved_issues": [
+    {
+      "affected_sections": [
+        "specs/lifecycle.md: Season Configuration Lifecycle",
+        "specs/config.md: Playoff Configuration",
+        "specs/config.md: Authorization Configuration"
+      ],
+      "blocking_acceptance": true,
+      "claim": "Frozen Season configuration amendments are authorized and versioned, but the draft does not define legal amendment boundaries or invalid-amendment handling when an amended result-affecting configuration would conflict with existing authoritative playoff state.",
+      "in_scope": true,
+      "issue_fingerprint": "da8309e8d3e4e5397393725bc4af8fca2bbe560519875aa9e68d5073229e3360",
+      "issue_id": "iss_da8309e8d3e4e539",
+      "normalized_severity": "major"
+    }
+  ]
+}

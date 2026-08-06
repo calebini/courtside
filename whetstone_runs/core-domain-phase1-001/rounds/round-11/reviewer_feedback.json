@@ -1,0 +1,58 @@
+{
+  "draft_hash": "1b3087bbf7918b47cb40a3d650feb39329f2297a78452b0f4255b4bf148e9b22",
+  "feedback": [
+    {
+      "affected_sections": [
+        "General Lifecycle Failure Rule",
+        "Core Mutation Authority",
+        "Authorization"
+      ],
+      "authority_impact": "major",
+      "baseline_severity": "major",
+      "claim": "Unauthorized mutation attempts are required to be rejected, but the draft does not define the required rejection report contents for authorization failures, leaving operators without a deterministic handoff record for denied mutations.",
+      "determinism_impact": "minor",
+      "evidence": "The General Lifecycle Failure Rule defines report fields for invalid lifecycle transitions and in-scope invariant/configuration validation failures, including entity, current state or condition, requested mutation, actor, violated rule, and state preservation. The Authorization invariant later says unauthorized mutation attempts are rejected without mutating authoritative state, but it does not require an equivalent rejection report identifying the actor, scope, attempted authority, denied rule, and preservation outcome. The scope contract keeps scoped authorization and obvious domain failure categories in scope at required_fields depth.",
+      "feedback_id": "fb_operability_001",
+      "in_scope": true,
+      "invariant_violated": "failure_handling",
+      "issue_fingerprint": "3a37f4f668606e2501e627a3a430ec28fed33b2dbadf882df7da6f906b0fd0f8",
+      "issue_id": "iss_3a37f4f668606e25",
+      "issue_type": "missing_failure_report",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Add authorization failures to the General Lifecycle Failure Rule or Authorization section with the same preserve-state reporting semantics: identify the actor, affected League/Season/Season Team/Player/Game scope, attempted mutation, missing or insufficient authority, violated authority rule, and confirmation that authoritative state and derived projections remain unchanged.",
+      "rubric_impact": "major",
+      "severity_rationale": "Authority rejection behavior is clear enough to reject the operation, so this does not block implementation, but missing terminal reporting for denied administrative mutations creates meaningful operability and handoff risk in an in-scope core authority surface."
+    },
+    {
+      "affected_sections": [
+        "Game Lifecycle",
+        "Audit Configuration",
+        "Venues, Media, and Audit"
+      ],
+      "authority_impact": "minor",
+      "baseline_severity": "minor",
+      "claim": "The draft requires rescheduling to preserve history but does not define whether schedule/status changes are audited or what minimum history must be retained.",
+      "determinism_impact": "minor",
+      "evidence": "Game Lifecycle says, \"Rescheduling preserves the history required by the audit policy.\" Audit Configuration lists mandatory audit records for result corrections, material Player-stat changes, roster changes, relationship approvals/revocations, role assignment changes, frozen configuration amendments, persisted random draws, and playoff correction resolutions, but does not mention scheduling, rescheduling, postponement, cancellation, or start transitions. The overview also says simple audit records cover material administrative changes, leaving schedule-history persistence ambiguous.",
+      "feedback_id": "fb_operability_002",
+      "in_scope": true,
+      "invariant_violated": "artifact_integrity",
+      "issue_fingerprint": "bfe41a107f82bd328fcc84695bd88acfa33f4888fd167c445755324a6aeeaa2c",
+      "issue_id": "iss_bfe41a107f82bd32",
+      "issue_type": "undefined_audit_history",
+      "normalized_severity": "minor",
+      "oscillation_key": null,
+      "recommended_change": "Define the minimum operational history for Game scheduling changes without prescribing storage: for example, require actor, timestamp, action, previous scheduled instant/status, new scheduled instant/status, optional reason when applicable, and clarify whether the record is an Audit Record or separate schedule history. If this is intentionally deferred, replace the audit-policy reference with an explicit deferral boundary and state the minimum history needed for Phase 1.",
+      "rubric_impact": "minor",
+      "severity_rationale": "This affects an in-scope lifecycle surface, but it does not prevent the core finalize/forfeit/correct/recompute flow from being built because authoritative result audit behavior is already explicit."
+    }
+  ],
+  "profile": "operability",
+  "reviewer": {
+    "model": "gpt-5-codex",
+    "name": "Codex Whetstone Operability Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 11
+}
