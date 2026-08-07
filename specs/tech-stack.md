@@ -1,6 +1,6 @@
 # Courtside Technology Stack Declaration
 
-- Status: proposed
+- Status: accepted
 - Spec version: 0.1.0
 - Last updated: 2026-08-07
 
@@ -48,7 +48,7 @@ Schema, constraints, functions, grants, and Row Level Security policies are chan
 
 Supabase Auth proves User Account identity and manages sessions and account recovery. It does not collapse User Account into Player and does not define a global `player` role.
 
-League Administrator assignments, Season Team Captain assignments, and approved Player Management Relationships are persistent Courtside domain records. Authorization is evaluated from those current scoped records. Approved Player managers may update only the linked Player fields granted by the domain specifications. Team Captain authority does not include roster or Game mutation in Phase 1. Service credentials and administrative database access must never be exposed to browser code.
+League Administrator assignments, Season Team Captain assignments, and approved Player Management Relationships are persistent Courtside domain records. Authorization is evaluated from those current scoped records. Approved Player managers may update only the linked Player fields granted by the domain specifications. Team Captain assignments are scoped domain authority markers and grant no independent core mutation authority in Phase 1 unless a later accepted specification grants it. Service credentials and administrative database access must never be exposed to browser code.
 
 The initial League Administrator bootstrap and the login methods offered to users must be specified before authentication is released. Neither choice may weaken the post-bootstrap administrator invariants.
 
@@ -79,7 +79,7 @@ AI may assist with source-column mapping or error explanation. AI-generated SQL 
 
 ## Media Boundary
 
-Supabase Storage is the initial object store for Player profile photos and gallery photos. The database owns Media identity, associations, ownership metadata, publication state, and audit references. Upload flows enforce authenticated authority, generated object keys, supported MIME types, file-size limits, and image validation. Public delivery and upload authority must be separate concerns.
+Supabase Storage is the initial object store for Player profile photos and reusable photo Media associated with Games or the League Gallery. The database owns Media identity, associations, ownership metadata, publication state, and audit references. Upload flows enforce authenticated authority, generated object keys, supported MIME types, file-size limits, and image validation. Public delivery and upload authority must be separate concerns.
 
 Database backup does not by itself protect stored media objects. Before production media is accepted, Courtside must define object retention, deletion behavior, export or replication, and restoration procedure. Cloudinary is not adopted initially and requires a later decision justified by concrete transformation or delivery needs.
 
@@ -111,4 +111,4 @@ The styling system, component library, transaction-capable query layer, external
 
 ## Ratification
 
-This declaration remains `proposed` until the user approves it after review. Acceptance authorizes the application scaffold and implementation planning but does not itself define database tables, API contracts, or UI design.
+This declaration was accepted on 2026-08-07 after the contained Whetstone consistency audit preserved the domain boundary and a corrective re-audit reported zero findings. Acceptance authorizes the application scaffold and implementation planning but does not itself define database tables, API contracts, or UI design.

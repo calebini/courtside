@@ -1,0 +1,59 @@
+{
+  "draft_hash": "c43cecc3a8ac972898cd64aa9991e0467d60162105dc858a458d751997e3aefb",
+  "feedback": [
+    {
+      "affected_sections": [
+        "specs/tech-stack.md#Authentication and Authorization",
+        "specs/overview.md#Canonical Concepts",
+        "specs/lifecycle.md#Core Mutation Authority",
+        "specs/invariants.md#Authorization"
+      ],
+      "authority_impact": "minor",
+      "baseline_severity": "minor",
+      "claim": "The technology declaration restates Phase 1 Team Captain limits using a narrower mutation list than the core domain authorities, which can read as an incomplete authorization boundary.",
+      "determinism_impact": null,
+      "evidence": "The declaration says, \"Team Captain authority does not include roster or Game mutation in Phase 1.\" The core specs state that Team Captain grants no independent authority over Game outcomes, rosters, Player Stat Lines, Player Management approvals, Season configuration amendments, playoff conflict resolution, and other core mutation surfaces unless later accepted.",
+      "feedback_id": "fb_001",
+      "in_scope": true,
+      "invariant_violated": "authority_boundary",
+      "issue_fingerprint": "d465372c7e3bde203656f31efea9d3623dfdf3830c1435fc240ebee69595459c",
+      "issue_id": "iss_d465372c7e3bde20",
+      "issue_type": "terminology_consistency",
+      "normalized_severity": "minor",
+      "oscillation_key": null,
+      "recommended_change": "Align the declaration wording with the core-domain phrase, for example: Team Captain assignments are scoped domain authority markers and grant no independent core mutation authority in Phase 1 unless a later accepted specification grants it.",
+      "rubric_impact": null,
+      "severity_rationale": "This directly affects the change intent to preserve authorization boundaries. The domain specs still prevail, so this is a contained consistency issue rather than a blocker."
+    },
+    {
+      "affected_sections": [
+        "specs/tech-stack.md#Media Boundary",
+        "specs/overview.md#Canonical Concepts",
+        "specs/lifecycle.md#Core Mutation Authority"
+      ],
+      "authority_impact": "minor",
+      "baseline_severity": "minor",
+      "claim": "The media storage declaration names Player profile photos and gallery photos but does not consistently reference Game-associated photo Media, even though the core domain defines Media as reusable items that may be associated with Games, the League Gallery, or both.",
+      "determinism_impact": null,
+      "evidence": "The declaration says, \"Supabase Storage is the initial object store for Player profile photos and gallery photos.\" The overview says, \"Media are optional photo records or YouTube links\" and \"The same Media item may be associated with Games, the League Gallery, or both.\" Lifecycle also distinguishes Player `profile_photo` from reusable Media items associated with Games or the League Gallery.",
+      "feedback_id": "fb_002",
+      "in_scope": true,
+      "invariant_violated": "artifact_integrity",
+      "issue_fingerprint": "ae36aee90cbac19817f45afc31e58ea20b52f84fed1340ac9a68100417116147",
+      "issue_id": "iss_ae36aee90cbac198",
+      "issue_type": "artifact_reference_consistency",
+      "normalized_severity": "minor",
+      "oscillation_key": null,
+      "recommended_change": "Change the media sentence to include reusable photo Media for Games and the League Gallery while preserving the distinction from Player `profile_photo`, for example: Supabase Storage is the initial object store for Player profile photos and reusable photo Media associated with Games or the League Gallery.",
+      "rubric_impact": null,
+      "severity_rationale": "The omission can create inconsistent artifact scope for recoverable media, but it is easy to correct and does not undermine the whole stack declaration."
+    }
+  ],
+  "profile": "consistency",
+  "reviewer": {
+    "model": "GPT-5",
+    "name": "Codex Whetstone Consistency Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 1
+}

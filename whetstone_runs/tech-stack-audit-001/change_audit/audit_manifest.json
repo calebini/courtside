@@ -1,0 +1,38 @@
+{
+  "audit_notes_hash": "c0247c1b1f50fc49967b52b99ea59cbe4dbe38b58cd1711574252afc54e9f67b",
+  "audit_notes_path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/whetstone_runs/tech-stack-audit-001/audit-notes.md",
+  "client": {
+    "model": "gpt-5.5",
+    "name": "codex",
+    "version": "unknown"
+  },
+  "generated_at": "2026-08-07T18:17:34.154335+00:00",
+  "profile": "consistency",
+  "schema_version": "change-audit-manifest-v1",
+  "specs": [
+    {
+      "hash": "9f9a0f64adcfcdc7f4ab9680200531e80fa25588e9ad5e1e7a656357b6046b70",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/tech-stack.md"
+    },
+    {
+      "hash": "33e48d55cd146f7e5a44c07f6126d52ea5d3798a8c9f94d8c444dcf2e4832ded",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/overview.md"
+    },
+    {
+      "hash": "7723d360abc7b2dc16a66b3d8b6e9ac83eaf31ebcdc7127404428b515c96d86a",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/lifecycle.md"
+    },
+    {
+      "hash": "71e03c2089a15397b453883fb89c16c2a6f337fbc14205267a750eaab4d38e2e",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/invariants.md"
+    },
+    {
+      "hash": "be6157fbc1a1b38cf5f5336c1c903d184faf0e1bbe8d2aafe68491cfa8230928",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/config.md"
+    },
+    {
+      "hash": "7bae042ca487d5449d5f6dea3431e0604d7794abc103faf544846164cfdbe47c",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/decisions/0001-ratify-core-domain.md"
+    }
+  ]
+}

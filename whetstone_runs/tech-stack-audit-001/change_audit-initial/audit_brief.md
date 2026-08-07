@@ -1,0 +1,497 @@
+# Whetstone Change Audit Brief
+
+Workflow: audit_change
+Profile: consistency
+
+Reviewer instructions:
+- Evaluate only the stated change intent and expected boundary.
+- Do not perform a full convergence review.
+- Treat unrelated polish, completeness, or future hardening concerns as out of scope.
+- Report an issue only when it directly affects the change intent, expected boundary, or listed source specs.
+- If a concern is outside the stated audit boundary, set in_scope=false.
+
+## Audit Notes
+
+Path: /Users/Shared/Agent-Workspace/repos/personal/courtside/whetstone_runs/tech-stack-audit-001/audit-notes.md
+Hash: c0247c1b1f50fc49967b52b99ea59cbe4dbe38b58cd1711574252afc54e9f67b
+
+# Change Intent
+
+Assess the proposed Courtside technology-stack declaration before ratification and implementation. The declaration adopts a TypeScript and Next.js modular monolith on Vercel with Supabase-managed PostgreSQL, Auth, and Storage, while requiring server-mediated transactional writes, scoped domain authorization, controlled spreadsheet imports, cache correctness, environment isolation, recoverable media, and executable verification.
+
+# Expected Boundary
+
+- The core domain specifications remain authoritative for terminology, lifecycle, authorization, configuration, audit, standings, playoff behavior, localization, and historical reproducibility.
+- Framework and vendor choices remain adapters or delivery mechanisms rather than sources of domain policy.
+- User Account remains distinct from Player, and Supabase Auth supplies identity rather than global domain roles.
+- Every authoritative multi-record mutation is atomic and produces required audit history.
+- Spreadsheet ingestion stages and validates data before applying an idempotent authoritative transaction; AI-generated production DML is prohibited.
+- Standings and playoff projections remain derived from authoritative outcomes and the frozen Season configuration version.
+- Cached public views cannot knowingly outlive accepted authoritative mutations.
+- The declaration should be specific enough to authorize the first implementation slice without prematurely selecting replaceable UI, query, analytics, or observability libraries.
+- Repository growth remains incremental and core logic remains independent of adapters.
+
+# Specs To Check
+
+- `specs/tech-stack.md` as the proposed implementation declaration under review.
+- `specs/overview.md` as domain scope and terminology authority.
+- `specs/lifecycle.md` as mutation and transition authority.
+- `specs/invariants.md` as cross-implementation correctness authority.
+- `specs/config.md` as configuration, authorization, localization, and audit authority.
+- `specs/decisions/0001-ratify-core-domain.md` as the core-domain decision record.
+
+# Reviewer Questions
+
+- Does the technology declaration preserve every material domain authority boundary?
+- Are database transactions, RLS, application services, and adapter responsibilities coherent rather than competing sources of policy?
+- Can the first game-finalization-to-standings slice be implemented without inventing a conflicting data or authorization model?
+- Do localization, caching, media, import, migration, environment, and recovery claims contradict or weaken a domain requirement?
+- Are any deferred choices actually blockers to the first write-capable vertical slice?
+- Does any wording accidentally authorize direct database mutation paths that bypass lifecycle, audit, idempotency, or configuration-freeze rules?
+- Which findings, if any, require a product-owner decision rather than a technical correction?
+
+# Out Of Scope
+
+- Phase 1 or Phase 2 convergence
+- automatic editing or source mutation
+- database table and column design
+- public API contracts
+- UI design or styling-system selection
+- detailed player-stat vocabulary
+- broad redesign of the converged core domain
+- implementation work beyond assessing whether the declaration safely authorizes it
+
+# Requested Result
+
+Run a reviewer-only Whetstone `audit-change` consistency check. Report the verdict, whether the boundary is preserved, blocker/major/minor findings, out-of-scope observations, and whether any issue requires a user decision. Do not mutate any source specification.
+
+## Specs To Check
+
+### Spec 1: /Users/Shared/Agent-Workspace/repos/personal/courtside/specs/tech-stack.md
+
+Hash: 7b4a8c71adc4ea5cc04ac9952164acf4812ec5302904c2bb5996a556ebd1b2dc
+
+```markdown
+# Courtside Technology Stack Declaration
+
+- Status: proposed
+- Spec version: 0.1.0
+- Last updated: 2026-08-07
+
+## Purpose and Authority
+
+This declaration defines the initial implementation platform and the boundaries that keep Courtside's domain behavior portable, testable, and safe to operate. It is normative for implementation choices but does not override the core domain specifications. If a platform convenience conflicts with a domain invariant, lifecycle rule, or authorization boundary, the domain specification prevails and this declaration must be amended.
+
+## Declared Stack
+
+| Concern | Declaration |
+| --- | --- |
+| Application language | TypeScript with strict type checking |
+| Application runtime | A supported Node.js Active LTS release, pinned when the application scaffold is created |
+| Package management | `npm` with a committed lockfile |
+| Web framework | Next.js App Router |
+| Application hosting | Vercel |
+| Relational database | Supabase-managed PostgreSQL |
+| Authentication provider | Supabase Auth, used for login identity rather than domain authorization |
+| Media object storage | Supabase Storage |
+| Localization | `next-intl` with English and French locale routes and translation dictionaries |
+| Database lifecycle | Version-controlled SQL migrations managed through the Supabase CLI |
+| Unit and domain testing | Vitest |
+| Browser testing | Playwright |
+| Database integration testing | A local Supabase/PostgreSQL stack rebuilt from committed migrations |
+
+React is supplied through the supported Next.js release rather than versioned independently. Exact dependency versions are recorded by the application manifest and lockfile when implementation begins. Production dependencies must use supported stable releases and must not use unbounded version ranges.
+
+## Application Shape
+
+Courtside is a modular monolith with a stateless application runtime. Durable domain state lives in PostgreSQL, while media bytes live in object storage and are referenced by persistent database metadata. The initial deployment has one web application and one relational database; it does not introduce microservices, queues, event buses, or additional databases.
+
+Core domain logic must remain independent of Next.js, Vercel, Supabase, HTTP, authentication tokens, and storage APIs. Application services coordinate use cases and authoritative mutations. Adapters own PostgreSQL, Supabase Auth, Supabase Storage, filesystem, spreadsheet, and network coupling. Next.js route handlers, Server Actions, and Server Components are delivery mechanisms and must not become competing locations for domain rules.
+
+The initial application is server-mediated. Browser code may participate in Supabase Auth session handling and controlled media upload flows, but it must not receive a service credential or write directly to authoritative domain tables. A later proposal may allow narrowly scoped direct client access only when Row Level Security, audit behavior, and lifecycle equivalence are demonstrated by integration tests.
+
+## Database Access and Transactions
+
+PostgreSQL is the authoritative relational store. Database constraints enforce structural integrity and invariants that must survive every write path. Row Level Security is defense in depth, not the sole expression of domain authorization. Application services remain responsible for scoped authority, legal state transitions, audit requirements, and deterministic conflict handling.
+
+Every authoritative mutation that changes related domain records, projections, configuration versions, or audit history must commit or roll back as one database transaction. Multi-step authoritative writes must not be implemented as unrelated Supabase Data API calls. Before the first write-capable vertical slice, the implementation must record one transaction-capable server-side query strategy; it may use parameterized PostgreSQL access or narrow transactional database functions, but it must not duplicate domain policy across both approaches.
+
+Schema, constraints, functions, grants, and Row Level Security policies are changed through reviewed migrations committed to the repository. Production Dashboard or ad hoc SQL changes are prohibited during ordinary operation. An emergency database change must be captured immediately as a migration and reviewed for schema drift.
+
+## Authentication and Authorization
+
+Supabase Auth proves User Account identity and manages sessions and account recovery. It does not collapse User Account into Player and does not define a global `player` role.
+
+League Administrator assignments, Season Team Captain assignments, and approved Player Management Relationships are persistent Courtside domain records. Authorization is evaluated from those current scoped records. Approved Player managers may update only the linked Player fields granted by the domain specifications. Team Captain authority does not include roster or Game mutation in Phase 1. Service credentials and administrative database access must never be exposed to browser code.
+
+The initial League Administrator bootstrap and the login methods offered to users must be specified before authentication is released. Neither choice may weaken the post-bootstrap administrator invariants.
+
+## Localization
+
+English and French use explicit locale routes and UI translation dictionaries managed through `next-intl`. Authored-content translations remain database content rather than UI dictionary entries. Proper names remain language-neutral.
+
+Locale selection follows the domain configuration: a supported saved User Account preference, then the League default. Browser language detection must not override that precedence. Missing authored content falls back to the League default. Locale formatting uses the League timezone for dates and times unless a later accepted specification changes that behavior.
+
+## Rendering and Cache Correctness
+
+Next.js may server-render, prerender, or cache public pages when doing so preserves observable correctness. Standings, schedules, Game pages, Player records, and playoff projections are not assumed to be immutable static content.
+
+Every accepted mutation identifies and invalidates its affected cached projections. Administrative confirmation must not report success while the application intentionally continues serving a known superseded authoritative result. A projection without a dependable invalidation path must use dynamic or uncached rendering until one exists.
+
+## Statistical Import Boundary
+
+The initial spreadsheet workflow is a controlled import pipeline rather than arbitrary SQL generation. It must:
+
+1. preserve the original source file or a stable content hash;
+2. parse rows into staging records without mutating authoritative data;
+3. validate Game, Player, Roster Membership, statistic vocabulary, known-versus-unknown values, and duplicate identities;
+4. produce a dry-run summary with row-level errors and the proposed changes;
+5. apply an approved batch transactionally through the same authoritative mutation rules used by the application; and
+6. persist batch identity, actor, importer version, source identity, outcome, and required audit records so retries are idempotent.
+
+AI may assist with source-column mapping or error explanation. AI-generated SQL must not be executed directly against production domain tables.
+
+## Media Boundary
+
+Supabase Storage is the initial object store for Player profile photos and gallery photos. The database owns Media identity, associations, ownership metadata, publication state, and audit references. Upload flows enforce authenticated authority, generated object keys, supported MIME types, file-size limits, and image validation. Public delivery and upload authority must be separate concerns.
+
+Database backup does not by itself protect stored media objects. Before production media is accepted, Courtside must define object retention, deletion behavior, export or replication, and restoration procedure. Cloudinary is not adopted initially and requires a later decision justified by concrete transformation or delivery needs.
+
+## Environments, Deployment, and Recovery
+
+Local development, preview or staging, and production use isolated durable data. Vercel preview deployments must not receive credentials that permit writes to the production Supabase project. Database migrations are verified from an empty local database before deployment and are applied through a controlled deployment step.
+
+Vercel server-side compute must run in a region appropriate for the Supabase database. Runtime database access must use the connection mode appropriate to serverless execution and must not create an unbounded connection pool.
+
+Before production launch, the project must declare its acceptable recovery point and recovery time, choose a Supabase plan or off-platform export schedule that meets them, cover both PostgreSQL and Storage objects, and complete a restore exercise. Managed backups are not treated as verified recovery until restoration has been tested.
+
+## Verification Baseline
+
+The first production-capable implementation must include:
+
+- unit and property-oriented tests for standings, playoff aggregation, lifecycle rules, configuration freezing, and known-versus-unknown statistics;
+- PostgreSQL integration tests for constraints, scoped authorization, Row Level Security, transactions, audit persistence, and import idempotency;
+- migration replay from an empty local Supabase database;
+- Playwright coverage for login, authorized profile-photo changes, core League Administrator flows, and at least one English/French route and fallback path; and
+- a production build and type check in continuous integration.
+
+Asynchronous Server Components are verified through integration or browser tests when the unit-test environment cannot execute them faithfully.
+
+## Explicit Non-selections
+
+The initial stack does not adopt microservices, message queues, event buses, GraphQL, Supabase Realtime, Edge Runtime database mutations, Cloudinary, a second database, direct browser domain writes, or direct AI-generated production SQL. These are not forbidden forever; each requires a concrete need and an accepted amendment.
+
+The styling system, component library, transaction-capable query layer, external observability provider, analytics provider, email delivery provider, detailed statistics vocabulary, and final backup retention are intentionally deferred. Each must be decided before the first feature that depends on it, and none may change the architecture or domain boundaries implicitly.
+
+## Ratification
+
+This declaration remains `proposed` until the user approves it after review. Acceptance authorizes the application scaffold and implementation planning but does not itself define database tables, API contracts, or UI design.
+```
+
+### Spec 2: /Users/Shared/Agent-Workspace/repos/personal/courtside/specs/overview.md
+
+Hash: 33e48d55cd146f7e5a44c07f6126d52ea5d3798a8c9f94d8c444dcf2e4832ded
+
+```markdown
+# Courtside Core Domain Overview
+
+- Status: proposed
+- Spec version: 0.1.0
+- Last updated: 2026-08-04
+
+## Purpose
+
+Courtside owns the core domain for operating a recreational basketball league across seasons. It defines durable league, team, player, account, competition, standings, playoff, media, venue, localization, authorization, and audit concepts without prescribing a database, API style, framework, or deployment architecture.
+
+This specification family is authoritative for domain terminology and behavior. `README.md` remains orientation only.
+
+## Scope
+
+Courtside covers persistent league, team, player, and user-account identity; season-specific team participation, rosters, schedules, results, standings, and playoffs; provisional, partial, confirmed, and corrected player game statistics; configurable score-based standings and round-specific playoff series; league-scoped administration and season-team captain authority; simple venues and reusable media associations; English and French user-interface and authored-content localization; and simple audit records for material administrative changes.
+
+## Canonical Concepts
+
+A League is the persistent organization that owns seasons, league defaults, supported languages, the league timezone, administrator assignments, venues, and the league gallery. Courtside currently assumes one organizational league boundary; cross-league identity and competition are out of scope.
+
+A Season is a competition cycle within a League. It owns participating Season Teams, Games, standings configuration, playoff configuration, and frozen configuration versions needed to reproduce historical outcomes.
+
+A Team is a durable team identity that persists across Seasons. Season roster and Season results belong to Season Team participation, not directly to Team.
+
+A Season Team is one Team participating in one Season. It owns that Season roster memberships, Season-specific captain assignments, schedule participation, and derived Season performance. At most one Season Team may connect the same Team and Season.
+
+A Player is a durable participant identity within the League history and exists independently of team participation and authentication.
+
+A Roster Membership is a Player membership in one Season Team over an effective period. Transfers close the prior membership and open a new one without rewriting historical Games or Player Stat Lines. A Player may not have overlapping active memberships in more than one Season Team in the same Season.
+
+A User Account is a login identity and is never the same domain entity as a Player. Accounts may exist without Players, Players may exist without accounts, one account may manage multiple Players, and multiple accounts may manage one Player through separately approved relationships.
+
+A Player Management Relationship is an approval-controlled relationship authorizing a User Account to manage a Player profile. Approval and revocation are performed by a League Administrator and are audited.
+
+Authorization is expressed through scoped assignments. League Administrator assignments apply to one League and persist across Seasons until revoked. After the initial League Administrator bootstrap boundary for a League, an existing League Administrator assigns, reassigns, and revokes League Administrator assignments for that League. The bootstrap boundary is outside Phase 1 domain mutation semantics. Team Captain assignments apply to exactly one Season Team and are assigned, reassigned, or revoked by a League Administrator. In Phase 1, Team Captain is a scoped domain authority marker and does not independently grant authority over Game outcomes, rosters, Player Stat Lines, Player Management approvals, Season configuration amendments, or playoff conflict resolution unless a later accepted specification grants that authority.
+
+A Game is a scheduled basketball match between two distinct Season Teams in the same Season. It records schedule, venue, competition phase, lifecycle status, authoritative score when available, optional Player Stat Lines, and optional Media associations. Regular-season and playoff Games share the same Game concept.
+
+A Player Stat Line is a Player statistical performance in a Game, attributed through the Roster Membership that made the Player eligible for one participating Season Team. Every statistical value distinguishes unknown from known zero. A line may be partial and has an independent verification status of provisional or confirmed.
+
+Team Statistics are derived Season-Team performance calculated from authoritative Game results and, where explicitly needed, aggregated Player Stat Lines. The authoritative Game score remains the source for points for, points against, and result-based standings calculations.
+
+Standings are derived rankings of Season Teams under the Season frozen standings configuration. They are never directly edited and are recomputed from eligible authoritative Game outcomes plus explicit, audited adjustment records if configuration permits adjustments.
+
+A Playoff Bracket is a fixed advancement structure composed of ordered Rounds and Matchups. Initial Matchup slots are filled by seeds; later slots reference winners of fixed prior Matchups. Matchups contain a round-configured number of Games and advance the team with the greater aggregate score under the configured aggregate-tiebreak policy.
+
+A Venue is a reusable League-owned location with a name, address, and optional notes. A Game may reference one Venue and may add Game-specific court or arrival instructions.
+
+Media are optional photo records or YouTube links. The same Media item may be associated with Games, the League Gallery, or both. Association is independent of Media identity.
+
+Courtside supports English and French localization. UI strings and authored content are localizable. Team names, Player names, and other proper names remain language-neutral. A saved account preference selects a supported language; otherwise the League default language is used. Missing requested content falls back to the League default.
+
+An Audit Record is an append-only explanation of a material administrative change. The minimum record contains actor, timestamp, action, previous value, new value, and an optional reason. A reason is mandatory for correcting a finalized or forfeited Game result.
+
+## Derived Data Authority
+
+Authoritative Game outcomes produce regular-season standings, Season-Team result statistics, playoff aggregate scores, and playoff advancement. Player Stat Lines produce Player game logs and optional detailed Team Statistics. Player-stat availability or completeness must never block an authoritative Game result, standings recomputation, or playoff advancement.
+
+## Non-goals
+
+Non-goals include database tables, identifiers, indexes, API endpoints, event schemas, transport formats, programming language, framework, authentication provider, media host, deployment platform, divisions, conferences, inter-league competition, cross-league Player identity, automatic proper-name translation, treating detailed Player statistics as a prerequisite for standings, and directly editing derived standings or playoff advancement.
+```
+
+### Spec 3: /Users/Shared/Agent-Workspace/repos/personal/courtside/specs/lifecycle.md
+
+Hash: 7723d360abc7b2dc16a66b3d8b6e9ac83eaf31ebcdc7127404428b515c96d86a
+
+```markdown
+# Courtside Domain Lifecycles
+
+- Status: proposed
+- Spec version: 0.1.0
+- Last updated: 2026-08-04
+
+## Purpose
+
+This specification defines state transitions and authority timing for Season configuration, rosters, Games, Player Stat Lines, permissions, standings, and playoff Matchups.
+
+## General Lifecycle Failure Rule
+
+For every lifecycle-bearing Courtside domain entity, a transition that is not explicitly permitted by this specification must be rejected without mutating authoritative state. The rejection report must identify the entity, current state or condition, requested state or mutation, actor, and violated lifecycle rule. In-scope invariant, configuration validation, and authorization failures follow the same preserve-state rule and must identify the affected scope, attempted mutation, violated rule, and confirmation that authoritative records, persisted projections, and configuration versions remain unchanged. Auditing rejected attempts is not required unless the audit policy for that surface explicitly requires it.
+
+Terminal states named in a lifecycle have no outgoing transitions except separately listed post-terminal corrections or administrative amendments. A post-terminal correction preserves terminal status unless this specification explicitly says otherwise.
+
+## Core Mutation Authority
+
+Mutation authority is evaluated at request time and scoped to the affected League, Season, Season Team, Player, or Game. League Administrators may create, schedule, reschedule, postpone, cancel, start, finalize, forfeit, and correct Games; create, end, and transfer Roster Memberships; create, update, confirm, and correct Player Stat Lines; approve and revoke Player Management Relationships; assign, reassign, and revoke League Administrator and Team Captain role assignments; amend frozen Season configuration; and resolve playoff correction conflicts. Ordinary League Administrator assignment mutation is performed only by an existing League Administrator for the affected League after bootstrap, and an attempted revocation that would leave the League without an active League Administrator is rejected without mutation. Team Captain assignments are auditable scoped role markers and grant no independent core mutation authority in Phase 1. Derived standings, Season-Team result statistics, playoff aggregates, and playoff advancement are deterministic projections and are not directly edited by any actor.
+
+An approved Player Management Relationship grants authority to update only the linked Player's `display_name` and `profile_photo`. The approved account may belong to the Player themself or to another authorized manager, so an individual member linked to their own Player may update that Player's photo. League Administrators may update the same two fields for administrative support. No Player Management Relationship grants authority over identity linkage, roster membership, eligibility, statistics, Game outcomes, standings, playoff advancement, Season configuration, roles, or account credentials. Attempts outside this surface use the general authorization-failure rule.
+
+For the approved Player profile surface, `display_name` is the required League-visible Player name used for ordinary display and administrative identification. An accepted `display_name` update replaces the prior value, must preserve a non-empty language-neutral proper name value, and must reject unsupported or blank values without mutation. `profile_photo` is an optional Player profile-photo reference distinct from the reusable Media items associated with Games or the League Gallery. It may be set, replaced, or cleared by an actor authorized for the linked Player profile. An accepted `profile_photo` update stores a stable reference to a supported uploaded or externally hosted photo identity without implying any Game or Gallery Media association; unsupported reference forms, non-photo references, or values that cannot be retained as a stable Player profile-photo identity are rejected without mutation. Accepted updates to either field write an Audit Record preserving the prior and new value with actor, timestamp, action, and optional reason. The Audit Record is the required operational artifact for inspecting accepted Player profile field changes; no separate profile-change history substitutes for that mandatory audit surface in Phase 1.
+
+## Season Configuration Lifecycle
+
+A Season begins with mutable configuration derived from League defaults and Season overrides. The first accepted transition of any Season Game to `final` or `forfeit` freezes a single versioned snapshot of all result-affecting Season configuration for that Season. The freeze operation is idempotent per Season; later or retried authoritative Game transitions reuse the existing frozen version rather than creating another first version. Concurrent first-freeze attempts accept exactly one snapshot. A competing attempt reuses the created snapshot when it depends on the same result-affecting configuration basis, or is rejected without mutation when it depends on a different mutable configuration basis. All standings and playoff calculations identify the frozen configuration version they use. A League Administrator may amend frozen configuration only by creating a new version and an Audit Record. Recalculation under an amended version is deterministic and applies to every affected derived projection, while historical versions remain available.
+
+For first-freeze duplicate detection, the result-affecting configuration basis is the canonical content identity of exact result-affecting values captured in the frozen Season configuration version. It includes standings point values, ordered ranking criteria, eligible Game phase and status rules, standings adjustment enablement, forfeit treatment, playoff Round identities and order, participant slot sources, configured Games per Matchup, advancement rule, aggregate-tiebreak policies, and any later accepted result-affecting field. It excludes League timezone, localization, Venue, Media, display text, and other values that do not affect standings or playoff outcomes. Equal canonical basis identities reuse the existing frozen version. Unequal canonical basis identities are rejected without mutating authoritative state, persisted projections, or configuration versions.
+
+After any dependent authoritative Game outcome exists, a frozen result-affecting configuration amendment is legal only if it preserves existing authoritative state or resolves every affected derived-state conflict in the same administrative action. Amendments that change playoff Round structure, configured Games per Matchup, participant slot sources, advancement rule, or aggregate-tiebreak policy are prohibited once dependent authoritative playoff Games exist unless the same administrative action applies an amendment-specific playoff conflict resolution. The permitted amendment resolutions are the same operator choices as authoritative result corrections: halt affected downstream advancement until replacement authoritative outcomes exist under the amended bracket participants and fixed slot sources, or explicitly affirm the existing downstream participant path as an audited administrative exception. The amendment action is rejected without mutating authoritative state, persisted projections, or configuration versions unless it identifies the amended configuration version, changed result-affecting playoff fields, affected Matchups and participant slots, conflicted downstream authoritative Games, chosen resolution type, actor, and reason; resolves every affected conflict in the same action; and writes the required Audit Record and resolution report.
+
+## Roster Membership Lifecycle
+
+A Roster Membership has an effective start and may have an effective end. A Player becomes eligible for a Season Team when a membership becomes effective. A Player may not have overlapping effective memberships for different Season Teams in the same Season. A transfer ends the prior membership before the new membership begins. Ending or transferring a membership does not rewrite eligibility, attribution, or Player Stat Lines for Games played while the prior membership was effective. A Player Stat Line must reference the membership that established eligibility for that Game.
+
+A Game evaluates roster eligibility at its competition eligibility anchor. For a Game that enters `in_progress`, the anchor is the first accepted start instant. For a Game that becomes `forfeit` from `scheduled` or `postponed` without entering `in_progress`, the anchor is the official forfeit decision instant. A cancelled Game has no competition eligibility anchor for Player Stat Line attribution. Rescheduling or postponement before the anchor may change expected timing but does not create Player Stat Line eligibility. Finalization and later authoritative result corrections do not change the anchor or rewrite attribution. A closed membership interval is terminal; later participation requires a new non-overlapping interval.
+
+## Game Lifecycle
+
+The normative Game statuses are `scheduled`, `postponed`, `cancelled`, `in_progress`, `final`, and `forfeit`.
+
+A new Game begins as `scheduled`. While it remains `scheduled`, a legal reschedule mutation may replace its scheduled instant without changing status and must preserve the required scheduling-change history. A `scheduled` Game may become `postponed`, `cancelled`, `in_progress`, or `forfeit`. A `postponed` Game may return to `scheduled` with a revised scheduled instant, become `cancelled`, or become `forfeit`. Direct rescheduling without a status change is rejected from every status other than `scheduled`; a postponed Game must use the explicit `postponed` to `scheduled` transition. A `cancelled` Game has no authoritative competitive outcome and does not affect standings or playoff aggregates. `cancelled` is terminal and replacement competition requires a new or separately scheduled Game.
+
+Every scheduled instant is interpreted in the League configured IANA timezone and stored as an unambiguous instant. Administrative scheduled-instant entry, including initial scheduling and rescheduling, must identify exactly one instant in the League configured IANA timezone before the Game is mutated. A local scheduled value that is ambiguous during a daylight-saving overlap, nonexistent during a daylight-saving gap, or otherwise cannot identify one unambiguous instant is rejected without mutation unless the administrative input supplies enough offset or disambiguation information to identify exactly one instant. The rejection report must identify the Game, attempted scheduled value, League timezone, actor, violated scheduling rule, and confirmation that authoritative Game state and schedule history remain unchanged. Scheduling changes must preserve operational history containing actor, timestamp, action, previous scheduled instant and status when present, new scheduled instant and status when present, and optional reason. This history may be represented as an Audit Record or as separate schedule history.
+
+An `in_progress` Game may become `final` after an authoritative non-tied score is recorded. An `in_progress` Game tied at the end of regulation continues through overtime until one team wins. A Game may become `forfeit` only from `scheduled`, `postponed`, or `in_progress`, and only with an explicit winning team and official non-tied score. `final` and `forfeit` are authoritative terminal outcome statuses and do not return to prior statuses. Detailed Player statistics are not required for `final` or `forfeit`.
+
+## Authoritative Result Corrections
+
+A League Administrator may correct the score or declared winner of a `final` or `forfeit` Game. A correction preserves authoritative status, writes an Audit Record containing actor, timestamp, action, previous value, new value, and mandatory reason, triggers deterministic recomputation of affected standings, Season-Team result statistics, playoff aggregates, and playoff advancement, and never silently rewrites prior audit history.
+
+If a correction would change a playoff participant after downstream Games already have authoritative outcomes, automated destructive propagation is prohibited. The correction must either be rejected before it is recorded or recorded with an explicit League Administrator resolution in the same administrative action. A correction action that cannot resolve every affected downstream participant slot is rejected without mutating authoritative state, and no unresolved participant-resolution conflict state is persisted. Existing downstream authoritative Game records remain historically visible and are not silently changed.
+
+The resolution report for an accepted correction must identify the corrected Game, affected Matchups and participant slots, downstream authoritative Games that create the conflict, the recalculated participant that would have advanced, the participant currently present downstream, and the League Administrator actor and reason. The permitted accepted resolutions are to apply the correction and halt affected downstream advancement until replacement authoritative outcomes are recorded under corrected bracket participants, or to apply the correction and explicitly affirm the existing downstream participant path as an audited administrative exception. Every accepted resolution writes an Audit Record, and the correction is rejected unless the chosen resolution is applied to every affected downstream participant slot in the same administrative action.
+
+When the chosen resolution halts affected downstream advancement, the halted condition is observable in the current playoff projection and resolution report rather than as a new Matchup lifecycle state. The projection must mark each affected participant slot or dependent Matchup as halted by the accepted correction resolution, identify the corrected participant source that must be replayed, and exclude conflicted downstream authoritative Games from current advancement calculations for the corrected path while retaining those Games as historical authoritative records. A halted path resumes only when replacement authoritative outcomes exist for every affected configured downstream Game whose participant slots match the corrected bracket participants and fixed slot sources. Recomputations before that condition is satisfied must continue to report the same halted slots and must not advance through them.
+
+The deterministic identity of an accepted correction resolution is composed of the corrected Game, the prior authoritative result value, the prior authoritative result audit or version identity being corrected, the corrected authoritative value, affected participant slots, downstream authoritative Games that create the conflict, and chosen resolution type. Affected participant slots are canonicalized by fixed bracket path or immutable slot identity, and downstream authoritative Games are canonicalized by immutable canonical Game identity within fixed bracket order. Identity equality is based on canonicalized content, not traversal order, storage order, report ordering, discovery order, display labels, or mutable implementation identifiers. Retries, replays, duplicate submissions, or concurrent recomputations for the same material correction action must return the same projection effect, correction/resolution artifact identity, Audit Record identity, and resolution report. A later correction of the same Game back to a previously used authoritative value is a distinct resolution identity when it corrects a different prior authoritative result value or prior result audit or version identity. After a resolution identity has been accepted, a later attempt with the same identity reuses the prior accepted correction and resolution rather than appending another material Audit Record or creating a competing acceptance. If an implementation records non-authoritative retry-attempt telemetry, that telemetry is separate from the authoritative append-only Audit Record surface and does not affect projection identity, audit identity, or resolution status. They must not create an alternate participant projection, silently consume historically visible conflicted Games for advancement, or require an operator to resolve the same accepted halt again.
+
+The deterministic identity of an accepted playoff-configuration amendment resolution is composed of the prior frozen configuration version, amended configuration version, canonical identity of the changed playoff result-affecting fields, affected participant slots, downstream authoritative Games that create the conflict, and chosen resolution type. Affected participant slots and downstream authoritative Games are canonicalized by the same rules used for authoritative result-correction resolutions. Retries, replays, duplicate submissions, or concurrent recomputations for the same amendment-resolution identity must return the same amended configuration version, projection effect, amendment/resolution artifact identity, Audit Record identity, and resolution report. After an amendment-resolution identity has been accepted, a later attempt with the same identity reuses the prior accepted amendment and resolution rather than appending another material Audit Record or creating a competing amended version. An amendment attempt that cannot produce this identity or resolve every affected conflict in the same action is rejected without mutation.
+
+## Player Stat Line Lifecycle
+
+Verification and completeness are independent. A Player Stat Line may be created or updated as `provisional` before or after the Game result becomes authoritative. A line becomes `confirmed` when its currently known values have been verified. A confirmed line may remain partial. Updating a confirmed value returns the changed line to `provisional` unless the same authorized action explicitly verifies the replacement. `confirmed` is not terminal; the only permitted post-confirmation mutation is an authorized value update that returns the changed line to `provisional` unless explicitly verified in the same action.
+
+Each statistical value is either known, including known zero, or unknown because it has not been recorded. Human-readable completeness labels are derived from which expected values are known and are not substitutes for field-level known/unknown state. Adding later details does not change Game-result authority. Material stat changes are audited with actor, timestamp, action, previous value, new value, and optional reason.
+
+## Player Management Lifecycle
+
+A User Account-to-Player management relationship follows `requested -> approved -> revoked`. A User Account may create a `requested` relationship for itself and a Player. A League Administrator may create a `requested` relationship on behalf of a User Account and Player, or create and approve the relationship in one audited administrative action. Only an approved relationship grants management authority. League Administrators approve and revoke relationships. Approval and revocation are audited. Multiple approved accounts may manage one Player, and one account may manage multiple Players. Duplicate active `requested` or `approved` relationships for the same User Account and Player are rejected without mutation. `revoked` is terminal for that relationship; later access requires a new request and approval.
+
+## Role Assignment Lifecycle
+
+League Administrator assignment is scoped to one League and persists across Seasons until revoked. After bootstrap, League Administrators assign, reassign, and revoke League Administrator assignments for that League, but an assignment mutation that would leave the League without an active League Administrator is rejected without mutation. A Team Captain assignment is scoped to one Season Team, and League Administrators assign, reassign, and revoke Team Captain authority. Role assignment changes are audited. Ending a Season does not convert Team Captain assignment into authority over a later Season Team. A revoked role assignment is terminal; later authority requires a new assignment or reassignment under League Administrator authority.
+
+## Standings Lifecycle
+
+Standings are recomputed projections, not independently mutable records. Only eligible `final` and `forfeit` regular-season Games contribute. Any authoritative eligible result or permitted adjustment change invalidates the prior projection. Recalculation uses the applicable frozen Season configuration version. A random-draw tiebreak is performed only after all preceding ranking criteria remain tied. Each draw result is persisted and audited; rendering or recalculating unchanged inputs reuses it.
+
+A random-draw tie context has a stable identity composed of Season, frozen Season configuration version, ranking step or criterion that invoked `random_draw`, tied Season Teams in canonical identity order before the draw, and equal preceding criterion values. Canonical identity order is ascending byte order of each Season Team immutable canonical domain identity as assigned when the Season Team is created. Exactly one persisted draw result may exist for a tie context. Retries, replays, concurrent recalculations, or duplicate requests for the same tie context must return the existing result. Attempting to create another draw result is rejected as a deterministic conflict without another draw. League Administrators do not override or replace the persisted draw in Phase 1.
+
+## Playoff Matchup Lifecycle
+
+Initial fixed-bracket Matchup slots resolve from configured Season seeds. Later Matchup slots resolve from winners of named prior Matchups. A Matchup contains the number of Games configured for its Round, and every configured Game must reach `final` or `forfeit` before normal advancement. The Matchup aggregate is the sum of authoritative scores. The team with greater aggregate advances through the fixed bracket. If aggregate scores are tied at the end of regulation in the final configured Game, that Game continues into aggregate-tiebreak overtime until the aggregate tie is broken, even when the regulation score of that individual Game was not tied. Overtime points remain part of the final Game score and therefore the Matchup aggregate. Playoff Games use the ordinary Game lifecycle. Playoff outcomes do not contribute to regular-season standings. A Matchup with incomplete configured Games, a tied aggregate after all permitted tiebreak handling, or unknown tiebreak policy must not advance automatically and must report the violated rule.
+```
+
+### Spec 4: /Users/Shared/Agent-Workspace/repos/personal/courtside/specs/invariants.md
+
+Hash: 71e03c2089a15397b453883fb89c16c2a6f337fbc14205267a750eaab4d38e2e
+
+```markdown
+# Courtside Domain Invariants
+
+- Status: proposed
+- Spec version: 0.1.0
+- Last updated: 2026-08-04
+
+## Purpose
+
+These rules must remain true across implementations, schemas, APIs, recalculations, imports, corrections, and administrative operations.
+
+## Identity and Participation
+
+A User Account and Player are distinct. A Player exists independently of User Accounts and team participation. A Team persists independently of any one Season. Season-specific roster, captain authority, Games, and performance attach to Season Team rather than directly to Team. At most one Season Team connects the same Team and Season. A Player may not have overlapping effective Roster Memberships for different Season Teams in the same Season. Transfers preserve historical membership, Game, and Player Stat Line attribution. A User Account may manage a Player only through an approved Player Management Relationship. Player management is many-to-many. Player Stat Line eligibility is evaluated against the Game competition eligibility anchor, and later scheduling, finalization, forfeiture, or result correction does not change historical attribution.
+
+## Authorization
+
+League Administrator authority is scoped to one League and persists across Seasons until revoked. Ordinary League Administrator assignment mutation is performed only by an existing League Administrator for the affected League after bootstrap, and the final active League Administrator cannot be revoked. Team Captain authority is scoped to exactly one Season Team. Only a League Administrator may approve Player Management Relationships, correct authoritative Game results, amend frozen Season configuration, assign or revoke League Administrator authority after bootstrap, assign or revoke Team Captain authority, mutate Game lifecycle status, create or change Roster Memberships, create or materially change Player Stat Lines, or resolve playoff correction conflicts. Approved Player Management Relationships grant authority only to update the linked Player's `display_name` and `profile_photo`; this includes an individual member updating the photo of their own linked Player. Team Captain authority grants no independent core mutation authority in Phase 1. Role and management-relationship changes are audited. Unauthorized mutations and unpermitted lifecycle transitions are rejected without mutation and produce the required rejection report.
+
+## Games and Results
+
+A Game belongs to exactly one Season. Home and away Season Teams are distinct and belong to the Game Season. A `final` or `forfeit` Game has authoritative non-tied score and a winning team consistent with that score. Non-authoritative statuses do not contribute to standings or completed playoff aggregates. Tied Games are prohibited; regulation ties continue through overtime until resolved. A `forfeit` has an explicit official score; derived systems never invent one. Correcting an authoritative result preserves previous value in append-only audit history and recomputes every affected projection. Regular-season and playoff Games are the same entity type distinguished by phase and optional Matchup association. `cancelled`, `final`, and `forfeit` are terminal except that authoritative result corrections may modify score or declared winner of `final` or `forfeit` Games while preserving status. A playoff correction conflict must be resolved in the same administrative action as the correction or the correction is rejected without mutation. Accepted halted correction resolutions make affected slots or Matchups halted in the current projection, exclude conflicted downstream authoritative Games from current corrected-path advancement calculations while preserving them historically, and resume only when replacement authoritative outcomes exist under corrected bracket participants.
+
+## Player Statistics
+
+A Player Stat Line belongs to exactly one Game, Player, and Roster Membership establishing eligibility. Unknown and known zero are distinct. Completeness and verification are independent. A Game result may become authoritative while Player Stat Lines are absent, provisional, partial, or unknown. Player-stat completeness never affects standings eligibility or playoff advancement. Team points for, points against, and result-derived Team Statistics use authoritative Game score, not the sum of Player Stat Lines. Corrected confirmed statistics return to provisional unless the replacement is explicitly verified in the same authorized action.
+
+## Standings
+
+Standings are derived and cannot be directly edited. Only eligible authoritative regular-season Game outcomes and explicit configuration-permitted adjustment records may influence standings. Under defaults, games played equals wins plus losses, league points equal wins times two, and point differential equals points for minus points against. Default descending ranking order is league points, point differential, points scored, then random draw. A loss awards zero League Points. Random draw is used only when all earlier criteria remain tied. A random-draw result is persisted and audited and must not change because standings are viewed or recomputed from unchanged inputs. Exactly one persisted random-draw result may exist for a stable tie context. An idempotent retry, replay, duplicate request, or recalculation returns the existing result and artifact identity. An attempt to persist a different result for the same tie context is rejected without another draw or authoritative mutation. A standings projection identifies the frozen Season configuration version used. Playoff Games do not affect regular-season standings.
+
+## Playoffs
+
+A Playoff Bracket uses a fixed advancement graph and does not reseed. Initial Matchup participants resolve from seeds; later participants resolve from winners of fixed prior Matchups. A Matchup contains the Round-configured number of ordinary Games. Every configured Matchup Game is played to an authoritative outcome; early series termination based on Games won is prohibited. Advancement is determined by aggregate authoritative points, not Games won. The aggregate winner is the participating team with greater sum of authoritative Game points after configured Games and any aggregate-tiebreak overtime. Default aggregate-tiebreak overtime continues the final configured Game until the aggregate tie is broken. Aggregate-tiebreak points are part of the authoritative final Game score. A Matchup advances only from authoritative Game scores. A Matchup with incomplete outcomes must not advance automatically, and an attempted correction creating unresolved participant conflict is rejected before authoritative state changes. Accepted correction resolutions that halt advancement are deterministic by canonicalized resolution identity; retries and replays return the same halted projection and report until replacement authoritative outcomes satisfy resume conditions.
+
+## Configuration and Reproducibility
+
+The first accepted `final` or `forfeit` Game freezes a single versioned snapshot of result-affecting Season configuration, and retries or later authoritative outcomes reuse that frozen version. Concurrent or retried first-freeze attempts compare canonical result-affecting configuration basis identity; equal identities reuse existing frozen version, and unequal identities are rejected without mutating authoritative state, persisted projections, or configuration versions. Later amendments require League Administrator authority and an Audit Record. A result-affecting amendment that conflicts with existing authoritative Game outcomes or playoff state must preserve authoritative state through rejection or same-action administrative resolution. A playoff-configuration amendment after dependent authoritative playoff Games must use an amendment-specific resolution report and deterministic identity; it is not identified as a corrected Game-result value. Historical versions remain available. Given the same authoritative outcomes, adjustment records, persisted random draws, accepted correction resolutions, and configuration version, standings and playoff advancement are deterministic. Configuration cannot enable tied final Games. Unknown playoff policies, ranking criteria, or lifecycle transitions are rejected rather than silently interpreted.
+
+## Localization
+
+English and French are supported languages. The League default is exactly one supported language. A saved supported user preference overrides the League default. Missing requested localized content falls back to the League default. UI strings and authored content are localizable; proper names remain language-neutral. Dates and times render in the selected language but use the League configured timezone unless a future accepted specification introduces viewer-local scheduling.
+
+## Venues, Media, and Audit
+
+A Venue is reusable and League-owned; a Game may reference at most one Venue. A Media item may be associated with a Game, League Gallery, or both without duplicating Media identity. Every material Audit Record contains actor, timestamp, action, previous value, and new value. Audit reasons are optional except for authoritative Game-result corrections, where a reason is mandatory. Audit history is append-only. Required rejection reports identify entity, current state or condition, requested mutation, actor, violated rule, and state-preservation outcome. Accepted playoff correction resolution reports identify halted slots or Matchups, conflicted downstream Games retained as historical records, corrected-path records excluded from current advancement, resume condition, and canonicalized resolution identity used for deterministic retries. Accepted playoff-configuration amendment resolution reports identify the prior and amended configuration versions, changed playoff result-affecting fields, halted or affirmed slots or Matchups, conflicted downstream Games retained as historical records, current advancement effect, resume condition when halted, and canonicalized amendment-resolution identity used for deterministic retries.
+```
+
+### Spec 5: /Users/Shared/Agent-Workspace/repos/personal/courtside/specs/config.md
+
+Hash: be6157fbc1a1b38cf5f5336c1c903d184faf0e1bbe8d2aafe68491cfa8230928
+
+```markdown
+# Courtside Domain Configuration
+
+- Status: proposed
+- Spec version: 0.1.0
+- Last updated: 2026-08-04
+
+## Purpose
+
+This specification defines the conceptual configuration surface and normative defaults. It does not prescribe a serialization format. YAML examples are illustrative unless a field or value is declared normative in prose.
+
+## Authority and Precedence
+
+Configuration resolves from normative Courtside defaults to League configuration to Season overrides to frozen Season configuration version. More specific values override less specific values only where permitted. The first accepted authoritative Season Game outcome freezes all result-affecting values into a single versioned Season snapshot. Later, retried, or concurrent authoritative outcome transitions reuse the existing snapshot or are rejected under the lifecycle freeze rule when they depend on a different mutable configuration basis.
+
+The result-affecting configuration basis identity used for first-freeze comparison is canonical content identity of values captured in the frozen version. It covers standings point values, ordered ranking criteria, eligible Game phase and status rules, standings adjustment enablement, forfeit treatment, playoff Round identities and order, participant slot sources, configured Games per Matchup, advancement rule, aggregate-tiebreak policies, and any later accepted result-affecting field. It excludes timezone, localization, Venue, Media, display text, and other non-result-affecting values.
+
+Canonicalization occurs after resolving normative defaults, League configuration, and Season overrides. Omitted values equal their resolved explicit defaults. Ordered policy fields, including ranking criteria and playoff Rounds, retain their normative order. Semantically unordered identity collections are sorted by ascending byte order of immutable canonical domain identity. Enum values use their exact normative tokens; integers use exact mathematical integer values without display formatting; absent optional values remain distinct from present non-default values unless this specification declares a default. Implementations may choose serialization and hashing mechanisms, but equal canonical content must compare equal and unequal canonical content must compare unequal across implementations.
+
+## League Configuration
+
+A League defines one valid IANA timezone, supported languages including English and French, one default language selected from supported languages, League Administrator assignments, reusable Venues, and League-level defaults for new Seasons. The concrete timezone and default language are League data, not hard-coded product constants.
+
+## Standings Configuration
+
+The standings engine is configurable by Season. It defines League Points for each authoritative outcome, ordered ranking criteria, eligible competition phases and Game statuses, whether explicit standings adjustments are permitted, and how random-draw results are persisted and reused. The normative default awards two points for a win and zero for a loss; eligible Games are regular-season `final` and `forfeit`; ranking is `league_points`, `point_differential`, `points_scored`, then `random_draw`; adjustments are disabled.
+
+All numeric ranking criteria sort descending. `random_draw` is evaluated only for teams still tied after every preceding criterion. Each performed draw records tied participants, canonical tied-participant order before the draw, preceding equal criterion values, resulting order, actor or system initiator, timestamp, applicable Season configuration version, and stable tie-context identity. The same unresolved tie context reuses the recorded result. The stable tie-context identity is composed of Season, frozen Season configuration version, ranking step or criterion, tied Season Team identities in canonical order, and equal preceding criterion values. Exactly one persisted draw result may exist for a tie context. An idempotent retry, replay, duplicate request, or recalculation returns the existing result and its artifact identity. An attempt to persist a different result for the same tie context is rejected as a deterministic conflict without another draw or authoritative mutation. League Administrators do not override or replace persisted draws in Phase 1.
+
+The initial ranking vocabulary is `league_points`, `point_differential`, `points_scored`, and `random_draw`. Adding a ranking criterion requires a later accepted specification defining inputs, ordering direction, tie behavior, and reproducibility requirements.
+
+## Standing Calculations
+
+For each Season Team under default rules: wins are eligible authoritative Games won; losses are eligible authoritative Games lost; games played equals wins plus losses; league points equal configured win and loss points; points for and against are sums of official eligible Game scores; point differential is points for minus points against; points scored is points for. A forfeit contributes its explicit official score. If standings adjustments are enabled later, each adjustment must be an explicit audited record rather than direct edit to derived standings.
+
+## Playoff Configuration
+
+Playoff structure is configurable per Round. Each Round defines stable Round identity and display order, fixed input slots from seeds or named prior-Matchup winners, number of Games in each Matchup, `aggregate_points` as advancement rule, and aggregate-tiebreak policy. Example Game counts are illustrative only. Every Season must provide actual Round list and Game count for each Round. `overtime` is the normative default aggregate-tiebreak policy and continues the final configured Game after regulation until the Matchup aggregate is no longer tied. Unknown policies are rejected rather than silently falling back. Round structure and policies are result-affecting frozen configuration and are subject to frozen amendment legality after dependent authoritative playoff Games exist.
+
+## Game and Venue Configuration
+
+Every Game has scheduled instant, home and away Season Teams, competition phase, optional Venue reference, and optional Game-specific venue instructions. Every Venue has stable League-local identity, name, address, and optional notes. The League timezone supplies scheduling interpretation for administrative entry and default display. Stored scheduled instants must remain unambiguous across daylight-saving transitions.
+
+## Statistics Configuration
+
+The concrete statistic vocabulary is deferred until the initial scorekeeping surface is specified. Any later vocabulary must preserve field-level known versus unknown state, known zero as valid value, line-level provisional or confirmed verification, confirmed partial lines, and independence between Player-stat completeness and Game-result authority. Points may be recorded before other statistics and must not imply unrecorded fields are zero.
+
+## Localization Configuration
+
+Language selection follows saved supported User Account preference, then League default language. If requested authored-content translation is missing, Courtside renders the League-default variant. UI and authored content must be capable of English and French variants. Proper names are stored and rendered without automatic translation. Concrete storage and editorial workflow are deferred.
+
+## Authorization Configuration
+
+The initial roles are `league_admin`, scoped to one League and persistent across Seasons until revoked, and `team_captain`, scoped to one Season Team. After bootstrap, existing League Administrators assign, reassign, and revoke League Administrator authority for that League, but cannot revoke the final active League Administrator. League Administrators assign, reassign, and revoke Team Captain authority and approve or revoke Player Management Relationships. League Administrators also hold Phase 1 authority for core Game lifecycle mutations, authoritative result corrections, Roster Membership changes, Player Stat Line creation and material changes, frozen Season configuration amendments, and playoff correction conflict resolution. Persisted random-draw duplicate or conflict attempts are handled only by deterministic reuse or rejection. Team Captain authority is a scoped role marker in Phase 1. Adding roles or changing authority requires an accepted specification update.
+
+## Audit Configuration
+
+Audit Records contain actor, timestamp, action, previous value, new value, and reason, with reason optional unless otherwise required. Auditing is mandatory for finalized or forfeited Game-result corrections with a required reason, accepted Player `display_name` and `profile_photo` updates, material Player-stat changes, Roster Membership changes, Player Management Relationship approvals and revocations, League Administrator and Team Captain assignment changes, frozen Season configuration amendments, persisted random-draw tiebreak results, playoff correction conflict resolutions, and scheduling changes unless required scheduling-change history is preserved outside Audit Records.
+
+An Audit Record for a playoff correction conflict resolution must include resolution type, prior authoritative result value, prior authoritative result audit or version identity being corrected, corrected authoritative value, affected participant slots, conflicted downstream authoritative Games, canonicalized resolution identity, and whether affected advancement is halted or an existing downstream participant path is affirmed as an administrative exception. An Audit Record for a playoff-configuration amendment resolution must include the prior frozen configuration version, amended configuration version, changed playoff result-affecting fields, resolution type, affected participant slots, conflicted downstream authoritative Games, canonicalized amendment-resolution identity, and whether affected advancement is halted or an existing downstream participant path is affirmed as an administrative exception. The canonicalized resolution identity is also the idempotency key for authoritative correction-resolution audit persistence: once accepted, duplicate submissions, retries, replays, and concurrent recomputations reuse the existing Audit Record identity and do not append another material Audit Record for the same accepted resolution. The corresponding resolution report must expose the same information needed to reproduce retry behavior and operator handoff, including whether the request created a new accepted resolution or returned the prior acceptance.
+
+Retention duration, export format, and cryptographic tamper evidence are deferred.
+```
+
+### Spec 6: /Users/Shared/Agent-Workspace/repos/personal/courtside/specs/decisions/0001-ratify-core-domain.md
+
+Hash: 7bae042ca487d5449d5f6dea3431e0604d7794abc103faf544846164cfdbe47c
+
+```markdown
+# ADR 0001: Ratify the Courtside Core Domain
+
+- Status: proposed
+- Spec version: 0.1.0
+- Date: 2026-08-04
+
+## Context
+
+Courtside needs a stable conceptual boundary before schema, API, framework, or deployment decisions. Without explicit domain authority, implementations are likely to collapse User Account and Player identity, lose roster history, treat playoff Games as a separate type, make standings depend on incomplete statistics, or encode one League policy as inflexible implementation rules.
+
+## Decision
+
+Adopt the domain defined by overview, lifecycle, invariants, and configuration. The ratified direction is that Season is the competition container while Team and Player identities persist across Seasons; Season Team and Roster Membership preserve Season participation and transfers historically; User Account and Player remain separate and connected through many-to-many approved management relationships; League Administrator authority persists across Seasons; Team Captain authority is scoped to one Season Team; Games use `scheduled`, `postponed`, `cancelled`, `in_progress`, `final`, and `forfeit`; tied authoritative outcomes are prohibited; League Administrators may correct authoritative outcomes with append-only audit and mandatory reason; Player-stat values distinguish unknown from known zero and may be partial and independently provisional or confirmed; standings derive from authoritative regular-season results under customizable versioned configuration; playoffs use fixed aggregate-points brackets with configurable aggregate-tiebreak defaulting to overtime in the final configured Game; result-affecting Season configuration freezes at first final or forfeited Game and changes only by versioned audited League Administrator amendment; the League owns timezone, reusable Venues, English/French language configuration, default language, localizable UI and authored content, and reusable Media identity; and material administrative changes use the minimum audit fields defined in configuration.
+
+## Consequences
+
+Schema and API work must preserve participation history instead of placing a mutable team reference directly on Player. Derived standings and playoff advancement require reproducible configuration versions and audit-aware recomputation. Statistics representations must preserve missingness and verification separately. Playoff Matchups cannot use conventional games-won best-of logic. Interfaces and contracts may be designed later without reopening these concepts unless new requirements create a genuine domain conflict. No implementation, contract, or public protocol directories are created by this decision alone.
+
+## Ratification
+
+This ADR remains `proposed` while the specification bundle is drafted and reviewed. It becomes `accepted` only after the bundle contains no unresolved major or minor contained-audit findings and the user approves the audited result. Acceptance does not constitute Whetstone Phase 1 stability or Phase 2 convergence.
+```

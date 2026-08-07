@@ -1,8 +1,8 @@
 # ADR 0001: Ratify the Courtside Core Domain
 
-- Status: proposed
+- Status: accepted
 - Spec version: 0.1.0
-- Date: 2026-08-04
+- Date: 2026-08-07
 
 ## Context
 
@@ -18,4 +18,4 @@ Schema and API work must preserve participation history instead of placing a mut
 
 ## Ratification
 
-This ADR remains `proposed` while the specification bundle is drafted and reviewed. It becomes `accepted` only after the bundle contains no unresolved major or minor contained-audit findings and the user approves the audited result. Acceptance does not constitute Whetstone Phase 1 stability or Phase 2 convergence.
+This ADR was accepted on 2026-08-07 after the specification bundle completed its contained audit, Whetstone Phase 1 stabilization, Phase 2 convergence, controlled apply-back, and user approval. The accepted source files are the normative authority; Whetstone run artifacts preserve review provenance.

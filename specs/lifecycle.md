@@ -1,8 +1,8 @@
 # Courtside Domain Lifecycles
 
-- Status: proposed
+- Status: accepted
 - Spec version: 0.1.0
-- Last updated: 2026-08-04
+- Last updated: 2026-08-07
 
 ## Purpose
 
