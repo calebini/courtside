@@ -39,8 +39,10 @@ node_modules/
 .next/
 .nuxt/
 .turbo/
+*.tsbuildinfo
+supabase/.branches/
+supabase/.temp/
 
 # Compiled output
 out/
 target/
-

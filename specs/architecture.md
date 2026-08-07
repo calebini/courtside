@@ -1,0 +1,56 @@
+# Courtside Initial Architecture
+
+- Status: accepted
+- Spec version: 0.1.0
+- Last updated: 2026-08-07
+
+## Purpose
+
+This specification translates the accepted domain and technology declarations into the initial modular-monolith boundaries. It owns implementation dependency direction and the first executable vertical slice; it does not define a public API.
+
+## Dependency Direction
+
+`src/courtside/core` contains deterministic domain values and calculations. It may depend on the TypeScript and Node.js standard libraries but not on Next.js, React, Vercel, Supabase, PostgreSQL clients, environment variables, or network APIs.
+
+`src/courtside/services` coordinates authorized use cases and transactions through explicit internal ports. It may depend on the core but not on concrete adapters or Next.js delivery code.
+
+`src/courtside/adapters` implements service ports for PostgreSQL and later external systems. Adapters may depend on services and core. PostgreSQL constraints and triggers protect cross-path integrity but do not become an alternate location for orchestration policy.
+
+`src/app` is the Next.js delivery surface. It may invoke application services but does not own domain rules. No write-capable HTTP endpoint is exposed before Supabase Auth session verification and scoped League Administrator authorization are integrated.
+
+## Transaction Strategy
+
+Authoritative server-side mutations use `node-postgres` with parameterized SQL and an explicitly checked-out client for the full transaction. Runtime connections use a bounded pool configured by the PostgreSQL adapter. Supabase Data API calls are not combined to approximate an authoritative transaction, and PostgreSQL RPC functions are not used as a parallel application-service layer in this slice.
+
+The PostgreSQL adapter connects with a server-only credential. Browser code cannot import the adapter or receive its connection string. Supabase Row Level Security remains enabled with no direct browser domain-table write policies.
+
+## First Vertical Slice
+
+The first slice begins with an existing `in_progress` regular-season Game and an active League Administrator. It accepts one command to finalize that Game with a non-tied authoritative score. In one transaction it:
+
+1. serializes duplicate command handling and reuses an existing receipt for an identical retry;
+2. verifies current League Administrator authority;
+3. locks the Game and Season records;
+4. validates the `in_progress` to `final` transition and authoritative score;
+5. creates or reuses the single frozen result-affecting Season configuration version;
+6. rejects a configuration-basis conflict without mutation;
+7. persists the final Game result and the configuration version used;
+8. appends the Game-finalization Audit Record;
+9. reads authoritative regular-season outcomes inside the transaction and recomputes standings through the pure domain engine; and
+10. persists an idempotent command receipt before commit.
+
+The returned standings projection identifies the frozen configuration version. If every configured numeric criterion remains tied and no persisted random-draw order is supplied, the engine exposes an unresolved stable tie context instead of inventing an order. Performing and auditing the random draw is a later slice; callers must not present an unresolved projection as final ranked standings.
+
+## Persistence Boundary
+
+The initial migration contains only records exercised by the slice: League, User Account, League Administrator Assignment, Season, Team, Season Team, frozen Season Configuration Version, Game, Audit Record, and Command Receipt. It includes participant, status, score, winner, configuration-version, append-only-history, and direct-browser-access protections.
+
+Standings are calculated projections and are not stored as editable rows. This slice recomputes them from authoritative Games on demand. A future cache or persisted projection must remain disposable and identify its configuration version.
+
+## Failure Semantics
+
+Domain, lifecycle, authorization, and idempotency failures roll back the transaction. Rejections identify the entity, current state or condition, requested mutation, actor, violated rule, and that authoritative state was preserved. Infrastructure errors also roll back but remain operational failures rather than domain rejections.
+
+## Deferred Surfaces
+
+This slice does not implement login, League Administrator bootstrap, Game start, forfeiture, result correction, configuration amendment, persisted random draw, playoffs, Player statistics, roster mutation, media, spreadsheet import, public mutation APIs, or production deployment. Those surfaces must extend the accepted boundaries rather than bypass them.
