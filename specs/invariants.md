@@ -10,104 +10,36 @@ These rules must remain true across implementations, schemas, APIs, recalculatio
 
 ## Identity and Participation
 
-1. A User Account and a Player are distinct identities.
-2. A Player exists independently of User Accounts and team participation.
-3. A Team persists independently of any one Season.
-4. Season-specific roster, captain authority, Games, and performance attach to a Season Team rather than directly to the persistent Team.
-5. At most one Season Team connects the same Team and Season.
-6. A Player may not have overlapping effective Roster Memberships for different Season Teams in the same Season.
-7. Transfers preserve historical membership, Game, and Player Stat Line attribution.
-8. A User Account may manage a Player only through an approved Player Management Relationship.
-9. Player management is many-to-many: one account may manage multiple Players and multiple accounts may manage one Player.
+A User Account and Player are distinct. A Player exists independently of User Accounts and team participation. A Team persists independently of any one Season. Season-specific roster, captain authority, Games, and performance attach to Season Team rather than directly to Team. At most one Season Team connects the same Team and Season. A Player may not have overlapping effective Roster Memberships for different Season Teams in the same Season. Transfers preserve historical membership, Game, and Player Stat Line attribution. A User Account may manage a Player only through an approved Player Management Relationship. Player management is many-to-many. Player Stat Line eligibility is evaluated against the Game competition eligibility anchor, and later scheduling, finalization, forfeiture, or result correction does not change historical attribution.
 
 ## Authorization
 
-1. League Administrator authority is scoped to one League and persists across Seasons until revoked.
-2. Team Captain authority is scoped to exactly one Season Team.
-3. Only a League Administrator may approve Player Management Relationships, correct authoritative Game results, amend frozen Season configuration, or assign Team Captain authority.
-4. Role and management-relationship changes are audited.
+League Administrator authority is scoped to one League and persists across Seasons until revoked. Ordinary League Administrator assignment mutation is performed only by an existing League Administrator for the affected League after bootstrap, and the final active League Administrator cannot be revoked. Team Captain authority is scoped to exactly one Season Team. Only a League Administrator may approve Player Management Relationships, correct authoritative Game results, amend frozen Season configuration, assign or revoke League Administrator authority after bootstrap, assign or revoke Team Captain authority, mutate Game lifecycle status, create or change Roster Memberships, create or materially change Player Stat Lines, or resolve playoff correction conflicts. Approved Player Management Relationships grant authority only to update the linked Player's `display_name` and `profile_photo`; this includes an individual member updating the photo of their own linked Player. Team Captain authority grants no independent core mutation authority in Phase 1. Role and management-relationship changes are audited. Unauthorized mutations and unpermitted lifecycle transitions are rejected without mutation and produce the required rejection report.
 
 ## Games and Results
 
-1. A Game belongs to exactly one Season.
-2. Home and away Season Teams are distinct and belong to the Game's Season.
-3. A `final` or `forfeit` Game has an authoritative non-tied score and a winning team consistent with that score.
-4. A `cancelled`, `scheduled`, `postponed`, or `in_progress` Game does not contribute to standings or completed playoff aggregates.
-5. Tied Games are prohibited; regulation ties continue through overtime until resolved.
-6. A `forfeit` has an explicit official score; derived systems never invent a forfeit score.
-7. Correcting an authoritative result preserves the previous value in append-only audit history and recomputes every affected derived projection.
-8. A regular-season Game and a playoff Game are the same entity type distinguished by competition phase and optional Matchup association.
+A Game belongs to exactly one Season. Home and away Season Teams are distinct and belong to the Game Season. A `final` or `forfeit` Game has authoritative non-tied score and a winning team consistent with that score. Non-authoritative statuses do not contribute to standings or completed playoff aggregates. Tied Games are prohibited; regulation ties continue through overtime until resolved. A `forfeit` has an explicit official score; derived systems never invent one. Correcting an authoritative result preserves previous value in append-only audit history and recomputes every affected projection. Regular-season and playoff Games are the same entity type distinguished by phase and optional Matchup association. `cancelled`, `final`, and `forfeit` are terminal except that authoritative result corrections may modify score or declared winner of `final` or `forfeit` Games while preserving status. A playoff correction conflict must be resolved in the same administrative action as the correction or the correction is rejected without mutation. Accepted halted correction resolutions make affected slots or Matchups halted in the current projection, exclude conflicted downstream authoritative Games from current corrected-path advancement calculations while preserving them historically, and resume only when replacement authoritative outcomes exist under corrected bracket participants.
 
 ## Player Statistics
 
-1. A Player Stat Line belongs to exactly one Game, one Player, and the Roster Membership establishing that Player's eligibility for a participating Season Team.
-2. Unknown and known zero are semantically different and remain distinguishable in every representation.
-3. Completeness and verification are independent: a partial line may be confirmed.
-4. A Game result may become authoritative while Player Stat Lines are absent, provisional, partial, or unknown.
-5. Player-stat completeness never affects standings eligibility or playoff advancement.
-6. Team points for, points against, and result-derived Team Statistics use the authoritative Game score, not the sum of Player Stat Lines.
-7. Corrected confirmed statistics return to provisional unless the replacement is explicitly verified in the same authorized action.
+A Player Stat Line belongs to exactly one Game, Player, and Roster Membership establishing eligibility. Unknown and known zero are distinct. Completeness and verification are independent. A Game result may become authoritative while Player Stat Lines are absent, provisional, partial, or unknown. Player-stat completeness never affects standings eligibility or playoff advancement. Team points for, points against, and result-derived Team Statistics use authoritative Game score, not the sum of Player Stat Lines. Corrected confirmed statistics return to provisional unless the replacement is explicitly verified in the same authorized action.
 
 ## Standings
 
-1. Standings are derived and cannot be directly edited.
-2. Only eligible authoritative regular-season Game outcomes and explicit configuration-permitted adjustment records may influence standings.
-3. Under the default rules:
-
-   ```text
-   games_played = wins + losses
-   league_points = wins * 2
-   point_differential = points_for - points_against
-   ```
-
-4. The default descending ranking order is:
-
-   ```text
-   league_points
-   point_differential
-   points_scored
-   random_draw
-   ```
-
-5. A loss awards zero League Points under the default configuration.
-6. Random draw is used only when all earlier configured criteria remain tied.
-7. A random-draw result is persisted and audited and must not change merely because standings are viewed or recomputed from unchanged authoritative inputs.
-8. A standings projection identifies the frozen Season configuration version used to produce it.
-9. Playoff Games do not affect regular-season standings.
+Standings are derived and cannot be directly edited. Only eligible authoritative regular-season Game outcomes and explicit configuration-permitted adjustment records may influence standings. Under defaults, games played equals wins plus losses, league points equal wins times two, and point differential equals points for minus points against. Default descending ranking order is league points, point differential, points scored, then random draw. A loss awards zero League Points. Random draw is used only when all earlier criteria remain tied. A random-draw result is persisted and audited and must not change because standings are viewed or recomputed from unchanged inputs. Exactly one persisted random-draw result may exist for a stable tie context. An idempotent retry, replay, duplicate request, or recalculation returns the existing result and artifact identity. An attempt to persist a different result for the same tie context is rejected without another draw or authoritative mutation. A standings projection identifies the frozen Season configuration version used. Playoff Games do not affect regular-season standings.
 
 ## Playoffs
 
-1. A Playoff Bracket uses a fixed advancement graph; it does not reseed between Rounds.
-2. Initial Matchup participants resolve from seeds, and later participants resolve from winners of fixed prior Matchups.
-3. A Playoff Matchup contains the Round-configured number of ordinary Games.
-4. Every configured Matchup Game is played to an authoritative outcome; early series termination based on Games won is prohibited.
-5. Matchup advancement is determined by aggregate authoritative points, not by Games won.
-6. The aggregate winner is the participating team with the greater sum of authoritative Game points after the configured Games and any aggregate-tiebreak overtime.
-7. Under the default aggregate-tiebreak policy, a Matchup aggregate tie after regulation in the final configured Game is resolved by continuing that Game through overtime until the aggregate tie is broken, even when the individual Game's regulation score was not tied.
-8. Aggregate-tiebreak points are part of the authoritative final Game score.
-9. A playoff Matchup cannot advance from incomplete, provisional, or detailed Player statistics; it advances only from authoritative Game scores.
+A Playoff Bracket uses a fixed advancement graph and does not reseed. Initial Matchup participants resolve from seeds; later participants resolve from winners of fixed prior Matchups. A Matchup contains the Round-configured number of ordinary Games. Every configured Matchup Game is played to an authoritative outcome; early series termination based on Games won is prohibited. Advancement is determined by aggregate authoritative points, not Games won. The aggregate winner is the participating team with greater sum of authoritative Game points after configured Games and any aggregate-tiebreak overtime. Default aggregate-tiebreak overtime continues the final configured Game until the aggregate tie is broken. Aggregate-tiebreak points are part of the authoritative final Game score. A Matchup advances only from authoritative Game scores. A Matchup with incomplete outcomes must not advance automatically, and an attempted correction creating unresolved participant conflict is rejected before authoritative state changes. Accepted correction resolutions that halt advancement are deterministic by canonicalized resolution identity; retries and replays return the same halted projection and report until replacement authoritative outcomes satisfy resume conditions.
 
 ## Configuration and Reproducibility
 
-1. The first `final` or `forfeit` Game freezes a versioned snapshot of result-affecting Season configuration.
-2. Later amendments require League Administrator authority and an Audit Record.
-3. Historical configuration versions remain available to explain prior calculations.
-4. Given the same authoritative outcomes, adjustment records, persisted random draws, and configuration version, standings and playoff advancement are deterministic.
-5. Configuration cannot enable tied final Games.
+The first accepted `final` or `forfeit` Game freezes a single versioned snapshot of result-affecting Season configuration, and retries or later authoritative outcomes reuse that frozen version. Concurrent or retried first-freeze attempts compare canonical result-affecting configuration basis identity; equal identities reuse existing frozen version, and unequal identities are rejected without mutating authoritative state, persisted projections, or configuration versions. Later amendments require League Administrator authority and an Audit Record. A result-affecting amendment that conflicts with existing authoritative Game outcomes or playoff state must preserve authoritative state through rejection or same-action administrative resolution. A playoff-configuration amendment after dependent authoritative playoff Games must use an amendment-specific resolution report and deterministic identity; it is not identified as a corrected Game-result value. Historical versions remain available. Given the same authoritative outcomes, adjustment records, persisted random draws, accepted correction resolutions, and configuration version, standings and playoff advancement are deterministic. Configuration cannot enable tied final Games. Unknown playoff policies, ranking criteria, or lifecycle transitions are rejected rather than silently interpreted.
 
 ## Localization
 
-1. English and French are supported languages.
-2. The League default is exactly one supported language.
-3. A saved supported user preference overrides the League default.
-4. Missing requested localized content falls back to the League default.
-5. UI strings and authored content are localizable; proper names remain language-neutral.
-6. Dates and times render in the selected language but use the League's configured timezone unless a future accepted specification introduces viewer-local scheduling.
+English and French are supported languages. The League default is exactly one supported language. A saved supported user preference overrides the League default. Missing requested localized content falls back to the League default. UI strings and authored content are localizable; proper names remain language-neutral. Dates and times render in the selected language but use the League configured timezone unless a future accepted specification introduces viewer-local scheduling.
 
 ## Venues, Media, and Audit
 
-1. A Venue is reusable and League-owned; a Game may reference at most one Venue.
-2. A Media item may be associated with a Game, the League Gallery, or both without duplication of Media identity.
-3. Every material Audit Record contains actor, timestamp, action, previous value, and new value.
-4. Audit reasons are optional except for authoritative Game-result corrections, where a reason is mandatory.
-5. Audit history is append-only.
+A Venue is reusable and League-owned; a Game may reference at most one Venue. A Media item may be associated with a Game, League Gallery, or both without duplicating Media identity. Every material Audit Record contains actor, timestamp, action, previous value, and new value. Audit reasons are optional except for authoritative Game-result corrections, where a reason is mandatory. Audit history is append-only. Required rejection reports identify entity, current state or condition, requested mutation, actor, violated rule, and state-preservation outcome. Accepted playoff correction resolution reports identify halted slots or Matchups, conflicted downstream Games retained as historical records, corrected-path records excluded from current advancement, resume condition, and canonicalized resolution identity used for deterministic retries. Accepted playoff-configuration amendment resolution reports identify the prior and amended configuration versions, changed playoff result-affecting fields, halted or affirmed slots or Matchups, conflicted downstream Games retained as historical records, current advancement effect, resume condition when halted, and canonicalized amendment-resolution identity used for deterministic retries.

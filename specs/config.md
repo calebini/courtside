@@ -10,208 +10,52 @@ This specification defines the conceptual configuration surface and normative de
 
 ## Authority and Precedence
 
-Configuration resolves in this order:
+Configuration resolves from normative Courtside defaults to League configuration to Season overrides to frozen Season configuration version. More specific values override less specific values only where permitted. The first accepted authoritative Season Game outcome freezes all result-affecting values into a single versioned Season snapshot. Later, retried, or concurrent authoritative outcome transitions reuse the existing snapshot or are rejected under the lifecycle freeze rule when they depend on a different mutable configuration basis.
 
-```text
-normative Courtside defaults
-  -> League configuration
-    -> Season overrides
-      -> frozen Season configuration version
-```
+The result-affecting configuration basis identity used for first-freeze comparison is canonical content identity of values captured in the frozen version. It covers standings point values, ordered ranking criteria, eligible Game phase and status rules, standings adjustment enablement, forfeit treatment, playoff Round identities and order, participant slot sources, configured Games per Matchup, advancement rule, aggregate-tiebreak policies, and any later accepted result-affecting field. It excludes timezone, localization, Venue, Media, display text, and other non-result-affecting values.
 
-More specific values override less specific values only where this specification permits customization. The first authoritative Season Game outcome freezes all result-affecting values into a versioned Season snapshot.
+Canonicalization occurs after resolving normative defaults, League configuration, and Season overrides. Omitted values equal their resolved explicit defaults. Ordered policy fields, including ranking criteria and playoff Rounds, retain their normative order. Semantically unordered identity collections are sorted by ascending byte order of immutable canonical domain identity. Enum values use their exact normative tokens; integers use exact mathematical integer values without display formatting; absent optional values remain distinct from present non-default values unless this specification declares a default. Implementations may choose serialization and hashing mechanisms, but equal canonical content must compare equal and unequal canonical content must compare unequal across implementations.
 
 ## League Configuration
 
-A League defines:
-
-- one valid IANA timezone;
-- supported languages, which must include English and French for this product scope;
-- one default language selected from its supported languages;
-- League Administrator assignments;
-- reusable Venues; and
-- League-level defaults for new Seasons.
-
-Illustrative configuration:
-
-```yaml
-league:
-  timezone: America/Toronto
-  languages:
-    supported: [en, fr]
-    default: en
-```
-
-The concrete timezone and default language are League data, not hard-coded product constants.
+A League defines one valid IANA timezone, supported languages including English and French, one default language selected from supported languages, League Administrator assignments, reusable Venues, and League-level defaults for new Seasons. The concrete timezone and default language are League data, not hard-coded product constants.
 
 ## Standings Configuration
 
-The standings engine is configurable by Season. Its configuration defines:
+The standings engine is configurable by Season. It defines League Points for each authoritative outcome, ordered ranking criteria, eligible competition phases and Game statuses, whether explicit standings adjustments are permitted, and how random-draw results are persisted and reused. The normative default awards two points for a win and zero for a loss; eligible Games are regular-season `final` and `forfeit`; ranking is `league_points`, `point_differential`, `points_scored`, then `random_draw`; adjustments are disabled.
 
-- League Points awarded for each authoritative outcome;
-- the ordered ranking criteria;
-- which competition phases and Game statuses are eligible;
-- whether explicit standings adjustments are permitted; and
-- how random-draw results are persisted and reused.
+All numeric ranking criteria sort descending. `random_draw` is evaluated only for teams still tied after every preceding criterion. Each performed draw records tied participants, canonical tied-participant order before the draw, preceding equal criterion values, resulting order, actor or system initiator, timestamp, applicable Season configuration version, and stable tie-context identity. The same unresolved tie context reuses the recorded result. The stable tie-context identity is composed of Season, frozen Season configuration version, ranking step or criterion, tied Season Team identities in canonical order, and equal preceding criterion values. Exactly one persisted draw result may exist for a tie context. An idempotent retry, replay, duplicate request, or recalculation returns the existing result and its artifact identity. An attempt to persist a different result for the same tie context is rejected as a deterministic conflict without another draw or authoritative mutation. League Administrators do not override or replace persisted draws in Phase 1.
 
-The normative default is:
+The initial ranking vocabulary is `league_points`, `point_differential`, `points_scored`, and `random_draw`. Adding a ranking criterion requires a later accepted specification defining inputs, ordering direction, tie behavior, and reproducibility requirements.
 
-```yaml
-standings:
-  points:
-    win: 2
-    loss: 0
-  eligible_games:
-    phase: regular_season
-    statuses: [final, forfeit]
-  ranking:
-    - league_points
-    - point_differential
-    - points_scored
-    - random_draw
-  adjustments:
-    enabled: false
-```
+## Standing Calculations
 
-All numeric ranking criteria above sort descending. `random_draw` is evaluated only for teams still tied after every preceding criterion. Each performed draw records the tied participants, preceding equal criterion values, resulting order, actor or system initiator, timestamp, and applicable Season configuration version. The same unresolved tie context reuses the recorded result.
-
-The initial configurable ranking vocabulary is:
-
-- `league_points`;
-- `point_differential`;
-- `points_scored`; and
-- `random_draw`.
-
-Adding a ranking criterion requires a later accepted specification defining its inputs, ordering direction, tie behavior, and reproducibility requirements.
-
-### Standing Calculations
-
-For each Season Team under the default rules:
-
-```text
-wins = eligible authoritative Games won
-losses = eligible authoritative Games lost
-games_played = wins + losses
-league_points = (wins * configured win points) + (losses * configured loss points)
-points_for = sum of that team's official eligible Game scores
-points_against = sum of opponents' official eligible Game scores
-point_differential = points_for - points_against
-points_scored = points_for
-```
-
-A forfeit contributes its explicit official score. The standings engine does not synthesize one. If standings adjustments are enabled in a future Season configuration, each adjustment must be an explicit audited record rather than a direct edit to derived standings.
+For each Season Team under default rules: wins are eligible authoritative Games won; losses are eligible authoritative Games lost; games played equals wins plus losses; league points equal configured win and loss points; points for and against are sums of official eligible Game scores; point differential is points for minus points against; points scored is points for. A forfeit contributes its explicit official score. If standings adjustments are enabled later, each adjustment must be an explicit audited record rather than direct edit to derived standings.
 
 ## Playoff Configuration
 
-Playoff structure is configurable per Round. Each Round defines:
-
-- a stable Round identity and display order;
-- fixed input slots from seeds or named prior-Matchup winners;
-- the number of Games in each Matchup;
-- `aggregate_points` as the advancement rule; and
-- an aggregate-tiebreak policy.
-
-Illustrative configuration:
-
-```yaml
-playoffs:
-  bracket: fixed
-  rounds:
-    - id: quarterfinal
-      games_per_matchup: 3
-      advancement: aggregate_points
-      aggregate_tiebreaker: overtime
-    - id: semifinal
-      games_per_matchup: 5
-      advancement: aggregate_points
-      aggregate_tiebreaker: overtime
-    - id: final
-      games_per_matchup: 7
-      advancement: aggregate_points
-      aggregate_tiebreaker: overtime
-```
-
-The example Game counts are not normative League defaults. Every Season must provide the actual Round list and Game count for each Round.
-
-`overtime` is the normative default aggregate-tiebreak policy. It continues the final configured Game after regulation until the Matchup aggregate is no longer tied. The configuration surface is modular so later accepted specifications may add other deterministic policies. An implementation must reject an unknown policy rather than silently falling back.
-
-Round structure and policies become part of the frozen result-affecting Season configuration.
+Playoff structure is configurable per Round. Each Round defines stable Round identity and display order, fixed input slots from seeds or named prior-Matchup winners, number of Games in each Matchup, `aggregate_points` as advancement rule, and aggregate-tiebreak policy. Example Game counts are illustrative only. Every Season must provide actual Round list and Game count for each Round. `overtime` is the normative default aggregate-tiebreak policy and continues the final configured Game after regulation until the Matchup aggregate is no longer tied. Unknown policies are rejected rather than silently falling back. Round structure and policies are result-affecting frozen configuration and are subject to frozen amendment legality after dependent authoritative playoff Games exist.
 
 ## Game and Venue Configuration
 
-Every Game has:
-
-- a scheduled instant;
-- home and away Season Teams;
-- a competition phase;
-- an optional Venue reference; and
-- optional Game-specific venue instructions.
-
-Every Venue has:
-
-- a stable League-local identity;
-- a name;
-- an address; and
-- optional notes.
-
-The League timezone supplies the scheduling interpretation for administrative entry and default display. Stored scheduled instants must remain unambiguous across daylight-saving transitions.
+Every Game has scheduled instant, home and away Season Teams, competition phase, optional Venue reference, and optional Game-specific venue instructions. Every Venue has stable League-local identity, name, address, and optional notes. The League timezone supplies scheduling interpretation for administrative entry and default display. Stored scheduled instants must remain unambiguous across daylight-saving transitions.
 
 ## Statistics Configuration
 
-The concrete statistic vocabulary is deferred until the initial scorekeeping surface is specified. Any later vocabulary must preserve:
-
-- field-level known versus unknown state;
-- known zero as a valid value;
-- line-level provisional or confirmed verification;
-- confirmed partial lines; and
-- independence between Player-stat completeness and Game-result authority.
-
-Points may be recorded before other statistics and must not imply that unrecorded fields are zero.
+The concrete statistic vocabulary is deferred until the initial scorekeeping surface is specified. Any later vocabulary must preserve field-level known versus unknown state, known zero as valid value, line-level provisional or confirmed verification, confirmed partial lines, and independence between Player-stat completeness and Game-result authority. Points may be recorded before other statistics and must not imply unrecorded fields are zero.
 
 ## Localization Configuration
 
-Language selection follows:
-
-```text
-saved supported User Account preference
-  -> League default language
-```
-
-If a requested authored-content translation is missing, Courtside renders the League-default variant. UI and authored content must be capable of English and French variants. Proper names are stored and rendered without automatic translation.
-
-The concrete storage and editorial workflow for translations are deferred to interface and implementation specifications.
+Language selection follows saved supported User Account preference, then League default language. If requested authored-content translation is missing, Courtside renders the League-default variant. UI and authored content must be capable of English and French variants. Proper names are stored and rendered without automatic translation. Concrete storage and editorial workflow are deferred.
 
 ## Authorization Configuration
 
-The initial roles are:
-
-- `league_admin`, scoped to one League and persistent across Seasons until revoked; and
-- `team_captain`, scoped to one Season Team.
-
-League Administrators assign, reassign, and revoke Team Captain authority and approve or revoke Player Management Relationships. Adding roles or changing their authority requires an accepted specification update.
+The initial roles are `league_admin`, scoped to one League and persistent across Seasons until revoked, and `team_captain`, scoped to one Season Team. After bootstrap, existing League Administrators assign, reassign, and revoke League Administrator authority for that League, but cannot revoke the final active League Administrator. League Administrators assign, reassign, and revoke Team Captain authority and approve or revoke Player Management Relationships. League Administrators also hold Phase 1 authority for core Game lifecycle mutations, authoritative result corrections, Roster Membership changes, Player Stat Line creation and material changes, frozen Season configuration amendments, and playoff correction conflict resolution. Persisted random-draw duplicate or conflict attempts are handled only by deterministic reuse or rejection. Team Captain authority is a scoped role marker in Phase 1. Adding roles or changing authority requires an accepted specification update.
 
 ## Audit Configuration
 
-Audit Records contain:
+Audit Records contain actor, timestamp, action, previous value, new value, and reason, with reason optional unless otherwise required. Auditing is mandatory for finalized or forfeited Game-result corrections with a required reason, accepted Player `display_name` and `profile_photo` updates, material Player-stat changes, Roster Membership changes, Player Management Relationship approvals and revocations, League Administrator and Team Captain assignment changes, frozen Season configuration amendments, persisted random-draw tiebreak results, playoff correction conflict resolutions, and scheduling changes unless required scheduling-change history is preserved outside Audit Records.
 
-```text
-actor
-timestamp
-action
-previous_value
-new_value
-reason (optional unless otherwise required)
-```
-
-Auditing is mandatory for:
-
-- finalized or forfeited Game-result corrections, with a required reason;
-- material Player-stat changes;
-- Roster Membership changes;
-- Player Management Relationship approvals and revocations;
-- League Administrator and Team Captain assignment changes;
-- frozen Season configuration amendments; and
-- persisted random-draw tiebreak results.
+An Audit Record for a playoff correction conflict resolution must include resolution type, prior authoritative result value, prior authoritative result audit or version identity being corrected, corrected authoritative value, affected participant slots, conflicted downstream authoritative Games, canonicalized resolution identity, and whether affected advancement is halted or an existing downstream participant path is affirmed as an administrative exception. An Audit Record for a playoff-configuration amendment resolution must include the prior frozen configuration version, amended configuration version, changed playoff result-affecting fields, resolution type, affected participant slots, conflicted downstream authoritative Games, canonicalized amendment-resolution identity, and whether affected advancement is halted or an existing downstream participant path is affirmed as an administrative exception. The canonicalized resolution identity is also the idempotency key for authoritative correction-resolution audit persistence: once accepted, duplicate submissions, retries, replays, and concurrent recomputations reuse the existing Audit Record identity and do not append another material Audit Record for the same accepted resolution. The corresponding resolution report must expose the same information needed to reproduce retry behavior and operator handoff, including whether the request created a new accepted resolution or returned the prior acceptance.
 
 Retention duration, export format, and cryptographic tamper evidence are deferred.
-
