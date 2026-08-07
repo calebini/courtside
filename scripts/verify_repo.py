@@ -14,6 +14,7 @@ REQUIRED_FILES = (
     "specs/lifecycle.md",
     "specs/invariants.md",
     "specs/config.md",
+    "specs/tech-stack.md",
     "specs/decisions/0001-ratify-core-domain.md",
     "specs/repo-standard.md",
 )
