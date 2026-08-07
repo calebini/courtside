@@ -1,6 +1,6 @@
 # Operator Decision Checkpoint Summary
 
-- terminal_state: `PHASE_1_STABLE`
+- terminal_state: `CONVERGED`
 - checkpoint_count: `15`
 - rounds_with_checkpoints: `4`, `8`, `12`, `19`
 - trigger_reason_counts: `deferable_scope_boundary`=9, `operator_policy_choice`=6

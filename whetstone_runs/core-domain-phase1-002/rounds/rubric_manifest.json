@@ -1,0 +1,45 @@
+{
+  "configured_budgets": {
+    "convergence_profile_budgets": {
+      "adversarial": 4,
+      "convergence_strict_check": 6
+    },
+    "convergence_round_budget": 16,
+    "effective_total_absolute_round_budget": 25,
+    "review_profile_budgets": {
+      "determinism": 3,
+      "operability": 3,
+      "structural_integrity": 3
+    },
+    "review_profile_set": "balanced_mvp",
+    "review_round_budget": 9,
+    "total_absolute_round_budget": 25
+  },
+  "controlled_vocabulary": {
+    "schema_version": "controlled-vocabulary-v1",
+    "vocabulary_hash": "ed361ca15a34bf4d10e2703b4a82088718bc71b0b23fee1ddbc019b38a77ec86",
+    "vocabulary_version": "2026-05-17"
+  },
+  "generated_at": "2026-08-07T07:11:41.833774+00:00",
+  "resolved_defaults": {
+    "required_artifacts": [
+      "spec.md",
+      "spec.history.md",
+      "run_state.json",
+      "decision_register.json",
+      "decision_summary.json",
+      "operator_decision_checkpoint_summary.json"
+    ],
+    "target_mode": "strict",
+    "target_phase": "mid"
+  },
+  "rubric_content_hash": "c2f9e0441a248c2056895ac9d4047764720094a9067daf87d601c128302f448e",
+  "rubric_label": null,
+  "rubric_path": "/Users/Shared/Agent-Workspace/repos/personal/cortext1/whetstone/rubrics/mvp-v1.md",
+  "rubric_profile": "mvp-v1",
+  "rubric_source": "builtin",
+  "target_mode": "strict",
+  "target_phase": "mid",
+  "warnings": [],
+  "workflow": "mvp"
+}

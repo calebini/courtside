@@ -1,0 +1,368 @@
+{
+  "convergence_acceptance_profiles": [
+    "convergence_strict_check",
+    "mvp_readiness_check"
+  ],
+  "oscillation": {
+    "concern_types": {
+      "authority_violation": {
+        "description": "section violates a defined role, boundary, or authority rule"
+      },
+      "clarity_gap": {
+        "description": "section is ambiguous, undefined, or unclear"
+      },
+      "completeness_gap": {
+        "description": "section is missing required content, rule, definition, or edge case"
+      },
+      "consistency_violation": {
+        "description": "section contradicts another section or prior decision"
+      },
+      "determinism_violation": {
+        "description": "section permits non-deterministic behavior"
+      },
+      "precision_gap": {
+        "description": "section is correct but under-specified"
+      },
+      "redundancy": {
+        "description": "section duplicates content elsewhere"
+      },
+      "scope_violation": {
+        "description": "section addresses something out of scope or omits something in scope"
+      }
+    },
+    "directions": {
+      "add": {
+        "description": "add missing content or behavior"
+      },
+      "clarify": {
+        "description": "clarify ambiguous content without materially changing scope or strictness"
+      },
+      "constrain": {
+        "description": "make behavior stricter, narrower, or more bounded"
+      },
+      "modify": {
+        "description": "change content when no more specific direction applies"
+      },
+      "relax": {
+        "description": "make behavior looser, broader, or less restrictive"
+      },
+      "remove": {
+        "description": "remove content or behavior"
+      }
+    },
+    "opposition_pairs": [
+      [
+        "add",
+        "remove"
+      ],
+      [
+        "constrain",
+        "relax"
+      ]
+    ],
+    "scopes": {
+      "local": {
+        "description": "specific rule, sentence, definition, field, or invariant"
+      },
+      "structural": {
+        "description": "section organization, responsibility boundary, lifecycle shape, or cross-section architecture"
+      }
+    }
+  },
+  "profile_sets": {
+    "balanced_mvp": {
+      "phase_1_default_budgets": {
+        "determinism": 7,
+        "operability": 6,
+        "structural_integrity": 7
+      },
+      "phase_1_profiles": [
+        "structural_integrity",
+        "determinism",
+        "operability"
+      ],
+      "phase_2_default_budgets": {
+        "adversarial": 4,
+        "convergence_strict_check": 6
+      },
+      "phase_2_profiles": [
+        "convergence_strict_check",
+        "adversarial",
+        "convergence_strict_check"
+      ]
+    },
+    "governance": {
+      "phase_1_default_budgets": {
+        "adversarial": 8,
+        "determinism": 10,
+        "operability": 10,
+        "structural_integrity": 10
+      },
+      "phase_1_profiles": [
+        "structural_integrity",
+        "determinism",
+        "operability",
+        "adversarial"
+      ],
+      "phase_2_default_budgets": {
+        "adversarial": 10,
+        "convergence_strict_check": 10
+      },
+      "phase_2_profiles": [
+        "convergence_strict_check",
+        "adversarial",
+        "convergence_strict_check"
+      ]
+    },
+    "stateful_system": {
+      "phase_1_default_budgets": {
+        "determinism": 10,
+        "operability": 10,
+        "structural_integrity": 10
+      },
+      "phase_1_profiles": [
+        "structural_integrity",
+        "determinism",
+        "operability"
+      ],
+      "phase_2_default_budgets": {
+        "adversarial": 10,
+        "convergence_strict_check": 10
+      },
+      "phase_2_profiles": [
+        "convergence_strict_check",
+        "adversarial",
+        "convergence_strict_check"
+      ]
+    },
+    "utility_mvp": {
+      "phase_1_default_budgets": {
+        "buildability": 4,
+        "consistency": 4,
+        "determinism_light": 4,
+        "operability_light": 3
+      },
+      "phase_1_profiles": [
+        "buildability",
+        "consistency",
+        "determinism_light",
+        "operability_light"
+      ],
+      "phase_2_default_budgets": {
+        "mvp_readiness_check": 4,
+        "scope_guard": 3
+      },
+      "phase_2_profiles": [
+        "mvp_readiness_check",
+        "scope_guard",
+        "mvp_readiness_check"
+      ]
+    }
+  },
+  "review_invariants": {
+    "acceptance_testability": {
+      "description": "completion criteria are observable enough to test implementation readiness"
+    },
+    "artifact_integrity": {
+      "description": "required artifacts have producer, consumer, identity, validation, mutation, and persistence semantics"
+    },
+    "authority_boundary": {
+      "description": "ownership, precedence, and mutation authority are explicit where behavior can diverge"
+    },
+    "deterministic_behavior": {
+      "description": "required behavior has deterministic inputs, ordering, decisions, and outputs"
+    },
+    "failure_handling": {
+      "description": "required failure paths define reject, retry, halt, continue, preserve, report, or escalate behavior"
+    },
+    "replay_idempotency": {
+      "description": "replay, retry, deduplication, and idempotency behavior are explicit where required"
+    },
+    "rubric_alignment": {
+      "description": "the draft satisfies the active rubric profile and target phase/mode without hidden gaps"
+    },
+    "scope_control": {
+      "description": "review pressure stays inside the configured workflow, rubric, profile, and approved scope contract"
+    },
+    "state_legality": {
+      "description": "stateful behavior defines legal states, transitions, terminal states, and invalid-transition handling"
+    },
+    "version_lineage": {
+      "description": "source, draft, dependency, and apply-back identity are hashable and auditable"
+    }
+  },
+  "review_profiles": {
+    "adversarial": {
+      "focus": [
+        "ambiguity_attack",
+        "exploit_paths",
+        "assumption_breaking"
+      ],
+      "focus_anchors": [
+        "baseline-review-invariants",
+        "conflict-model",
+        "oscillation-detection-full-definition",
+        "phase-gated-feedback-classification",
+        "target-matrix-precedence"
+      ],
+      "prompt_guidance": "Stress-test ambiguity, hidden assumptions, exploit paths, and cases where a permissive reading could produce unsafe, divergent, or out-of-scope behavior. Do not elevate severity unless the baseline invariants, authority model, determinism requirements, or active rubric justify it."
+    },
+    "buildability": {
+      "focus": [
+        "core_flow",
+        "required_inputs_outputs",
+        "acceptance_criteria"
+      ],
+      "focus_anchors": [],
+      "prompt_guidance": "Review whether an engineer can build the first useful implementation without guessing. Prioritize core flows, required inputs and outputs, command/API behavior, ownership, and observable acceptance criteria. Avoid requesting post-MVP hardening unless it blocks the core flow."
+    },
+    "consistency": {
+      "focus": [
+        "terminology_consistency",
+        "command_option_consistency",
+        "artifact_reference_consistency"
+      ],
+      "focus_anchors": [],
+      "prompt_guidance": "Review internal consistency of terminology, option names, artifacts, section references, lifecycle terms, and source-of-truth statements. Prefer small alignment fixes over expanding the system contract."
+    },
+    "convergence_strict_check": {
+      "focus": [
+        "rubric_alignment",
+        "declaration_validity",
+        "strictness_gaps"
+      ],
+      "focus_anchors": [
+        "accepted-draft-definition",
+        "convergence-declaration",
+        "phase-2-failure-handling",
+        "round-scheduling-algorithm",
+        "target-matrix-precedence"
+      ],
+      "prompt_guidance": "Evaluate target/rubric readiness, unresolved blocker or major issues, declaration validity, and whether the draft satisfies the configured convergence target. Do not expand scope merely to make the spec more complete."
+    },
+    "determinism": {
+      "focus": [
+        "hashing",
+        "replayability",
+        "idempotency"
+      ],
+      "focus_anchors": [
+        "content-normalization-and-hashing",
+        "issue-and-conflict-identity",
+        "oscillation-detection-full-definition",
+        "phase-gated-feedback-classification",
+        "reproducibility"
+      ],
+      "prompt_guidance": "Emphasize behavior that must produce the same outcome across implementers and repeated runs: hashes, ordering, replay, retries, idempotency, stable identifiers, deduplication, and deterministic failure states."
+    },
+    "determinism_light": {
+      "focus": [
+        "path_resolution",
+        "stable_ids",
+        "exit_codes",
+        "report_presence"
+      ],
+      "focus_anchors": [],
+      "prompt_guidance": "Review deterministic behavior only where it affects observable MVP outcomes: path resolution, exit codes, stable identifiers, ordering visible to users, and whether required reports or files are produced. Do not require exhaustive replay, idempotency, recovery, or audit contracts unless they are explicitly in scope."
+    },
+    "mvp_readiness_check": {
+      "focus": [
+        "mvp_scope",
+        "core_flow_buildability",
+        "deferred_hardening"
+      ],
+      "focus_anchors": [],
+      "prompt_guidance": "Evaluate whether the draft is ready for a first useful MVP implementation under the scope contract. Check blockers and major gaps in core flows, but treat nonessential hardening as deferrable when it does not change MVP interfaces, state legality, artifact integrity, or acceptance outcomes."
+    },
+    "operability": {
+      "focus": [
+        "failure_modes",
+        "observability",
+        "recovery"
+      ],
+      "focus_anchors": [
+        "artifact-validation-policy",
+        "configuration",
+        "halt-artifact-matrix",
+        "phase-1-failure-handling",
+        "phase-2-failure-handling",
+        "primary-outputs",
+        "reproducibility"
+      ],
+      "prompt_guidance": "Emphasize operational failure modes, validation failures, terminal reporting, recovery behavior, observability, and operator handoff needed to run the system safely."
+    },
+    "operability_light": {
+      "focus": [
+        "obvious_failure_modes",
+        "user_visible_errors",
+        "safe_non_destructive_behavior"
+      ],
+      "focus_anchors": [],
+      "prompt_guidance": "Review obvious user-visible failures and safe behavior for the MVP. Prefer simple error/failure categories and clear user outcomes. Do not require full observability, recovery, runbooks, or exhaustive failure matrices."
+    },
+    "scope_guard": {
+      "focus": [
+        "scope_contract_alignment",
+        "over_expansion",
+        "deferred_surface_preservation"
+      ],
+      "focus_anchors": [],
+      "prompt_guidance": "Review whether the draft stayed within the approved scope contract. Flag scope expansion, new persistent surfaces, exhaustive matrices, broad error vocabularies, or post-MVP hardening that became required without operator approval. Prefer scope-promotion decisions over silently widening the MVP."
+    },
+    "structural_integrity": {
+      "focus": [
+        "authority_boundaries",
+        "state_machine_legality",
+        "cross_spec_consistency"
+      ],
+      "focus_anchors": [
+        "artifact-schemas-minimum-required-fields",
+        "artifact-validation-policy",
+        "conflict-escalation",
+        "conflict-model",
+        "core-roles",
+        "editor-decline-taxonomy",
+        "halt-artifact-matrix",
+        "halting-conditions-ordered-precedence",
+        "review-profiles",
+        "round-scheduling-algorithm",
+        "round-strategy-adaptive",
+        "state-machine-full-transitions"
+      ],
+      "prompt_guidance": "Emphasize authority boundaries, legal state/lifecycle transitions, required artifact/schema structure, and cross-section consistency. This profile is appropriate for stateful systems where ambiguity can corrupt state, replay, or audit behavior."
+    }
+  },
+  "schema_version": "controlled-vocabulary-v1",
+  "severity_aliases": {
+    "critical": "blocker",
+    "high": "major",
+    "low": "nit",
+    "medium": "minor",
+    "moderate": "minor",
+    "n/a": null,
+    "na": null,
+    "no authority impact": null,
+    "no determinism impact": null,
+    "no impact": null,
+    "no rubric impact": null,
+    "no-impact": null,
+    "no_impact": null,
+    "none": null,
+    "not applicable": null,
+    "not applicable to authority": null,
+    "not applicable to determinism": null,
+    "not applicable to rubric": null,
+    "not impacted": null,
+    "not-applicable": null,
+    "not_applicable": null,
+    "null": null,
+    "severe": "blocker"
+  },
+  "severity_order": [
+    "nit",
+    "minor",
+    "major",
+    "blocker"
+  ],
+  "vocabulary_version": "2026-05-17"
+}

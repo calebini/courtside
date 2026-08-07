@@ -2,7 +2,7 @@
 
 - source_register_path: `/Users/Shared/Agent-Workspace/repos/personal/courtside/whetstone_runs/core-domain-phase1-002/rounds/decision_register.json`
 - mode: `end_of_cycle`
-- terminal_state: `PHASE_1_STABLE`
+- terminal_state: `CONVERGED`
 - decision_count: `15`
 - decision_status_counts: `deferred_scope_decision`=5, `operator_review_recommended`=10
 - unresolved_human_decision_count: `15`

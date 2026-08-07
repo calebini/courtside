@@ -898,7 +898,7 @@
     "deferred_scope_decision": 5,
     "operator_review_recommended": 10
   },
-  "generated_at": "2026-08-06T20:02:51.170674+00:00",
+  "generated_at": "2026-08-07T07:12:12.191116+00:00",
   "hotspots": {
     "human_decision_clusters": [
       {
@@ -978,6 +978,6 @@
   "mode": "end_of_cycle",
   "source_register_path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/whetstone_runs/core-domain-phase1-002/rounds/decision_register.json",
   "summary_method": "mechanical_v1",
-  "terminal_state": "PHASE_1_STABLE",
+  "terminal_state": "CONVERGED",
   "unresolved_human_decision_count": 15
 }

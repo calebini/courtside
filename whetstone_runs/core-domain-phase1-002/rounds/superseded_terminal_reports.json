@@ -1,0 +1,12 @@
+{
+  "generated_at": "2026-08-07T07:12:12.199498+00:00",
+  "reports": [
+    {
+      "path": "technical_failure_report.json",
+      "prior_round_number": 15,
+      "prior_terminal_state": "TARGET_NOT_REACHED"
+    }
+  ],
+  "superseded_by_round_number": 25,
+  "superseded_by_terminal_state": "CONVERGED"
+}

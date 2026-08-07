@@ -1,0 +1,11 @@
+{
+  "checkpoint_count": 0,
+  "checkpoints": [],
+  "default_action": "continue_without_operator_input",
+  "draft_hash": "907801fb1db19482a8cd1e6575f88ab388a9a3965ce0071b624695205e512522",
+  "generated_at": "2026-08-07T07:11:02.492937+00:00",
+  "mode": "artifact_only",
+  "profile": "convergence_strict_check",
+  "round_number": 23,
+  "runtime_effect": "none"
+}

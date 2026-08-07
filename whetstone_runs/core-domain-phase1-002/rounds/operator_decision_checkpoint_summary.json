@@ -445,7 +445,7 @@
       }
     ]
   },
-  "generated_at": "2026-08-06T20:02:51.176712+00:00",
+  "generated_at": "2026-08-07T07:12:12.196491+00:00",
   "recommended_operator_review": [
     {
       "affected_sections": [
@@ -544,7 +544,7 @@
     "decision_point": 15
   },
   "summary_method": "mechanical_checkpoint_v1",
-  "terminal_state": "PHASE_1_STABLE",
+  "terminal_state": "CONVERGED",
   "trigger_reason_counts": {
     "deferable_scope_boundary": 9,
     "operator_policy_choice": 6
