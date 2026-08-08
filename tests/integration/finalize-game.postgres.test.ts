@@ -364,7 +364,7 @@ describeWithDatabase('PostgreSQL Game finalization slice', () => {
         {
           id: ids.season,
           configurationFrozen: false,
-          games: [
+          inProgressGames: [
             {
               id: ids.game,
               homeTeamName: 'A',

@@ -24,6 +24,55 @@ export interface FinalScore {
   readonly away: number;
 }
 
+export function validateGameParticipants(homeSeasonTeamId: string, awaySeasonTeamId: string) {
+  if (!homeSeasonTeamId || !awaySeasonTeamId || homeSeasonTeamId === awaySeasonTeamId) {
+    throw new RuleViolation(
+      'game.distinct_participants_required',
+      'A Game requires distinct home and away Season Teams'
+    );
+  }
+}
+
+export function rescheduleGameState(game: GameState): GameState {
+  if (game.status !== 'scheduled' && game.status !== 'postponed') {
+    throw new RuleViolation(
+      'game.scheduled_or_postponed_to_scheduled_only',
+      `Game ${game.id} cannot be rescheduled from ${game.status}`
+    );
+  }
+  return {...game, status: 'scheduled', version: game.version + 1};
+}
+
+export function postponeGameState(game: GameState): GameState {
+  if (game.status !== 'scheduled') {
+    throw new RuleViolation(
+      'game.scheduled_to_postponed_only',
+      `Game ${game.id} cannot transition from ${game.status} to postponed`
+    );
+  }
+  return {...game, status: 'postponed', version: game.version + 1};
+}
+
+export function cancelGameState(game: GameState): GameState {
+  if (game.status !== 'scheduled' && game.status !== 'postponed') {
+    throw new RuleViolation(
+      'game.precompetition_to_cancelled_only',
+      `Game ${game.id} cannot transition from ${game.status} to cancelled`
+    );
+  }
+  return {...game, status: 'cancelled', version: game.version + 1};
+}
+
+export function startGameState(game: GameState): GameState {
+  if (game.status !== 'scheduled') {
+    throw new RuleViolation(
+      'game.scheduled_to_in_progress_only',
+      `Game ${game.id} cannot transition from ${game.status} to in_progress`
+    );
+  }
+  return {...game, status: 'in_progress', version: game.version + 1};
+}
+
 export interface FinalizedGameState extends GameState {
   readonly status: 'final';
   readonly homeScore: number;

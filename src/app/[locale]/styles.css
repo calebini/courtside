@@ -140,7 +140,8 @@ label {
   font-weight: 750;
 }
 
-input {
+input,
+select {
   width: 100%;
   min-height: 2.85rem;
   padding: 0.65rem 0.75rem;
@@ -152,6 +153,7 @@ input {
 }
 
 input:focus-visible,
+select:focus-visible,
 button:focus-visible,
 a:focus-visible {
   outline: 3px solid #ef8d55;
@@ -236,6 +238,26 @@ a:focus-visible {
   gap: 1rem;
 }
 
+.season-workspace {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.season-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 0.5rem;
+}
+
+.operations-grid {
+  display: grid;
+  grid-template-columns: minmax(20rem, 0.8fr) minmax(24rem, 1.2fr);
+  gap: 1rem;
+}
+
 .panel {
   min-width: 0;
   padding: clamp(1rem, 3vw, 1.6rem);
@@ -271,6 +293,78 @@ a:focus-visible {
   border: 1px solid #ddd5c6;
   border-radius: 0.65rem;
   background: #fffefa;
+}
+
+.compact-form {
+  margin-top: 1.25rem;
+}
+
+.participant-fields,
+.venue-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.game-summary p {
+  margin-bottom: 0.2rem;
+}
+
+.game-matchup {
+  font-size: 0.95rem;
+}
+
+.venue-copy {
+  color: #697183;
+  font-size: 0.74rem;
+}
+
+.operation-card > .status-pill {
+  display: inline-flex;
+  margin-bottom: 0.75rem;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+}
+
+.button-row form {
+  flex: 1 1 7rem;
+}
+
+.button-row button {
+  width: 100%;
+  padding: 0.5rem 0.8rem;
+}
+
+.button-secondary {
+  border: 1px solid #17223b;
+  background: transparent;
+  color: #17223b;
+}
+
+.button-danger {
+  background: #8c3d2b;
+}
+
+details {
+  margin-top: 0.9rem;
+  border-top: 1px solid #e3dccf;
+  padding-top: 0.8rem;
+}
+
+summary {
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.postponed-card {
+  border-color: #e2c893;
+  background: #fffaf0;
 }
 
 .game-time {
@@ -380,7 +474,8 @@ tbody tr:last-child td {
 }
 
 @media (max-width: 850px) {
-  .season-grid {
+  .season-grid,
+  .operations-grid {
     grid-template-columns: 1fr;
   }
 }
@@ -402,5 +497,10 @@ tbody tr:last-child td {
 
   .score-row label span {
     min-height: auto;
+  }
+
+  .participant-fields,
+  .venue-fields {
+    grid-template-columns: 1fr;
   }
 }

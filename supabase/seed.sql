@@ -74,6 +74,15 @@ values (
   'Local League Admin'
 );
 
+insert into venues (id, league_id, name, address, notes)
+values (
+  '40000000-0000-4000-8000-000000000013',
+  '40000000-0000-4000-8000-000000000010',
+  'Harbour Community Centre',
+  '100 Harbour Way',
+  'Use the east gym entrance.'
+);
+
 insert into league_admin_assignments (id, league_id, user_account_id)
 values (
   '40000000-0000-4000-8000-000000000012',
@@ -131,7 +140,9 @@ insert into games (
   home_season_team_id,
   away_season_team_id,
   scheduled_at,
-  started_at
+  started_at,
+  venue_id,
+  venue_instructions
 )
 values
   (
@@ -142,7 +153,9 @@ values
     '40000000-0000-4000-8000-000000000040',
     '40000000-0000-4000-8000-000000000041',
     '2026-08-07T18:00:00-07:00',
-    '2026-08-07T18:02:00-07:00'
+    '2026-08-07T18:02:00-07:00',
+    '40000000-0000-4000-8000-000000000013',
+    'Court 1'
   ),
   (
     '40000000-0000-4000-8000-000000000051',
@@ -152,5 +165,7 @@ values
     '40000000-0000-4000-8000-000000000042',
     '40000000-0000-4000-8000-000000000043',
     '2026-08-07T19:30:00-07:00',
-    '2026-08-07T19:34:00-07:00'
+    '2026-08-07T19:34:00-07:00',
+    '40000000-0000-4000-8000-000000000013',
+    'Court 2'
   );

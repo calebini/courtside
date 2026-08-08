@@ -34,7 +34,7 @@ The production bootstrap command and operator runbook are deferred and authentic
 
 ## Secure Mutation Delivery
 
-Game finalization is delivered through a Next.js Server Action. The action accepts only the target Game and score input from the browser, generates its command identity on the server, derives the actor from the verified session, and invokes the existing application service. The application service and PostgreSQL transaction remain the authority for scoped authorization, lifecycle validation, idempotency, configuration freezing, auditing, and standings recomputation.
+Game scheduling, rescheduling, postponement, cancellation, start, and finalization are delivered through Next.js Server Actions. The actions accept only target references and requested changes from the browser, use server-generated command identities rendered with each form, derive the actor from the verified session, and invoke application services. Application services and PostgreSQL transactions remain the authority for scoped authorization, lifecycle validation, idempotency, scheduling history, configuration freezing, auditing, and standings recomputation.
 
 Invalid input, authentication failure, authorization failure, and infrastructure failure must not leak credentials, raw database errors, or sensitive identity details to the browser.
 
