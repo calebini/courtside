@@ -3,6 +3,47 @@
     "eyebrow": "Courtside foundation",
     "title": "League records with a memory.",
     "summary": "The first working slice finalizes authoritative game results, freezes season rules, preserves audit history, and recomputes standings.",
-    "languageLabel": "Language"
+    "languageLabel": "Language",
+    "openAdmin": "Open league desk"
+  },
+  "Auth": {
+    "eyebrow": "League operations",
+    "title": "Sign in to the league desk.",
+    "summary": "Authorized league administrators can record official results and review the standings they produce.",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "invalid": "That email and password did not match an authorized login.",
+    "localCredentials": "Local demo: admin@courtside.local / courtside-local-admin"
+  },
+  "Admin": {
+    "eyebrow": "League desk",
+    "title": "Results, made official.",
+    "summary": "Finalize an in-progress game and the standings will be recalculated from the authoritative result in the same transaction.",
+    "signOut": "Sign out",
+    "league": "League",
+    "gamesToFinalize": "Games to finalize",
+    "rulesFrozen": "Rules frozen",
+    "rulesMutable": "Rules not yet frozen",
+    "noGames": "There are no in-progress games waiting for a result.",
+    "score": "score",
+    "versus": "vs",
+    "finalize": "Finalize result",
+    "standings": "Standings",
+    "provisional": "Tie unresolved",
+    "rank": "Rank",
+    "team": "Team",
+    "played": "GP",
+    "wins": "W",
+    "losses": "L",
+    "leaguePoints": "Pts",
+    "differential": "+/−",
+    "pointsFor": "PF",
+    "invalidScore": "Enter two different whole-number scores. Tied final results are prohibited.",
+    "finalized": "The result is official and the standings have been recalculated.",
+    "rejected": "The result was not accepted. The official records were left unchanged.",
+    "unexpected": "The result could not be saved. The official records were left unchanged.",
+    "noAccessTitle": "No league administration access",
+    "noAccessSummary": "This login is not linked to an active League Administrator assignment."
   }
 }

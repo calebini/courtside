@@ -53,4 +53,6 @@ Domain, lifecycle, authorization, and idempotency failures roll back the transac
 
 ## Deferred Surfaces
 
-This slice does not implement login, League Administrator bootstrap, Game start, forfeiture, result correction, configuration amendment, persisted random draw, playoffs, Player statistics, roster mutation, media, spreadsheet import, public mutation APIs, or production deployment. Those surfaces must extend the accepted boundaries rather than bypass them.
+The second slice adds the authenticated delivery boundary defined in `specs/authentication.md`: verified Supabase sessions, User Account resolution, current scoped League Administrator checks, a server-mediated Game-finalization action, and a read-only standings projection. Disposable local fixtures make the path demonstrable without serving as production bootstrap.
+
+The implementation still defers the production League Administrator bootstrap command and runbook, Game start, forfeiture, result correction, configuration amendment, persisted random draw, playoffs, Player statistics, roster mutation, media, spreadsheet import, public mutation APIs, and production deployment. Those surfaces must extend the accepted boundaries rather than bypass them.

@@ -10,6 +10,7 @@ Courtside is a seed-stage project in the Cortext ecosystem. Its core domain and 
 - [`specs/config.md`](specs/config.md) defines configurable policy and normative defaults.
 - [`specs/tech-stack.md`](specs/tech-stack.md) declares the accepted implementation platform and its safety boundaries.
 - [`specs/architecture.md`](specs/architecture.md) defines dependency direction and the first transactional vertical slice.
+- [`specs/authentication.md`](specs/authentication.md) defines login, session verification, authorization delivery, and bootstrap boundaries.
 - [`specs/repo-standard.md`](specs/repo-standard.md) defines how this repository grows as its boundaries become real.
 - `README.md` is orientation, not normative design.
 
@@ -27,3 +28,7 @@ npm run verify
 ```
 
 PostgreSQL integration setup and test commands are documented in [`docs/development.md`](docs/development.md).
+
+## Local Demo
+
+The current end-to-end slice provides email/password sign-in, a protected League Administrator desk, authoritative Game finalization, and live standings recomputation. Start the local Supabase stack, reset its disposable fixtures, and run the web application using [`docs/development.md`](docs/development.md).

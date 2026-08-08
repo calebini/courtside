@@ -1,7 +1,7 @@
 :root {
   color-scheme: light;
   font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-  background: #f5f2e9;
+  background: #f3efe5;
   color: #17223b;
 }
 
@@ -11,31 +11,64 @@
 
 body {
   margin: 0;
+  background:
+    radial-gradient(circle at 12% 0%, rgb(229 97 52 / 14%), transparent 28rem),
+    #f3efe5;
 }
 
-main {
+a {
+  color: inherit;
+  font-weight: 750;
+}
+
+main:not(.dashboard-shell, .auth-shell) {
   width: min(44rem, calc(100% - 2rem));
   margin: 18vh auto 0;
 }
 
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
 h1 {
   max-width: 15ch;
-  margin: 0;
+  margin-bottom: 1.25rem;
   font-size: clamp(2.5rem, 8vw, 5.5rem);
   line-height: 0.95;
   letter-spacing: -0.055em;
 }
 
+h2 {
+  margin-bottom: 0;
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  letter-spacing: -0.04em;
+}
+
+h3 {
+  margin-bottom: 0;
+  font-size: 1.35rem;
+  letter-spacing: -0.025em;
+}
+
 p {
   max-width: 42rem;
-  font-size: 1.125rem;
+  font-size: 1.05rem;
   line-height: 1.6;
 }
 
-.eyebrow {
+.lede {
+  color: #4c566b;
+}
+
+.eyebrow,
+.panel-kicker {
+  margin-bottom: 0.6rem;
   color: #b5492b;
-  font-size: 0.8rem;
-  font-weight: 750;
+  font-size: 0.76rem;
+  font-weight: 800;
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
@@ -46,7 +79,328 @@ nav {
   margin-top: 2rem;
 }
 
-a {
-  color: inherit;
-  font-weight: 700;
+.primary-link,
+button {
+  display: inline-flex;
+  min-height: 2.85rem;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 0.55rem;
+  background: #17223b;
+  color: white;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.primary-link {
+  padding: 0 1.15rem;
+}
+
+.auth-shell {
+  display: grid;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  place-items: center;
+}
+
+.auth-card {
+  width: min(31rem, 100%);
+  padding: clamp(1.5rem, 5vw, 3rem);
+  border: 1px solid #ddd5c5;
+  border-radius: 1rem;
+  background: rgb(255 253 247 / 92%);
+  box-shadow: 0 1.25rem 4rem rgb(23 34 59 / 10%);
+}
+
+.auth-card h1 {
+  font-size: clamp(2.35rem, 8vw, 4rem);
+}
+
+.wordmark {
+  display: inline-block;
+  margin-bottom: 2.25rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-decoration: none;
+}
+
+.stack-form {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+label {
+  display: grid;
+  gap: 0.45rem;
+  font-size: 0.86rem;
+  font-weight: 750;
+}
+
+input {
+  width: 100%;
+  min-height: 2.85rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid #c9c0af;
+  border-radius: 0.45rem;
+  background: #fffefa;
+  color: #17223b;
+  font: inherit;
+}
+
+input:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid #ef8d55;
+  outline-offset: 2px;
+}
+
+.local-note {
+  margin: 1.25rem 0 0;
+  color: #737b8b;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.74rem;
+}
+
+.dashboard-shell {
+  width: min(78rem, calc(100% - 2rem));
+  margin: 0 auto;
+  padding-bottom: 5rem;
+}
+
+.topbar {
+  display: flex;
+  min-height: 5.25rem;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #d7cfbf;
+}
+
+.topbar .wordmark {
+  margin: 0;
+}
+
+.account-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  color: #596174;
+  font-size: 0.82rem;
+}
+
+.button-link {
+  min-height: auto;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #17223b;
+  text-decoration: underline;
+}
+
+.dashboard-heading {
+  padding: clamp(3rem, 8vw, 6rem) 0 2.5rem;
+}
+
+.dashboard-heading h1 {
+  max-width: none;
+}
+
+.league {
+  margin-top: 2rem;
+}
+
+.league-heading,
+.panel-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.league-heading {
+  align-items: flex-end;
+  margin-bottom: 1.25rem;
+}
+
+.timezone {
+  color: #697183;
+  font-size: 0.8rem;
+}
+
+.season-grid {
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.85fr) minmax(30rem, 1.45fr);
+  gap: 1rem;
+}
+
+.panel {
+  min-width: 0;
+  padding: clamp(1rem, 3vw, 1.6rem);
+  border: 1px solid #d8d0c0;
+  border-radius: 0.85rem;
+  background: rgb(255 253 247 / 88%);
+  box-shadow: 0 0.5rem 2rem rgb(23 34 59 / 5%);
+}
+
+.status-pill {
+  flex: 0 0 auto;
+  padding: 0.3rem 0.55rem;
+  border-radius: 99rem;
+  background: #fff0d5;
+  color: #8d5900;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.status-pill.frozen {
+  background: #dfece3;
+  color: #306141;
+}
+
+.game-list {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1.25rem;
+}
+
+.game-card {
+  padding: 1rem;
+  border: 1px solid #ddd5c6;
+  border-radius: 0.65rem;
+  background: #fffefa;
+}
+
+.game-time {
+  margin-bottom: 0.75rem;
+  color: #72798a;
+  font-size: 0.75rem;
+}
+
+.score-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
+  gap: 0.6rem;
+}
+
+.score-row label span {
+  min-height: 2.25rem;
+}
+
+.score-row input {
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.versus {
+  padding-bottom: 0.85rem;
+  color: #8a91a0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.game-card button {
+  width: 100%;
+  margin-top: 0.8rem;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  margin-top: 1.25rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+  white-space: nowrap;
+}
+
+th,
+td {
+  padding: 0.72rem 0.55rem;
+  border-bottom: 1px solid #e3dccf;
+  text-align: right;
+}
+
+thead th {
+  color: #72798a;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+  text-align: left;
+}
+
+tbody tr:last-child th,
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.notice,
+.empty-state {
+  max-width: none;
+  padding: 0.9rem 1rem;
+  border-radius: 0.6rem;
+  font-size: 0.9rem;
+}
+
+.notice-success {
+  background: #dfece3;
+  color: #275738;
+}
+
+.notice-error {
+  background: #f8dfd8;
+  color: #873b28;
+}
+
+.empty-state {
+  border: 1px dashed #bcb3a2;
+  background: rgb(255 253 247 / 55%);
+}
+
+.empty-state h2 {
+  font-size: 1.4rem;
+}
+
+.empty-state p,
+.empty-copy {
+  margin-bottom: 0;
+  color: #697183;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 850px) {
+  .season-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .account-actions > span,
+  .timezone {
+    display: none;
+  }
+
+  .score-row {
+    grid-template-columns: 1fr;
+  }
+
+  .versus {
+    padding: 0;
+    text-align: center;
+  }
+
+  .score-row label span {
+    min-height: auto;
+  }
 }

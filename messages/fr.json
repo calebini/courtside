@@ -3,6 +3,47 @@
     "eyebrow": "Fondation Courtside",
     "title": "Des résultats de ligue qui gardent leur mémoire.",
     "summary": "La première tranche fonctionnelle finalise les résultats officiels, fige les règles de saison, conserve l’historique d’audit et recalcule le classement.",
-    "languageLabel": "Langue"
+    "languageLabel": "Langue",
+    "openAdmin": "Ouvrir le bureau de la ligue"
+  },
+  "Auth": {
+    "eyebrow": "Opérations de la ligue",
+    "title": "Connectez-vous au bureau de la ligue.",
+    "summary": "Les administrateurs autorisés peuvent enregistrer les résultats officiels et consulter le classement produit.",
+    "email": "Courriel",
+    "password": "Mot de passe",
+    "submit": "Se connecter",
+    "invalid": "Ce courriel et ce mot de passe ne correspondent pas à une connexion autorisée.",
+    "localCredentials": "Démo locale : admin@courtside.local / courtside-local-admin"
+  },
+  "Admin": {
+    "eyebrow": "Bureau de la ligue",
+    "title": "Des résultats rendus officiels.",
+    "summary": "Finalisez un match en cours et le classement sera recalculé à partir du résultat officiel dans la même transaction.",
+    "signOut": "Se déconnecter",
+    "league": "Ligue",
+    "gamesToFinalize": "Matchs à finaliser",
+    "rulesFrozen": "Règles figées",
+    "rulesMutable": "Règles pas encore figées",
+    "noGames": "Aucun match en cours n’attend de résultat.",
+    "score": "pointage",
+    "versus": "c.",
+    "finalize": "Finaliser le résultat",
+    "standings": "Classement",
+    "provisional": "Égalité non résolue",
+    "rank": "Rang",
+    "team": "Équipe",
+    "played": "MJ",
+    "wins": "V",
+    "losses": "D",
+    "leaguePoints": "Pts",
+    "differential": "+/−",
+    "pointsFor": "PP",
+    "invalidScore": "Saisissez deux pointages entiers différents. Un résultat final nul est interdit.",
+    "finalized": "Le résultat est officiel et le classement a été recalculé.",
+    "rejected": "Le résultat n’a pas été accepté. Les dossiers officiels sont inchangés.",
+    "unexpected": "Le résultat n’a pas pu être enregistré. Les dossiers officiels sont inchangés.",
+    "noAccessTitle": "Aucun accès administratif",
+    "noAccessSummary": "Cette connexion n’est liée à aucune affectation active d’administrateur de ligue."
   }
 }

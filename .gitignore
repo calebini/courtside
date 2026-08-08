@@ -23,6 +23,8 @@ temp/
 # Test and coverage artifacts
 .coverage
 coverage/
+playwright-report/
+test-results/
 htmlcov/
 .pytest_cache/
 

@@ -15,6 +15,7 @@ REQUIRED_FILES = (
     "tsconfig.json",
     "specs/overview.md",
     "specs/architecture.md",
+    "specs/authentication.md",
     "specs/lifecycle.md",
     "specs/invariants.md",
     "specs/config.md",
@@ -22,19 +23,24 @@ REQUIRED_FILES = (
     "specs/decisions/0001-ratify-core-domain.md",
     "specs/decisions/0002-adopt-initial-tech-stack.md",
     "specs/decisions/0003-use-node-postgres-transactions.md",
+    "specs/decisions/0004-deliver-authenticated-admin-slice.md",
     "specs/repo-standard.md",
     "docs/development.md",
     "src/courtside/core/standings.ts",
     "src/courtside/services/finalize-game.ts",
+    "src/courtside/services/resolve-authenticated-account.ts",
     "src/courtside/adapters/postgres/finalize-game-store.ts",
     "supabase/migrations/20260807190000_initial_game_result_slice.sql",
     "tests/unit/standings.test.ts",
     "tests/integration/finalize-game.postgres.test.ts",
+    "tests/e2e/admin-finalization.spec.ts",
+    "supabase/seed.sql",
     ".github/workflows/ci.yml",
 )
 ACCEPTED_SPECS = (
     "specs/overview.md",
     "specs/architecture.md",
+    "specs/authentication.md",
     "specs/lifecycle.md",
     "specs/invariants.md",
     "specs/config.md",
@@ -42,6 +48,7 @@ ACCEPTED_SPECS = (
     "specs/decisions/0001-ratify-core-domain.md",
     "specs/decisions/0002-adopt-initial-tech-stack.md",
     "specs/decisions/0003-use-node-postgres-transactions.md",
+    "specs/decisions/0004-deliver-authenticated-admin-slice.md",
 )
 TEMPLATE_MARKERS = tuple(
     "{{" + name + "}}" for name in ("component_slug", "package_name", "Component Name")

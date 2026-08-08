@@ -4,8 +4,11 @@ import type {Pool} from 'pg';
 import {afterAll, beforeAll, beforeEach, describe, expect, it} from 'vitest';
 
 import {PostgresFinalizeGameStore} from '@/courtside/adapters/postgres/finalize-game-store';
+import {PostgresAdminDashboardStore} from '@/courtside/adapters/postgres/admin-dashboard-store';
 import {createPostgresPool} from '@/courtside/adapters/postgres/pool';
+import {PostgresUserAccountDirectory} from '@/courtside/adapters/postgres/user-account-directory';
 import {createFinalizeGameService} from '@/courtside/services/finalize-game';
+import {resolveAuthenticatedAccount} from '@/courtside/services/resolve-authenticated-account';
 
 const connectionString = process.env.TEST_DATABASE_URL;
 const describeWithDatabase = connectionString ? describe : describe.skip;
@@ -335,6 +338,44 @@ describeWithDatabase('PostgreSQL Game finalization slice', () => {
       'select count(*)::int as count from season_configuration_versions'
     );
     expect(configurationCount.rows[0].count).toBe(0);
+  });
+
+  it('maps a verified login identity and scopes the administrator dashboard', async () => {
+    const externalAuthId = '50000000-0000-4000-8000-000000000001';
+    await pool.query(
+      'update user_accounts set external_auth_id = $2 where id = $1',
+      [ids.admin, externalAuthId]
+    );
+    const {identity, account} = await resolveAuthenticatedAccount(
+      {
+        getVerifiedIdentity: async () => ({externalAuthId, email: 'admin@example.test'})
+      },
+      new PostgresUserAccountDirectory(pool)
+    );
+
+    expect(identity?.externalAuthId).toBe(externalAuthId);
+    expect(account).toEqual({id: ids.admin, displayName: 'League Admin'});
+
+    const leagues = await new PostgresAdminDashboardStore(pool).load(account!.id);
+    expect(leagues).toHaveLength(1);
+    expect(leagues[0]).toMatchObject({
+      id: ids.league,
+      seasons: [
+        {
+          id: ids.season,
+          configurationFrozen: false,
+          games: [
+            {
+              id: ids.game,
+              homeTeamName: 'A',
+              awayTeamName: 'B'
+            }
+          ],
+          unresolvedTieCount: 1
+        }
+      ]
+    });
+    expect(leagues[0].seasons[0].standings.map((row) => row.teamName)).toEqual(['A', 'B']);
   });
 
   it('enforces winner and score consistency below the service layer', async () => {
