@@ -5,6 +5,7 @@ import {redirect} from 'next/navigation';
 
 import {
   PostgresAdminDashboardStore,
+  type AdminCompletedGame,
   type AdminGame,
   type AdminVenue
 } from '@/courtside/adapters/postgres/admin-dashboard-store';
@@ -17,7 +18,9 @@ import {resolveAuthenticatedAccount} from '@/courtside/services/resolve-authenti
 import {signOut} from '../auth-actions';
 import {
   cancelGameAction,
+  correctGameResultAction,
   finalizeGameAction,
+  forfeitGameAction,
   postponeGameAction,
   rescheduleGameAction,
   scheduleGameAction,
@@ -29,6 +32,8 @@ export const dynamic = 'force-dynamic';
 function resultMessageKey(result: string | undefined) {
   const keys: Record<string, string> = {
     finalized: 'finalized',
+    forfeited: 'forfeited',
+    corrected: 'corrected',
     schedule: 'scheduled',
     reschedule: 'rescheduled',
     postpone: 'postponed',
@@ -139,6 +144,174 @@ function GameSummary({
   );
 }
 
+function ForfeitForm({
+  game,
+  locale,
+  labels
+}: {
+  game: AdminGame;
+  locale: string;
+  labels: {
+    forfeit: string;
+    forfeitGame: string;
+    winner: string;
+    optionalReason: string;
+    score: string;
+  };
+}) {
+  return (
+    <details className="result-details">
+      <summary>{labels.forfeit}</summary>
+      <form action={forfeitGameAction} className="stack-form compact-form">
+        <CommandFields gameId={game.id} locale={locale} />
+        <div className="score-row">
+          <label>
+            <span>{game.homeTeamName}</span>
+            <input
+              aria-label={`${game.homeTeamName} ${labels.score}`}
+              inputMode="numeric"
+              min="0"
+              name="homeScore"
+              required
+              step="1"
+              type="number"
+            />
+          </label>
+          <span className="versus">—</span>
+          <label>
+            <span>{game.awayTeamName}</span>
+            <input
+              aria-label={`${game.awayTeamName} ${labels.score}`}
+              inputMode="numeric"
+              min="0"
+              name="awayScore"
+              required
+              step="1"
+              type="number"
+            />
+          </label>
+        </div>
+        <label>
+          <span>{labels.winner}</span>
+          <select name="winningSeasonTeamId" required>
+            <option value={game.homeSeasonTeamId}>{game.homeTeamName}</option>
+            <option value={game.awaySeasonTeamId}>{game.awayTeamName}</option>
+          </select>
+        </label>
+        <label>
+          <span>{labels.optionalReason}</span>
+          <input name="reason" type="text" />
+        </label>
+        <button className="button-danger" type="submit">{labels.forfeitGame}</button>
+      </form>
+    </details>
+  );
+}
+
+function CompletedGameCard({
+  game,
+  locale,
+  timeZone,
+  labels
+}: {
+  game: AdminCompletedGame;
+  locale: string;
+  timeZone: string;
+  labels: {
+    auditHistory: string;
+    correctResult: string;
+    correctionReason: string;
+    finalStatus: string;
+    forfeitStatus: string;
+    noVenue: string;
+    recordedBy: string;
+    score: string;
+    versus: string;
+    winner: string;
+  };
+}) {
+  return (
+    <article className="game-card completed-card">
+      <div className="completed-heading">
+        <span className="status-pill">
+          {game.status === 'forfeit' ? labels.forfeitStatus : labels.finalStatus}
+        </span>
+        <strong>{game.homeScore}–{game.awayScore}</strong>
+      </div>
+      <GameSummary
+        game={game}
+        locale={locale}
+        noVenue={labels.noVenue}
+        timeZone={timeZone}
+        versus={labels.versus}
+      />
+      <details className="result-details">
+        <summary>{labels.correctResult}</summary>
+        <form action={correctGameResultAction} className="stack-form compact-form">
+          <CommandFields gameId={game.id} locale={locale} />
+          <div className="score-row">
+            <label>
+              <span>{game.homeTeamName}</span>
+              <input
+                aria-label={`${game.homeTeamName} ${labels.score}`}
+                defaultValue={game.homeScore}
+                min="0"
+                name="homeScore"
+                required
+                step="1"
+                type="number"
+              />
+            </label>
+            <span className="versus">—</span>
+            <label>
+              <span>{game.awayTeamName}</span>
+              <input
+                aria-label={`${game.awayTeamName} ${labels.score}`}
+                defaultValue={game.awayScore}
+                min="0"
+                name="awayScore"
+                required
+                step="1"
+                type="number"
+              />
+            </label>
+          </div>
+          <label>
+            <span>{labels.winner}</span>
+            <select defaultValue={game.winningSeasonTeamId} name="winningSeasonTeamId" required>
+              <option value={game.homeSeasonTeamId}>{game.homeTeamName}</option>
+              <option value={game.awaySeasonTeamId}>{game.awayTeamName}</option>
+            </select>
+          </label>
+          <label>
+            <span>{labels.correctionReason}</span>
+            <input name="reason" required type="text" />
+          </label>
+          <button type="submit">{labels.correctResult}</button>
+        </form>
+      </details>
+      <details className="audit-details">
+        <summary>{labels.auditHistory} ({game.audits.length})</summary>
+        <ol className="audit-list">
+          {game.audits.map((audit) => (
+            <li key={audit.id}>
+              <strong>
+                {audit.previousHomeScore === null
+                  ? `${audit.newHomeScore}–${audit.newAwayScore}`
+                  : `${audit.previousHomeScore}–${audit.previousAwayScore} → ${audit.newHomeScore}–${audit.newAwayScore}`}
+              </strong>
+              <span>
+                {labels.recordedBy} {audit.actorName} · {formatSchedule(audit.createdAt, locale, timeZone)}
+              </span>
+              {audit.reason ? <span>{audit.reason}</span> : null}
+            </li>
+          ))}
+        </ol>
+      </details>
+    </article>
+  );
+}
+
 export default async function AdminPage({
   params,
   searchParams
@@ -165,6 +338,25 @@ export default async function AdminPage({
   const leagues = account ? await new PostgresAdminDashboardStore(pool).load(account.id) : [];
   const resultKey = resultMessageKey(query.result);
   const resultIsSuccess = query.result !== 'rejected' && query.result !== 'unexpected';
+  const forfeitLabels = {
+    forfeit: t('forfeit'),
+    forfeitGame: t('forfeitGame'),
+    winner: t('winner'),
+    optionalReason: t('optionalReason'),
+    score: t('score')
+  };
+  const completedLabels = {
+    auditHistory: t('auditHistory'),
+    correctResult: t('correctResult'),
+    correctionReason: t('correctionReason'),
+    finalStatus: t('finalStatus'),
+    forfeitStatus: t('forfeitStatus'),
+    noVenue: t('noVenue'),
+    recordedBy: t('recordedBy'),
+    score: t('score'),
+    versus: t('versus'),
+    winner: t('winner')
+  };
 
   return (
     <main className="dashboard-shell">
@@ -197,6 +389,9 @@ export default async function AdminPage({
       ) : null}
       {query.error === 'invalid_game' ? (
         <p className="notice notice-error">{t('invalidGame')}</p>
+      ) : null}
+      {query.error === 'invalid_correction' ? (
+        <p className="notice notice-error">{t('invalidCorrection')}</p>
       ) : null}
       {resultKey ? (
         <p className={`notice ${resultIsSuccess ? 'notice-success' : 'notice-error'}`}>
@@ -331,6 +526,7 @@ export default async function AdminPage({
                             <button type="submit">{t('saveReschedule')}</button>
                           </form>
                         </details>
+                        <ForfeitForm game={game} labels={forfeitLabels} locale={locale} />
                       </article>
                     ))}
                     {season.postponedGames.map((game) => (
@@ -365,6 +561,7 @@ export default async function AdminPage({
                           <CommandFields gameId={game.id} locale={locale} />
                           <button className="button-danger" type="submit">{t('cancel')}</button>
                         </form>
+                        <ForfeitForm game={game} labels={forfeitLabels} locale={locale} />
                       </article>
                     ))}
                   </div>
@@ -385,8 +582,7 @@ export default async function AdminPage({
                   ) : (
                     <div className="game-list">
                       {season.inProgressGames.map((game) => (
-                        <form action={finalizeGameAction} className="game-card" key={game.id}>
-                          <CommandFields gameId={game.id} locale={locale} />
+                        <article className="game-card" key={game.id}>
                           <GameSummary
                             game={game}
                             locale={locale}
@@ -394,35 +590,39 @@ export default async function AdminPage({
                             timeZone={league.timezone}
                             versus={t('versus')}
                           />
-                          <div className="score-row">
-                            <label>
-                              <span>{game.homeTeamName}</span>
-                              <input
-                                aria-label={`${game.homeTeamName} ${t('score')}`}
-                                inputMode="numeric"
-                                min="0"
-                                name="homeScore"
-                                required
-                                step="1"
-                                type="number"
-                              />
-                            </label>
-                            <span className="versus">{t('versus')}</span>
-                            <label>
-                              <span>{game.awayTeamName}</span>
-                              <input
-                                aria-label={`${game.awayTeamName} ${t('score')}`}
-                                inputMode="numeric"
-                                min="0"
-                                name="awayScore"
-                                required
-                                step="1"
-                                type="number"
-                              />
-                            </label>
-                          </div>
-                          <button type="submit">{t('finalize')}</button>
-                        </form>
+                          <form action={finalizeGameAction} className="stack-form compact-form">
+                            <CommandFields gameId={game.id} locale={locale} />
+                            <div className="score-row">
+                              <label>
+                                <span>{game.homeTeamName}</span>
+                                <input
+                                  aria-label={`${game.homeTeamName} ${t('score')}`}
+                                  inputMode="numeric"
+                                  min="0"
+                                  name="homeScore"
+                                  required
+                                  step="1"
+                                  type="number"
+                                />
+                              </label>
+                              <span className="versus">{t('versus')}</span>
+                              <label>
+                                <span>{game.awayTeamName}</span>
+                                <input
+                                  aria-label={`${game.awayTeamName} ${t('score')}`}
+                                  inputMode="numeric"
+                                  min="0"
+                                  name="awayScore"
+                                  required
+                                  step="1"
+                                  type="number"
+                                />
+                              </label>
+                            </div>
+                            <button type="submit">{t('finalize')}</button>
+                          </form>
+                          <ForfeitForm game={game} labels={forfeitLabels} locale={locale} />
+                        </article>
                       ))}
                     </div>
                   )}
@@ -470,6 +670,30 @@ export default async function AdminPage({
                   </div>
                 </section>
               </div>
+
+              <section className="panel completed-panel">
+                <div className="panel-heading">
+                  <div>
+                    <p className="panel-kicker">{t('completedKicker')}</p>
+                    <h3>{t('completedGames')}</h3>
+                  </div>
+                </div>
+                {season.completedGames.length === 0 ? (
+                  <p className="empty-copy">{t('noCompletedGames')}</p>
+                ) : (
+                  <div className="completed-grid">
+                    {season.completedGames.map((game) => (
+                      <CompletedGameCard
+                        game={game}
+                        key={game.id}
+                        labels={completedLabels}
+                        locale={locale}
+                        timeZone={league.timezone}
+                      />
+                    ))}
+                  </div>
+                )}
+              </section>
             </section>
           ))}
         </section>

@@ -31,4 +31,4 @@ PostgreSQL integration setup and test commands are documented in [`docs/developm
 
 ## Local Demo
 
-The current end-to-end workflow provides email/password sign-in, a protected League Administrator desk, timezone-safe Game scheduling and pre-result lifecycle operations, authoritative Game finalization, and live standings recomputation. Start the local Supabase stack, reset its disposable fixtures, and run the web application using [`docs/development.md`](docs/development.md).
+The current end-to-end workflow provides email/password sign-in, a protected League Administrator desk, timezone-safe Game scheduling and pre-result lifecycle operations, authoritative finalization and forfeiture, audited result correction, and live standings recomputation. Start the local Supabase stack, reset its disposable fixtures, and run the web application using [`docs/development.md`](docs/development.md).

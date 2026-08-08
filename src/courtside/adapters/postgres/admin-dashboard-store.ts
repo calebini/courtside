@@ -9,10 +9,32 @@ export interface AdminGame {
   readonly status: GameStatus;
   readonly homeTeamName: string;
   readonly awayTeamName: string;
+  readonly homeSeasonTeamId: string;
+  readonly awaySeasonTeamId: string;
   readonly scheduledAt: Date;
   readonly venueId: string | null;
   readonly venueName: string | null;
   readonly venueInstructions: string | null;
+}
+
+export interface AdminResultAudit {
+  readonly id: string;
+  readonly action: 'game.finalized' | 'game.forfeited' | 'game.result_corrected';
+  readonly actorName: string;
+  readonly previousHomeScore: number | null;
+  readonly previousAwayScore: number | null;
+  readonly newHomeScore: number;
+  readonly newAwayScore: number;
+  readonly reason: string | null;
+  readonly createdAt: Date;
+}
+
+export interface AdminCompletedGame extends AdminGame {
+  readonly status: 'final' | 'forfeit';
+  readonly homeScore: number;
+  readonly awayScore: number;
+  readonly winningSeasonTeamId: string;
+  readonly audits: readonly AdminResultAudit[];
 }
 
 export interface AdminSeasonTeam {
@@ -47,6 +69,7 @@ export interface AdminSeason {
   readonly scheduledGames: readonly AdminGame[];
   readonly postponedGames: readonly AdminGame[];
   readonly inProgressGames: readonly AdminGame[];
+  readonly completedGames: readonly AdminCompletedGame[];
   readonly standings: readonly AdminStanding[];
   readonly unresolvedTieCount: number;
 }
@@ -96,6 +119,20 @@ interface GameRow {
   venue_instructions: string | null;
   home_score: number | null;
   away_score: number | null;
+  winning_season_team_id: string | null;
+}
+
+interface ResultAuditRow {
+  id: string;
+  game_id: string;
+  action: AdminResultAudit['action'];
+  actor_name: string;
+  previous_home_score: string | null;
+  previous_away_score: string | null;
+  new_home_score: string;
+  new_away_score: string;
+  reason: string | null;
+  created_at: Date;
 }
 
 export class PostgresAdminDashboardStore {
@@ -142,7 +179,7 @@ export class PostgresAdminDashboardStore {
 
     const leagues = new Map<string, AdminLeague & {seasons: AdminSeason[]}>();
     for (const row of seasonResult.rows) {
-      const [teamResult, gameResult] = await Promise.all([
+      const [teamResult, gameResult, auditResult] = await Promise.all([
         this.pool.query<TeamRow>(
           `select st.id as season_team_id, t.name as team_name
              from season_teams st
@@ -164,7 +201,8 @@ export class PostgresAdminDashboardStore {
                   v.name as venue_name,
                   g.venue_instructions,
                   g.home_score,
-                  g.away_score
+                  g.away_score,
+                  g.winning_season_team_id
              from games g
              join season_teams hst on hst.id = g.home_season_team_id
              join teams ht on ht.id = hst.team_id
@@ -172,10 +210,51 @@ export class PostgresAdminDashboardStore {
              join teams at on at.id = ast.team_id
              left join venues v on v.id = g.venue_id
             where g.season_id = $1
+              and g.phase = 'regular'
             order by g.scheduled_at, g.id`,
+          [row.season_id]
+        ),
+        this.pool.query<ResultAuditRow>(
+          `select ar.id,
+                  ar.entity_id as game_id,
+                  ar.action,
+                  ua.display_name as actor_name,
+                  ar.previous_value ->> 'home_score' as previous_home_score,
+                  ar.previous_value ->> 'away_score' as previous_away_score,
+                  ar.new_value ->> 'home_score' as new_home_score,
+                  ar.new_value ->> 'away_score' as new_away_score,
+                  ar.reason,
+                  ar.created_at
+             from audit_records ar
+             join user_accounts ua on ua.id = ar.actor_account_id
+             join games g on g.id = ar.entity_id
+            where g.season_id = $1
+              and g.phase = 'regular'
+              and ar.entity_type = 'Game'
+              and ar.action in ('game.finalized', 'game.forfeited', 'game.result_corrected')
+            order by ar.created_at desc, ar.id desc`,
           [row.season_id]
         )
       ]);
+
+      const auditsByGame = new Map<string, AdminResultAudit[]>();
+      for (const audit of auditResult.rows) {
+        const audits = auditsByGame.get(audit.game_id) ?? [];
+        audits.push({
+          id: audit.id,
+          action: audit.action,
+          actorName: audit.actor_name,
+          previousHomeScore:
+            audit.previous_home_score === null ? null : Number(audit.previous_home_score),
+          previousAwayScore:
+            audit.previous_away_score === null ? null : Number(audit.previous_away_score),
+          newHomeScore: Number(audit.new_home_score),
+          newAwayScore: Number(audit.new_away_score),
+          reason: audit.reason,
+          createdAt: audit.created_at
+        });
+        auditsByGame.set(audit.game_id, audits);
+      }
 
       const teamNames = new Map(
         teamResult.rows.map((team) => [team.season_team_id, team.team_name])
@@ -222,6 +301,8 @@ export class PostgresAdminDashboardStore {
             status: game.status,
             homeTeamName: game.home_team_name,
             awayTeamName: game.away_team_name,
+            homeSeasonTeamId: game.home_season_team_id,
+            awaySeasonTeamId: game.away_season_team_id,
             scheduledAt: game.scheduled_at,
             venueId: game.venue_id,
             venueName: game.venue_name,
@@ -234,6 +315,8 @@ export class PostgresAdminDashboardStore {
             status: game.status,
             homeTeamName: game.home_team_name,
             awayTeamName: game.away_team_name,
+            homeSeasonTeamId: game.home_season_team_id,
+            awaySeasonTeamId: game.away_season_team_id,
             scheduledAt: game.scheduled_at,
             venueId: game.venue_id,
             venueName: game.venue_name,
@@ -246,10 +329,41 @@ export class PostgresAdminDashboardStore {
             status: game.status,
             homeTeamName: game.home_team_name,
             awayTeamName: game.away_team_name,
+            homeSeasonTeamId: game.home_season_team_id,
+            awaySeasonTeamId: game.away_season_team_id,
             scheduledAt: game.scheduled_at,
             venueId: game.venue_id,
             venueName: game.venue_name,
             venueInstructions: game.venue_instructions
+          })),
+        completedGames: gameResult.rows
+          .filter(
+            (game): game is GameRow & {
+              status: 'final' | 'forfeit';
+              home_score: number;
+              away_score: number;
+              winning_season_team_id: string;
+            } =>
+              (game.status === 'final' || game.status === 'forfeit') &&
+              game.home_score !== null &&
+              game.away_score !== null &&
+              game.winning_season_team_id !== null
+          )
+          .map((game) => ({
+            id: game.id,
+            status: game.status,
+            homeTeamName: game.home_team_name,
+            awayTeamName: game.away_team_name,
+            scheduledAt: game.scheduled_at,
+            venueId: game.venue_id,
+            venueName: game.venue_name,
+            venueInstructions: game.venue_instructions,
+            homeSeasonTeamId: game.home_season_team_id,
+            awaySeasonTeamId: game.away_season_team_id,
+            homeScore: game.home_score,
+            awayScore: game.away_score,
+            winningSeasonTeamId: game.winning_season_team_id,
+            audits: auditsByGame.get(game.id) ?? []
           })),
         standings: projection.rows.map((standing) => ({
           ...standing,

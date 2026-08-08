@@ -213,6 +213,10 @@ class PostgresGameOperationTransaction implements GameOperationTransaction {
       `update games
           set status = $4,
               started_at = $5,
+              competition_eligibility_at = case
+                when $4 = 'in_progress' then $5
+                else competition_eligibility_at
+              end,
               version = version + 1
         where id = $1
           and version = $2

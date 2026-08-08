@@ -3,14 +3,18 @@
 import {revalidatePath} from 'next/cache';
 import {redirect} from 'next/navigation';
 
-import {PostgresFinalizeGameStore} from '@/courtside/adapters/postgres/finalize-game-store';
+import {PostgresGameResultStore} from '@/courtside/adapters/postgres/finalize-game-store';
 import {PostgresGameOperationStore} from '@/courtside/adapters/postgres/game-operation-store';
 import {getRuntimePostgresPool} from '@/courtside/adapters/postgres/runtime-pool';
 import {PostgresUserAccountDirectory} from '@/courtside/adapters/postgres/user-account-directory';
 import {SupabaseVerifiedIdentityProvider} from '@/courtside/adapters/supabase/identity-provider';
 import {createSupabaseServerClient} from '@/courtside/adapters/supabase/server-client';
 import {TemporalScheduledInstantResolver} from '@/courtside/adapters/temporal/scheduled-instant-resolver';
-import {createFinalizeGameService, MutationRejected} from '@/courtside/services/finalize-game';
+import {
+  createGameResultService,
+  MutationRejected,
+  type GameResultCommand
+} from '@/courtside/services/finalize-game';
 import {
   createGameOperationsService,
   GameOperationRejected,
@@ -20,6 +24,12 @@ import {resolveAuthenticatedAccount} from '@/courtside/services/resolve-authenti
 
 type PendingGameOperationCommand = GameOperationCommand extends infer Command
   ? Command extends GameOperationCommand
+    ? Omit<Command, 'actorAccountId'>
+    : never
+  : never;
+
+type PendingGameResultCommand = GameResultCommand extends infer Command
+  ? Command extends GameResultCommand
     ? Omit<Command, 'actorAccountId'>
     : never
   : never;
@@ -191,36 +201,107 @@ export async function startGameAction(formData: FormData) {
 
 export async function finalizeGameAction(formData: FormData) {
   const locale = supportedLocale(formData.get('locale'));
-  const gameId = String(formData.get('gameId') ?? '');
   const commandId = commandIdentity(formData.get('commandId'));
+  const gameId = entityIdentity(formData.get('gameId'));
   const homeScore = nonnegativeInteger(formData.get('homeScore'));
   const awayScore = nonnegativeInteger(formData.get('awayScore'));
-  let outcome = 'unexpected';
 
   if (!commandId || !gameId || homeScore === null || awayScore === null || homeScore === awayScore) {
     redirect(`/${locale}/admin?error=invalid_score`);
   }
 
+  await runGameResult(locale, {
+    type: 'finalize',
+    commandId,
+    gameId,
+    homeScore,
+    awayScore
+  });
+}
+
+async function runGameResult(locale: string, command: PendingGameResultCommand) {
   const {pool, account} = await authenticatedAccount();
 
   if (!account) {
     redirect(`/${locale}/sign-in`);
   }
 
+  let outcome: string =
+    command.type === 'finalize'
+      ? 'finalized'
+      : command.type === 'forfeit'
+        ? 'forfeited'
+        : 'corrected';
   try {
-    const finalizeGame = createFinalizeGameService(new PostgresFinalizeGameStore(pool));
-    await finalizeGame({
-      commandId,
-      actorAccountId: account.id,
-      gameId,
-      homeScore,
-      awayScore
-    });
-    outcome = 'finalized';
+    const manageResult = createGameResultService(new PostgresGameResultStore(pool));
+    await manageResult({...command, actorAccountId: account.id} as GameResultCommand);
   } catch (error) {
     outcome = error instanceof MutationRejected ? 'rejected' : 'unexpected';
   }
 
   revalidatePath(`/${locale}/admin`);
   redirect(`/${locale}/admin?result=${outcome}`);
+}
+
+export async function forfeitGameAction(formData: FormData) {
+  const locale = supportedLocale(formData.get('locale'));
+  const commandId = commandIdentity(formData.get('commandId'));
+  const gameId = entityIdentity(formData.get('gameId'));
+  const winningSeasonTeamId = entityIdentity(formData.get('winningSeasonTeamId'));
+  const homeScore = nonnegativeInteger(formData.get('homeScore'));
+  const awayScore = nonnegativeInteger(formData.get('awayScore'));
+  const reason = String(formData.get('reason') ?? '').trim() || null;
+
+  if (
+    !commandId ||
+    !gameId ||
+    !winningSeasonTeamId ||
+    homeScore === null ||
+    awayScore === null ||
+    homeScore === awayScore
+  ) {
+    redirect(`/${locale}/admin?error=invalid_score`);
+  }
+
+  await runGameResult(locale, {
+    type: 'forfeit',
+    commandId,
+    gameId,
+    homeScore,
+    awayScore,
+    winningSeasonTeamId,
+    reason
+  });
+}
+
+export async function correctGameResultAction(formData: FormData) {
+  const locale = supportedLocale(formData.get('locale'));
+  const commandId = commandIdentity(formData.get('commandId'));
+  const gameId = entityIdentity(formData.get('gameId'));
+  const winningSeasonTeamId = entityIdentity(formData.get('winningSeasonTeamId'));
+  const homeScore = nonnegativeInteger(formData.get('homeScore'));
+  const awayScore = nonnegativeInteger(formData.get('awayScore'));
+  const reason = String(formData.get('reason') ?? '').trim();
+
+  if (
+    !commandId ||
+    !gameId ||
+    !winningSeasonTeamId ||
+    homeScore === null ||
+    awayScore === null ||
+    homeScore === awayScore ||
+    !reason
+  ) {
+    redirect(`/${locale}/admin?error=invalid_correction`);
+  }
+
+  await runGameResult(locale, {
+    type: 'correct',
+    commandId,
+    gameId,
+    homeScore,
+    awayScore,
+    winningSeasonTeamId,
+    reason
+  });
 }

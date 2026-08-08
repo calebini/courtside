@@ -37,7 +37,8 @@ jobs:
             -c "create role anon nologin; create role authenticated nologin;"
           psql -h 127.0.0.1 -U postgres -v ON_ERROR_STOP=1 \
             -f supabase/migrations/20260807190000_initial_game_result_slice.sql \
-            -f supabase/migrations/20260807210000_game_scheduling_and_start.sql
+            -f supabase/migrations/20260807210000_game_scheduling_and_start.sql \
+            -f supabase/migrations/20260808010000_forfeits_and_result_corrections.sql
       - name: Run PostgreSQL integration tests
         env:
           TEST_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/postgres

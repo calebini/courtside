@@ -43,7 +43,7 @@ npm run db:reset
 npm run test:e2e
 ```
 
-The browser test schedules a Game, exercises postponement and rescheduling, starts it, and finalizes its result. Reset the local database afterward when you want the original demo state again.
+The browser test schedules a Game, exercises postponement and rescheduling, starts and finalizes it, corrects the official result with a reason, and records a second Game as a forfeit. Reset the local database afterward when you want the original demo state again.
 
 Stop the local stack when finished:
 
@@ -84,4 +84,6 @@ The first slice is implemented by:
 
 The second slice supplies verified login delivery and a protected League Administrator interface. The third slice adds reusable Venue reads plus scheduling, rescheduling, postponement, cancellation, and Game start. League-local wall-clock input is resolved through the Temporal adapter and rejects ambiguous or nonexistent daylight-saving times.
 
-The production bootstrap command, Venue administration, persisted random draws, corrections, forfeits, and the remaining domain surfaces are later slices.
+The fourth slice unifies finalization, explicit-score forfeiture, and terminal-status-preserving result correction in one authoritative transaction. It records the competition eligibility anchor, requires a reason for correction, preserves prior values in append-only audit history, and recomputes standings immediately.
+
+The production bootstrap command, Venue administration, persisted random draws, playoff correction conflicts, and the remaining domain surfaces are later slices.

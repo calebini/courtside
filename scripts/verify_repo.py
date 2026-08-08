@@ -25,6 +25,7 @@ REQUIRED_FILES = (
     "specs/decisions/0003-use-node-postgres-transactions.md",
     "specs/decisions/0004-deliver-authenticated-admin-slice.md",
     "specs/decisions/0005-deliver-game-scheduling-and-start.md",
+    "specs/decisions/0006-deliver-forfeits-and-result-corrections.md",
     "specs/repo-standard.md",
     "docs/development.md",
     "src/courtside/core/standings.ts",
@@ -37,6 +38,7 @@ REQUIRED_FILES = (
     "src/app/icon.svg",
     "supabase/migrations/20260807190000_initial_game_result_slice.sql",
     "supabase/migrations/20260807210000_game_scheduling_and_start.sql",
+    "supabase/migrations/20260808010000_forfeits_and_result_corrections.sql",
     "tests/unit/standings.test.ts",
     "tests/integration/finalize-game.postgres.test.ts",
     "tests/integration/manage-game.postgres.test.ts",
@@ -57,6 +59,7 @@ ACCEPTED_SPECS = (
     "specs/decisions/0003-use-node-postgres-transactions.md",
     "specs/decisions/0004-deliver-authenticated-admin-slice.md",
     "specs/decisions/0005-deliver-game-scheduling-and-start.md",
+    "specs/decisions/0006-deliver-forfeits-and-result-corrections.md",
 )
 TEMPLATE_MARKERS = tuple(
     "{{" + name + "}}" for name in ("component_slug", "package_name", "Component Name")

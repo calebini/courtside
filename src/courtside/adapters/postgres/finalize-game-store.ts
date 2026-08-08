@@ -45,6 +45,12 @@ class PostgresFinalizeGameTransaction implements FinalizeGameTransaction {
       phase: GamePhase;
       home_season_team_id: string;
       away_season_team_id: string;
+      home_score: number | null;
+      away_score: number | null;
+      winning_season_team_id: string | null;
+      configuration_version_id: string | null;
+      competition_eligibility_at: Date | null;
+      finalized_at: Date | null;
       version: number;
     }>(
       `select g.id,
@@ -54,6 +60,12 @@ class PostgresFinalizeGameTransaction implements FinalizeGameTransaction {
               g.phase,
               g.home_season_team_id,
               g.away_season_team_id,
+              g.home_score,
+              g.away_score,
+              g.winning_season_team_id,
+              g.configuration_version_id,
+              g.competition_eligibility_at,
+              g.finalized_at,
               g.version
          from games g
          join seasons s on s.id = g.season_id
@@ -71,6 +83,12 @@ class PostgresFinalizeGameTransaction implements FinalizeGameTransaction {
           phase: row.phase,
           homeSeasonTeamId: row.home_season_team_id,
           awaySeasonTeamId: row.away_season_team_id,
+          homeScore: row.home_score,
+          awayScore: row.away_score,
+          winningSeasonTeamId: row.winning_season_team_id,
+          configurationVersionId: row.configuration_version_id,
+          competitionEligibilityAt: row.competition_eligibility_at,
+          finalizedAt: row.finalized_at,
           version: row.version
         }
       : null;
@@ -159,39 +177,46 @@ class PostgresFinalizeGameTransaction implements FinalizeGameTransaction {
     }
   }
 
-  async finalizeGame(input: {
+  async saveAuthoritativeResult(input: {
     gameId: string;
     expectedVersion: number;
+    expectedStatus: GameStatus;
+    status: 'final' | 'forfeit';
     homeScore: number;
     awayScore: number;
     winningSeasonTeamId: string;
     configurationVersionId: string;
+    competitionEligibilityAt: Date;
     finalizedAt: Date;
   }) {
     const result = await this.client.query(
       `update games
-          set status = 'final',
-              home_score = $3,
-              away_score = $4,
-              winning_season_team_id = $5,
-              configuration_version_id = $6,
-              finalized_at = $7,
+          set status = $4,
+              home_score = $5,
+              away_score = $6,
+              winning_season_team_id = $7,
+              configuration_version_id = $8,
+              competition_eligibility_at = $9,
+              finalized_at = $10,
               version = version + 1
         where id = $1
           and version = $2
-          and status = 'in_progress'`,
+          and status = $3`,
       [
         input.gameId,
         input.expectedVersion,
+        input.expectedStatus,
+        input.status,
         input.homeScore,
         input.awayScore,
         input.winningSeasonTeamId,
         input.configurationVersionId,
+        input.competitionEligibilityAt,
         input.finalizedAt
       ]
     );
     if (result.rowCount !== 1) {
-      throw new Error(`Game ${input.gameId} changed during finalization`);
+      throw new Error(`Game ${input.gameId} changed during authoritative result mutation`);
     }
   }
 
@@ -305,3 +330,5 @@ export class PostgresFinalizeGameStore implements FinalizeGameStore {
     }
   }
 }
+
+export {PostgresFinalizeGameStore as PostgresGameResultStore};

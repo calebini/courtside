@@ -2,7 +2,9 @@ import {describe, expect, it} from 'vitest';
 
 import {
   cancelGameState,
+  correctAuthoritativeGameState,
   finalizeGameState,
+  forfeitGameState,
   postponeGameState,
   rescheduleGameState,
   startGameState,
@@ -38,6 +40,48 @@ describe('Game finalization', () => {
     expect(() =>
       finalizeGameState({...game, status: 'scheduled'}, {home: 81, away: 77})
     ).toThrow(/cannot transition/);
+  });
+});
+
+describe('Forfeits and result corrections', () => {
+  it('accepts an explicit score and matching declared forfeit winner', () => {
+    expect(
+      forfeitGameState({...game, status: 'scheduled'}, {home: 20, away: 0}, 'home')
+    ).toMatchObject({
+      status: 'forfeit',
+      homeScore: 20,
+      awayScore: 0,
+      winningSeasonTeamId: 'home',
+      version: 5
+    });
+  });
+
+  it('rejects a declared forfeit winner that disagrees with the score', () => {
+    expect(() =>
+      forfeitGameState({...game, status: 'postponed'}, {home: 20, away: 0}, 'away')
+    ).toThrowError(expect.objectContaining({rule: 'game.declared_winner_matches_score'}));
+  });
+
+  it('corrects an authoritative score without changing terminal status', () => {
+    const authoritative = forfeitGameState(
+      {...game, status: 'in_progress'},
+      {home: 20, away: 0},
+      'home'
+    );
+    expect(correctAuthoritativeGameState(authoritative, {home: 0, away: 20}, 'away')).toMatchObject({
+      status: 'forfeit',
+      homeScore: 0,
+      awayScore: 20,
+      winningSeasonTeamId: 'away',
+      version: 6
+    });
+  });
+
+  it('rejects a correction that does not change the official result', () => {
+    const authoritative = finalizeGameState(game, {home: 81, away: 77});
+    expect(() =>
+      correctAuthoritativeGameState(authoritative, {home: 81, away: 77}, 'home')
+    ).toThrowError(expect.objectContaining({rule: 'game.result_correction_changes_value'}));
   });
 });
 

@@ -7,7 +7,7 @@ import {PostgresFinalizeGameStore} from '@/courtside/adapters/postgres/finalize-
 import {PostgresAdminDashboardStore} from '@/courtside/adapters/postgres/admin-dashboard-store';
 import {createPostgresPool} from '@/courtside/adapters/postgres/pool';
 import {PostgresUserAccountDirectory} from '@/courtside/adapters/postgres/user-account-directory';
-import {createFinalizeGameService} from '@/courtside/services/finalize-game';
+import {createFinalizeGameService, createGameResultService} from '@/courtside/services/finalize-game';
 import {resolveAuthenticatedAccount} from '@/courtside/services/resolve-authenticated-account';
 
 const connectionString = process.env.TEST_DATABASE_URL;
@@ -109,8 +109,8 @@ describeWithDatabase('PostgreSQL Game finalization slice', () => {
     await pool.query(
       `insert into games
         (id, season_id, phase, status, home_season_team_id, away_season_team_id,
-         scheduled_at, started_at)
-       values ($1, $2, 'regular', 'in_progress', $3, $4, $5, $5)`,
+         scheduled_at, started_at, competition_eligibility_at)
+       values ($1, $2, 'regular', 'in_progress', $3, $4, $5, $5, $5)`,
       [ids.game, ids.season, ids.seasonTeamA, ids.seasonTeamB, new Date('2026-08-07T18:00:00Z')]
     );
   });
@@ -119,8 +119,8 @@ describeWithDatabase('PostgreSQL Game finalization slice', () => {
     await pool.query(
       `insert into games
         (id, season_id, phase, status, home_season_team_id, away_season_team_id,
-         scheduled_at, started_at)
-       values ($1, $2, 'regular', 'in_progress', $3, $4, $5, $5)`,
+         scheduled_at, started_at, competition_eligibility_at)
+       values ($1, $2, 'regular', 'in_progress', $3, $4, $5, $5, $5)`,
       [
         ids.secondGame,
         ids.season,
@@ -186,6 +186,240 @@ describeWithDatabase('PostgreSQL Game finalization slice', () => {
       receipt_count: 1,
       game_status: 'final'
     });
+  });
+
+  it('records an explicit-score pre-start forfeit and its eligibility anchor', async () => {
+    await pool.query(
+      `update games
+          set status = 'scheduled',
+              started_at = null,
+              competition_eligibility_at = null
+        where id = $1`,
+      [ids.game]
+    );
+    const generatedIds = [
+      '20000000-0000-4000-8000-000000000041',
+      '20000000-0000-4000-8000-000000000042'
+    ];
+    const acceptedAt = new Date('2026-08-07T20:00:00Z');
+    const manageResult = createGameResultService(new PostgresFinalizeGameStore(pool), {
+      now: () => acceptedAt,
+      newId: () => generatedIds.shift() ?? randomUUID()
+    });
+
+    const result = await manageResult({
+      type: 'forfeit',
+      commandId: '30000000-0000-4000-8000-000000000041',
+      actorAccountId: ids.admin,
+      gameId: ids.game,
+      homeScore: 20,
+      awayScore: 0,
+      winningSeasonTeamId: ids.seasonTeamA,
+      reason: 'Away team unavailable'
+    });
+
+    expect(result).toMatchObject({
+      receiptReused: false,
+      operation: 'forfeit',
+      game: {
+        status: 'forfeit',
+        homeScore: 20,
+        awayScore: 0,
+        winningSeasonTeamId: ids.seasonTeamA,
+        version: 1
+      }
+    });
+    expect(result.standings.rows[0]).toMatchObject({
+      seasonTeamId: ids.seasonTeamA,
+      wins: 1,
+      leaguePoints: 2,
+      pointsFor: 20
+    });
+
+    const persisted = await pool.query(
+      `select g.status,
+              g.competition_eligibility_at,
+              ar.action,
+              ar.reason
+         from games g
+         join audit_records ar on ar.entity_id = g.id
+        where g.id = $1`,
+      [ids.game]
+    );
+    expect(persisted.rows[0]).toMatchObject({
+      status: 'forfeit',
+      competition_eligibility_at: acceptedAt,
+      action: 'game.forfeited',
+      reason: 'Away team unavailable'
+    });
+  });
+
+  it('corrects an official result, preserves status and history, and reverses standings', async () => {
+    const generatedIds = [
+      '20000000-0000-4000-8000-000000000051',
+      '20000000-0000-4000-8000-000000000052',
+      '20000000-0000-4000-8000-000000000053'
+    ];
+    const manageResult = createGameResultService(new PostgresFinalizeGameStore(pool), {
+      now: () => new Date('2026-08-07T21:00:00Z'),
+      newId: () => generatedIds.shift() ?? randomUUID()
+    });
+    await manageResult({
+      type: 'finalize',
+      commandId: '30000000-0000-4000-8000-000000000051',
+      actorAccountId: ids.admin,
+      gameId: ids.game,
+      homeScore: 81,
+      awayScore: 77
+    });
+    const corrected = await manageResult({
+      type: 'correct',
+      commandId: '30000000-0000-4000-8000-000000000052',
+      actorAccountId: ids.admin,
+      gameId: ids.game,
+      homeScore: 70,
+      awayScore: 75,
+      winningSeasonTeamId: ids.seasonTeamB,
+      reason: 'Score sheet transposition'
+    });
+
+    expect(corrected.game).toMatchObject({
+      status: 'final',
+      homeScore: 70,
+      awayScore: 75,
+      winningSeasonTeamId: ids.seasonTeamB,
+      version: 2
+    });
+    expect(corrected.standings.rows[0]).toMatchObject({
+      seasonTeamId: ids.seasonTeamB,
+      wins: 1,
+      leaguePoints: 2
+    });
+
+    const audits = await pool.query(
+      `select action, previous_value, new_value, reason
+         from audit_records
+        where entity_id = $1
+        order by created_at, id`,
+      [ids.game]
+    );
+    expect(audits.rows).toHaveLength(2);
+    expect(audits.rows[1]).toMatchObject({
+      action: 'game.result_corrected',
+      previous_value: {status: 'final', home_score: 81, away_score: 77},
+      new_value: {status: 'final', home_score: 70, away_score: 75},
+      reason: 'Score sheet transposition'
+    });
+
+    const dashboard = await new PostgresAdminDashboardStore(pool).load(ids.admin);
+    expect(dashboard[0].seasons[0].completedGames[0]).toMatchObject({
+      status: 'final',
+      homeScore: 70,
+      awayScore: 75,
+      audits: [
+        {action: 'game.result_corrected', reason: 'Score sheet transposition'},
+        {action: 'game.finalized'}
+      ]
+    });
+  });
+
+  it('rejects an inconsistent forfeit winner and a correction without a reason', async () => {
+    const manageResult = createGameResultService(new PostgresFinalizeGameStore(pool));
+    await pool.query(
+      `update games
+          set status = 'scheduled',
+              started_at = null,
+              competition_eligibility_at = null
+        where id = $1`,
+      [ids.game]
+    );
+
+    await expect(
+      manageResult({
+        type: 'forfeit',
+        commandId: '30000000-0000-4000-8000-000000000061',
+        actorAccountId: ids.admin,
+        gameId: ids.game,
+        homeScore: 20,
+        awayScore: 0,
+        winningSeasonTeamId: ids.seasonTeamB,
+        reason: null
+      })
+    ).rejects.toMatchObject({
+      report: {violatedRule: 'game.declared_winner_matches_score'}
+    });
+
+    await pool.query(
+      `update games
+          set status = 'in_progress',
+              started_at = now(),
+              competition_eligibility_at = now()
+        where id = $1`,
+      [ids.game]
+    );
+    await manageResult({
+      type: 'finalize',
+      commandId: '30000000-0000-4000-8000-000000000062',
+      actorAccountId: ids.admin,
+      gameId: ids.game,
+      homeScore: 81,
+      awayScore: 77
+    });
+    await expect(
+      manageResult({
+        type: 'correct',
+        commandId: '30000000-0000-4000-8000-000000000063',
+        actorAccountId: ids.admin,
+        gameId: ids.game,
+        homeScore: 70,
+        awayScore: 75,
+        winningSeasonTeamId: ids.seasonTeamB,
+        reason: '   '
+      })
+    ).rejects.toMatchObject({
+      report: {violatedRule: 'game.result_correction_reason_required'}
+    });
+
+    const persisted = await pool.query(
+      `select status, home_score, away_score,
+              (select count(*)::int from audit_records) as audit_count
+         from games
+        where id = $1`,
+      [ids.game]
+    );
+    expect(persisted.rows[0]).toMatchObject({
+      status: 'final',
+      home_score: 81,
+      away_score: 77,
+      audit_count: 1
+    });
+  });
+
+  it('enforces eligibility anchors and correction reasons below the service layer', async () => {
+    await expect(
+      pool.query(
+        `update games
+            set status = 'scheduled'
+          where id = $1`,
+        [ids.game]
+      )
+    ).rejects.toThrow(/games_competition_eligibility_anchor_check/);
+
+    await expect(
+      pool.query(
+        `insert into audit_records
+          (id, league_id, actor_account_id, action, entity_type, entity_id,
+           previous_value, new_value, reason, created_at)
+         values ($1, $2, $3, 'game.result_corrected', 'Game', $4,
+                 '{}'::jsonb, '{}'::jsonb, null, now())`,
+        [
+          '20000000-0000-4000-8000-000000000071',
+          ids.league,
+          ids.admin,
+          ids.game
+        ]
+      )
+    ).rejects.toThrow(/audit_result_correction_reason_check/);
   });
 
   it('reuses one frozen configuration version for later authoritative Games', async () => {
@@ -399,9 +633,9 @@ describeWithDatabase('PostgreSQL Game finalization slice', () => {
       pool.query(
         `insert into games
           (id, season_id, phase, status, home_season_team_id, away_season_team_id,
-           scheduled_at, started_at, finalized_at, home_score, away_score,
+           scheduled_at, started_at, competition_eligibility_at, finalized_at, home_score, away_score,
            winning_season_team_id, configuration_version_id)
-         values ($1, $2, 'regular', 'final', $3, $4, $5, $5, $5, 90, 80, $4, $6)`,
+         values ($1, $2, 'regular', 'final', $3, $4, $5, $5, $5, $5, 90, 80, $4, $6)`,
         [
           ids.secondGame,
           ids.season,

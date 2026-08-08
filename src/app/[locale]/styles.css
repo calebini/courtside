@@ -403,6 +403,47 @@ summary {
   margin-top: 0.8rem;
 }
 
+.completed-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));
+  gap: 0.85rem;
+  margin-top: 1.25rem;
+}
+
+.completed-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.completed-heading > strong {
+  font-size: 1.3rem;
+}
+
+.audit-list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0.8rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.audit-list li {
+  display: grid;
+  gap: 0.2rem;
+  padding-left: 0.75rem;
+  border-left: 3px solid #e6a16f;
+  color: #596174;
+  font-size: 0.76rem;
+}
+
+.audit-list strong {
+  color: #17223b;
+  font-size: 0.86rem;
+}
+
 .table-wrap {
   overflow-x: auto;
   margin-top: 1.25rem;
