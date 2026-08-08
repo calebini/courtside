@@ -61,7 +61,7 @@ Start the Next.js development server:
 npm run dev
 ```
 
-The localized foundation page is available at `/en` and `/fr`.
+The localized public portal is available at `/en` and `/fr`, with schedule, results, and standings at `/{locale}/schedule`, `/{locale}/results`, and `/{locale}/standings`. These routes require no login and render fresh authoritative data in the League timezone.
 
 The authenticated administrator slice adds `/en/sign-in`, `/fr/sign-in`, and the protected `/{locale}/admin` league desk. Resetting the local database loads a disposable fixture:
 
@@ -85,5 +85,7 @@ The first slice is implemented by:
 The second slice supplies verified login delivery and a protected League Administrator interface. The third slice adds reusable Venue reads plus scheduling, rescheduling, postponement, cancellation, and Game start. League-local wall-clock input is resolved through the Temporal adapter and rejects ambiguous or nonexistent daylight-saving times.
 
 The fourth slice unifies finalization, explicit-score forfeiture, and terminal-status-preserving result correction in one authoritative transaction. It records the competition eligibility anchor, requires a reason for correction, preserves prior values in append-only audit history, and recomputes standings immediately.
+
+The fifth slice adds the unauthenticated bilingual public portal. A dedicated PostgreSQL read adapter exposes only allowlisted League competition data and reuses the standings engine; User Accounts, audit actors, correction reasons, and administrative configuration remain private.
 
 The production bootstrap command, Venue administration, persisted random draws, playoff correction conflicts, and the remaining domain surfaces are later slices.

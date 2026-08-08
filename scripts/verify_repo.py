@@ -16,6 +16,7 @@ REQUIRED_FILES = (
     "specs/overview.md",
     "specs/architecture.md",
     "specs/authentication.md",
+    "specs/public-portal.md",
     "specs/lifecycle.md",
     "specs/invariants.md",
     "specs/config.md",
@@ -26,6 +27,7 @@ REQUIRED_FILES = (
     "specs/decisions/0004-deliver-authenticated-admin-slice.md",
     "specs/decisions/0005-deliver-game-scheduling-and-start.md",
     "specs/decisions/0006-deliver-forfeits-and-result-corrections.md",
+    "specs/decisions/0007-deliver-public-league-portal.md",
     "specs/repo-standard.md",
     "docs/development.md",
     "src/courtside/core/standings.ts",
@@ -34,6 +36,7 @@ REQUIRED_FILES = (
     "src/courtside/services/manage-game.ts",
     "src/courtside/adapters/postgres/finalize-game-store.ts",
     "src/courtside/adapters/postgres/game-operation-store.ts",
+    "src/courtside/adapters/postgres/public-league-store.ts",
     "src/courtside/adapters/temporal/scheduled-instant-resolver.ts",
     "src/app/icon.svg",
     "supabase/migrations/20260807190000_initial_game_result_slice.sql",
@@ -42,6 +45,7 @@ REQUIRED_FILES = (
     "tests/unit/standings.test.ts",
     "tests/integration/finalize-game.postgres.test.ts",
     "tests/integration/manage-game.postgres.test.ts",
+    "tests/integration/public-league-store.postgres.test.ts",
     "tests/e2e/admin-finalization.spec.ts",
     "supabase/seed.sql",
     ".github/workflows/ci.yml",
@@ -50,6 +54,7 @@ ACCEPTED_SPECS = (
     "specs/overview.md",
     "specs/architecture.md",
     "specs/authentication.md",
+    "specs/public-portal.md",
     "specs/lifecycle.md",
     "specs/invariants.md",
     "specs/config.md",
@@ -60,6 +65,7 @@ ACCEPTED_SPECS = (
     "specs/decisions/0004-deliver-authenticated-admin-slice.md",
     "specs/decisions/0005-deliver-game-scheduling-and-start.md",
     "specs/decisions/0006-deliver-forfeits-and-result-corrections.md",
+    "specs/decisions/0007-deliver-public-league-portal.md",
 )
 TEMPLATE_MARKERS = tuple(
     "{{" + name + "}}" for name in ("component_slug", "package_name", "Component Name")

@@ -11,6 +11,7 @@ Courtside is a seed-stage project in the Cortext ecosystem. Its core domain and 
 - [`specs/tech-stack.md`](specs/tech-stack.md) declares the accepted implementation platform and its safety boundaries.
 - [`specs/architecture.md`](specs/architecture.md) defines dependency direction and the first transactional vertical slice.
 - [`specs/authentication.md`](specs/authentication.md) defines login, session verification, authorization delivery, and bootstrap boundaries.
+- [`specs/public-portal.md`](specs/public-portal.md) defines the unauthenticated schedule, results, standings, and public-data boundary.
 - [`specs/repo-standard.md`](specs/repo-standard.md) defines how this repository grows as its boundaries become real.
 - `README.md` is orientation, not normative design.
 
@@ -31,4 +32,4 @@ PostgreSQL integration setup and test commands are documented in [`docs/developm
 
 ## Local Demo
 
-The current end-to-end workflow provides email/password sign-in, a protected League Administrator desk, timezone-safe Game scheduling and pre-result lifecycle operations, authoritative finalization and forfeiture, audited result correction, and live standings recomputation. Start the local Supabase stack, reset its disposable fixtures, and run the web application using [`docs/development.md`](docs/development.md).
+The current end-to-end workflow provides a bilingual public schedule, results, and standings portal plus email/password sign-in and a protected League Administrator desk for timezone-safe scheduling, lifecycle operations, authoritative finalization and forfeiture, audited result correction, and live standings recomputation. Start the local Supabase stack, reset its disposable fixtures, and run the web application using [`docs/development.md`](docs/development.md).

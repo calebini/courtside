@@ -101,4 +101,22 @@ test('a League Administrator manages a Game through finalization, correction, an
   await expect(forfeitCard).toContainText('Forfeit');
   await expect(forfeitCard).toContainText('0–20');
   await expect(page.getByRole('row', {name: /Northside Comets/})).toContainText('4');
+
+  await page.goto('/en/results');
+  await expect(page.getByRole('heading', {name: 'Results', exact: true})).toBeVisible();
+  await expect(page.locator('.public-game-card').filter({hasText: '70–75'})).toBeVisible();
+  await expect(page.locator('.public-game-card').filter({hasText: '0–20'})).toContainText('Forfeit');
+  await expect(page.getByText('Score sheet transposition')).toHaveCount(0);
+  await expect(page.getByText('Local League Admin')).toHaveCount(0);
+
+  await page.goto('/en/standings');
+  await expect(page.getByRole('heading', {name: 'Standings', exact: true})).toBeVisible();
+  await expect(page.getByRole('row', {name: /Northside Comets/})).toContainText('4');
+
+  await page.goto('/fr/schedule');
+  await expect(page.getByRole('heading', {name: 'Horaire', exact: true})).toBeVisible();
+  await expect(page.getByText('En cours').first()).toBeVisible();
+  await expect(page.getByText('c.', {exact: true}).first()).toBeVisible();
+  await expect(page.getByText(/Harbour Community Centre/).first()).toBeVisible();
+  await expect(page.getByText('America/Los_Angeles')).toBeVisible();
 });
