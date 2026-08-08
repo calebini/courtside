@@ -727,10 +727,145 @@ tbody tr:last-child td {
   font-size: 0.9rem;
 }
 
+.roster-command-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.roster-section {
+  margin-top: 1rem;
+  padding: clamp(1rem, 3vw, 1.6rem);
+  border: 1px solid #d8d0c0;
+  border-radius: 0.85rem;
+  background: rgb(255 253 247 / 72%);
+}
+
+.section-heading,
+.team-roster-heading,
+.roster-member-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.section-heading > span,
+.team-roster-heading > span {
+  display: grid;
+  min-width: 2rem;
+  min-height: 2rem;
+  place-items: center;
+  border-radius: 99rem;
+  background: #e8e1d3;
+  color: #596174;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.player-directory-grid,
+.team-roster-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+  gap: 0.85rem;
+  margin-top: 1.25rem;
+}
+
+.player-directory-card,
+.team-roster {
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid #ddd5c6;
+  border-radius: 0.65rem;
+  background: #fffefa;
+}
+
+.player-directory-card > strong {
+  display: block;
+  font-size: 1.05rem;
+}
+
+.player-directory-card > span {
+  display: block;
+  margin-top: 0.3rem;
+  color: #697183;
+  font-size: 0.76rem;
+}
+
+.team-roster-heading {
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid #e3dccf;
+}
+
+.team-roster-heading h4 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.roster-member-list {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.8rem;
+}
+
+.roster-member {
+  padding: 0.85rem;
+  border: 1px solid #e1d8c8;
+  border-radius: 0.55rem;
+  background: #fffdf8;
+}
+
+.roster-member-ended {
+  background: #f4f0e8;
+  color: #596174;
+}
+
+.membership-period {
+  margin: 0.45rem 0 0;
+  color: #697183;
+  font-size: 0.76rem;
+}
+
+.roster-member-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+}
+
+.roster-member-actions button,
+.player-directory-card button {
+  width: 100%;
+}
+
+.roster-audit-list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.roster-audit-list li {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.85rem 1rem;
+  border-left: 3px solid #e6a16f;
+  border-radius: 0 0.5rem 0.5rem 0;
+  background: #fffefa;
+  color: #596174;
+  font-size: 0.76rem;
+}
+
+.roster-audit-list strong {
+  color: #17223b;
+  font-size: 0.86rem;
+}
+
 @media (max-width: 850px) {
   .season-grid,
   .operations-grid,
-  .public-route-grid {
+  .public-route-grid,
+  .roster-command-grid {
     grid-template-columns: 1fr;
   }
 
@@ -759,7 +894,8 @@ tbody tr:last-child td {
   }
 
   .participant-fields,
-  .venue-fields {
+  .venue-fields,
+  .roster-member-actions {
     grid-template-columns: 1fr;
   }
 

@@ -365,6 +365,9 @@ export default async function AdminPage({
           COURTSIDE
         </a>
         <div className="account-actions">
+          <a className="button-link" href={`/${locale}/admin/rosters`}>
+            {t('manageRosters')}
+          </a>
           <span>{account?.displayName ?? identity.email}</span>
           <form action={signOut}>
             <input name="locale" type="hidden" value={locale} />

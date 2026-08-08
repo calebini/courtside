@@ -43,7 +43,7 @@ npm run db:reset
 npm run test:e2e
 ```
 
-The browser test schedules a Game, exercises postponement and rescheduling, starts and finalizes it, corrects the official result with a reason, and records a second Game as a forfeit. Reset the local database afterward when you want the original demo state again.
+The browser tests exercise the complete Game lifecycle plus Player creation, display-name replacement, roster addition, transfer, ending, audit history, and English/French delivery. Reset the local database afterward when you want the original demo state again.
 
 Stop the local stack when finished:
 
@@ -63,7 +63,7 @@ npm run dev
 
 The localized public portal is available at `/en` and `/fr`, with schedule, results, and standings at `/{locale}/schedule`, `/{locale}/results`, and `/{locale}/standings`. These routes require no login and render fresh authoritative data in the League timezone.
 
-The authenticated administrator slice adds `/en/sign-in`, `/fr/sign-in`, and the protected `/{locale}/admin` league desk. Resetting the local database loads a disposable fixture:
+The authenticated administrator slices add `/en/sign-in`, `/fr/sign-in`, the protected `/{locale}/admin` league desk, and the Player and Roster desk at `/{locale}/admin/rosters`. Resetting the local database loads a disposable fixture:
 
 ```text
 Email: admin@courtside.local
@@ -88,4 +88,6 @@ The fourth slice unifies finalization, explicit-score forfeiture, and terminal-s
 
 The fifth slice adds the unauthenticated bilingual public portal. A dedicated PostgreSQL read adapter exposes only allowlisted League competition data and reuses the standings engine; User Accounts, audit actors, correction reasons, and administrative configuration remain private.
 
-The production bootstrap command, Venue administration, persisted random draws, playoff correction conflicts, and the remaining domain surfaces are later slices.
+The sixth slice adds durable Players and non-overlapping, half-open Roster Membership intervals. League Administrators can create and rename Players, add and end memberships, and atomically transfer a Player within a Season while PostgreSQL and append-only audit preserve history.
+
+The production bootstrap command, Venue administration, persisted random draws, playoff correction conflicts, Player Management Relationships, member profile photos, and the remaining domain surfaces are later slices.

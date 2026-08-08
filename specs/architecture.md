@@ -2,7 +2,7 @@
 
 - Status: accepted
 - Spec version: 0.1.0
-- Last updated: 2026-08-07
+- Last updated: 2026-08-08
 
 ## Purpose
 
@@ -61,4 +61,6 @@ The fourth slice unifies finalization, forfeiture, and correction under the auth
 
 The fifth slice adds a public, read-only League portal for schedule, official results, and standings. One PostgreSQL adapter supplies an explicit public projection to fresh localized Server Components. It reuses the pure standings engine, exposes no administrative or identity records, and creates no browser database access or public mutation endpoint.
 
-The implementation still defers the production League Administrator bootstrap command and runbook, Venue administration, playoff correction conflicts, configuration amendment, persisted random draw, playoffs, Player statistics, roster mutation, public Player profiles, media, spreadsheet import, public mutation APIs, and production deployment. Those surfaces must extend the accepted boundaries rather than bypass them.
+The sixth slice adds League-owned Player identity and time-effective Roster Membership history. A pure core models name and interval transitions; an application service owns current authorization, timezone resolution, idempotency, audit, addition, ending, and atomic same-Season transfer; PostgreSQL enforces same-League ownership, half-open non-overlap, and terminal closed history. A localized protected roster desk exposes the workflow without publishing Player records or granting member and Team Captain authority.
+
+The implementation still defers the production League Administrator bootstrap command and runbook, Venue administration, playoff correction conflicts, configuration amendment, persisted random draw, playoffs, Player statistics, Player Management Relationships, member profile and photo management, public Player profiles, media, spreadsheet import, public mutation APIs, and production deployment. Those surfaces must extend the accepted boundaries rather than bypass them.
