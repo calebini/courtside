@@ -25,6 +25,7 @@ export interface AdminPlayerAccessView {
   readonly leagueName: string;
   readonly relationships: readonly {
     id: string; playerId: string; playerDisplayName: string; accountDisplayName: string;
+    accountContactEmail: string | null;
     status: PlayerManagementStatus; outcome: PlayerManagementStatus | 'declined'; requestedAt: Date;
   }[];
 }
@@ -106,9 +107,10 @@ export class PostgresPlayerAccessDashboardStore {
   async loadAdmin(accountId: string): Promise<AdminPlayerAccessView[]> {
     const [leagueResult, relationshipResult] = await Promise.all([
       this.pool.query<{id: string; name: string}>(`select l.id, l.name from leagues l join league_admin_assignments la on la.league_id = l.id where la.user_account_id = $1 and la.revoked_at is null order by l.name`, [accountId]),
-      this.pool.query<{league_id: string; id: string; player_id: string; player_display_name: string; account_display_name: string; status: PlayerManagementStatus; latest_action: string | null; requested_at: Date}>(
+      this.pool.query<{league_id: string; id: string; player_id: string; player_display_name: string; account_display_name: string; account_contact_email: string | null; status: PlayerManagementStatus; latest_action: string | null; requested_at: Date}>(
         `select p.league_id, pmr.id, p.id player_id, p.display_name player_display_name,
-                ua.display_name account_display_name, pmr.status, pmr.requested_at,
+                ua.display_name account_display_name, ua.contact_email account_contact_email,
+                pmr.status, pmr.requested_at,
                 (select ar.action from audit_records ar
                   where ar.entity_type = 'PlayerManagementRelationship'
                     and ar.entity_id = pmr.id
@@ -125,6 +127,7 @@ export class PostgresPlayerAccessDashboardStore {
         playerId: row.player_id,
         playerDisplayName: row.player_display_name,
         accountDisplayName: row.account_display_name,
+        accountContactEmail: row.account_contact_email,
         status: row.status,
         outcome: row.status === 'revoked' && row.latest_action === 'player_management.declined'
           ? 'declined'

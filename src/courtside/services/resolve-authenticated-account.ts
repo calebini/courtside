@@ -1,6 +1,9 @@
 export interface VerifiedIdentity {
   readonly externalAuthId: string;
   readonly email: string | null;
+  readonly emailVerified: boolean;
+  readonly displayName: string | null;
+  readonly preferredLocale: 'en' | 'fr' | null;
 }
 
 export interface VerifiedIdentityProvider {
@@ -10,6 +13,7 @@ export interface VerifiedIdentityProvider {
 export interface AuthenticatedUserAccount {
   readonly id: string;
   readonly displayName: string;
+  readonly preferredLocale: 'en' | 'fr';
 }
 
 export interface UserAccountDirectory {

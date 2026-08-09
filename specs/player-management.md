@@ -51,7 +51,8 @@ may be managed by several User Accounts.
 
 The member portal provides My Players, searchable Player access requests, display-name changes,
 and photo set, replace, and clear. The League desk centers pending requests with selected batch
-approval or decline and retains relationship history. Account provisioning, invitations,
+approval or decline, shows the confirmed requester email to authorized administrators, and retains
+relationship history. Account provisioning is defined in `specs/authentication.md`. Invitations,
 multi-League account membership, public Player pages, crop tools, and image transformations are
 deferred. Until multi-League account membership exists, the deployment contains one searchable
 League boundary.

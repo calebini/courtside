@@ -16,7 +16,16 @@ export class SupabaseVerifiedIdentityProvider implements VerifiedIdentityProvide
 
     return {
       externalAuthId: data.user.id,
-      email: data.user.email ?? null
+      email: data.user.email ?? null,
+      emailVerified: Boolean(data.user.email_confirmed_at),
+      displayName: typeof data.user.user_metadata.display_name === 'string'
+        ? data.user.user_metadata.display_name
+        : null,
+      preferredLocale: data.user.user_metadata.preferred_locale === 'fr'
+        ? 'fr'
+        : data.user.user_metadata.preferred_locale === 'en'
+          ? 'en'
+          : null
     };
   }
 }

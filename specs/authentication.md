@@ -1,16 +1,20 @@
 # Courtside Authentication Delivery
 
 - Status: accepted
-- Spec version: 0.1.0
-- Last updated: 2026-08-07
+- Spec version: 0.2.0
+- Last updated: 2026-08-09
 
 ## Purpose
 
-This specification defines the initial login, session-verification, and League Administrator bootstrap delivery boundary. It does not grant domain authority through Supabase Auth and does not collapse a login identity into a User Account or Player.
+This specification defines registration, login, recovery, session verification, User Account provisioning, and the League Administrator bootstrap boundary. It does not grant domain authority through Supabase Auth and does not collapse a login identity into a User Account or Player.
 
-## Initial Login Method
+## Login and Registration
 
-The initial user-facing login method is email and password through Supabase Auth. Public self-sign-up is disabled. Password reset, invitations, social login, passkeys, and multi-factor authentication are deferred until their complete user and operational flows are specified and tested.
+The initial user-facing login method is email and password through Supabase Auth. A deployment configuration selects `open` or `closed` registration; missing or unknown configuration fails closed. The local demo selects open registration. Open registration creates authentication identity only and does not grant Player, Team, Season, or League authority.
+
+Registration requires display name, email, language preference, and a password of 8 through 128 characters containing at least one letter and one digit. Supabase owns credentials, confirmation tokens, password policy enforcement, authentication rate limits, and recovery tokens. Courtside does not persist passwords or provider tokens.
+
+The initial production posture is email confirmation before account provisioning. A successful registration that has no confirmed session renders the same check-email outcome whether the email is new or already registered. A later League-code or invitation policy may replace open registration without changing User Account or Player Management identities.
 
 Local development may contain a clearly identified disposable Auth user and matching Courtside fixtures. Local credentials must not be reused outside the local Supabase stack and must never be treated as a production bootstrap mechanism.
 
@@ -19,6 +23,20 @@ Local development may contain a clearly identified disposable Auth user and matc
 Every authenticated server-rendered page and Server Action verifies the current identity with Supabase Auth. Cookie contents or an unverified local session payload are not sufficient proof of identity. Authentication failure redirects interactive requests to the localized sign-in page without attempting a domain read or mutation.
 
 The verified Supabase user identifier maps to at most one persistent Courtside User Account through `external_auth_id`. Email addresses and authentication-provider metadata are not domain authorization claims.
+
+## User Account Provisioning
+
+Provisioning is a server-side, idempotent operation following successful registration confirmation, authentication callback, or sign-in. It requires a Supabase identity verified by `getUser`, a confirmed email address, and a valid display name. It creates at most one independent Courtside User Account for `external_auth_id`, stores the normalized contact email for authorized administrator review, and stores English or French as the User Account language preference.
+
+Repeated provisioning reuses the existing User Account, synchronizes its verified contact email and the explicitly selected supported language, and does not overwrite its Courtside display name. Provisioning does not create a Player or any Player Management Relationship. A newly provisioned Account must use the request-and-approval workflow in `specs/player-management.md`.
+
+An authenticated but unprovisionable identity is signed out and receives a generic account-preparation failure. Server Components may resolve Accounts but do not provision them as a rendering side effect.
+
+## Password Recovery
+
+Password recovery accepts an email and always returns the same check-email response for invalid syntax, an unknown account, provider rejection, and an accepted request. Recovery links return through a fixed configured Courtside site origin and an allowlisted localized destination. The callback exchanges the single-use provider code for a verified server session; arbitrary `next` destinations are rejected.
+
+Updating a password requires the active recovery session, repeats the registration password policy, and signs out after success. Missing, invalid, or expired recovery state sends the user back to sign-in without revealing account existence or provider details.
 
 ## Authorization
 
@@ -38,6 +56,10 @@ Game scheduling, rescheduling, postponement, cancellation, start, finalization, 
 
 Invalid input, authentication failure, authorization failure, and infrastructure failure must not leak credentials, raw database errors, or sensitive identity details to the browser.
 
+## Deployment Requirements
+
+Production release requires an explicit site URL, explicit registration mode, working transactional email provider, email confirmation, Supabase authentication rate limits, CAPTCHA or an equivalent abuse control for open registration, and an exercised confirmation and recovery runbook. Local Inbucket delivery is disposable development infrastructure rather than production email.
+
 ## Deferred Surface
 
-This slice does not release production authentication, implement invitations or recovery, create the production bootstrap command, expose public sign-up, grant direct browser access to domain tables, or change Team Captain and Player Management authority.
+This slice does not release production authentication, implement invitations, League codes, social login, passkeys, multi-factor authentication, create the production bootstrap command, grant direct browser access to domain tables, or change Team Captain and Player Management authority.

@@ -14,7 +14,7 @@ cp .env.example .env.local
 npm run verify
 ```
 
-The committed example contains only project-local connection details and Supabase's public browser key. Deployed environments must supply their own database connection and public project key; server credentials must never use a `NEXT_PUBLIC_` variable.
+The committed example contains only project-local connection details, Supabase's public browser key, the local site URL, and open local registration mode. Deployed environments must supply their own database connection, public project key, canonical site URL, and explicit registration mode; server credentials must never use a `NEXT_PUBLIC_` variable.
 
 `npm run verify` checks repository invariants, lint, TypeScript, unit tests, and the production Next.js build. Integration tests are separate because they require PostgreSQL.
 
@@ -27,7 +27,7 @@ npm run db:start
 npm run db:reset
 ```
 
-The authenticated administrator slice enables the local API gateway and Supabase Auth. Storage, Realtime, Studio, and analytics remain disabled. The first startup downloads the required images and can take several minutes without much terminal output.
+The authenticated slices enable the local API gateway, Supabase Auth, private profile-photo Storage, and Inbucket email testing. The first startup downloads the required images and can take several minutes without much terminal output.
 
 Run the transactional integration suite against the local database:
 
@@ -63,14 +63,14 @@ npm run dev
 
 The localized public portal is available at `/en` and `/fr`, with schedule, results, and standings at `/{locale}/schedule`, `/{locale}/results`, and `/{locale}/standings`. These routes require no login and render fresh authoritative data in the League timezone.
 
-The authenticated administrator slices add `/en/sign-in`, `/fr/sign-in`, the protected `/{locale}/admin` league desk, and the Player and Roster desk at `/{locale}/admin/rosters`. Resetting the local database loads a disposable fixture:
+The authenticated slices add localized registration, sign-in, password recovery, the protected `/{locale}/players` portal, the `/{locale}/admin` league desk, and the Player and Roster desk at `/{locale}/admin/rosters`. Registration confirmation and password-recovery messages are visible in local Inbucket at `http://127.0.0.1:54324`. Resetting the local database loads disposable fixtures:
 
 ```text
 Email: admin@courtside.local
 Password: courtside-local-admin
 ```
 
-These credentials exist only in the project-local Supabase seed and must never be reused in a deployed environment. Public sign-up is disabled.
+Member credentials are `member@courtside.local` / `courtside-local-member`. These credentials exist only in the project-local Supabase seed and must never be reused in a deployed environment. Local self-sign-up is open and requires confirmation through Inbucket; production needs an explicit registration mode, transactional email, and abuse controls.
 
 ## Implemented Slices
 
@@ -90,4 +90,6 @@ The fifth slice adds the unauthenticated bilingual public portal. A dedicated Po
 
 The sixth slice adds durable Players and non-overlapping, half-open Roster Membership intervals. League Administrators can create and rename Players, add and end memberships, and atomically transfer a Player within a Season while PostgreSQL and append-only audit preserve history.
 
-The production bootstrap command, Venue administration, persisted random draws, playoff correction conflicts, Player Management Relationships, member profile photos, and the remaining domain surfaces are later slices.
+The seventh slice adds Player Management Relationships, account-requested access with administrator batch review, private Player profile updates, and validated private photo Storage. The eighth slice adds open-or-closed registration configuration, confirmed-email Account provisioning, saved language preference, and non-enumerating password recovery.
+
+The production bootstrap command, production email and abuse-control setup, Venue administration, persisted random draws, playoff correction conflicts, and the remaining domain surfaces are later slices.

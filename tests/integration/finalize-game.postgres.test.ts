@@ -582,13 +582,19 @@ describeWithDatabase('PostgreSQL Game finalization slice', () => {
     );
     const {identity, account} = await resolveAuthenticatedAccount(
       {
-        getVerifiedIdentity: async () => ({externalAuthId, email: 'admin@example.test'})
+        getVerifiedIdentity: async () => ({
+          externalAuthId,
+          email: 'admin@example.test',
+          emailVerified: true,
+          displayName: 'League Admin',
+          preferredLocale: 'en'
+        })
       },
       new PostgresUserAccountDirectory(pool)
     );
 
     expect(identity?.externalAuthId).toBe(externalAuthId);
-    expect(account).toEqual({id: ids.admin, displayName: 'League Admin'});
+    expect(account).toEqual({id: ids.admin, displayName: 'League Admin', preferredLocale: 'en'});
 
     const leagues = await new PostgresAdminDashboardStore(pool).load(account!.id);
     expect(leagues).toHaveLength(1);

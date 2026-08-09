@@ -48,6 +48,10 @@ The concrete statistic vocabulary is deferred until the initial scorekeeping sur
 
 Language selection follows saved supported User Account preference, then League default language. If requested authored-content translation is missing, Courtside renders the League-default variant. UI and authored content must be capable of English and French variants. Proper names are stored and rendered without automatic translation. Concrete storage and editorial workflow are deferred.
 
+## Account Onboarding Configuration
+
+Each deployment explicitly configures registration as `open` or `closed`; missing and unknown values fail closed. The deployment also supplies one canonical HTTP or HTTPS site origin for confirmation and recovery redirects. Redirect destinations are application allowlists rather than caller-controlled URLs. Open production registration requires email confirmation, provider rate limits, and CAPTCHA or an equivalent abuse control. These deployment controls do not grant domain authority and are not part of frozen Season configuration.
+
 ## Authorization Configuration
 
 The initial roles are `league_admin`, scoped to one League and persistent across Seasons until revoked, and `team_captain`, scoped to one Season Team. After bootstrap, existing League Administrators assign, reassign, and revoke League Administrator authority for that League, but cannot revoke the final active League Administrator. League Administrators assign, reassign, and revoke Team Captain authority and approve or revoke Player Management Relationships. League Administrators also hold Phase 1 authority for core Game lifecycle mutations, authoritative result corrections, Roster Membership changes, Player Stat Line creation and material changes, frozen Season configuration amendments, and playoff correction conflict resolution. Persisted random-draw duplicate or conflict attempts are handled only by deterministic reuse or rejection. Team Captain authority is a scoped role marker in Phase 1. Adding roles or changing authority requires an accepted specification update.

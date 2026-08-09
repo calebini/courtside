@@ -10,7 +10,7 @@ Courtside is a seed-stage project in the Cortext ecosystem. Its core domain and 
 - [`specs/config.md`](specs/config.md) defines configurable policy and normative defaults.
 - [`specs/tech-stack.md`](specs/tech-stack.md) declares the accepted implementation platform and its safety boundaries.
 - [`specs/architecture.md`](specs/architecture.md) defines dependency direction and the first transactional vertical slice.
-- [`specs/authentication.md`](specs/authentication.md) defines login, session verification, authorization delivery, and bootstrap boundaries.
+- [`specs/authentication.md`](specs/authentication.md) defines registration, login, recovery, session verification, account provisioning, authorization delivery, and bootstrap boundaries.
 - [`specs/public-portal.md`](specs/public-portal.md) defines the unauthenticated schedule, results, standings, and public-data boundary.
 - [`specs/rosters.md`](specs/rosters.md) defines durable Player identity and historical Season roster participation.
 - [`specs/repo-standard.md`](specs/repo-standard.md) defines how this repository grows as its boundaries become real.
@@ -33,4 +33,4 @@ PostgreSQL integration setup and test commands are documented in [`docs/developm
 
 ## Local Demo
 
-The current end-to-end workflow provides a bilingual public schedule, results, and standings portal plus email/password sign-in and protected League Administrator desks for timezone-safe Game operations, authoritative results, live standings, durable Players, and audited roster history. Start the local Supabase stack, reset its disposable fixtures, and run the web application using [`docs/development.md`](docs/development.md).
+The current end-to-end workflow provides a bilingual public schedule, results, and standings portal plus registration, email/password sign-in and recovery, private Player access requests, and protected League Administrator desks for timezone-safe Game operations, authoritative results, live standings, durable Players, and audited roster history. Start the local Supabase stack, reset its disposable fixtures, and run the web application using [`docs/development.md`](docs/development.md).

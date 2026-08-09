@@ -94,15 +94,19 @@ values (
   'en'
 );
 
-insert into user_accounts (id, external_auth_id, display_name)
+insert into user_accounts (id, external_auth_id, display_name, contact_email, preferred_locale)
 values (
   '40000000-0000-4000-8000-000000000011',
   '40000000-0000-4000-8000-000000000001',
-  'Local League Admin'
+  'Local League Admin',
+  'admin@courtside.local',
+  'en'
 ), (
   '40000000-0000-4000-8000-000000000014',
   '40000000-0000-4000-8000-000000000003',
-  'Local Member'
+  'Local Member',
+  'member@courtside.local',
+  'en'
 );
 
 insert into venues (id, league_id, name, address, notes)

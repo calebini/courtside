@@ -125,6 +125,7 @@ export default async function PlayerAccessPage({
                         <span>
                           <strong>{relationship.playerDisplayName}</strong>
                           <small>{relationship.accountDisplayName}</small>
+                          {relationship.accountContactEmail ? <small>{relationship.accountContactEmail}</small> : null}
                         </span>
                       </label>
                     ))}
@@ -158,6 +159,7 @@ export default async function PlayerAccessPage({
                   <div>
                     <strong>{relationship.playerDisplayName}</strong>
                     <p>{relationship.accountDisplayName}</p>
+                    {relationship.accountContactEmail ? <small>{relationship.accountContactEmail}</small> : null}
                     <span className="status-pill">{t(relationship.outcome)}</span>
                   </div>
                   {relationship.status === 'approved' ? (

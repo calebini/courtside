@@ -1,5 +1,7 @@
 import {getTranslations} from 'next-intl/server';
+import Link from 'next/link';
 
+import {isRegistrationOpen} from '@/courtside/adapters/config/auth-config';
 import {signIn} from '../auth-actions';
 
 export const dynamic = 'force-dynamic';
@@ -9,7 +11,7 @@ export default async function SignInPage({
   searchParams
 }: {
   params: Promise<{locale: string}>;
-  searchParams: Promise<{error?: string}>;
+  searchParams: Promise<{error?: string; result?: string}>;
 }) {
   const [{locale}, query, t] = await Promise.all([
     params,
@@ -26,7 +28,10 @@ export default async function SignInPage({
         <p className="eyebrow">{t('eyebrow')}</p>
         <h1>{t('title')}</h1>
         <p className="lede">{t('summary')}</p>
-        {query.error ? <p className="notice notice-error">{t('invalid')}</p> : null}
+        {query.result === 'password_updated' ? (
+          <p className="notice notice-success">{t('passwordUpdated')}</p>
+        ) : null}
+        {query.error ? <p className="notice notice-error">{t(query.error === 'account' ? 'accountUnavailable' : query.error === 'recovery' ? 'recoveryExpired' : 'invalid')}</p> : null}
         <form action={signIn} className="stack-form">
           <input name="locale" type="hidden" value={locale} />
           <label>
@@ -39,6 +44,10 @@ export default async function SignInPage({
           </label>
           <button type="submit">{t('submit')}</button>
         </form>
+        <div className="auth-links">
+          <Link href={`/${locale}/forgot-password`}>{t('forgotPassword')}</Link>
+          {isRegistrationOpen() ? <Link href={`/${locale}/register`}>{t('createAccount')}</Link> : null}
+        </div>
         {process.env.NODE_ENV !== 'production' ? (
           <p className="local-note">{t('localCredentials')}</p>
         ) : null}
