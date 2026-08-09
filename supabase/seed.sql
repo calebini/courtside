@@ -59,6 +59,33 @@ values (
 )
 on conflict (provider_id, provider) do nothing;
 
+insert into auth.users (
+  instance_id, id, aud, role, email, encrypted_password, email_confirmed_at,
+  raw_app_meta_data, raw_user_meta_data, created_at, updated_at,
+  confirmation_token, recovery_token, email_change_token_new, email_change
+)
+values (
+  '00000000-0000-0000-0000-000000000000',
+  '40000000-0000-4000-8000-000000000003',
+  'authenticated', 'authenticated', 'member@courtside.local',
+  crypt('courtside-local-member', gen_salt('bf')), now(),
+  '{"provider":"email","providers":["email"]}'::jsonb,
+  '{"display_name":"Local Member"}'::jsonb, now(), now(), '', '', '', ''
+)
+on conflict (id) do nothing;
+
+insert into auth.identities (
+  id, provider_id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at
+)
+values (
+  '40000000-0000-4000-8000-000000000004',
+  '40000000-0000-4000-8000-000000000003',
+  '40000000-0000-4000-8000-000000000003',
+  '{"sub":"40000000-0000-4000-8000-000000000003","email":"member@courtside.local","email_verified":true}'::jsonb,
+  'email', now(), now(), now()
+)
+on conflict (provider_id, provider) do nothing;
+
 insert into leagues (id, name, timezone, default_language)
 values (
   '40000000-0000-4000-8000-000000000010',
@@ -72,6 +99,10 @@ values (
   '40000000-0000-4000-8000-000000000011',
   '40000000-0000-4000-8000-000000000001',
   'Local League Admin'
+), (
+  '40000000-0000-4000-8000-000000000014',
+  '40000000-0000-4000-8000-000000000003',
+  'Local Member'
 );
 
 insert into venues (id, league_id, name, address, notes)
@@ -138,6 +169,18 @@ values
   ('40000000-0000-4000-8000-000000000061', '40000000-0000-4000-8000-000000000010', 'Jordan Lee'),
   ('40000000-0000-4000-8000-000000000062', '40000000-0000-4000-8000-000000000010', 'Morgan Patel'),
   ('40000000-0000-4000-8000-000000000063', '40000000-0000-4000-8000-000000000010', 'Samira Roy');
+
+insert into player_management_relationships (
+  id, player_id, user_account_id, status, requested_at, requested_by_account_id,
+  approved_at, approved_by_account_id
+)
+values (
+  '40000000-0000-4000-8000-000000000080',
+  '40000000-0000-4000-8000-000000000061',
+  '40000000-0000-4000-8000-000000000014',
+  'approved', now(), '40000000-0000-4000-8000-000000000011',
+  now(), '40000000-0000-4000-8000-000000000011'
+);
 
 insert into roster_memberships
   (id, player_id, season_id, season_team_id, effective_from)

@@ -10,6 +10,9 @@ Courtside owns the core domain for operating a recreational basketball league ac
 
 This specification family is authoritative for domain terminology and behavior. `README.md` remains orientation only.
 
+Private Player profile access, photo handling, and the User Account relationship lifecycle are
+further constrained by [`player-management.md`](player-management.md).
+
 ## Scope
 
 Courtside covers persistent league, team, player, and user-account identity; season-specific team participation, rosters, schedules, results, standings, and playoffs; provisional, partial, confirmed, and corrected player game statistics; configurable score-based standings and round-specific playoff series; league-scoped administration and season-team captain authority; simple venues and reusable media associations; English and French user-interface and authored-content localization; and simple audit records for material administrative changes.

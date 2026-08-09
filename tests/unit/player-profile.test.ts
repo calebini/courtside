@@ -1,0 +1,30 @@
+import {describe, expect, it} from 'vitest';
+
+import {RuleViolation} from '../../src/courtside/core/errors';
+import {
+  MAX_PROFILE_PHOTO_BYTES,
+  nextPlayerManagementStatus,
+  validateProfilePhoto
+} from '../../src/courtside/core/player-profile';
+
+describe('private Player profiles', () => {
+  it('accepts supported signatures only when the declared type agrees', () => {
+    expect(validateProfilePhoto(new Uint8Array([0xff, 0xd8, 0xff, 0x00]), 'image/jpeg')).toMatchObject({contentType: 'image/jpeg', extension: 'jpg'});
+    expect(validateProfilePhoto(new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), 'image/png')).toMatchObject({contentType: 'image/png', extension: 'png'});
+    expect(validateProfilePhoto(new Uint8Array([0x52, 0x49, 0x46, 0x46, 0, 0, 0, 0, 0x57, 0x45, 0x42, 0x50]), 'image/webp')).toMatchObject({contentType: 'image/webp', extension: 'webp'});
+    expect(() => validateProfilePhoto(new Uint8Array([0xff, 0xd8, 0xff]), 'image/png')).toThrow(RuleViolation);
+  });
+
+  it('rejects empty and oversized profile photos', () => {
+    expect(() => validateProfilePhoto(new Uint8Array(), 'image/png')).toThrow(RuleViolation);
+    expect(() => validateProfilePhoto(new Uint8Array(MAX_PROFILE_PHOTO_BYTES + 1), 'image/png')).toThrow(RuleViolation);
+  });
+
+  it('allows only requested-to-approved and active-to-revoked transitions', () => {
+    expect(nextPlayerManagementStatus('requested', 'approve')).toBe('approved');
+    expect(nextPlayerManagementStatus('requested', 'revoke')).toBe('revoked');
+    expect(nextPlayerManagementStatus('approved', 'revoke')).toBe('revoked');
+    expect(() => nextPlayerManagementStatus('approved', 'approve')).toThrow(RuleViolation);
+    expect(() => nextPlayerManagementStatus('revoked', 'revoke')).toThrow(RuleViolation);
+  });
+});

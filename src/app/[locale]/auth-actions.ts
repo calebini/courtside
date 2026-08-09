@@ -2,6 +2,9 @@
 
 import {redirect} from 'next/navigation';
 
+import {PostgresPlayerAccessDashboardStore} from '@/courtside/adapters/postgres/player-access-dashboard-store';
+import {getRuntimePostgresPool} from '@/courtside/adapters/postgres/runtime-pool';
+import {PostgresUserAccountDirectory} from '@/courtside/adapters/postgres/user-account-directory';
 import {createSupabaseServerClient} from '@/courtside/adapters/supabase/server-client';
 
 function supportedLocale(value: FormDataEntryValue | null) {
@@ -18,12 +21,17 @@ export async function signIn(formData: FormData) {
   }
 
   const supabase = await createSupabaseServerClient();
-  const {error} = await supabase.auth.signInWithPassword({email, password});
+  const {data, error} = await supabase.auth.signInWithPassword({email, password});
   if (error) {
     redirect(`/${locale}/sign-in?error=invalid`);
   }
 
-  redirect(`/${locale}/admin`);
+  const pool = getRuntimePostgresPool();
+  const account = await new PostgresUserAccountDirectory(pool).findByExternalAuthId(data.user.id);
+  const isAdmin = account
+    ? await new PostgresPlayerAccessDashboardStore(pool).hasAdministrativeAccess(account.id)
+    : false;
+  redirect(`/${locale}/${isAdmin ? 'admin' : 'players'}`);
 }
 
 export async function signOut(formData: FormData) {

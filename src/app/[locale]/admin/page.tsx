@@ -365,6 +365,12 @@ export default async function AdminPage({
           COURTSIDE
         </a>
         <div className="account-actions">
+          <a className="button-link" href={`/${locale}/players`}>
+            {t('myPlayers')}
+          </a>
+          <a className="button-link" href={`/${locale}/admin/player-access`}>
+            {t('managePlayerAccess')}
+          </a>
           <a className="button-link" href={`/${locale}/admin/rosters`}>
             {t('manageRosters')}
           </a>

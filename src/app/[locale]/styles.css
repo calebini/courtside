@@ -861,12 +861,89 @@ tbody tr:last-child td {
   font-size: 0.86rem;
 }
 
+.player-portal,
+.access-dashboard {
+  max-width: 1120px;
+}
+
+.access-request-panel {
+  max-width: 620px;
+  margin-bottom: 1.4rem;
+}
+
+.managed-player-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.managed-player-heading,
+.access-row,
+.access-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.managed-player-heading h2,
+.access-row p {
+  margin: 0.15rem 0 0.45rem;
+}
+
+.profile-photo {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #f0bf91;
+  background: #f8efe4;
+}
+
+.profile-photo-placeholder {
+  display: grid;
+  place-items: center;
+  color: #9a4932;
+  font: 700 1.7rem/1 Georgia, serif;
+}
+
+.profile-actions {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.2rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid #e1d8c8;
+}
+
+.field-help {
+  margin: -0.4rem 0 0;
+  color: #697183;
+  font-size: 0.76rem;
+}
+
+.access-list {
+  margin-top: 1.25rem;
+}
+
+.access-row {
+  justify-content: space-between;
+  margin-top: 0.75rem;
+}
+
+.access-row-actions {
+  flex-wrap: wrap;
+}
+
 @media (max-width: 850px) {
   .season-grid,
   .operations-grid,
   .public-route-grid,
   .roster-command-grid {
     grid-template-columns: 1fr;
+  }
+
+  .access-row {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .public-route-grid > a {
