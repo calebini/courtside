@@ -867,8 +867,70 @@ tbody tr:last-child td {
 }
 
 .access-request-panel {
-  max-width: 620px;
+  max-width: 760px;
   margin-bottom: 1.4rem;
+}
+
+.player-request-picker,
+.pending-access-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.player-request-picker fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.player-request-picker legend {
+  margin-bottom: 0.55rem;
+  color: #17223b;
+  font-weight: 700;
+}
+
+.request-player-options,
+.pending-access-list {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.request-player-option,
+.pending-access-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid #ded4c4;
+  border-radius: 0.55rem;
+  background: #fffdf8;
+  cursor: pointer;
+}
+
+.request-player-option:has(input:checked),
+.pending-access-row:has(input:checked) {
+  border-color: #b44f32;
+  box-shadow: 0 0 0 2px rgb(180 79 50 / 12%);
+}
+
+.request-player-option input,
+.pending-access-row input {
+  width: 1.05rem;
+  height: 1.05rem;
+  margin: 0;
+  accent-color: #b44f32;
+}
+
+.request-player-option span,
+.pending-access-row span {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.request-player-option small,
+.pending-access-row small {
+  color: #697183;
 }
 
 .managed-player-grid {
@@ -922,6 +984,23 @@ tbody tr:last-child td {
 
 .access-list {
   margin-top: 1.25rem;
+}
+
+.pending-access-section {
+  padding: 1.15rem;
+  border: 1px solid #e1d8c8;
+  border-radius: 0.7rem;
+  background: #f8f4eb;
+}
+
+.batch-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.batch-actions button {
+  flex: 1 1 220px;
 }
 
 .access-row {

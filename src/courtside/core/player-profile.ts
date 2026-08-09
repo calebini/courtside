@@ -51,9 +51,12 @@ export type PlayerManagementStatus = 'requested' | 'approved' | 'revoked';
 
 export function nextPlayerManagementStatus(
   current: PlayerManagementStatus,
-  requested: 'approve' | 'revoke'
+  requested: 'approve' | 'decline' | 'revoke'
 ): PlayerManagementStatus {
-  if (current === 'revoked' || (current === 'approved' && requested === 'approve')) {
+  if (
+    current === 'revoked' ||
+    (current === 'approved' && requested !== 'revoke')
+  ) {
     throw new RuleViolation(
       'player_management.valid_transition',
       `Cannot ${requested} a ${current} Player Management Relationship`

@@ -6,6 +6,7 @@ import {
   nextPlayerManagementStatus,
   validateProfilePhoto
 } from '../../src/courtside/core/player-profile';
+import {processPlayerAccessBatch} from '../../src/courtside/services/manage-player-access';
 
 describe('private Player profiles', () => {
   it('accepts supported signatures only when the declared type agrees', () => {
@@ -23,8 +24,36 @@ describe('private Player profiles', () => {
   it('allows only requested-to-approved and active-to-revoked transitions', () => {
     expect(nextPlayerManagementStatus('requested', 'approve')).toBe('approved');
     expect(nextPlayerManagementStatus('requested', 'revoke')).toBe('revoked');
+    expect(nextPlayerManagementStatus('requested', 'decline')).toBe('revoked');
     expect(nextPlayerManagementStatus('approved', 'revoke')).toBe('revoked');
     expect(() => nextPlayerManagementStatus('approved', 'approve')).toThrow(RuleViolation);
+    expect(() => nextPlayerManagementStatus('approved', 'decline')).toThrow(RuleViolation);
     expect(() => nextPlayerManagementStatus('revoked', 'revoke')).toThrow(RuleViolation);
+  });
+
+  it('processes selected access decisions independently and deduplicates retries', async () => {
+    const accepted: string[] = [];
+    const result = await processPlayerAccessBatch(
+      async (command) => {
+        if ('relationshipId' in command && command.relationshipId === 'stale') throw new Error('stale');
+        if ('relationshipId' in command) accepted.push(command.relationshipId);
+      },
+      {
+        type: 'approve',
+        actorAccountId: 'admin',
+        relationshipIds: ['first', 'stale', 'first', 'second']
+      }
+    );
+
+    expect(accepted).toEqual(['first', 'second']);
+    expect(result).toEqual({attempted: 3, succeeded: 2, failed: 1});
+  });
+
+  it('bounds access batches', async () => {
+    await expect(processPlayerAccessBatch(async () => undefined, {
+      type: 'decline',
+      actorAccountId: 'admin',
+      relationshipIds: []
+    })).rejects.toBeInstanceOf(RuleViolation);
   });
 });

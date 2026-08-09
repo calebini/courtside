@@ -14,14 +14,23 @@ may be managed by several User Accounts.
 - A Player Management Relationship has exactly one of `requested`, `approved`, or `revoked`.
 - A revoked relationship is terminal. A later grant is a new relationship with a new identity.
 - At most one requested or approved relationship may exist for an Account and Player pair.
-- An Account may request access using the exact Player reference supplied out of band by the
-  League desk. The product does not expose an authenticated Player directory for discovery.
-- A League Administrator may request, approve, create-and-approve, or revoke a relationship for
-  a Player in their League.
+- User-requested access is the normal workflow. An authenticated Account searches the deployment's
+  single League Player directory and requests one existing Player created by a League Administrator.
+- Player discovery returns no rows until the Account enters a non-empty Player display-name or
+  Team-name query. Matching results expose only display name, current Team, and Season context.
+  They do not expose profile photos or other private Player data.
+- A League Administrator may approve or decline a requested relationship and may revoke an
+  approved relationship for a Player in their League. Direct create-and-approve remains a domain
+  capability for exceptional administration but is not the primary product workflow.
 - Only an approved relationship grants the Account authority to view and update that Player's
   private profile. League Administrators retain equivalent authority for Players in their League.
 - Initial managed fields are `display_name` and `profile_photo` only.
-- Requests, approvals, revocations, display-name changes, and photo changes are audited.
+- Requests, approvals, declines, revocations, display-name changes, and photo changes are audited.
+- The League desk may approve or decline selected pending requests as a batch. Each request is
+  authorized, committed, and audited independently so a stale or invalid request does not prevent
+  valid selections from completing. The result reports successful and failed counts.
+- A declined request uses the terminal `revoked` persistence state. A later attempt creates a new
+  relationship rather than reopening the declined record.
 
 ## Profile photos
 
@@ -40,7 +49,9 @@ may be managed by several User Accounts.
 
 ## Initial delivery boundary
 
-The member portal provides My Players, exact-reference access requests, display-name changes,
-and photo set, replace, and clear. The League desk provides relationship approval and revocation.
-Account provisioning, invitations, public Player pages, crop tools, and image transformations are
-deferred.
+The member portal provides My Players, searchable Player access requests, display-name changes,
+and photo set, replace, and clear. The League desk centers pending requests with selected batch
+approval or decline and retains relationship history. Account provisioning, invitations,
+multi-League account membership, public Player pages, crop tools, and image transformations are
+deferred. Until multi-League account membership exists, the deployment contains one searchable
+League boundary.

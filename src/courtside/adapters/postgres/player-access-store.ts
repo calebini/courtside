@@ -30,6 +30,14 @@ class PostgresPlayerAccessTransaction implements PlayerAccessTransaction {
     return row ? {id: row.id, playerId: row.player_id, leagueId: row.league_id, userAccountId: row.user_account_id, status: row.status, version: row.version} : null;
   }
 
+  async isSoleDeploymentLeague(leagueId: string) {
+    const result = await this.client.query<{allowed: boolean}>(
+      `select count(*) = 1 and bool_and(id = $1) allowed from leagues`,
+      [leagueId]
+    );
+    return result.rows[0]?.allowed === true;
+  }
+
   async hasLeagueAdmin(leagueId: string, accountId: string) {
     const result = await this.client.query(
       'select 1 from league_admin_assignments where league_id = $1 and user_account_id = $2 and revoked_at is null limit 1',

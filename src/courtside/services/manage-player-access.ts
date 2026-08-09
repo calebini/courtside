@@ -15,6 +15,7 @@ export interface StoredPlayerAccessRelationship {
 export interface PlayerAccessTransaction {
   findPlayer(playerId: string): Promise<{id: string; leagueId: string} | null>;
   findRelationship(relationshipId: string): Promise<StoredPlayerAccessRelationship | null>;
+  isSoleDeploymentLeague(leagueId: string): Promise<boolean>;
   hasLeagueAdmin(leagueId: string, accountId: string): Promise<boolean>;
   hasActivePair(playerId: string, accountId: string): Promise<boolean>;
   accountExists(accountId: string): Promise<boolean>;
@@ -39,7 +40,52 @@ export interface PlayerAccessStore {
 export type PlayerAccessCommand =
   | {type: 'request'; actorAccountId: string; playerId: string}
   | {type: 'grant'; actorAccountId: string; playerId: string; userAccountId: string; reason?: string | null}
-  | {type: 'approve' | 'revoke'; actorAccountId: string; relationshipId: string; reason?: string | null};
+  | {type: 'approve' | 'decline' | 'revoke'; actorAccountId: string; relationshipId: string; reason?: string | null};
+
+export interface PlayerAccessBatchResult {
+  readonly attempted: number;
+  readonly succeeded: number;
+  readonly failed: number;
+}
+
+export async function processPlayerAccessBatch(
+  manageAccess: (command: PlayerAccessCommand) => Promise<unknown>,
+  input: {
+    readonly type: 'approve' | 'decline';
+    readonly actorAccountId: string;
+    readonly relationshipIds: readonly string[];
+    readonly reason?: string | null;
+  }
+): Promise<PlayerAccessBatchResult> {
+  const relationshipIds = [...new Set(input.relationshipIds)];
+  if (relationshipIds.length < 1 || relationshipIds.length > 100) {
+    throw new RuleViolation(
+      'player_management.batch_size',
+      'A Player access batch must contain between 1 and 100 unique requests'
+    );
+  }
+
+  let succeeded = 0;
+  for (const relationshipId of relationshipIds) {
+    try {
+      await manageAccess({
+        type: input.type,
+        actorAccountId: input.actorAccountId,
+        relationshipId,
+        reason: input.reason
+      });
+      succeeded += 1;
+    } catch {
+      // Each command owns its transaction. A rejected or stale selection is reported without
+      // rolling back other valid decisions in the administrator's batch.
+    }
+  }
+  return {
+    attempted: relationshipIds.length,
+    succeeded,
+    failed: relationshipIds.length - succeeded
+  };
+}
 
 export function createPlayerAccessService(
   store: PlayerAccessStore,
@@ -54,6 +100,15 @@ export function createPlayerAccessService(
       const player = await transaction.findPlayer(command.playerId);
       if (!player) throw new RuleViolation('player.exists', 'Player not found');
       const targetAccountId = command.type === 'request' ? command.actorAccountId : command.userAccountId;
+      if (
+        command.type === 'request' &&
+        !await transaction.isSoleDeploymentLeague(player.leagueId)
+      ) {
+        throw new RuleViolation(
+          'player_management.single_league_scope',
+          'Player discovery requests require exactly one deployment League'
+        );
+      }
       if (command.type === 'grant' && !await transaction.hasLeagueAdmin(player.leagueId, command.actorAccountId)) {
         throw new RuleViolation('player_management.admin_required', 'League Administrator authority required');
       }
@@ -90,7 +145,8 @@ export function createPlayerAccessService(
     });
     await transaction.appendAudit({
       id: newId(), leagueId: relationship.leagueId, actorAccountId: command.actorAccountId,
-      action: `player_management.${status}`, entityId: relationship.id,
+      action: `player_management.${command.type === 'decline' ? 'declined' : status}`,
+      entityId: relationship.id,
       previousValue: {status: relationship.status}, newValue: {status},
       reason: command.reason?.trim() || null, occurredAt
     });

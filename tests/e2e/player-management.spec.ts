@@ -27,9 +27,17 @@ test('a member manages approved Players while the League desk controls authority
   await expect(member.getByText('The private profile photo was updated and audited.')).toBeVisible();
   await expect(member.locator('.profile-photo').first()).toHaveAttribute('src', /storage\/v1\/object\/sign/);
 
-  await member.getByLabel('Player reference').fill('40000000-0000-4000-8000-000000000060');
+  await expect(member.locator('.request-player-option')).toHaveCount(0);
+  await expect(member.getByText('Start typing a Player or team name to reveal matching profiles.')).toBeVisible();
+  await member.getByLabel('Search by Player or team name').fill('Avery');
+  const averyOption = member.locator('.request-player-option').filter({hasText: 'Avery Chen'});
+  await expect(averyOption).toBeVisible();
+  await member.getByLabel('Search by Player or team name').fill('West End Waves');
+  const samiraOption = member.locator('.request-player-option').filter({hasText: 'Samira Roy'});
+  await expect(samiraOption).toContainText('West End Waves');
+  await samiraOption.getByRole('radio').check();
   await member.getByRole('button', {name: 'Request access'}).click();
-  await expect(member.locator('.managed-player-card').filter({hasText: 'Avery Chen'})).toContainText('Requested');
+  await expect(member.locator('.managed-player-card').filter({hasText: 'Samira Roy'})).toContainText('Requested');
 
   const adminContext = await browser.newContext();
   const admin = await adminContext.newPage();
@@ -38,13 +46,16 @@ test('a member manages approved Players while the League desk controls authority
   await admin.getByLabel('Password').fill('courtside-local-admin');
   await admin.getByRole('button', {name: 'Sign in'}).click();
   await admin.getByRole('link', {name: 'Manage Player access'}).click();
-  const request = admin.locator('.access-row').filter({hasText: 'Avery Chen'});
+  await expect(admin.getByRole('heading', {name: 'Pending requests'})).toBeVisible();
+  await expect(admin.getByRole('heading', {name: 'Approve access'})).toHaveCount(0);
+  const request = admin.locator('.pending-access-row').filter({hasText: 'Samira Roy'});
   await expect(request).toContainText('Local Member');
-  await request.getByRole('button', {name: 'Approve request'}).click();
-  await expect(admin.getByText('The request was approved and audited.')).toBeVisible();
+  await request.getByRole('checkbox').check();
+  await admin.getByRole('button', {name: 'Approve selected'}).click();
+  await expect(admin.getByText('Approved 1 selected request(s); 0 could not be completed.')).toBeVisible();
 
   await member.reload();
-  await expect(member.locator('.managed-player-card').filter({hasText: 'Avery Chen'})).toContainText('Approved');
+  await expect(member.locator('.managed-player-card').filter({hasText: 'Samira Roy'})).toContainText('Approved');
   await adminContext.close();
   await memberContext.close();
 });
