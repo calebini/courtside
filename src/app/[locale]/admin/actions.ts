@@ -8,6 +8,7 @@ import {PostgresGameOperationStore} from '@/courtside/adapters/postgres/game-ope
 import {getRuntimePostgresPool} from '@/courtside/adapters/postgres/runtime-pool';
 import {PostgresCreateSeasonStore} from '@/courtside/adapters/postgres/season-setup-store';
 import {PostgresSeasonTeamStore} from '@/courtside/adapters/postgres/season-team-store';
+import {PostgresSeasonConfigurationStore} from '@/courtside/adapters/postgres/season-configuration-store';
 import {PostgresUserAccountDirectory} from '@/courtside/adapters/postgres/user-account-directory';
 import {PostgresVenueStore} from '@/courtside/adapters/postgres/venue-store';
 import {SupabaseVerifiedIdentityProvider} from '@/courtside/adapters/supabase/identity-provider';
@@ -37,6 +38,11 @@ import {
   VenueRejected,
   type VenueCommand
 } from '@/courtside/services/manage-venue';
+import {
+  createSeasonConfigurationService,
+  SeasonConfigurationRejected
+} from '@/courtside/services/update-season-configuration';
+import type {RankingCriterion} from '@/courtside/core/configuration';
 
 type PendingGameOperationCommand = GameOperationCommand extends infer Command
   ? Command extends GameOperationCommand
@@ -198,6 +204,48 @@ export async function createSeasonAction(formData: FormData) {
     });
   } catch (error) {
     outcome = error instanceof CreateSeasonRejected ? 'season_rejected' : 'unexpected';
+  }
+
+  revalidatePath(`/${locale}/admin`);
+  redirect(`/${locale}/admin?result=${outcome}`);
+}
+
+export async function updateSeasonConfigurationAction(formData: FormData) {
+  const locale = supportedLocale(formData.get('locale'));
+  const commandId = commandIdentity(formData.get('commandId'));
+  const seasonId = entityIdentity(formData.get('seasonId'));
+  const winPoints = nonnegativeInteger(formData.get('winPoints'));
+  const lossPoints = nonnegativeInteger(formData.get('lossPoints'));
+  const scoreCriteria = formData.getAll('ranking').map(String);
+  if (
+    !commandId ||
+    !seasonId ||
+    winPoints === null ||
+    lossPoints === null ||
+    scoreCriteria.length !== 3
+  ) {
+    redirect(`/${locale}/admin?error=invalid_configuration`);
+  }
+
+  const {pool, account} = await authenticatedAccount();
+  if (!account) {
+    redirect(`/${locale}/sign-in`);
+  }
+
+  let outcome = 'configuration_updated';
+  try {
+    await createSeasonConfigurationService(new PostgresSeasonConfigurationStore(pool))({
+      commandId,
+      actorAccountId: account.id,
+      seasonId,
+      winPoints,
+      lossPoints,
+      ranking: [...scoreCriteria, 'random_draw'] as RankingCriterion[]
+    });
+  } catch (error) {
+    outcome = error instanceof SeasonConfigurationRejected
+      ? 'configuration_rejected'
+      : 'unexpected';
   }
 
   revalidatePath(`/${locale}/admin`);

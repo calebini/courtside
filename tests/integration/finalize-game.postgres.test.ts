@@ -458,7 +458,7 @@ describeWithDatabase('PostgreSQL Game finalization slice', () => {
     expect(persisted.rows[0]).toEqual({configuration_count: 1, audit_count: 2});
   });
 
-  it('rejects a later Game when mutable configuration diverges from the frozen basis', async () => {
+  it('prevents mutable configuration divergence after freeze before a later Game', async () => {
     await insertSecondGame();
     const generatedIds = [
       '20000000-0000-4000-8000-000000000021',
@@ -476,7 +476,7 @@ describeWithDatabase('PostgreSQL Game finalization slice', () => {
       homeScore: 81,
       awayScore: 77
     });
-    await pool.query(
+    await expect(pool.query(
       `update seasons
           set result_configuration = jsonb_set(
             result_configuration,
@@ -485,21 +485,16 @@ describeWithDatabase('PostgreSQL Game finalization slice', () => {
           )
         where id = $1`,
       [ids.season]
-    );
+    )).rejects.toThrow(/versioned amendment/);
 
-    await expect(
-      service({
-        commandId: '30000000-0000-4000-8000-000000000022',
-        actorAccountId: ids.admin,
-        gameId: ids.secondGame,
-        homeScore: 70,
-        awayScore: 75
-      })
-    ).rejects.toMatchObject({
-      report: {
-        violatedRule: 'season.configuration_basis_conflict',
-        authoritativeStatePreserved: true
-      }
+    await expect(service({
+      commandId: '30000000-0000-4000-8000-000000000022',
+      actorAccountId: ids.admin,
+      gameId: ids.secondGame,
+      homeScore: 70,
+      awayScore: 75
+    })).resolves.toMatchObject({
+      game: {status: 'final'}
     });
 
     const persisted = await pool.query(
@@ -511,8 +506,8 @@ describeWithDatabase('PostgreSQL Game finalization slice', () => {
     );
     expect(persisted.rows[0]).toEqual({
       configuration_count: 1,
-      audit_count: 1,
-      second_game_status: 'in_progress'
+      audit_count: 2,
+      second_game_status: 'final'
     });
   });
 

@@ -3,6 +3,10 @@ import type {Pool} from 'pg';
 import {canonicalHash, readStandingsConfiguration} from '@/courtside/core/configuration';
 import type {GamePhase, GameStatus} from '@/courtside/core/game';
 import {calculateStandings, type StandingsGame} from '@/courtside/core/standings';
+import {
+  readEditableSeasonConfiguration,
+  type EditableSeasonConfiguration
+} from '@/courtside/core/pre-freeze-season-configuration';
 
 export interface AdminGame {
   readonly id: string;
@@ -68,6 +72,7 @@ export interface AdminSeason {
   readonly id: string;
   readonly name: string;
   readonly configurationFrozen: boolean;
+  readonly configuration: EditableSeasonConfiguration;
   readonly teams: readonly AdminSeasonTeam[];
   readonly scheduledGames: readonly AdminGame[];
   readonly postponedGames: readonly AdminGame[];
@@ -298,6 +303,8 @@ export class PostgresAdminDashboardStore {
         teamResult.rows.map((team) => [team.season_team_id, team.team_name])
       );
       const configuration = row.frozen_configuration ?? row.result_configuration;
+      const editableConfiguration = readEditableSeasonConfiguration(configuration);
+      const standingsConfiguration = readStandingsConfiguration(configuration);
       const configurationVersionId =
         row.configuration_version_id ?? `mutable-${canonicalHash(configuration)}`;
       const authoritativeGames: StandingsGame[] = gameResult.rows
@@ -321,13 +328,14 @@ export class PostgresAdminDashboardStore {
         configurationVersionId,
         seasonTeamIds: teamResult.rows.map((team) => team.season_team_id),
         games: authoritativeGames,
-        configuration: readStandingsConfiguration(configuration)
+        configuration: standingsConfiguration
       });
 
       const season: AdminSeason = {
         id: row.season_id,
         name: row.season_name,
         configurationFrozen: row.configuration_version_id !== null,
+        configuration: editableConfiguration,
         teams: teamResult.rows.map((team) => ({
           id: team.season_team_id,
           teamId: team.team_id,

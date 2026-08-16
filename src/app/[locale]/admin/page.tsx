@@ -30,6 +30,7 @@ import {
   rescheduleGameAction,
   scheduleGameAction,
   startGameAction,
+  updateSeasonConfigurationAction,
   updateVenueAction
 } from './actions';
 
@@ -54,6 +55,8 @@ function resultMessageKey(result: string | undefined) {
     venue_updated: 'venueUpdated',
     venue_archived: 'venueArchived',
     venue_rejected: 'venueRejected',
+    configuration_updated: 'configurationUpdated',
+    configuration_rejected: 'configurationRejected',
     rejected: 'rejected',
     unexpected: 'unexpected'
   };
@@ -164,6 +167,124 @@ function VenueDetailFields({
         <textarea defaultValue={venue?.notes ?? ''} maxLength={1000} name="notes" rows={3} />
       </label>
     </>
+  );
+}
+
+const scoreRankingCriteria = [
+  'league_points',
+  'point_differential',
+  'points_scored'
+] as const;
+
+function SeasonConfigurationPanel({
+  season,
+  locale,
+  labels
+}: {
+  season: {
+    id: string;
+    configurationFrozen: boolean;
+    configuration: {
+      winPoints: number;
+      lossPoints: number;
+      ranking: readonly string[];
+      playoffRoundCount: number;
+    };
+  };
+  locale: string;
+  labels: {
+    kicker: string;
+    title: string;
+    mutable: string;
+    frozen: string;
+    winPoints: string;
+    lossPoints: string;
+    ranking: string;
+    rankingPriority: (position: number) => string;
+    criteria: Record<(typeof scoreRankingCriteria)[number] | 'random_draw', string>;
+    randomDrawFixed: string;
+    fixedRules: string;
+    playoffRounds: (count: number) => string;
+    save: string;
+    frozenSummary: string;
+  };
+}) {
+  const configuration = season.configuration;
+  return (
+    <section className="panel configuration-panel">
+      <div className="panel-heading">
+        <div>
+          <p className="panel-kicker">{labels.kicker}</p>
+          <h3>{labels.title}</h3>
+        </div>
+        <span className={`status-pill ${season.configurationFrozen ? 'frozen' : ''}`}>
+          {season.configurationFrozen ? labels.frozen : labels.mutable}
+        </span>
+      </div>
+      {season.configurationFrozen ? (
+        <p className="empty-copy">{labels.frozenSummary}</p>
+      ) : (
+        <form action={updateSeasonConfigurationAction} className="stack-form compact-form">
+          <CommandFields locale={locale} />
+          <input name="seasonId" type="hidden" value={season.id} />
+          <div className="configuration-points-grid">
+            <label>
+              <span>{labels.winPoints}</span>
+              <input
+                defaultValue={configuration.winPoints}
+                inputMode="numeric"
+                min="0"
+                name="winPoints"
+                required
+                step="1"
+                type="number"
+              />
+            </label>
+            <label>
+              <span>{labels.lossPoints}</span>
+              <input
+                defaultValue={configuration.lossPoints}
+                inputMode="numeric"
+                min="0"
+                name="lossPoints"
+                required
+                step="1"
+                type="number"
+              />
+            </label>
+          </div>
+          <fieldset className="ranking-editor">
+            <legend>{labels.ranking}</legend>
+            {configuration.ranking.slice(0, -1).map((criterion, index) => (
+              <label key={`${index}-${criterion}`}>
+                <span>{labels.rankingPriority(index + 1)}</span>
+                <select defaultValue={criterion} name="ranking" required>
+                  {scoreRankingCriteria.map((option) => (
+                    <option key={option} value={option}>{labels.criteria[option]}</option>
+                  ))}
+                </select>
+              </label>
+            ))}
+            <div className="fixed-ranking-row">
+              <span>{labels.rankingPriority(4)}</span>
+              <strong>{labels.criteria.random_draw}</strong>
+              <small>{labels.randomDrawFixed}</small>
+            </div>
+          </fieldset>
+          <button type="submit">{labels.save}</button>
+        </form>
+      )}
+      <dl className="configuration-summary">
+        <div><dt>{labels.winPoints}</dt><dd>{configuration.winPoints}</dd></div>
+        <div><dt>{labels.lossPoints}</dt><dd>{configuration.lossPoints}</dd></div>
+        <div>
+          <dt>{labels.ranking}</dt>
+          <dd>{configuration.ranking.map((criterion) => labels.criteria[criterion as keyof typeof labels.criteria]).join(' → ')}</dd>
+        </div>
+      </dl>
+      <p className="empty-copy">{labels.fixedRules}</p>
+      <p className="empty-copy">{labels.playoffRounds(configuration.playoffRoundCount)}</p>
+    </section>
   );
 }
 
@@ -437,6 +558,7 @@ export default async function AdminPage({
     'season_rejected',
     'team_rejected',
     'venue_rejected',
+    'configuration_rejected',
     'unexpected'
   ].includes(query.result ?? '');
   const forfeitLabels = {
@@ -511,6 +633,9 @@ export default async function AdminPage({
       ) : null}
       {query.error === 'invalid_venue' ? (
         <p className="notice notice-error">{t('invalidVenue')}</p>
+      ) : null}
+      {query.error === 'invalid_configuration' ? (
+        <p className="notice notice-error">{t('invalidConfiguration')}</p>
       ) : null}
       {resultKey ? (
         <p className={`notice ${resultIsSuccess ? 'notice-success' : 'notice-error'}`}>
@@ -645,6 +770,32 @@ export default async function AdminPage({
                   {season.configurationFrozen ? t('rulesFrozen') : t('rulesMutable')}
                 </span>
               </div>
+
+              <SeasonConfigurationPanel
+                labels={{
+                  kicker: t('configurationKicker'),
+                  title: t('seasonConfiguration'),
+                  mutable: t('rulesMutable'),
+                  frozen: t('rulesFrozen'),
+                  winPoints: t('winPoints'),
+                  lossPoints: t('lossPoints'),
+                  ranking: t('rankingOrder'),
+                  rankingPriority: (position) => t('rankingPriority', {position}),
+                  criteria: {
+                    league_points: t('criterionLeaguePoints'),
+                    point_differential: t('criterionPointDifferential'),
+                    points_scored: t('criterionPointsScored'),
+                    random_draw: t('criterionRandomDraw')
+                  },
+                  randomDrawFixed: t('randomDrawFixed'),
+                  fixedRules: t('fixedConfigurationRules'),
+                  playoffRounds: (count) => t('playoffRoundCount', {count}),
+                  save: t('saveConfiguration'),
+                  frozenSummary: t('frozenConfigurationSummary')
+                }}
+                locale={locale}
+                season={season}
+              />
 
               {season.teams.length < 2 ? (
                 <section className="empty-state">

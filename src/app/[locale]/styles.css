@@ -507,6 +507,67 @@ a:focus-visible {
   margin-bottom: 1rem;
 }
 
+.configuration-points-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.ranking-editor {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 1rem;
+  border: 1px solid #d8d0c0;
+  border-radius: 0.65rem;
+}
+
+.ranking-editor legend {
+  padding: 0 0.35rem;
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.fixed-ranking-row {
+  display: grid;
+  grid-template-columns: minmax(6rem, 0.35fr) minmax(10rem, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 0.45rem;
+  background: #f2eee5;
+  font-size: 0.82rem;
+}
+
+.fixed-ranking-row small {
+  color: #697183;
+}
+
+.configuration-summary {
+  display: grid;
+  gap: 0.5rem;
+  margin: 1.25rem 0 0;
+}
+
+.configuration-summary > div {
+  display: grid;
+  grid-template-columns: minmax(10rem, 0.4fr) minmax(12rem, 1fr);
+  gap: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e3dccf;
+}
+
+.configuration-summary dt {
+  color: #697183;
+  font-size: 0.76rem;
+}
+
+.configuration-summary dd {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 750;
+}
+
 .venue-directory {
   padding-top: 2rem;
 }
@@ -1158,7 +1219,13 @@ tbody tr:last-child td {
 
   .participant-fields,
   .venue-fields,
+  .configuration-points-grid,
   .roster-member-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .fixed-ranking-row,
+  .configuration-summary > div {
     grid-template-columns: 1fr;
   }
 

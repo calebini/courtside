@@ -2,7 +2,7 @@
 
 - Status: accepted
 - Spec version: 0.1.0
-- Last updated: 2026-08-07
+- Last updated: 2026-08-16
 
 ## Purpose
 
@@ -25,6 +25,8 @@ For the approved Player profile surface, `display_name` is the required League-v
 ## Season Configuration Lifecycle
 
 A Season begins with mutable configuration derived from League defaults and Season overrides. The first accepted transition of any Season Game to `final` or `forfeit` freezes a single versioned snapshot of all result-affecting Season configuration for that Season. The freeze operation is idempotent per Season; later or retried authoritative Game transitions reuse the existing frozen version rather than creating another first version. Concurrent first-freeze attempts accept exactly one snapshot. A competing attempt reuses the created snapshot when it depends on the same result-affecting configuration basis, or is rejected without mutation when it depends on a different mutable configuration basis. All standings and playoff calculations identify the frozen configuration version they use. A League Administrator may amend frozen configuration only by creating a new version and an Audit Record. Recalculation under an amended version is deterministic and applies to every affected derived projection, while historical versions remain available.
+
+While `frozen_configuration_version_id` is absent, an active League Administrator may submit an audited ordinary configuration update limited to the accepted pre-freeze surface. The action locks the Season, preserves every configuration field outside that surface, and commits the changed configuration, complete prior/new audit values, and idempotent command receipt atomically. An unchanged, unauthorized, unsupported, or concurrently frozen request is rejected without mutation. Once a frozen version exists, both the application service and persistence boundary reject an ordinary `result_configuration` change; a direct record edit is not a substitute for a versioned amendment.
 
 For first-freeze duplicate detection, the result-affecting configuration basis is the canonical content identity of exact result-affecting values captured in the frozen Season configuration version. It includes standings point values, ordered ranking criteria, eligible Game phase and status rules, standings adjustment enablement, forfeit treatment, playoff Round identities and order, participant slot sources, configured Games per Matchup, advancement rule, aggregate-tiebreak policies, and any later accepted result-affecting field. It excludes League timezone, localization, Venue, Media, display text, and other values that do not affect standings or playoff outcomes. Equal canonical basis identities reuse the existing frozen version. Unequal canonical basis identities are rejected without mutating authoritative state, persisted projections, or configuration versions.
 

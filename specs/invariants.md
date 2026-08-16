@@ -2,7 +2,7 @@
 
 - Status: accepted
 - Spec version: 0.1.0
-- Last updated: 2026-08-07
+- Last updated: 2026-08-16
 
 ## Purpose
 
@@ -35,6 +35,8 @@ A Playoff Bracket uses a fixed advancement graph and does not reseed. Initial Ma
 ## Configuration and Reproducibility
 
 The first accepted `final` or `forfeit` Game freezes a single versioned snapshot of result-affecting Season configuration, and retries or later authoritative outcomes reuse that frozen version. Concurrent or retried first-freeze attempts compare canonical result-affecting configuration basis identity; equal identities reuse existing frozen version, and unequal identities are rejected without mutating authoritative state, persisted projections, or configuration versions. Later amendments require League Administrator authority and an Audit Record. A result-affecting amendment that conflicts with existing authoritative Game outcomes or playoff state must preserve authoritative state through rejection or same-action administrative resolution. A playoff-configuration amendment after dependent authoritative playoff Games must use an amendment-specific resolution report and deterministic identity; it is not identified as a corrected Game-result value. Historical versions remain available. Given the same authoritative outcomes, adjustment records, persisted random draws, accepted correction resolutions, and configuration version, standings and playoff advancement are deterministic. Configuration cannot enable tied final Games. Unknown playoff policies, ranking criteria, or lifecycle transitions are rejected rather than silently interpreted.
+
+An ordinary pre-freeze standings update may alter only the accepted point values and ranking order. It must preserve all non-edited and unknown accepted configuration fields exactly, must leave `random_draw` last, and must not award a win less than or equal to a loss. No ordinary write path may alter mutable result configuration after the Season has a frozen configuration version.
 
 ## Localization
 

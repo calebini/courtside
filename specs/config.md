@@ -2,7 +2,7 @@
 
 - Status: accepted
 - Spec version: 0.1.0
-- Last updated: 2026-08-07
+- Last updated: 2026-08-16
 
 ## Purpose
 
@@ -27,6 +27,8 @@ The standings engine is configurable by Season. It defines League Points for eac
 All numeric ranking criteria sort descending. `random_draw` is evaluated only for teams still tied after every preceding criterion. Each performed draw records tied participants, canonical tied-participant order before the draw, preceding equal criterion values, resulting order, actor or system initiator, timestamp, applicable Season configuration version, and stable tie-context identity. The same unresolved tie context reuses the recorded result. The stable tie-context identity is composed of Season, frozen Season configuration version, ranking step or criterion, tied Season Team identities in canonical order, and equal preceding criterion values. Exactly one persisted draw result may exist for a tie context. An idempotent retry, replay, duplicate request, or recalculation returns the existing result and its artifact identity. An attempt to persist a different result for the same tie context is rejected as a deterministic conflict without another draw or authoritative mutation. League Administrators do not override or replace persisted draws in Phase 1.
 
 The initial ranking vocabulary is `league_points`, `point_differential`, `points_scored`, and `random_draw`. Adding a ranking criterion requires a later accepted specification defining inputs, ordering direction, tie behavior, and reproducibility requirements.
+
+Before the Season configuration freezes, a League Administrator may change the nonnegative integer win and loss League Points provided a win remains worth more than a loss, and may reorder `league_points`, `point_differential`, and `points_scored`. Each supported numeric criterion appears exactly once and `random_draw` remains the mandatory final criterion. This safe editor does not change eligible phases or statuses, adjustment policy, forfeit treatment, playoff configuration, or unknown accepted configuration fields. An accepted material change is audited; an unchanged request is rejected. Ordinary editing is unavailable after freeze, when only the separately specified versioned-amendment lifecycle may apply.
 
 ## Standing Calculations
 

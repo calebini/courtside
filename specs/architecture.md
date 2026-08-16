@@ -2,7 +2,7 @@
 
 - Status: accepted
 - Spec version: 0.1.0
-- Last updated: 2026-08-08
+- Last updated: 2026-08-16
 
 ## Purpose
 
@@ -70,3 +70,5 @@ Initial Season setup follows the same delivery shape: pure name validation and n
 Team setup extends that boundary with batch reconciliation of durable League Teams and Season Team participation. The service serializes changes through the affected Season or Season Team, reuses existing Team identity, audits each material creation or removal, and rejects removal when authoritative dependencies exist. PostgreSQL independently enforces Team-name and Season-participation uniqueness plus dependent-record referential integrity.
 
 Venue administration extends the same boundary with durable League-owned Venue creation, audited correction, and terminal archival. Archived Venues remain available to existing Game read models but are excluded by the scheduling adapter from new or replacement schedules. PostgreSQL enforces normalized field bounds, immutable League ownership, and case-insensitive active-name uniqueness.
+
+Pre-freeze Season configuration follows the same dependency direction. A pure core validates and merges only the accepted standings controls without dropping future configuration fields. The service owns current League Administrator authorization, Season locking, frozen-state and no-op rejection, full-value audit, and command idempotency. The PostgreSQL adapter performs the mutation transaction, and a database trigger independently prevents ordinary `result_configuration` changes once a frozen version is attached. The bilingual administrator surface becomes read-only at freeze and does not expose the deferred versioned-amendment workflow.
