@@ -9,6 +9,7 @@ import {getRuntimePostgresPool} from '@/courtside/adapters/postgres/runtime-pool
 import {PostgresCreateSeasonStore} from '@/courtside/adapters/postgres/season-setup-store';
 import {PostgresSeasonTeamStore} from '@/courtside/adapters/postgres/season-team-store';
 import {PostgresUserAccountDirectory} from '@/courtside/adapters/postgres/user-account-directory';
+import {PostgresVenueStore} from '@/courtside/adapters/postgres/venue-store';
 import {SupabaseVerifiedIdentityProvider} from '@/courtside/adapters/supabase/identity-provider';
 import {createSupabaseServerClient} from '@/courtside/adapters/supabase/server-client';
 import {TemporalScheduledInstantResolver} from '@/courtside/adapters/temporal/scheduled-instant-resolver';
@@ -31,6 +32,11 @@ import {
   SeasonTeamRejected
 } from '@/courtside/services/manage-season-teams';
 import {resolveAuthenticatedAccount} from '@/courtside/services/resolve-authenticated-account';
+import {
+  createVenueService,
+  VenueRejected,
+  type VenueCommand
+} from '@/courtside/services/manage-venue';
 
 type PendingGameOperationCommand = GameOperationCommand extends infer Command
   ? Command extends GameOperationCommand
@@ -40,6 +46,12 @@ type PendingGameOperationCommand = GameOperationCommand extends infer Command
 
 type PendingGameResultCommand = GameResultCommand extends infer Command
   ? Command extends GameResultCommand
+    ? Omit<Command, 'actorAccountId'>
+    : never
+  : never;
+
+type PendingVenueCommand = VenueCommand extends infer Command
+  ? Command extends VenueCommand
     ? Omit<Command, 'actorAccountId'>
     : never
   : never;
@@ -250,6 +262,70 @@ export async function removeSeasonTeamAction(formData: FormData) {
 
   revalidatePath(`/${locale}/admin`);
   redirect(`/${locale}/admin?result=${outcome}`);
+}
+
+async function runVenueOperation(locale: string, command: PendingVenueCommand) {
+  const {pool, account} = await authenticatedAccount();
+  if (!account) {
+    redirect(`/${locale}/sign-in`);
+  }
+
+  let outcome = `venue_${command.type === 'create' ? 'created' : command.type === 'update' ? 'updated' : 'archived'}`;
+  try {
+    await createVenueService(new PostgresVenueStore(pool))({
+      ...command,
+      actorAccountId: account.id
+    } as VenueCommand);
+  } catch (error) {
+    outcome = error instanceof VenueRejected ? 'venue_rejected' : 'unexpected';
+  }
+
+  revalidatePath(`/${locale}/admin`);
+  redirect(`/${locale}/admin?result=${outcome}`);
+}
+
+export async function createVenueAction(formData: FormData) {
+  const locale = supportedLocale(formData.get('locale'));
+  const commandId = commandIdentity(formData.get('commandId'));
+  const leagueId = entityIdentity(formData.get('leagueId'));
+  if (!commandId || !leagueId) {
+    redirect(`/${locale}/admin?error=invalid_venue`);
+  }
+  await runVenueOperation(locale, {
+    type: 'create',
+    commandId,
+    leagueId,
+    name: String(formData.get('name') ?? ''),
+    address: String(formData.get('address') ?? ''),
+    notes: String(formData.get('notes') ?? '')
+  });
+}
+
+export async function updateVenueAction(formData: FormData) {
+  const locale = supportedLocale(formData.get('locale'));
+  const commandId = commandIdentity(formData.get('commandId'));
+  const venueId = entityIdentity(formData.get('venueId'));
+  if (!commandId || !venueId) {
+    redirect(`/${locale}/admin?error=invalid_venue`);
+  }
+  await runVenueOperation(locale, {
+    type: 'update',
+    commandId,
+    venueId,
+    name: String(formData.get('name') ?? ''),
+    address: String(formData.get('address') ?? ''),
+    notes: String(formData.get('notes') ?? '')
+  });
+}
+
+export async function archiveVenueAction(formData: FormData) {
+  const locale = supportedLocale(formData.get('locale'));
+  const commandId = commandIdentity(formData.get('commandId'));
+  const venueId = entityIdentity(formData.get('venueId'));
+  if (!commandId || !venueId) {
+    redirect(`/${locale}/admin?error=invalid_venue`);
+  }
+  await runVenueOperation(locale, {type: 'archive', commandId, venueId});
 }
 
 export async function rescheduleGameAction(formData: FormData) {

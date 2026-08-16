@@ -18,16 +18,19 @@ import {resolveAuthenticatedAccount} from '@/courtside/services/resolve-authenti
 import {signOut} from '../auth-actions';
 import {
   addSeasonTeamsAction,
+  archiveVenueAction,
   cancelGameAction,
   correctGameResultAction,
   createSeasonAction,
+  createVenueAction,
   finalizeGameAction,
   forfeitGameAction,
   postponeGameAction,
   removeSeasonTeamAction,
   rescheduleGameAction,
   scheduleGameAction,
-  startGameAction
+  startGameAction,
+  updateVenueAction
 } from './actions';
 
 export const dynamic = 'force-dynamic';
@@ -47,6 +50,10 @@ function resultMessageKey(result: string | undefined) {
     teams_updated: 'teamsUpdated',
     team_removed: 'teamRemoved',
     team_rejected: 'teamRejected',
+    venue_created: 'venueCreated',
+    venue_updated: 'venueUpdated',
+    venue_archived: 'venueArchived',
+    venue_rejected: 'venueRejected',
     rejected: 'rejected',
     unexpected: 'unexpected'
   };
@@ -121,13 +128,53 @@ function SeasonSetupForm({
   );
 }
 
+function VenueDetailFields({
+  venue,
+  labels
+}: {
+  venue?: AdminVenue;
+  labels: {name: string; address: string; notes: string};
+}) {
+  return (
+    <>
+      <label>
+        <span>{labels.name}</span>
+        <input
+          autoComplete="off"
+          defaultValue={venue?.name ?? ''}
+          maxLength={120}
+          minLength={2}
+          name="name"
+          required
+        />
+      </label>
+      <label>
+        <span>{labels.address}</span>
+        <input
+          autoComplete="street-address"
+          defaultValue={venue?.address ?? ''}
+          maxLength={240}
+          minLength={2}
+          name="address"
+          required
+        />
+      </label>
+      <label>
+        <span>{labels.notes}</span>
+        <textarea defaultValue={venue?.notes ?? ''} maxLength={1000} name="notes" rows={3} />
+      </label>
+    </>
+  );
+}
+
 function VenueFields({
   venues,
   selectedVenueId,
   instructions,
   venueLabel,
   noVenueLabel,
-  instructionsLabel
+  instructionsLabel,
+  archivedLabel
 }: {
   venues: readonly AdminVenue[];
   selectedVenueId?: string | null;
@@ -135,16 +182,20 @@ function VenueFields({
   venueLabel: string;
   noVenueLabel: string;
   instructionsLabel: string;
+  archivedLabel: string;
 }) {
+  const selectableVenues = venues.filter(
+    (venue) => venue.archivedAt === null || venue.id === selectedVenueId
+  );
   return (
     <div className="venue-fields">
       <label>
         <span>{venueLabel}</span>
         <select defaultValue={selectedVenueId ?? ''} name="venueId">
           <option value="">{noVenueLabel}</option>
-          {venues.map((venue) => (
-            <option key={venue.id} value={venue.id}>
-              {venue.name} — {venue.address}
+          {selectableVenues.map((venue) => (
+            <option disabled={venue.archivedAt !== null} key={venue.id} value={venue.id}>
+              {venue.name} — {venue.address}{venue.archivedAt ? ` (${archivedLabel})` : ''}
             </option>
           ))}
         </select>
@@ -381,9 +432,13 @@ export default async function AdminPage({
 
   const leagues = account ? await new PostgresAdminDashboardStore(pool).load(account.id) : [];
   const resultKey = resultMessageKey(query.result);
-  const resultIsSuccess = !['rejected', 'season_rejected', 'team_rejected', 'unexpected'].includes(
-    query.result ?? ''
-  );
+  const resultIsSuccess = ![
+    'rejected',
+    'season_rejected',
+    'team_rejected',
+    'venue_rejected',
+    'unexpected'
+  ].includes(query.result ?? '');
   const forfeitLabels = {
     forfeit: t('forfeit'),
     forfeitGame: t('forfeitGame'),
@@ -454,6 +509,9 @@ export default async function AdminPage({
       {query.error === 'invalid_team' ? (
         <p className="notice notice-error">{t('invalidTeam')}</p>
       ) : null}
+      {query.error === 'invalid_venue' ? (
+        <p className="notice notice-error">{t('invalidVenue')}</p>
+      ) : null}
       {resultKey ? (
         <p className={`notice ${resultIsSuccess ? 'notice-success' : 'notice-error'}`}>
           {t(resultKey)}
@@ -476,6 +534,87 @@ export default async function AdminPage({
             </div>
             <span className="timezone">{league.timezone}</span>
           </div>
+
+          <section className="panel venue-admin-panel">
+            <div className="panel-heading">
+              <div>
+                <p className="panel-kicker">{t('venueSetupKicker')}</p>
+                <h3>{t('manageVenues')}</h3>
+              </div>
+            </div>
+            <div className="venue-admin-grid">
+              <form action={createVenueAction} className="stack-form compact-form">
+                <CommandFields locale={locale} />
+                <input name="leagueId" type="hidden" value={league.id} />
+                <VenueDetailFields
+                  labels={{
+                    name: t('venueName'),
+                    address: t('venueAddress'),
+                    notes: t('venueNotes')
+                  }}
+                />
+                <button type="submit">{t('createVenue')}</button>
+              </form>
+              <div className="venue-directory">
+                <h4>{t('leagueVenues')}</h4>
+                {league.venues.length === 0 ? (
+                  <p className="empty-copy">{t('noLeagueVenues')}</p>
+                ) : (
+                  <div className="venue-admin-list">
+                    {league.venues.map((venue) => (
+                      <article
+                        className={`venue-admin-card ${venue.archivedAt ? 'archived' : ''}`}
+                        key={venue.id}
+                      >
+                        <div className="venue-admin-heading">
+                          <div>
+                            <strong>{venue.name}</strong>
+                            <span>{venue.address}</span>
+                          </div>
+                          {venue.archivedAt ? (
+                            <span className="status-pill">{t('archivedVenue')}</span>
+                          ) : null}
+                        </div>
+                        {venue.notes ? <p className="empty-copy">{venue.notes}</p> : null}
+                        {!venue.archivedAt ? (
+                          <>
+                            <details>
+                              <summary>{t('correctVenue')}</summary>
+                              <form action={updateVenueAction} className="stack-form compact-form">
+                                <CommandFields locale={locale} />
+                                <input name="venueId" type="hidden" value={venue.id} />
+                                <VenueDetailFields
+                                  labels={{
+                                    name: t('venueName'),
+                                    address: t('venueAddress'),
+                                    notes: t('venueNotes')
+                                  }}
+                                  venue={venue}
+                                />
+                                <button type="submit">{t('saveVenue')}</button>
+                              </form>
+                            </details>
+                            <details>
+                              <summary>{t('archiveVenue')}</summary>
+                              <p className="empty-copy">{t('archiveVenueWarning')}</p>
+                              <form action={archiveVenueAction} className="archive-venue-form">
+                                <CommandFields locale={locale} />
+                                <input name="venueId" type="hidden" value={venue.id} />
+                                <button className="button-danger" type="submit">
+                                  {t('confirmArchiveVenue')}
+                                </button>
+                              </form>
+                            </details>
+                          </>
+                        ) : null}
+                      </article>
+                    ))}
+                  </div>
+                )}
+                <p className="empty-copy">{t('venueArchiveSummary')}</p>
+              </div>
+            </div>
+          </section>
 
           <section className="panel">
             <div className="panel-heading">
@@ -598,6 +737,7 @@ export default async function AdminPage({
                       <input name="scheduledAt" required type="datetime-local" />
                     </label>
                     <VenueFields
+                      archivedLabel={t('archivedVenue')}
                       instructionsLabel={t('venueInstructions')}
                       noVenueLabel={t('noVenue')}
                       venueLabel={t('venue')}
@@ -658,6 +798,7 @@ export default async function AdminPage({
                               />
                             </label>
                             <VenueFields
+                              archivedLabel={t('archivedVenue')}
                               instructions={game.venueInstructions}
                               instructionsLabel={t('venueInstructions')}
                               noVenueLabel={t('noVenue')}
@@ -688,6 +829,7 @@ export default async function AdminPage({
                             <input name="scheduledAt" required type="datetime-local" />
                           </label>
                           <VenueFields
+                            archivedLabel={t('archivedVenue')}
                             instructions={game.venueInstructions}
                             instructionsLabel={t('venueInstructions')}
                             noVenueLabel={t('noVenue')}

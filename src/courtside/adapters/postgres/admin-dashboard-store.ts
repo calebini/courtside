@@ -47,6 +47,8 @@ export interface AdminVenue {
   readonly id: string;
   readonly name: string;
   readonly address: string;
+  readonly notes: string | null;
+  readonly archivedAt: Date | null;
 }
 
 export interface AdminStanding {
@@ -111,6 +113,8 @@ interface VenueRow {
   id: string;
   name: string;
   address: string;
+  notes: string | null;
+  archived_at: Date | null;
 }
 
 interface GameRow {
@@ -177,12 +181,12 @@ export class PostgresAdminDashboardStore {
       [accountId]
       ),
       this.pool.query<VenueRow>(
-        `select v.league_id, v.id, v.name, v.address
+        `select v.league_id, v.id, v.name, v.address, v.notes, v.archived_at
            from league_admin_assignments laa
            join venues v on v.league_id = laa.league_id
           where laa.user_account_id = $1
             and laa.revoked_at is null
-          order by v.name, v.id`,
+          order by v.archived_at nulls first, v.name, v.id`,
         [accountId]
       )
     ]);
@@ -190,7 +194,13 @@ export class PostgresAdminDashboardStore {
     const venuesByLeague = new Map<string, AdminVenue[]>();
     for (const venue of venueResult.rows) {
       const venues = venuesByLeague.get(venue.league_id) ?? [];
-      venues.push({id: venue.id, name: venue.name, address: venue.address});
+      venues.push({
+        id: venue.id,
+        name: venue.name,
+        address: venue.address,
+        notes: venue.notes,
+        archivedAt: venue.archived_at
+      });
       venuesByLeague.set(venue.league_id, venues);
     }
 

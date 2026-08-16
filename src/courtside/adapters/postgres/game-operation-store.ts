@@ -137,7 +137,8 @@ class PostgresGameOperationTransaction implements GameOperationTransaction {
       `select 1
          from venues
         where id = $1
-          and league_id = $2`,
+          and league_id = $2
+          and archived_at is null`,
       [venueId, leagueId]
     );
     return result.rowCount === 1;

@@ -497,6 +497,60 @@ a:focus-visible {
   gap: clamp(1rem, 3vw, 2rem);
 }
 
+.venue-admin-grid {
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.8fr) minmax(20rem, 1.2fr);
+  gap: clamp(1rem, 3vw, 2rem);
+}
+
+.venue-admin-panel {
+  margin-bottom: 1rem;
+}
+
+.venue-directory {
+  padding-top: 2rem;
+}
+
+.venue-admin-list {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.venue-admin-card {
+  padding: 0.9rem;
+  border: 1px solid #ddd5c6;
+  border-radius: 0.65rem;
+  background: #fffefa;
+}
+
+.venue-admin-card.archived {
+  background: #f2eee5;
+  color: #697183;
+}
+
+.venue-admin-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.venue-admin-heading > div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.venue-admin-heading span:not(.status-pill) {
+  color: #697183;
+  font-size: 0.78rem;
+}
+
+.archive-venue-form button {
+  width: 100%;
+  margin-top: 0.8rem;
+}
+
 .participating-team-list {
   padding-top: 2rem;
 }
@@ -1067,6 +1121,7 @@ tbody tr:last-child td {
   .season-grid,
   .operations-grid,
   .team-setup-grid,
+  .venue-admin-grid,
   .public-route-grid,
   .roster-command-grid {
     grid-template-columns: 1fr;
