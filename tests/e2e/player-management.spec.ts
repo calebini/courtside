@@ -45,7 +45,7 @@ test('a member manages approved Players while the League desk controls authority
   await admin.getByLabel('Email').fill('admin@courtside.local');
   await admin.getByLabel('Password').fill('courtside-local-admin');
   await admin.getByRole('button', {name: 'Sign in'}).click();
-  await admin.getByRole('link', {name: 'Manage Player access'}).click();
+  await admin.getByRole('link', {name: 'Access requests', exact: true}).click();
   await expect(admin.getByRole('heading', {name: 'Pending requests'})).toBeVisible();
   await expect(admin.getByRole('heading', {name: 'Approve access'})).toHaveCount(0);
   const request = admin.locator('.pending-access-row').filter({hasText: 'Samira Roy'});

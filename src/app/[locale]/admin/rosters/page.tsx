@@ -1,21 +1,13 @@
 import {randomUUID} from 'node:crypto';
 
 import {getTranslations} from 'next-intl/server';
-import Link from 'next/link';
-import {redirect} from 'next/navigation';
 
 import {
   PostgresRosterDashboardStore,
   type AdminRosterMembership,
   type AdminRosterSeason
 } from '@/courtside/adapters/postgres/roster-dashboard-store';
-import {getRuntimePostgresPool} from '@/courtside/adapters/postgres/runtime-pool';
-import {PostgresUserAccountDirectory} from '@/courtside/adapters/postgres/user-account-directory';
-import {SupabaseVerifiedIdentityProvider} from '@/courtside/adapters/supabase/identity-provider';
-import {createSupabaseServerClient} from '@/courtside/adapters/supabase/server-client';
-import {resolveAuthenticatedAccount} from '@/courtside/services/resolve-authenticated-account';
-
-import {signOut} from '../../auth-actions';
+import {requireAdminSession} from '../admin-session';
 import {
   addRosterMembershipAction,
   createPlayerAction,
@@ -167,15 +159,7 @@ export default async function RostersPage({
     searchParams,
     getTranslations('RosterAdmin')
   ]);
-  const pool = getRuntimePostgresPool();
-  const supabase = await createSupabaseServerClient();
-  const {identity, account} = await resolveAuthenticatedAccount(
-    new SupabaseVerifiedIdentityProvider(supabase),
-    new PostgresUserAccountDirectory(pool)
-  );
-  if (!identity) {
-    redirect(`/${locale}/sign-in`);
-  }
+  const {pool, account} = await requireAdminSession(locale);
 
   const leagues = account ? await new PostgresRosterDashboardStore(pool).load(account.id) : [];
   const resultKey = resultMessageKey(query.result);
@@ -195,19 +179,7 @@ export default async function RostersPage({
   };
 
   return (
-    <main className="dashboard-shell roster-dashboard">
-      <header className="topbar">
-        <Link className="wordmark" href={`/${locale}`}>COURTSIDE</Link>
-        <div className="account-actions">
-          <Link className="button-link" href={`/${locale}/admin`}>{t('leagueDesk')}</Link>
-          <span>{account?.displayName ?? identity.email}</span>
-          <form action={signOut}>
-            <input name="locale" type="hidden" value={locale} />
-            <button className="button-link" type="submit">{t('signOut')}</button>
-          </form>
-        </div>
-      </header>
-
+    <div className="admin-route roster-dashboard">
       <section className="dashboard-heading">
         <p className="eyebrow">{t('eyebrow')}</p>
         <h1>{t('title')}</h1>
@@ -418,6 +390,6 @@ export default async function RostersPage({
           </section>
         </section>
       ))}
-    </main>
+    </div>
   );
 }

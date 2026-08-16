@@ -1,15 +1,7 @@
 import {getTranslations} from 'next-intl/server';
-import Link from 'next/link';
-import {redirect} from 'next/navigation';
 
 import {PostgresPlayerAccessDashboardStore} from '@/courtside/adapters/postgres/player-access-dashboard-store';
-import {getRuntimePostgresPool} from '@/courtside/adapters/postgres/runtime-pool';
-import {PostgresUserAccountDirectory} from '@/courtside/adapters/postgres/user-account-directory';
-import {SupabaseVerifiedIdentityProvider} from '@/courtside/adapters/supabase/identity-provider';
-import {createSupabaseServerClient} from '@/courtside/adapters/supabase/server-client';
-import {resolveAuthenticatedAccount} from '@/courtside/services/resolve-authenticated-account';
-
-import {signOut} from '../../auth-actions';
+import {requireAdminSession} from '../admin-session';
 import {
   approveSelectedPlayerAccessAction,
   declineSelectedPlayerAccessAction,
@@ -39,13 +31,7 @@ export default async function PlayerAccessPage({
     searchParams,
     getTranslations('PlayerAccessAdmin')
   ]);
-  const pool = getRuntimePostgresPool();
-  const supabase = await createSupabaseServerClient();
-  const {identity, account} = await resolveAuthenticatedAccount(
-    new SupabaseVerifiedIdentityProvider(supabase),
-    new PostgresUserAccountDirectory(pool)
-  );
-  if (!identity) redirect(`/${locale}/sign-in`);
+  const {pool, account} = await requireAdminSession(locale);
   const leagues = account ? await new PostgresPlayerAccessDashboardStore(pool).loadAdmin(account.id) : [];
   const succeeded = count(query.succeeded);
   const failed = count(query.failed);
@@ -59,20 +45,7 @@ export default async function PlayerAccessPage({
   };
 
   return (
-    <main className="dashboard-shell access-dashboard">
-      <header className="topbar">
-        <Link className="wordmark" href={`/${locale}`}>COURTSIDE</Link>
-        <div className="account-actions">
-          <Link className="button-link" href={`/${locale}/players`}>{t('myPlayers')}</Link>
-          <Link className="button-link" href={`/${locale}/admin`}>{t('leagueDesk')}</Link>
-          <span>{account?.displayName ?? identity.email}</span>
-          <form action={signOut}>
-            <input name="locale" type="hidden" value={locale} />
-            <button className="button-link" type="submit">{t('signOut')}</button>
-          </form>
-        </div>
-      </header>
-
+    <div className="admin-route access-dashboard">
       <section className="dashboard-heading">
         <p className="eyebrow">{t('eyebrow')}</p>
         <h1>{t('title')}</h1>
@@ -175,6 +148,6 @@ export default async function PlayerAccessPage({
           </section>
         );
       })}
-    </main>
+    </div>
   );
 }

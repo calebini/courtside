@@ -9,7 +9,7 @@ test('a League Administrator preserves Player identity and roster history', asyn
   await page.getByRole('button', {name: 'Sign in'}).click();
 
   await expect(page).toHaveURL(/\/en\/admin$/);
-  await page.getByRole('link', {name: 'Manage players and rosters'}).click();
+  await page.getByRole('link', {name: 'People & rosters'}).click();
   await expect(page).toHaveURL(/\/en\/admin\/rosters/);
   await expect(
     page.getByRole('heading', {name: 'Keep every roster move in the record.'})

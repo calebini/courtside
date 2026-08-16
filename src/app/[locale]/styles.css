@@ -406,6 +406,351 @@ a:focus-visible {
   padding-bottom: 5rem;
 }
 
+.admin-topbar {
+  position: sticky;
+  z-index: 20;
+  top: 0;
+  padding-top: 0.85rem;
+  border-bottom: 1px solid #d7cfbf;
+  background: rgb(243 239 229 / 96%);
+  backdrop-filter: blur(12px);
+}
+
+.admin-brand-row {
+  display: flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.admin-brand-row .wordmark {
+  margin: 0;
+}
+
+.admin-navigation {
+  display: flex;
+  overflow-x: auto;
+  gap: 0.35rem;
+  margin: 0.5rem 0 0;
+  scrollbar-width: none;
+}
+
+.admin-navigation a {
+  flex: 0 0 auto;
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.55rem 0.55rem 0 0;
+  color: #596174;
+  font-size: 0.78rem;
+  text-decoration: none;
+}
+
+.admin-navigation a:hover,
+.admin-navigation a[aria-current='page'] {
+  background: #fffdf7;
+  color: #17223b;
+}
+
+.admin-navigation a[aria-current='page'] {
+  box-shadow: inset 0 -3px #b5492b;
+}
+
+.admin-navigation-placeholder {
+  min-height: 2.8rem;
+}
+
+.admin-route {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-page-heading {
+  padding: clamp(2.5rem, 6vw, 4.25rem) 0 1rem;
+}
+
+.admin-page-heading h1 {
+  max-width: 18ch;
+  font-size: clamp(2.5rem, 5.5vw, 4.6rem);
+}
+
+.admin-page-heading .lede {
+  max-width: 48rem;
+}
+
+.admin-context-bar {
+  display: grid;
+  grid-template-columns: minmax(13rem, 1fr) minmax(13rem, 0.8fr) auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.15rem;
+  border: 1px solid #d7cfbf;
+  border-radius: 0.8rem;
+  background: rgb(255 253 247 / 76%);
+}
+
+.admin-context-title h2,
+.admin-context-title p {
+  margin-bottom: 0;
+}
+
+.admin-context-title h2 {
+  font-size: 1.55rem;
+}
+
+.admin-context-title > span {
+  color: #697183;
+  font-size: 0.72rem;
+}
+
+.admin-context-season {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem 0.65rem;
+}
+
+.admin-context-season > span:first-child {
+  width: 100%;
+  color: #697183;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.season-context-form {
+  display: flex;
+  align-items: end;
+  gap: 0.5rem;
+}
+
+.season-context-form label {
+  min-width: 12rem;
+}
+
+.season-context-form button {
+  min-height: 2.75rem;
+  padding: 0.65rem 0.8rem;
+}
+
+.context-quick-link {
+  justify-self: end;
+  font-size: 0.78rem;
+}
+
+.route-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  margin: 0.25rem 0;
+}
+
+.button-link.primary-link {
+  padding: 0.7rem 1rem;
+  border-radius: 0.5rem;
+  background: #17223b;
+  color: #fffdf7;
+  text-decoration: none;
+}
+
+.setup-prompt {
+  display: grid;
+  grid-template-columns: minmax(16rem, 1fr) minmax(15rem, 0.8fr) auto;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.2rem;
+  border: 1px dashed #b78a54;
+  border-radius: 0.8rem;
+  background: #fff8ea;
+}
+
+.setup-prompt h3,
+.setup-prompt p {
+  margin-bottom: 0;
+}
+
+.setup-prompt-status {
+  display: grid;
+  gap: 0.35rem;
+  color: #8a6133;
+  font-size: 0.78rem;
+}
+
+.setup-prompt-status [data-complete='true'] {
+  color: #306141;
+}
+
+.desk-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.desk-metrics a {
+  display: grid;
+  gap: 0.65rem;
+  padding: 1rem;
+  border: 1px solid #d8d0c0;
+  border-radius: 0.7rem;
+  background: rgb(255 253 247 / 82%);
+  text-decoration: none;
+}
+
+.desk-metrics span {
+  color: #697183;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.desk-metrics strong {
+  font-size: 2rem;
+}
+
+.attention-section {
+  padding: clamp(1rem, 3vw, 1.6rem);
+  border: 1px solid #dfc79f;
+  border-radius: 0.85rem;
+  background: #fff9ee;
+}
+
+.attention-grid,
+.attention-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.attention-summary-card {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem;
+  border: 1px solid #dfc79f;
+  border-radius: 0.65rem;
+  background: #fffefa;
+  text-decoration: none;
+}
+
+.attention-summary-card.urgent {
+  border-color: #d27c5a;
+  box-shadow: inset 4px 0 #b5492b;
+}
+
+.attention-summary-card span,
+.attention-summary-card small {
+  color: #697183;
+  font-size: 0.73rem;
+}
+
+.desk-overview-grid {
+  display: grid;
+  grid-template-columns: minmax(22rem, 1.2fr) minmax(18rem, 0.8fr);
+  gap: 1rem;
+}
+
+.desk-game-list,
+.recent-result-list {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
+.desk-game-row,
+.recent-result-list article {
+  padding: 0.8rem;
+  border: 1px solid #e1d9cb;
+  border-radius: 0.55rem;
+  background: #fffefa;
+}
+
+.standings-snapshot {
+  display: grid;
+  gap: 0;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.standings-snapshot li {
+  display: grid;
+  grid-template-columns: 1.5rem 1fr auto;
+  gap: 0.65rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid #e3dccf;
+  font-size: 0.82rem;
+}
+
+.standings-snapshot li > span:last-child {
+  color: #697183;
+}
+
+.recent-result-list {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+}
+
+.recent-result-list article {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.recent-result-list .status-pill {
+  justify-self: start;
+}
+
+.recent-result-list small {
+  color: #697183;
+}
+
+.setup-group {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #d7cfbf;
+}
+
+.setup-group > .section-heading h2 {
+  font-size: 1.75rem;
+}
+
+.readiness-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.readiness-list li {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 0.55rem;
+  background: #f2eee5;
+  color: #697183;
+  font-size: 0.78rem;
+}
+
+.readiness-list li[data-complete='true'] {
+  background: #e4eee7;
+  color: #306141;
+}
+
+.create-season-disclosure > summary {
+  font-size: 1rem;
+}
+
+.admin-games-route > .operations-panel,
+.admin-games-route > .schedule-panel,
+.admin-games-route > .standings-panel,
+.admin-games-route > .completed-panel {
+  margin-top: 0.5rem;
+}
+
 .topbar {
   display: flex;
   min-height: 5.25rem;
@@ -1184,8 +1529,20 @@ tbody tr:last-child td {
   .team-setup-grid,
   .venue-admin-grid,
   .public-route-grid,
-  .roster-command-grid {
+  .roster-command-grid,
+  .admin-context-bar,
+  .setup-prompt,
+  .desk-overview-grid {
     grid-template-columns: 1fr;
+  }
+
+  .desk-metrics,
+  .readiness-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .context-quick-link {
+    justify-self: start;
   }
 
   .access-row {
@@ -1226,6 +1583,39 @@ tbody tr:last-child td {
 
   .fixed-ranking-row,
   .configuration-summary > div {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-brand-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .admin-brand-row .account-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .admin-navigation {
+    margin-top: 0.75rem;
+  }
+
+  .dashboard-heading {
+    padding-top: 2.5rem;
+  }
+
+  .season-context-form,
+  .route-action-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .season-context-form label {
+    min-width: 0;
+  }
+
+  .desk-metrics,
+  .readiness-list {
     grid-template-columns: 1fr;
   }
 

@@ -12,9 +12,12 @@ test('a League Administrator manages a Game through finalization, correction, an
 
   await expect(page).toHaveURL(/\/en\/admin/);
   await expect(
-    page.getByRole('heading', {name: 'Run the night from first tip to final.'})
+    page.getByRole('heading', {name: 'What needs attention now.'})
   ).toBeVisible();
   await expect(page.getByText('Courtside Rec League')).toBeVisible();
+  await expect(page.locator('.schedule-panel')).toHaveCount(0);
+  await page.getByRole('link', {name: 'Games', exact: true}).click();
+  await expect(page).toHaveURL(/\/en\/admin\/games/);
 
   const schedulePanel = page.locator('.schedule-panel');
   await schedulePanel.getByLabel(/Local date and time/).fill('2026-11-01T01:30');
@@ -35,7 +38,7 @@ test('a League Administrator manages a Game through finalization, correction, an
   await operationCard.getByRole('button', {name: 'Postpone'}).click();
 
   await expect(page.getByText('The game has been postponed.')).toBeVisible();
-  operationCard = page.locator('.operations-panel .postponed-card').filter({hasText: 'Court 3'});
+  operationCard = page.locator('.postponed-card').filter({hasText: 'Court 3'});
   await operationCard.getByLabel(/New local date and time/).fill('2026-08-21T19:00');
   await operationCard.getByRole('button', {name: 'Return to schedule'}).click();
 
@@ -44,7 +47,7 @@ test('a League Administrator manages a Game through finalization, correction, an
   await operationCard.getByRole('button', {name: 'Start game'}).click();
 
   await expect(page.getByText('The game is now in progress and ready for its final score.')).toBeVisible();
-  const scoreCard = page.locator('.score-panel .game-card').filter({hasText: 'Court 3'});
+  const scoreCard = page.locator('.attention-section .game-card').filter({hasText: 'Court 3'});
   const finalizeForm = scoreCard.locator('form').first();
   await finalizeForm.getByLabel('Harbour Hawks score').fill('81');
   await finalizeForm.getByLabel('Northside Comets score').fill('77');

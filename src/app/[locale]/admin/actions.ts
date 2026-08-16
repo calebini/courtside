@@ -104,6 +104,26 @@ function venueInstructions(value: FormDataEntryValue | null) {
   return text || null;
 }
 
+type AdminSection = 'games' | 'setup';
+
+function adminLocation(
+  locale: string,
+  section: AdminSection,
+  formData: FormData,
+  message: {error: string} | {result: string}
+) {
+  const query = new URLSearchParams();
+  const contextSeasonId = entityIdentity(formData.get('contextSeasonId'));
+  if (contextSeasonId) query.set('season', contextSeasonId);
+  if ('error' in message) query.set('error', message.error);
+  else query.set('result', message.result);
+  return `/${locale}/admin/${section}?${query.toString()}`;
+}
+
+function revalidateAdmin(locale: string) {
+  revalidatePath(`/${locale}/admin`, 'layout');
+}
+
 async function authenticatedAccount() {
   const pool = getRuntimePostgresPool();
   const supabase = await createSupabaseServerClient();
@@ -114,7 +134,11 @@ async function authenticatedAccount() {
   return {pool, account};
 }
 
-async function runGameOperation(locale: string, command: PendingGameOperationCommand) {
+async function runGameOperation(
+  locale: string,
+  command: PendingGameOperationCommand,
+  formData: FormData
+) {
   const {pool, account} = await authenticatedAccount();
   if (!account) {
     redirect(`/${locale}/sign-in`);
@@ -139,11 +163,11 @@ async function runGameOperation(locale: string, command: PendingGameOperationCom
     }
   }
 
-  revalidatePath(`/${locale}/admin`);
+  revalidateAdmin(locale);
   redirect(
     errorCode
-      ? `/${locale}/admin?error=${errorCode}`
-      : `/${locale}/admin?result=${outcome}`
+      ? adminLocation(locale, 'games', formData, {error: errorCode})
+      : adminLocation(locale, 'games', formData, {result: outcome})
   );
 }
 
@@ -165,7 +189,7 @@ export async function scheduleGameAction(formData: FormData) {
     !scheduledAt ||
     !venue.valid
   ) {
-    redirect(`/${locale}/admin?error=invalid_schedule`);
+    redirect(adminLocation(locale, 'games', formData, {error: 'invalid_schedule'}));
   }
 
   await runGameOperation(locale, {
@@ -177,7 +201,7 @@ export async function scheduleGameAction(formData: FormData) {
     localScheduledAt: scheduledAt,
     venueId: venue.value,
     venueInstructions: instructions
-  });
+  }, formData);
 }
 
 export async function createSeasonAction(formData: FormData) {
@@ -186,7 +210,7 @@ export async function createSeasonAction(formData: FormData) {
   const leagueId = entityIdentity(formData.get('leagueId'));
   const name = String(formData.get('name') ?? '');
   if (!commandId || !leagueId) {
-    redirect(`/${locale}/admin?error=invalid_season`);
+    redirect(adminLocation(locale, 'setup', formData, {error: 'invalid_season'}));
   }
 
   const {pool, account} = await authenticatedAccount();
@@ -206,8 +230,8 @@ export async function createSeasonAction(formData: FormData) {
     outcome = error instanceof CreateSeasonRejected ? 'season_rejected' : 'unexpected';
   }
 
-  revalidatePath(`/${locale}/admin`);
-  redirect(`/${locale}/admin?result=${outcome}`);
+  revalidateAdmin(locale);
+  redirect(adminLocation(locale, 'setup', formData, {result: outcome}));
 }
 
 export async function updateSeasonConfigurationAction(formData: FormData) {
@@ -224,7 +248,7 @@ export async function updateSeasonConfigurationAction(formData: FormData) {
     lossPoints === null ||
     scoreCriteria.length !== 3
   ) {
-    redirect(`/${locale}/admin?error=invalid_configuration`);
+    redirect(adminLocation(locale, 'setup', formData, {error: 'invalid_configuration'}));
   }
 
   const {pool, account} = await authenticatedAccount();
@@ -248,8 +272,8 @@ export async function updateSeasonConfigurationAction(formData: FormData) {
       : 'unexpected';
   }
 
-  revalidatePath(`/${locale}/admin`);
-  redirect(`/${locale}/admin?result=${outcome}`);
+  revalidateAdmin(locale);
+  redirect(adminLocation(locale, 'setup', formData, {result: outcome}));
 }
 
 export async function addSeasonTeamsAction(formData: FormData) {
@@ -258,7 +282,7 @@ export async function addSeasonTeamsAction(formData: FormData) {
   const seasonId = entityIdentity(formData.get('seasonId'));
   const names = String(formData.get('names') ?? '').split(/\r?\n/u);
   if (!commandId || !seasonId) {
-    redirect(`/${locale}/admin?error=invalid_team`);
+    redirect(adminLocation(locale, 'setup', formData, {error: 'invalid_team'}));
   }
 
   const {pool, account} = await authenticatedAccount();
@@ -279,8 +303,8 @@ export async function addSeasonTeamsAction(formData: FormData) {
     outcome = error instanceof SeasonTeamRejected ? 'team_rejected' : 'unexpected';
   }
 
-  revalidatePath(`/${locale}/admin`);
-  redirect(`/${locale}/admin?result=${outcome}`);
+  revalidateAdmin(locale);
+  redirect(adminLocation(locale, 'setup', formData, {result: outcome}));
 }
 
 export async function removeSeasonTeamAction(formData: FormData) {
@@ -288,7 +312,7 @@ export async function removeSeasonTeamAction(formData: FormData) {
   const commandId = commandIdentity(formData.get('commandId'));
   const seasonTeamId = entityIdentity(formData.get('seasonTeamId'));
   if (!commandId || !seasonTeamId) {
-    redirect(`/${locale}/admin?error=invalid_team`);
+    redirect(adminLocation(locale, 'setup', formData, {error: 'invalid_team'}));
   }
 
   const {pool, account} = await authenticatedAccount();
@@ -308,11 +332,15 @@ export async function removeSeasonTeamAction(formData: FormData) {
     outcome = error instanceof SeasonTeamRejected ? 'team_rejected' : 'unexpected';
   }
 
-  revalidatePath(`/${locale}/admin`);
-  redirect(`/${locale}/admin?result=${outcome}`);
+  revalidateAdmin(locale);
+  redirect(adminLocation(locale, 'setup', formData, {result: outcome}));
 }
 
-async function runVenueOperation(locale: string, command: PendingVenueCommand) {
+async function runVenueOperation(
+  locale: string,
+  command: PendingVenueCommand,
+  formData: FormData
+) {
   const {pool, account} = await authenticatedAccount();
   if (!account) {
     redirect(`/${locale}/sign-in`);
@@ -328,8 +356,8 @@ async function runVenueOperation(locale: string, command: PendingVenueCommand) {
     outcome = error instanceof VenueRejected ? 'venue_rejected' : 'unexpected';
   }
 
-  revalidatePath(`/${locale}/admin`);
-  redirect(`/${locale}/admin?result=${outcome}`);
+  revalidateAdmin(locale);
+  redirect(adminLocation(locale, 'setup', formData, {result: outcome}));
 }
 
 export async function createVenueAction(formData: FormData) {
@@ -337,7 +365,7 @@ export async function createVenueAction(formData: FormData) {
   const commandId = commandIdentity(formData.get('commandId'));
   const leagueId = entityIdentity(formData.get('leagueId'));
   if (!commandId || !leagueId) {
-    redirect(`/${locale}/admin?error=invalid_venue`);
+    redirect(adminLocation(locale, 'setup', formData, {error: 'invalid_venue'}));
   }
   await runVenueOperation(locale, {
     type: 'create',
@@ -346,7 +374,7 @@ export async function createVenueAction(formData: FormData) {
     name: String(formData.get('name') ?? ''),
     address: String(formData.get('address') ?? ''),
     notes: String(formData.get('notes') ?? '')
-  });
+  }, formData);
 }
 
 export async function updateVenueAction(formData: FormData) {
@@ -354,7 +382,7 @@ export async function updateVenueAction(formData: FormData) {
   const commandId = commandIdentity(formData.get('commandId'));
   const venueId = entityIdentity(formData.get('venueId'));
   if (!commandId || !venueId) {
-    redirect(`/${locale}/admin?error=invalid_venue`);
+    redirect(adminLocation(locale, 'setup', formData, {error: 'invalid_venue'}));
   }
   await runVenueOperation(locale, {
     type: 'update',
@@ -363,7 +391,7 @@ export async function updateVenueAction(formData: FormData) {
     name: String(formData.get('name') ?? ''),
     address: String(formData.get('address') ?? ''),
     notes: String(formData.get('notes') ?? '')
-  });
+  }, formData);
 }
 
 export async function archiveVenueAction(formData: FormData) {
@@ -371,9 +399,9 @@ export async function archiveVenueAction(formData: FormData) {
   const commandId = commandIdentity(formData.get('commandId'));
   const venueId = entityIdentity(formData.get('venueId'));
   if (!commandId || !venueId) {
-    redirect(`/${locale}/admin?error=invalid_venue`);
+    redirect(adminLocation(locale, 'setup', formData, {error: 'invalid_venue'}));
   }
-  await runVenueOperation(locale, {type: 'archive', commandId, venueId});
+  await runVenueOperation(locale, {type: 'archive', commandId, venueId}, formData);
 }
 
 export async function rescheduleGameAction(formData: FormData) {
@@ -385,7 +413,7 @@ export async function rescheduleGameAction(formData: FormData) {
   const instructions = venueInstructions(formData.get('venueInstructions'));
 
   if (!commandId || !gameId || !scheduledAt || !venue.valid) {
-    redirect(`/${locale}/admin?error=invalid_schedule`);
+    redirect(adminLocation(locale, 'games', formData, {error: 'invalid_schedule'}));
   }
 
   await runGameOperation(locale, {
@@ -395,7 +423,7 @@ export async function rescheduleGameAction(formData: FormData) {
     localScheduledAt: scheduledAt,
     venueId: venue.value,
     venueInstructions: instructions
-  });
+  }, formData);
 }
 
 async function transitionGameAction(
@@ -406,9 +434,9 @@ async function transitionGameAction(
   const commandId = commandIdentity(formData.get('commandId'));
   const gameId = entityIdentity(formData.get('gameId'));
   if (!commandId || !gameId) {
-    redirect(`/${locale}/admin?error=invalid_game`);
+    redirect(adminLocation(locale, 'games', formData, {error: 'invalid_game'}));
   }
-  await runGameOperation(locale, {type, commandId, gameId});
+  await runGameOperation(locale, {type, commandId, gameId}, formData);
 }
 
 export async function postponeGameAction(formData: FormData) {
@@ -431,7 +459,7 @@ export async function finalizeGameAction(formData: FormData) {
   const awayScore = nonnegativeInteger(formData.get('awayScore'));
 
   if (!commandId || !gameId || homeScore === null || awayScore === null || homeScore === awayScore) {
-    redirect(`/${locale}/admin?error=invalid_score`);
+    redirect(adminLocation(locale, 'games', formData, {error: 'invalid_score'}));
   }
 
   await runGameResult(locale, {
@@ -440,10 +468,14 @@ export async function finalizeGameAction(formData: FormData) {
     gameId,
     homeScore,
     awayScore
-  });
+  }, formData);
 }
 
-async function runGameResult(locale: string, command: PendingGameResultCommand) {
+async function runGameResult(
+  locale: string,
+  command: PendingGameResultCommand,
+  formData: FormData
+) {
   const {pool, account} = await authenticatedAccount();
 
   if (!account) {
@@ -463,8 +495,8 @@ async function runGameResult(locale: string, command: PendingGameResultCommand) 
     outcome = error instanceof MutationRejected ? 'rejected' : 'unexpected';
   }
 
-  revalidatePath(`/${locale}/admin`);
-  redirect(`/${locale}/admin?result=${outcome}`);
+  revalidateAdmin(locale);
+  redirect(adminLocation(locale, 'games', formData, {result: outcome}));
 }
 
 export async function forfeitGameAction(formData: FormData) {
@@ -484,7 +516,7 @@ export async function forfeitGameAction(formData: FormData) {
     awayScore === null ||
     homeScore === awayScore
   ) {
-    redirect(`/${locale}/admin?error=invalid_score`);
+    redirect(adminLocation(locale, 'games', formData, {error: 'invalid_score'}));
   }
 
   await runGameResult(locale, {
@@ -495,7 +527,7 @@ export async function forfeitGameAction(formData: FormData) {
     awayScore,
     winningSeasonTeamId,
     reason
-  });
+  }, formData);
 }
 
 export async function correctGameResultAction(formData: FormData) {
@@ -516,7 +548,7 @@ export async function correctGameResultAction(formData: FormData) {
     homeScore === awayScore ||
     !reason
   ) {
-    redirect(`/${locale}/admin?error=invalid_correction`);
+    redirect(adminLocation(locale, 'games', formData, {error: 'invalid_correction'}));
   }
 
   await runGameResult(locale, {
@@ -527,5 +559,5 @@ export async function correctGameResultAction(formData: FormData) {
     awayScore,
     winningSeasonTeamId,
     reason
-  });
+  }, formData);
 }
