@@ -7,6 +7,7 @@ import {PostgresGameResultStore} from '@/courtside/adapters/postgres/finalize-ga
 import {PostgresGameOperationStore} from '@/courtside/adapters/postgres/game-operation-store';
 import {getRuntimePostgresPool} from '@/courtside/adapters/postgres/runtime-pool';
 import {PostgresCreateSeasonStore} from '@/courtside/adapters/postgres/season-setup-store';
+import {PostgresSeasonTeamStore} from '@/courtside/adapters/postgres/season-team-store';
 import {PostgresUserAccountDirectory} from '@/courtside/adapters/postgres/user-account-directory';
 import {SupabaseVerifiedIdentityProvider} from '@/courtside/adapters/supabase/identity-provider';
 import {createSupabaseServerClient} from '@/courtside/adapters/supabase/server-client';
@@ -25,6 +26,10 @@ import {
   createSeasonService,
   CreateSeasonRejected
 } from '@/courtside/services/create-season';
+import {
+  createSeasonTeamService,
+  SeasonTeamRejected
+} from '@/courtside/services/manage-season-teams';
 import {resolveAuthenticatedAccount} from '@/courtside/services/resolve-authenticated-account';
 
 type PendingGameOperationCommand = GameOperationCommand extends infer Command
@@ -181,6 +186,66 @@ export async function createSeasonAction(formData: FormData) {
     });
   } catch (error) {
     outcome = error instanceof CreateSeasonRejected ? 'season_rejected' : 'unexpected';
+  }
+
+  revalidatePath(`/${locale}/admin`);
+  redirect(`/${locale}/admin?result=${outcome}`);
+}
+
+export async function addSeasonTeamsAction(formData: FormData) {
+  const locale = supportedLocale(formData.get('locale'));
+  const commandId = commandIdentity(formData.get('commandId'));
+  const seasonId = entityIdentity(formData.get('seasonId'));
+  const names = String(formData.get('names') ?? '').split(/\r?\n/u);
+  if (!commandId || !seasonId) {
+    redirect(`/${locale}/admin?error=invalid_team`);
+  }
+
+  const {pool, account} = await authenticatedAccount();
+  if (!account) {
+    redirect(`/${locale}/sign-in`);
+  }
+
+  let outcome = 'teams_updated';
+  try {
+    await createSeasonTeamService(new PostgresSeasonTeamStore(pool))({
+      type: 'add_teams',
+      commandId,
+      actorAccountId: account.id,
+      seasonId,
+      names
+    });
+  } catch (error) {
+    outcome = error instanceof SeasonTeamRejected ? 'team_rejected' : 'unexpected';
+  }
+
+  revalidatePath(`/${locale}/admin`);
+  redirect(`/${locale}/admin?result=${outcome}`);
+}
+
+export async function removeSeasonTeamAction(formData: FormData) {
+  const locale = supportedLocale(formData.get('locale'));
+  const commandId = commandIdentity(formData.get('commandId'));
+  const seasonTeamId = entityIdentity(formData.get('seasonTeamId'));
+  if (!commandId || !seasonTeamId) {
+    redirect(`/${locale}/admin?error=invalid_team`);
+  }
+
+  const {pool, account} = await authenticatedAccount();
+  if (!account) {
+    redirect(`/${locale}/sign-in`);
+  }
+
+  let outcome = 'team_removed';
+  try {
+    await createSeasonTeamService(new PostgresSeasonTeamStore(pool))({
+      type: 'remove_team',
+      commandId,
+      actorAccountId: account.id,
+      seasonTeamId
+    });
+  } catch (error) {
+    outcome = error instanceof SeasonTeamRejected ? 'team_rejected' : 'unexpected';
   }
 
   revalidatePath(`/${locale}/admin`);

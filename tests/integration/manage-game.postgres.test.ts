@@ -86,7 +86,7 @@ describeWithDatabase('PostgreSQL Game scheduling and start slice', () => {
     );
     await pool.query(
       `insert into teams (id, league_id, name)
-       values ($1, $3, 'A'), ($2, $3, 'B')`,
+       values ($1, $3, 'AA'), ($2, $3, 'BB')`,
       [ids.teamA, ids.teamB, ids.league]
     );
     await pool.query(

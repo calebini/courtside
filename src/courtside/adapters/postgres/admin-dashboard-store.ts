@@ -39,6 +39,7 @@ export interface AdminCompletedGame extends AdminGame {
 
 export interface AdminSeasonTeam {
   readonly id: string;
+  readonly teamId: string;
   readonly name: string;
 }
 
@@ -101,6 +102,7 @@ interface LeagueRow {
 
 interface TeamRow {
   season_team_id: string;
+  team_id: string;
   team_name: string;
 }
 
@@ -207,7 +209,7 @@ export class PostgresAdminDashboardStore {
     for (const row of seasonResult.rows) {
       const [teamResult, gameResult, auditResult] = await Promise.all([
         this.pool.query<TeamRow>(
-          `select st.id as season_team_id, t.name as team_name
+          `select st.id as season_team_id, st.team_id, t.name as team_name
              from season_teams st
              join teams t on t.id = st.team_id
             where st.season_id = $1
@@ -318,6 +320,7 @@ export class PostgresAdminDashboardStore {
         configurationFrozen: row.configuration_version_id !== null,
         teams: teamResult.rows.map((team) => ({
           id: team.season_team_id,
+          teamId: team.team_id,
           name: team.team_name
         })),
         scheduledGames: gameResult.rows

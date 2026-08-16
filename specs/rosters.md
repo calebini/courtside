@@ -18,6 +18,8 @@ An active League Administrator for the Player League may create a Player or repl
 
 A Roster Membership connects one Player to one Season Team and carries an effective interval. `effective_from` is inclusive and `effective_until` is exclusive. An open membership has no `effective_until`. Ending requires an instant strictly after `effective_from`. A closed membership is terminal and is never reopened or rewritten.
 
+Season Team participation is established by the separately accepted Team setup workflow. It may be removed only before any Roster Membership, Team Captain assignment, Game, or other authoritative record depends on it. Removing participation never deletes the durable Team identity.
+
 A Player may not have overlapping Roster Membership intervals within the same Season, including duplicate overlap on the same Season Team. This database-enforced invariant prevents both conflicting team participation and duplicate active membership. The Player and Season Team must belong to the same League.
 
 Adding a membership opens a new interval. Ending closes an open interval. Transferring atomically closes one open interval and opens a new interval for a different Season Team in the same Season at the identical effective instant. A transfer is rejected if another interval would overlap the new membership. Historical memberships remain visible to League Administrators.

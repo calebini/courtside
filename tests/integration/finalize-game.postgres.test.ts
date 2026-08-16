@@ -98,7 +98,7 @@ describeWithDatabase('PostgreSQL Game finalization slice', () => {
     );
     await pool.query(
       `insert into teams (id, league_id, name)
-       values ($1, $3, 'A'), ($2, $3, 'B')`,
+       values ($1, $3, 'AA'), ($2, $3, 'BB')`,
       [ids.teamA, ids.teamB, ids.league]
     );
     await pool.query(
@@ -607,15 +607,15 @@ describeWithDatabase('PostgreSQL Game finalization slice', () => {
           inProgressGames: [
             {
               id: ids.game,
-              homeTeamName: 'A',
-              awayTeamName: 'B'
+              homeTeamName: 'AA',
+              awayTeamName: 'BB'
             }
           ],
           unresolvedTieCount: 1
         }
       ]
     });
-    expect(leagues[0].seasons[0].standings.map((row) => row.teamName)).toEqual(['A', 'B']);
+    expect(leagues[0].seasons[0].standings.map((row) => row.teamName)).toEqual(['AA', 'BB']);
   });
 
   it('enforces winner and score consistency below the service layer', async () => {

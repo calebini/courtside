@@ -17,12 +17,14 @@ import {resolveAuthenticatedAccount} from '@/courtside/services/resolve-authenti
 
 import {signOut} from '../auth-actions';
 import {
+  addSeasonTeamsAction,
   cancelGameAction,
   correctGameResultAction,
   createSeasonAction,
   finalizeGameAction,
   forfeitGameAction,
   postponeGameAction,
+  removeSeasonTeamAction,
   rescheduleGameAction,
   scheduleGameAction,
   startGameAction
@@ -42,6 +44,9 @@ function resultMessageKey(result: string | undefined) {
     start: 'started',
     season_created: 'seasonCreated',
     season_rejected: 'seasonRejected',
+    teams_updated: 'teamsUpdated',
+    team_removed: 'teamRemoved',
+    team_rejected: 'teamRejected',
     rejected: 'rejected',
     unexpected: 'unexpected'
   };
@@ -376,7 +381,9 @@ export default async function AdminPage({
 
   const leagues = account ? await new PostgresAdminDashboardStore(pool).load(account.id) : [];
   const resultKey = resultMessageKey(query.result);
-  const resultIsSuccess = query.result !== 'rejected' && query.result !== 'unexpected';
+  const resultIsSuccess = !['rejected', 'season_rejected', 'team_rejected', 'unexpected'].includes(
+    query.result ?? ''
+  );
   const forfeitLabels = {
     forfeit: t('forfeit'),
     forfeitGame: t('forfeitGame'),
@@ -444,6 +451,9 @@ export default async function AdminPage({
       {query.error === 'invalid_season' ? (
         <p className="notice notice-error">{t('invalidSeason')}</p>
       ) : null}
+      {query.error === 'invalid_team' ? (
+        <p className="notice notice-error">{t('invalidTeam')}</p>
+      ) : null}
       {resultKey ? (
         <p className={`notice ${resultIsSuccess ? 'notice-success' : 'notice-error'}`}>
           {t(resultKey)}
@@ -503,6 +513,55 @@ export default async function AdminPage({
                   <p>{t('noTeamsSummary')}</p>
                 </section>
               ) : null}
+
+              <section className="panel team-setup-panel">
+                <div className="panel-heading">
+                  <div>
+                    <p className="panel-kicker">{t('teamSetupKicker')}</p>
+                    <h3>{t('manageSeasonTeams')}</h3>
+                  </div>
+                </div>
+                <div className="team-setup-grid">
+                  <form action={addSeasonTeamsAction} className="stack-form compact-form">
+                    <CommandFields locale={locale} />
+                    <input name="seasonId" type="hidden" value={season.id} />
+                    <label>
+                      <span>{t('teamNames')}</span>
+                      <textarea
+                        autoComplete="off"
+                        name="names"
+                        placeholder={t('teamNamesPlaceholder')}
+                        required
+                        rows={5}
+                      />
+                    </label>
+                    <p className="empty-copy">{t('teamEntrySummary')}</p>
+                    <button type="submit">{t('addTeams')}</button>
+                  </form>
+                  <div className="participating-team-list">
+                    <h4>{t('participatingTeams')}</h4>
+                    {season.teams.length === 0 ? (
+                      <p className="empty-copy">{t('noParticipatingTeams')}</p>
+                    ) : (
+                      <ul>
+                        {season.teams.map((team) => (
+                          <li key={team.id}>
+                            <span>{team.name}</span>
+                            <form action={removeSeasonTeamAction}>
+                              <CommandFields locale={locale} />
+                              <input name="seasonTeamId" type="hidden" value={team.id} />
+                              <button className="button-link" type="submit">
+                                {t('removeFromSeason')}
+                              </button>
+                            </form>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    <p className="empty-copy">{t('teamRemovalSummary')}</p>
+                  </div>
+                </div>
+              </section>
 
               <div className="operations-grid">
                 <section className="panel schedule-panel">

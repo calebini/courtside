@@ -94,7 +94,7 @@ describeWithDatabase('PostgreSQL Player and Roster Membership lifecycle', () => 
     );
     await pool.query(
       `insert into teams (id, league_id, name)
-       values ($1, $4, 'A'), ($2, $4, 'B'), ($3, $5, 'Other')`,
+       values ($1, $4, 'AA'), ($2, $4, 'BB'), ($3, $5, 'Other')`,
       [ids.teamA, ids.teamB, ids.otherTeam, ids.league, ids.otherLeague]
     );
     await pool.query(
