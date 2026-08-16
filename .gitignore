@@ -48,3 +48,4 @@ supabase/.temp/
 # Compiled output
 out/
 target/
+.vercel/
