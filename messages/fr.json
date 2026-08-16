@@ -257,6 +257,8 @@
     "started": "Le match est maintenant en cours et prêt à recevoir son pointage final.",
     "rejected": "Le résultat n’a pas été accepté. Les dossiers officiels sont inchangés.",
     "unexpected": "Le résultat n’a pas pu être enregistré. Les dossiers officiels sont inchangés.",
+    "noSeasonsTitle": "Aucune saison configurée",
+    "noSeasonsSummary": "Votre accès d’administrateur de ligue est actif. Cette ligue doit avoir une première saison avant de pouvoir gérer les matchs et le classement.",
     "noAccessTitle": "Aucun accès administratif",
     "noAccessSummary": "Cette connexion n’est liée à aucune affectation active d’administrateur de ligue."
   }

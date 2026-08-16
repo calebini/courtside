@@ -257,6 +257,8 @@
     "started": "The game is now in progress and ready for its final score.",
     "rejected": "The result was not accepted. The official records were left unchanged.",
     "unexpected": "The result could not be saved. The official records were left unchanged.",
+    "noSeasonsTitle": "No season configured yet",
+    "noSeasonsSummary": "Your League Administrator access is active. This league needs its first season before games and standings can be managed.",
     "noAccessTitle": "No league administration access",
     "noAccessSummary": "This login is not linked to an active League Administrator assignment."
   }

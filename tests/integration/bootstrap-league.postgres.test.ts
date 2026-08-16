@@ -2,6 +2,7 @@ import type {Pool} from 'pg';
 import {afterAll, beforeAll, beforeEach, describe, expect, it} from 'vitest';
 
 import {PostgresBootstrapLeagueStore} from '@/courtside/adapters/postgres/bootstrap-league-store';
+import {PostgresAdminDashboardStore} from '@/courtside/adapters/postgres/admin-dashboard-store';
 import {createPostgresPool} from '@/courtside/adapters/postgres/pool';
 import {createLeagueBootstrapService} from '@/courtside/services/bootstrap-league';
 
@@ -103,5 +104,15 @@ describeWithDatabase('PostgreSQL initial League Administrator bootstrap', () => 
     expect((await pool.query('select id from league_admin_assignments')).rowCount).toBe(1);
     expect((await pool.query('select id from audit_records')).rowCount).toBe(1);
     expect((await pool.query('select command_id from command_receipts')).rowCount).toBe(1);
+
+    await expect(
+      new PostgresAdminDashboardStore(pool).load('91000000-0000-4000-8000-000000000001')
+    ).resolves.toEqual([{
+      id: '93000000-0000-4000-8000-000000000001',
+      name: 'Paris Rec Basketball',
+      timezone: 'Europe/Paris',
+      venues: [],
+      seasons: []
+    }]);
   });
 });

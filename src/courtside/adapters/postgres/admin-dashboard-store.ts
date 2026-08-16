@@ -93,6 +93,12 @@ interface SeasonRow {
   frozen_configuration: unknown | null;
 }
 
+interface LeagueRow {
+  id: string;
+  name: string;
+  timezone: string;
+}
+
 interface TeamRow {
   season_team_id: string;
   team_name: string;
@@ -139,7 +145,16 @@ export class PostgresAdminDashboardStore {
   constructor(private readonly pool: Pool) {}
 
   async load(accountId: string): Promise<AdminLeague[]> {
-    const [seasonResult, venueResult] = await Promise.all([
+    const [leagueResult, seasonResult, venueResult] = await Promise.all([
+      this.pool.query<LeagueRow>(
+        `select l.id, l.name, l.timezone
+           from league_admin_assignments laa
+           join leagues l on l.id = laa.league_id
+          where laa.user_account_id = $1
+            and laa.revoked_at is null
+          order by l.name, l.id`,
+        [accountId]
+      ),
       this.pool.query<SeasonRow>(
       `select l.id as league_id,
               l.name as league_name,
@@ -177,7 +192,18 @@ export class PostgresAdminDashboardStore {
       venuesByLeague.set(venue.league_id, venues);
     }
 
-    const leagues = new Map<string, AdminLeague & {seasons: AdminSeason[]}>();
+    const leagues = new Map<string, AdminLeague & {seasons: AdminSeason[]}>(
+      leagueResult.rows.map((league) => [
+        league.id,
+        {
+          id: league.id,
+          name: league.name,
+          timezone: league.timezone,
+          venues: venuesByLeague.get(league.id) ?? [],
+          seasons: []
+        }
+      ])
+    );
     for (const row of seasonResult.rows) {
       const [teamResult, gameResult, auditResult] = await Promise.all([
         this.pool.query<TeamRow>(
@@ -372,15 +398,11 @@ export class PostgresAdminDashboardStore {
         unresolvedTieCount: projection.unresolvedTies.length
       };
 
-      const league = leagues.get(row.league_id) ?? {
-        id: row.league_id,
-        name: row.league_name,
-        timezone: row.timezone,
-        venues: venuesByLeague.get(row.league_id) ?? [],
-        seasons: []
-      };
+      const league = leagues.get(row.league_id);
+      if (!league) {
+        throw new Error('An authorized Season resolved without its League');
+      }
       league.seasons.push(season);
-      leagues.set(row.league_id, league);
     }
 
     return [...leagues.values()];

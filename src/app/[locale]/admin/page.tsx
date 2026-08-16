@@ -425,6 +425,13 @@ export default async function AdminPage({
             <span className="timezone">{league.timezone}</span>
           </div>
 
+          {league.seasons.length === 0 ? (
+            <section className="empty-state">
+              <h3>{t('noSeasonsTitle')}</h3>
+              <p>{t('noSeasonsSummary')}</p>
+            </section>
+          ) : null}
+
           {league.seasons.map((season) => (
             <section className="season-workspace" key={season.id}>
               <div className="season-heading">
