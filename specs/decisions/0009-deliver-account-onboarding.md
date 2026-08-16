@@ -17,5 +17,5 @@ Registration never creates or selects a Player. After provisioning, the Account 
 
 - Account onboarding unlocks the existing Player request workflow without weakening administrator approval.
 - A later League code or invitation gate can change registration admission without replacing Account, Player, or Player Management identities.
-- Production remains blocked on email delivery, abuse controls, and the administrator bootstrap runbook.
+- Production remains blocked on email delivery, abuse controls, and explicit production authorization of the now-delivered staging bootstrap control.
 - Authorized administrators may see the confirmed requester email in the Player-access queue; it remains absent from public projections.

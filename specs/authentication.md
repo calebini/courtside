@@ -1,8 +1,8 @@
 # Courtside Authentication Delivery
 
 - Status: accepted
-- Spec version: 0.2.0
-- Last updated: 2026-08-09
+- Spec version: 0.3.0
+- Last updated: 2026-08-15
 
 ## Purpose
 
@@ -46,9 +46,11 @@ An authenticated User Account without an active League Administrator assignment 
 
 ## Initial Administrator Bootstrap
 
-Production bootstrap is an explicit, controlled operational action that creates or selects the first User Account and establishes the first League Administrator assignment in one server-side transaction. It is allowed only while the target League has no League Administrator assignment history, is serialized per League, and writes an Audit Record. Retrying identical bootstrap content reuses the accepted result; conflicting or post-bootstrap attempts are rejected without mutation.
+Initial bootstrap is an explicit, controlled operational action that selects an already provisioned User Account by its normalized verified contact email and establishes the first League Administrator assignment in one server-side transaction. The action creates the initial League when the deployment contains none, or selects the sole existing League only when its name, IANA timezone, and default language exactly match the requested configuration. A deployment containing multiple Leagues is outside this initial command's scope.
 
-The production bootstrap command and operator runbook are deferred and authentication must not be released to production until they exist. The local development fixture is not the production bootstrap command. After bootstrap, all administrator assignment changes follow the accepted domain lifecycle and final-active-administrator protection.
+The command is allowed only while the selected League has no League Administrator assignment history. A deployment-wide transaction lock serializes attempts before a League necessarily exists. The accepted transaction creates the League when required, creates the assignment, writes an Audit Record, and stores a Command Receipt. Retrying identical normalized bootstrap content reuses the accepted result even when the operator supplies a new command identity. Reusing a command identity for different content, changing accepted content, or attempting bootstrap after any administrator assignment history exists is rejected without mutation.
+
+The delivered operator command is staging-only, uses the Supabase transaction pooler, verifies that an explicitly confirmed project reference matches the database connection, and performs a read-only plan unless the operator also supplies `--apply`. It does not create a Season, Team, Player, or Auth identity. Those records require separate deliberate setup. The local development fixture is not this bootstrap command. After bootstrap, all administrator assignment changes follow the accepted domain lifecycle and final-active-administrator protection. A production bootstrap remains blocked until this control is deliberately extended and exercised for a production target.
 
 ## Secure Mutation Delivery
 
@@ -62,4 +64,4 @@ Production release requires an explicit site URL, explicit registration mode, wo
 
 ## Deferred Surface
 
-This slice does not release production authentication, implement invitations, League codes, social login, passkeys, multi-factor authentication, create the production bootstrap command, grant direct browser access to domain tables, or change Team Captain and Player Management authority.
+This slice does not release production authentication, implement invitations, League codes, social login, passkeys, multi-factor authentication, authorize the bootstrap command for production, create Season or Team setup automation, grant direct browser access to domain tables, or change Team Captain and Player Management authority.

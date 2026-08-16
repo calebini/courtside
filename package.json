@@ -15,6 +15,7 @@
     "test": "vitest run tests/unit",
     "test:integration": "vitest run --config vitest.integration.config.ts",
     "test:e2e": "playwright test",
+    "bootstrap:staging": "node --import tsx scripts/bootstrap-staging.ts",
     "db:start": "supabase start",
     "db:stop": "supabase stop",
     "db:reset": "supabase db reset",
@@ -41,6 +42,7 @@
     "eslint": "^9.39.5",
     "eslint-config-next": "^16.3.0",
     "supabase": "^2.114.0",
+    "tsx": "^4.23.12",
     "typescript": "^6.0.3",
     "vitest": "^4.1.10"
   }
