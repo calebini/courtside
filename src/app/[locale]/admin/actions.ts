@@ -6,6 +6,7 @@ import {redirect} from 'next/navigation';
 import {PostgresGameResultStore} from '@/courtside/adapters/postgres/finalize-game-store';
 import {PostgresGameOperationStore} from '@/courtside/adapters/postgres/game-operation-store';
 import {getRuntimePostgresPool} from '@/courtside/adapters/postgres/runtime-pool';
+import {PostgresCreateSeasonStore} from '@/courtside/adapters/postgres/season-setup-store';
 import {PostgresUserAccountDirectory} from '@/courtside/adapters/postgres/user-account-directory';
 import {SupabaseVerifiedIdentityProvider} from '@/courtside/adapters/supabase/identity-provider';
 import {createSupabaseServerClient} from '@/courtside/adapters/supabase/server-client';
@@ -20,6 +21,10 @@ import {
   GameOperationRejected,
   type GameOperationCommand
 } from '@/courtside/services/manage-game';
+import {
+  createSeasonService,
+  CreateSeasonRejected
+} from '@/courtside/services/create-season';
 import {resolveAuthenticatedAccount} from '@/courtside/services/resolve-authenticated-account';
 
 type PendingGameOperationCommand = GameOperationCommand extends infer Command
@@ -150,6 +155,36 @@ export async function scheduleGameAction(formData: FormData) {
     venueId: venue.value,
     venueInstructions: instructions
   });
+}
+
+export async function createSeasonAction(formData: FormData) {
+  const locale = supportedLocale(formData.get('locale'));
+  const commandId = commandIdentity(formData.get('commandId'));
+  const leagueId = entityIdentity(formData.get('leagueId'));
+  const name = String(formData.get('name') ?? '');
+  if (!commandId || !leagueId) {
+    redirect(`/${locale}/admin?error=invalid_season`);
+  }
+
+  const {pool, account} = await authenticatedAccount();
+  if (!account) {
+    redirect(`/${locale}/sign-in`);
+  }
+
+  let outcome = 'season_created';
+  try {
+    await createSeasonService(new PostgresCreateSeasonStore(pool))({
+      commandId,
+      actorAccountId: account.id,
+      leagueId,
+      name
+    });
+  } catch (error) {
+    outcome = error instanceof CreateSeasonRejected ? 'season_rejected' : 'unexpected';
+  }
+
+  revalidatePath(`/${locale}/admin`);
+  redirect(`/${locale}/admin?result=${outcome}`);
 }
 
 export async function rescheduleGameAction(formData: FormData) {

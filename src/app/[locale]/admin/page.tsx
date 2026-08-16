@@ -19,6 +19,7 @@ import {signOut} from '../auth-actions';
 import {
   cancelGameAction,
   correctGameResultAction,
+  createSeasonAction,
   finalizeGameAction,
   forfeitGameAction,
   postponeGameAction,
@@ -39,6 +40,8 @@ function resultMessageKey(result: string | undefined) {
     postpone: 'postponed',
     cancel: 'cancelled',
     start: 'started',
+    season_created: 'seasonCreated',
+    season_rejected: 'seasonRejected',
     rejected: 'rejected',
     unexpected: 'unexpected'
   };
@@ -74,6 +77,42 @@ function CommandFields({locale, gameId}: {locale: string; gameId?: string}) {
       <input name="commandId" type="hidden" value={randomUUID()} />
       {gameId ? <input name="gameId" type="hidden" value={gameId} /> : null}
     </>
+  );
+}
+
+function SeasonSetupForm({
+  actionLabel,
+  leagueId,
+  locale,
+  nameLabel,
+  namePlaceholder,
+  rulesSummary
+}: {
+  actionLabel: string;
+  leagueId: string;
+  locale: string;
+  nameLabel: string;
+  namePlaceholder: string;
+  rulesSummary: string;
+}) {
+  return (
+    <form action={createSeasonAction} className="stack-form compact-form">
+      <CommandFields locale={locale} />
+      <input name="leagueId" type="hidden" value={leagueId} />
+      <label>
+        <span>{nameLabel}</span>
+        <input
+          autoComplete="off"
+          maxLength={120}
+          minLength={2}
+          name="name"
+          placeholder={namePlaceholder}
+          required
+        />
+      </label>
+      <p className="empty-copy">{rulesSummary}</p>
+      <button type="submit">{actionLabel}</button>
+    </form>
   );
 }
 
@@ -402,6 +441,9 @@ export default async function AdminPage({
       {query.error === 'invalid_correction' ? (
         <p className="notice notice-error">{t('invalidCorrection')}</p>
       ) : null}
+      {query.error === 'invalid_season' ? (
+        <p className="notice notice-error">{t('invalidSeason')}</p>
+      ) : null}
       {resultKey ? (
         <p className={`notice ${resultIsSuccess ? 'notice-success' : 'notice-error'}`}>
           {t(resultKey)}
@@ -425,12 +467,26 @@ export default async function AdminPage({
             <span className="timezone">{league.timezone}</span>
           </div>
 
-          {league.seasons.length === 0 ? (
-            <section className="empty-state">
-              <h3>{t('noSeasonsTitle')}</h3>
-              <p>{t('noSeasonsSummary')}</p>
-            </section>
-          ) : null}
+          <section className="panel">
+            <div className="panel-heading">
+              <div>
+                <p className="panel-kicker">{t('seasonSetupKicker')}</p>
+                <h3>
+                  {league.seasons.length === 0
+                    ? t('createFirstSeason')
+                    : t('createAnotherSeason')}
+                </h3>
+              </div>
+            </div>
+            <SeasonSetupForm
+              actionLabel={t('createSeason')}
+              leagueId={league.id}
+              locale={locale}
+              nameLabel={t('seasonName')}
+              namePlaceholder={t('seasonNamePlaceholder')}
+              rulesSummary={t('defaultSeasonRules')}
+            />
+          </section>
 
           {league.seasons.map((season) => (
             <section className="season-workspace" key={season.id}>
@@ -441,6 +497,13 @@ export default async function AdminPage({
                 </span>
               </div>
 
+              {season.teams.length < 2 ? (
+                <section className="empty-state">
+                  <h3>{t('noTeamsTitle')}</h3>
+                  <p>{t('noTeamsSummary')}</p>
+                </section>
+              ) : null}
+
               <div className="operations-grid">
                 <section className="panel schedule-panel">
                   <div className="panel-heading">
@@ -449,7 +512,8 @@ export default async function AdminPage({
                       <h3>{t('scheduleGame')}</h3>
                     </div>
                   </div>
-                  <form action={scheduleGameAction} className="stack-form compact-form">
+                  {season.teams.length >= 2 ? (
+                    <form action={scheduleGameAction} className="stack-form compact-form">
                     <CommandFields locale={locale} />
                     <input name="seasonId" type="hidden" value={season.id} />
                     <div className="participant-fields">
@@ -481,7 +545,10 @@ export default async function AdminPage({
                       venues={league.venues}
                     />
                     <button type="submit">{t('schedule')}</button>
-                  </form>
+                    </form>
+                  ) : (
+                    <p className="empty-copy">{t('scheduleNeedsTeams')}</p>
+                  )}
                 </section>
 
                 <section className="panel operations-panel">
