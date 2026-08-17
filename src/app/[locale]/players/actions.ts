@@ -11,6 +11,7 @@ import {getRuntimePostgresPool} from '@/courtside/adapters/postgres/runtime-pool
 import {PostgresUserAccountDirectory} from '@/courtside/adapters/postgres/user-account-directory';
 import {SupabaseVerifiedIdentityProvider} from '@/courtside/adapters/supabase/identity-provider';
 import {createSupabaseServerClient} from '@/courtside/adapters/supabase/server-client';
+import {RuleViolation} from '@/courtside/core/errors';
 import {validateProfilePhoto} from '@/courtside/core/player-profile';
 import {createPlayerAccessService} from '@/courtside/services/manage-player-access';
 import {createPlayerProfileService} from '@/courtside/services/manage-player-profile';
@@ -70,17 +71,35 @@ export async function uploadPlayerPhotoAction(formData: FormData) {
   if (!playerId || !(fileValue instanceof File)) finish(locale, 'invalid_photo');
   const file = fileValue;
 
-  let objectKey: string | null = null;
+  let validated: ReturnType<typeof validateProfilePhoto>;
   try {
-    const validated = validateProfilePhoto(new Uint8Array(await file.arrayBuffer()), file.type);
-    objectKey = `${playerId}/${randomUUID()}.${validated.extension}`;
-    const uploaded = await supabase.storage.from(BUCKET).upload(objectKey, validated.bytes, {contentType: validated.contentType, upsert: false});
-    if (uploaded.error) throw uploaded.error;
+    validated = validateProfilePhoto(new Uint8Array(await file.arrayBuffer()), file.type);
+  } catch (error) {
+    if (error instanceof RuleViolation && error.rule === 'player_profile.photo_size') {
+      finish(locale, 'photo_too_large');
+    }
+    if (error instanceof RuleViolation && error.rule === 'player_profile.photo_type') {
+      finish(locale, 'unsupported_photo');
+    }
+    finish(locale, 'invalid_photo');
+  }
+
+  const objectKey = `${playerId}/${randomUUID()}.${validated.extension}`;
+  const uploaded = await supabase.storage.from(BUCKET).upload(objectKey, validated.bytes, {
+    contentType: validated.contentType,
+    upsert: false
+  });
+  if (uploaded.error) {
+    await supabase.storage.from(BUCKET).remove([objectKey]);
+    finish(locale, 'photo_upload_failed');
+  }
+
+  try {
     const result = await createPlayerProfileService(new PostgresPlayerProfileStore(pool))({type: 'set_photo', actorAccountId: account.id, playerId, objectKey, contentType: validated.contentType, byteSize: validated.bytes.byteLength});
     if (result.previousPhotoObjectKey) await supabase.storage.from(BUCKET).remove([result.previousPhotoObjectKey]);
   } catch {
-    if (objectKey) await supabase.storage.from(BUCKET).remove([objectKey]);
-    finish(locale, 'invalid_photo');
+    await supabase.storage.from(BUCKET).remove([objectKey]);
+    finish(locale, 'rejected');
   }
   finish(locale, 'photo_updated');
 }

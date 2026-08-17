@@ -13,12 +13,28 @@ describe('private Player profiles', () => {
     expect(validateProfilePhoto(new Uint8Array([0xff, 0xd8, 0xff, 0x00]), 'image/jpeg')).toMatchObject({contentType: 'image/jpeg', extension: 'jpg'});
     expect(validateProfilePhoto(new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), 'image/png')).toMatchObject({contentType: 'image/png', extension: 'png'});
     expect(validateProfilePhoto(new Uint8Array([0x52, 0x49, 0x46, 0x46, 0, 0, 0, 0, 0x57, 0x45, 0x42, 0x50]), 'image/webp')).toMatchObject({contentType: 'image/webp', extension: 'webp'});
-    expect(() => validateProfilePhoto(new Uint8Array([0xff, 0xd8, 0xff]), 'image/png')).toThrow(RuleViolation);
+    expect(() => validateProfilePhoto(new Uint8Array([0xff, 0xd8, 0xff]), 'image/png')).toThrow(
+      expect.objectContaining({rule: 'player_profile.photo_type'})
+    );
   });
 
   it('rejects empty and oversized profile photos', () => {
-    expect(() => validateProfilePhoto(new Uint8Array(), 'image/png')).toThrow(RuleViolation);
-    expect(() => validateProfilePhoto(new Uint8Array(MAX_PROFILE_PHOTO_BYTES + 1), 'image/png')).toThrow(RuleViolation);
+    expect(() => validateProfilePhoto(new Uint8Array(), 'image/png')).toThrow(
+      expect.objectContaining({rule: 'player_profile.photo_size'})
+    );
+    expect(() => validateProfilePhoto(new Uint8Array(MAX_PROFILE_PHOTO_BYTES + 1), 'image/png')).toThrow(
+      expect.objectContaining({rule: 'player_profile.photo_size'})
+    );
+  });
+
+  it('accepts a valid PNG at the size of the reported upload', () => {
+    const reportedUpload = new Uint8Array(245633);
+    reportedUpload.set([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+
+    expect(validateProfilePhoto(reportedUpload, 'image/png')).toMatchObject({
+      contentType: 'image/png',
+      extension: 'png'
+    });
   });
 
   it('allows only requested-to-approved and active-to-revoked transitions', () => {

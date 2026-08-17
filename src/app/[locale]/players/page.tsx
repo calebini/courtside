@@ -33,7 +33,7 @@ export default async function PlayersPage({params, searchParams}: {params: Promi
     const result = await supabase.storage.from(BUCKET).createSignedUrl(player.profilePhotoObjectKey!, 300);
     if (result.data?.signedUrl) signedPhotos.set(player.playerId, result.data.signedUrl);
   }));
-  const messages: Record<string, string> = {requested: 'requested', profile_updated: 'profileUpdated', photo_updated: 'photoUpdated', photo_cleared: 'photoCleared', invalid_reference: 'invalidReference', invalid_profile: 'invalidProfile', invalid_photo: 'invalidPhoto', rejected: 'rejected'};
+  const messages: Record<string, string> = {requested: 'requested', profile_updated: 'profileUpdated', photo_updated: 'photoUpdated', photo_cleared: 'photoCleared', invalid_reference: 'invalidReference', invalid_profile: 'invalidProfile', invalid_photo: 'invalidPhoto', photo_too_large: 'photoTooLarge', unsupported_photo: 'unsupportedPhoto', photo_upload_failed: 'photoUploadFailed', rejected: 'rejected'};
 
   return <main className="dashboard-shell player-portal">
     <header className="topbar"><Link className="wordmark" href={`/${locale}`}>COURTSIDE</Link><div className="account-actions">{isAdmin ? <Link className="button-link" href={`/${locale}/admin`}>{t('leagueDesk')}</Link> : null}<span>{account.displayName}</span><form action={signOut}><input name="locale" type="hidden" value={locale}/><button className="button-link" type="submit">{t('signOut')}</button></form></div></header>

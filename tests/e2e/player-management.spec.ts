@@ -22,6 +22,18 @@ test('a member manages approved Players while the League desk controls authority
   await expect(member.getByText('The Player display name was updated and audited.')).toBeVisible();
 
   const updatedJordan = member.locator('.managed-player-card').filter({hasText: 'Jordan L.'});
+  await updatedJordan.getByLabel('Profile photo').setInputFiles({
+    name: 'oversized.png',
+    mimeType: 'image/png',
+    buffer: Buffer.concat([validPng, Buffer.alloc(1024 * 1024)])
+  });
+  await updatedJordan.getByRole('button', {name: 'Set or replace photo'}).click();
+  await expect(member.getByText('That image is larger than 1 MiB. Choose a smaller file.')).toBeVisible();
+
+  await updatedJordan.getByLabel('Profile photo').setInputFiles({name: 'unsupported.gif', mimeType: 'image/gif', buffer: Buffer.from('GIF89a')});
+  await updatedJordan.getByRole('button', {name: 'Set or replace photo'}).click();
+  await expect(member.getByText('Choose a JPEG, PNG, or WebP image whose contents match its format.')).toBeVisible();
+
   await updatedJordan.getByLabel('Profile photo').setInputFiles({name: 'avatar.png', mimeType: 'image/png', buffer: validPng});
   await updatedJordan.getByRole('button', {name: 'Set or replace photo'}).click();
   await expect(member.getByText('The private profile photo was updated and audited.')).toBeVisible();
