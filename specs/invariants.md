@@ -2,7 +2,7 @@
 
 - Status: accepted
 - Spec version: 0.1.0
-- Last updated: 2026-08-16
+- Last updated: 2026-08-17
 
 ## Purpose
 
@@ -14,7 +14,16 @@ A User Account and Player are distinct. A Player exists independently of User Ac
 
 ## Authorization
 
-League Administrator authority is scoped to one League and persists across Seasons until revoked. Ordinary League Administrator assignment mutation is performed only by an existing League Administrator for the affected League after bootstrap, and the final active League Administrator cannot be revoked. Team Captain authority is scoped to exactly one Season Team. Only a League Administrator may approve Player Management Relationships, correct authoritative Game results, amend frozen Season configuration, assign or revoke League Administrator authority after bootstrap, assign or revoke Team Captain authority, mutate Game lifecycle status, create or change Roster Memberships, create or materially change Player Stat Lines, or resolve playoff correction conflicts. Approved Player Management Relationships grant authority only to update the linked Player's `display_name` and `profile_photo`; this includes an individual member updating the photo of their own linked Player. Team Captain authority grants no independent core mutation authority in Phase 1. Role and management-relationship changes are audited. Unauthorized mutations and unpermitted lifecycle transitions are rejected without mutation and produce the required rejection report.
+League Administrator authority is scoped to one League and persists across Seasons until revoked. Ordinary League Administrator assignment mutation is performed only by an existing League Administrator for the affected League after bootstrap, and the final active League Administrator cannot be revoked. Team Captain authority is scoped to exactly one Season Team. Only a League Administrator may delete an eligible unused Season, approve Player Management Relationships, correct authoritative Game results, amend frozen Season configuration, assign or revoke League Administrator authority after bootstrap, assign or revoke Team Captain authority, mutate Game lifecycle status, create or change Roster Memberships, create or materially change Player Stat Lines, or resolve playoff correction conflicts. Approved Player Management Relationships grant authority only to update the linked Player's `display_name` and `profile_photo`; this includes an individual member updating the photo of their own linked Player. Team Captain authority grants no independent core mutation authority in Phase 1. Role and management-relationship changes are audited. Unauthorized mutations and unpermitted lifecycle transitions are rejected without mutation and produce the required rejection report.
+
+## Season Retention
+
+A Season with any dependent domain record cannot be deleted. Season deletion never cascades to
+Season Teams, Games, Roster Memberships, configuration versions, Team Captain assignments, durable
+League records, or append-only history. An accepted unused-Season deletion preserves the complete
+prior Season value in one append-only Audit Record, and concurrent attempts produce at most one
+material deletion. Used Seasons remain authoritative records until a separately accepted retention
+or archival lifecycle applies.
 
 ## Games and Results
 

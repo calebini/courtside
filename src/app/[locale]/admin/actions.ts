@@ -7,6 +7,7 @@ import {PostgresGameResultStore} from '@/courtside/adapters/postgres/finalize-ga
 import {PostgresGameOperationStore} from '@/courtside/adapters/postgres/game-operation-store';
 import {PostgresRoleAssignmentStore} from '@/courtside/adapters/postgres/role-assignment-store';
 import {getRuntimePostgresPool} from '@/courtside/adapters/postgres/runtime-pool';
+import {PostgresDeleteSeasonStore} from '@/courtside/adapters/postgres/season-deletion-store';
 import {PostgresCreateSeasonStore} from '@/courtside/adapters/postgres/season-setup-store';
 import {PostgresSeasonTeamStore} from '@/courtside/adapters/postgres/season-team-store';
 import {PostgresSeasonConfigurationStore} from '@/courtside/adapters/postgres/season-configuration-store';
@@ -34,6 +35,10 @@ import {
   createSeasonService,
   CreateSeasonRejected
 } from '@/courtside/services/create-season';
+import {
+  createDeleteSeasonService,
+  DeleteSeasonRejected
+} from '@/courtside/services/delete-season';
 import {
   createSeasonTeamService,
   SeasonTeamRejected
@@ -240,6 +245,38 @@ export async function createSeasonAction(formData: FormData) {
     });
   } catch (error) {
     outcome = error instanceof CreateSeasonRejected ? 'season_rejected' : 'unexpected';
+  }
+
+  revalidateAdmin(locale);
+  redirect(adminLocation(locale, 'setup', formData, {result: outcome}));
+}
+
+export async function deleteSeasonAction(formData: FormData) {
+  const locale = supportedLocale(formData.get('locale'));
+  const commandId = commandIdentity(formData.get('commandId'));
+  const seasonId = entityIdentity(formData.get('seasonId'));
+  const confirmationName = String(formData.get('confirmationName') ?? '');
+  const reason = String(formData.get('reason') ?? '').trim() || null;
+  if (!commandId || !seasonId || confirmationName.length === 0) {
+    redirect(adminLocation(locale, 'setup', formData, {error: 'invalid_season_deletion'}));
+  }
+
+  const {pool, account} = await authenticatedAccount();
+  if (!account) {
+    redirect(`/${locale}/sign-in`);
+  }
+
+  let outcome = 'season_deleted';
+  try {
+    await createDeleteSeasonService(new PostgresDeleteSeasonStore(pool))({
+      commandId,
+      actorAccountId: account.id,
+      seasonId,
+      confirmationName,
+      reason
+    });
+  } catch (error) {
+    outcome = error instanceof DeleteSeasonRejected ? 'season_delete_rejected' : 'unexpected';
   }
 
   revalidateAdmin(locale);

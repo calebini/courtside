@@ -9,6 +9,7 @@ import {
   archiveVenueAction,
   createSeasonAction,
   createVenueAction,
+  deleteSeasonAction,
   grantLeagueAdministratorAction,
   removeSeasonTeamAction,
   revokeLeagueAdministratorAction,
@@ -47,6 +48,58 @@ export function SeasonSetupForm({
       <p className="empty-copy">{rulesSummary}</p>
       <button type="submit">{actionLabel}</button>
     </form>
+  );
+}
+
+export function SeasonDeletionPanel({
+  season,
+  locale,
+  labels
+}: {
+  season: AdminSeason;
+  locale: string;
+  labels: {
+    summary: string;
+    title: string;
+    eligible: string;
+    protected: string;
+    warning: string;
+    confirmation: string;
+    confirmationHelp: string;
+    optionalReason: string;
+    submit: string;
+  };
+}) {
+  const gameCount = season.scheduledGames.length
+    + season.postponedGames.length
+    + season.inProgressGames.length
+    + season.completedGames.length;
+  const eligible = season.teams.length === 0 && gameCount === 0 && !season.configurationFrozen;
+
+  return (
+    <details className="panel season-deletion-panel">
+      <summary>{labels.summary}</summary>
+      <div className="panel-heading season-deletion-heading">
+        <div><p className="panel-kicker">{eligible ? labels.eligible : labels.protected}</p><h3>{labels.title}</h3></div>
+      </div>
+      <p className="empty-copy">{labels.warning}</p>
+      {eligible ? (
+        <form action={deleteSeasonAction} className="stack-form compact-form">
+          <CommandFields locale={locale} />
+          <input name="seasonId" type="hidden" value={season.id} />
+          <label>
+            <span>{labels.confirmation}</span>
+            <input autoComplete="off" maxLength={120} name="confirmationName" required />
+            <small>{labels.confirmationHelp}</small>
+          </label>
+          <label>
+            <span>{labels.optionalReason}</span>
+            <input maxLength={1000} name="reason" type="text" />
+          </label>
+          <button className="button-danger" type="submit">{labels.submit}</button>
+        </form>
+      ) : null}
+    </details>
   );
 }
 

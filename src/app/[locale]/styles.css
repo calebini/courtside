@@ -744,6 +744,24 @@ a:focus-visible {
   font-size: 1rem;
 }
 
+.season-deletion-panel {
+  border-color: #d7b6ae;
+  background: #fff9f6;
+}
+
+.season-deletion-panel > summary {
+  color: #7a3324;
+  font-size: 0.9rem;
+}
+
+.season-deletion-heading {
+  margin-top: 1rem;
+}
+
+.season-deletion-panel small {
+  color: #697183;
+}
+
 .role-admin-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

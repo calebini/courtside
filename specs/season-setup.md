@@ -2,7 +2,7 @@
 
 - Status: accepted
 - Spec version: 0.1.0
-- Last updated: 2026-08-16
+- Last updated: 2026-08-17
 
 ## Purpose
 
@@ -26,6 +26,12 @@ The Season configuration remains mutable until the first accepted `final` or `fo
 
 Direct database edits are not a supported administrator or developer mode. An exceptional operational repair may use a reviewed migration or recovery runbook, but it must preserve the same version, audit, reproducibility, and conflict-resolution invariants rather than overwriting frozen configuration in place.
 
+## Deletion Boundary
+
+Creation mistakes use the separately accepted `specs/season-deletion.md` workflow. Only a Season
+without dependent domain records may be hard-deleted. Used Season retention and archival remain
+separate from setup.
+
 ## Delivery
 
-The League desk renders a bilingual Season creation form for each administered League. An administered League with no Seasons is shown as accessible and ready for setup. After creation, the desk renders the Season and an explicit empty-Team state; Team and Season Team setup is the next delivery slice.
+League Setup renders a bilingual Season creation form for each administered League. An administered League with no Seasons is shown as accessible and ready for setup. After creation, the setup route renders the Season and its Team, configuration, and eligible unused-Season deletion controls.

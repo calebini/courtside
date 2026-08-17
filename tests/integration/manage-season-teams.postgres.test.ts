@@ -20,7 +20,8 @@ const ids = {
   removableTeam: '98000000-0000-4000-8000-000000000007',
   removableSeasonTeam: '98000000-0000-4000-8000-000000000008',
   player: '98000000-0000-4000-8000-000000000009',
-  membership: '98000000-0000-4000-8000-000000000010'
+  membership: '98000000-0000-4000-8000-000000000010',
+  captainAssignment: '98000000-0000-4000-8000-000000000017'
 };
 
 describeWithDatabase('PostgreSQL Season Team setup', () => {
@@ -172,6 +173,35 @@ describeWithDatabase('PostgreSQL Season Team setup', () => {
     await expect(manage({
       type: 'remove_team',
       commandId: '98000000-0000-4000-8000-000000000013',
+      actorAccountId: ids.admin,
+      seasonTeamId: ids.removableSeasonTeam
+    })).rejects.toMatchObject({
+      report: {violatedRule: 'season_team.removal_without_dependencies'}
+    });
+    expect((await pool.query('select id from season_teams')).rowCount).toBe(1);
+    expect((await pool.query('select id from audit_records')).rowCount).toBe(0);
+  });
+
+  it('rejects removal when Team Captain history depends on participation', async () => {
+    await pool.query(
+      `insert into teams (id, league_id, name) values ($1, $2, 'Left Bank Hoops')`,
+      [ids.removableTeam, ids.league]
+    );
+    await pool.query(
+      `insert into season_teams (id, season_id, team_id) values ($1, $2, $3)`,
+      [ids.removableSeasonTeam, ids.season, ids.removableTeam]
+    );
+    await pool.query(
+      `insert into season_team_captain_assignments
+        (id, season_team_id, user_account_id, assigned_at, assigned_by_account_id)
+       values ($1, $2, $3, '2026-08-17T12:00:00Z', $4)`,
+      [ids.captainAssignment, ids.removableSeasonTeam, ids.outsider, ids.admin]
+    );
+
+    const manage = createSeasonTeamService(new PostgresSeasonTeamStore(pool));
+    await expect(manage({
+      type: 'remove_team',
+      commandId: '98000000-0000-4000-8000-000000000018',
       actorAccountId: ids.admin,
       seasonTeamId: ids.removableSeasonTeam
     })).rejects.toMatchObject({

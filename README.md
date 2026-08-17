@@ -14,6 +14,7 @@ Courtside is a seed-stage project in the Cortext ecosystem. Its core domain and 
 - [`specs/public-portal.md`](specs/public-portal.md) defines the unauthenticated schedule, results, standings, and public-data boundary.
 - [`specs/rosters.md`](specs/rosters.md) defines durable Player identity and historical Season roster participation.
 - [`specs/role-administration.md`](specs/role-administration.md) defines post-bootstrap League Administrator and Team Captain assignment workflows.
+- [`specs/season-deletion.md`](specs/season-deletion.md) defines the protected removal of an unused Season created in error.
 - [`specs/repo-standard.md`](specs/repo-standard.md) defines how this repository grows as its boundaries become real.
 - `README.md` is orientation, not normative design.
 

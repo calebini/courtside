@@ -2,7 +2,7 @@
 
 - Status: accepted
 - Spec version: 0.1.0
-- Last updated: 2026-08-07
+- Last updated: 2026-08-17
 
 ## Purpose
 
@@ -21,7 +21,7 @@ Courtside covers persistent league, team, player, and user-account identity; sea
 
 A League is the persistent organization that owns seasons, league defaults, supported languages, the league timezone, administrator assignments, venues, and the league gallery. Courtside currently assumes one organizational league boundary; cross-league identity and competition are out of scope.
 
-A Season is a competition cycle within a League. It owns participating Season Teams, Games, standings configuration, playoff configuration, and frozen configuration versions needed to reproduce historical outcomes.
+A Season is a competition cycle within a League. It owns participating Season Teams, Games, standings configuration, playoff configuration, and frozen configuration versions needed to reproduce historical outcomes. A Season created in error may be deleted only while it has no dependent domain records; used Seasons are retained for a separately defined end or archive lifecycle.
 
 A Team is a durable team identity that persists across Seasons. Season roster and Season results belong to Season Team participation, not directly to Team.
 

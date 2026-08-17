@@ -2,7 +2,7 @@
 
 - Status: accepted
 - Spec version: 0.1.0
-- Last updated: 2026-08-16
+- Last updated: 2026-08-17
 
 ## Purpose
 
@@ -16,7 +16,7 @@ Terminal states named in a lifecycle have no outgoing transitions except separat
 
 ## Core Mutation Authority
 
-Mutation authority is evaluated at request time and scoped to the affected League, Season, Season Team, Player, or Game. League Administrators may create, schedule, reschedule, postpone, cancel, start, finalize, forfeit, and correct Games; create, end, and transfer Roster Memberships; create, update, confirm, and correct Player Stat Lines; approve and revoke Player Management Relationships; assign, reassign, and revoke League Administrator and Team Captain role assignments; amend frozen Season configuration; and resolve playoff correction conflicts. Ordinary League Administrator assignment mutation is performed only by an existing League Administrator for the affected League after bootstrap, and an attempted revocation that would leave the League without an active League Administrator is rejected without mutation. Team Captain assignments are auditable scoped role markers and grant no independent core mutation authority in Phase 1. Derived standings, Season-Team result statistics, playoff aggregates, and playoff advancement are deterministic projections and are not directly edited by any actor.
+Mutation authority is evaluated at request time and scoped to the affected League, Season, Season Team, Player, or Game. League Administrators may create or delete an eligible unused Season; create, schedule, reschedule, postpone, cancel, start, finalize, forfeit, and correct Games; create, end, and transfer Roster Memberships; create, update, confirm, and correct Player Stat Lines; approve and revoke Player Management Relationships; assign, reassign, and revoke League Administrator and Team Captain role assignments; amend frozen Season configuration; and resolve playoff correction conflicts. Ordinary League Administrator assignment mutation is performed only by an existing League Administrator for the affected League after bootstrap, and an attempted revocation that would leave the League without an active League Administrator is rejected without mutation. Team Captain assignments are auditable scoped role markers and grant no independent core mutation authority in Phase 1. Derived standings, Season-Team result statistics, playoff aggregates, and playoff advancement are deterministic projections and are not directly edited by any actor.
 
 An approved Player Management Relationship grants authority to update only the linked Player's `display_name` and `profile_photo`. The approved account may belong to the Player themself or to another authorized manager, so an individual member linked to their own Player may update that Player's photo. League Administrators may update the same two fields for administrative support. No Player Management Relationship grants authority over identity linkage, roster membership, eligibility, statistics, Game outcomes, standings, playoff advancement, Season configuration, roles, or account credentials. Attempts outside this surface use the general authorization-failure rule.
 
@@ -31,6 +31,20 @@ While `frozen_configuration_version_id` is absent, an active League Administrato
 For first-freeze duplicate detection, the result-affecting configuration basis is the canonical content identity of exact result-affecting values captured in the frozen Season configuration version. It includes standings point values, ordered ranking criteria, eligible Game phase and status rules, standings adjustment enablement, forfeit treatment, playoff Round identities and order, participant slot sources, configured Games per Matchup, advancement rule, aggregate-tiebreak policies, and any later accepted result-affecting field. It excludes League timezone, localization, Venue, Media, display text, and other values that do not affect standings or playoff outcomes. Equal canonical basis identities reuse the existing frozen version. Unequal canonical basis identities are rejected without mutating authoritative state, persisted projections, or configuration versions.
 
 After any dependent authoritative Game outcome exists, a frozen result-affecting configuration amendment is legal only if it preserves existing authoritative state or resolves every affected derived-state conflict in the same administrative action. Amendments that change playoff Round structure, configured Games per Matchup, participant slot sources, advancement rule, or aggregate-tiebreak policy are prohibited once dependent authoritative playoff Games exist unless the same administrative action applies an amendment-specific playoff conflict resolution. The permitted amendment resolutions are the same operator choices as authoritative result corrections: halt affected downstream advancement until replacement authoritative outcomes exist under the amended bracket participants and fixed slot sources, or explicitly affirm the existing downstream participant path as an audited administrative exception. The amendment action is rejected without mutating authoritative state, persisted projections, or configuration versions unless it identifies the amended configuration version, changed result-affecting playoff fields, affected Matchups and participant slots, conflicted downstream authoritative Games, chosen resolution type, actor, and reason; resolves every affected conflict in the same action; and writes the required Audit Record and resolution report.
+
+## Unused Season Deletion Lifecycle
+
+A Season created in error may be deleted only by an active League Administrator for its League and
+only while it has no dependent domain records. Season Teams, Games, Roster Memberships, frozen
+configuration versions, Team Captain assignments, and any later Season-owned record make deletion
+ineligible. The operation requires exact typed confirmation of the current Season name, performs no
+cascading cleanup, and never deletes durable League data or append-only audit history.
+
+An accepted deletion locks and rechecks the Season and dependency state, appends a `season.deleted`
+Audit Record containing the prior Season value and optional reason, deletes the Season, and persists
+the idempotent Command Receipt in one transaction. The deleted name becomes available for reuse.
+Concurrent requests accept at most one material deletion. Used Seasons have no deletion transition;
+their future end or archive lifecycle requires a separate accepted specification.
 
 ## Roster Membership Lifecycle
 

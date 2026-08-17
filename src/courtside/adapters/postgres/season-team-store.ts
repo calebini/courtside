@@ -154,6 +154,10 @@ class PostgresSeasonTeamTransaction implements SeasonTeamTransaction {
             from games
            where home_season_team_id = $1
               or away_season_team_id = $1
+        ) or exists (
+          select 1
+            from season_team_captain_assignments
+           where season_team_id = $1
         ) as has_dependencies`,
       [seasonTeamId]
     );

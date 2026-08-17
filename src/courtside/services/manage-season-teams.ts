@@ -365,9 +365,9 @@ export function createSeasonTeamService(
           throw rejection(command, {
             entityType: 'SeasonTeam',
             entityId: seasonTeam.id,
-            currentStateOrCondition: 'Roster Membership or Game depends on this Season Team',
+            currentStateOrCondition: 'Roster Membership, Game, or role history depends on this Season Team',
             violatedRule: 'season_team.removal_without_dependencies',
-            message: 'A Team with roster or Game history cannot be removed from the Season'
+            message: 'A Team with roster, Game, or role history cannot be removed from the Season'
           });
         }
 

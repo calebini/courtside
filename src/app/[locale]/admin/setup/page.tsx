@@ -13,6 +13,7 @@ import {
 import {requireAdminSession} from '../admin-session';
 import {
   SeasonConfigurationPanel,
+  SeasonDeletionPanel,
   SeasonSetupForm,
   RoleAdministrationPanel,
   TeamParticipationPanel,
@@ -120,6 +121,23 @@ export default async function SetupPage({
               none: t('noParticipatingTeams'),
               remove: t('removeFromSeason'),
               removalSummary: t('teamRemovalSummary')
+            }}
+            locale={locale}
+            season={season}
+          />
+          <SeasonDeletionPanel
+            labels={{
+              summary: t('seasonDeletionSummary'),
+              title: t('deleteUnusedSeason'),
+              eligible: t('seasonDeletionEligible'),
+              protected: t('seasonDeletionProtected'),
+              warning: season.teams.length === 0 && gameCount === 0 && !season.configurationFrozen
+                ? t('seasonDeletionWarning')
+                : t('seasonDeletionBlocked'),
+              confirmation: t('seasonDeletionConfirmation'),
+              confirmationHelp: t('seasonDeletionConfirmationHelp', {season: season.name}),
+              optionalReason: t('optionalReason'),
+              submit: t('confirmSeasonDeletion')
             }}
             locale={locale}
             season={season}

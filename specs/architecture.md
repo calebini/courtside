@@ -2,7 +2,7 @@
 
 - Status: accepted
 - Spec version: 0.1.0
-- Last updated: 2026-08-16
+- Last updated: 2026-08-17
 
 ## Purpose
 
@@ -68,6 +68,12 @@ The implementation now includes a staging-only League Administrator bootstrap se
 Initial Season setup follows the same delivery shape: pure name validation and normative defaults in core, current scoped authorization and idempotent orchestration in a service, one PostgreSQL transaction for Season, Audit Record, and Command Receipt persistence, and a server-derived actor at the bilingual administrator boundary. It deliberately leaves Team participation and playoff Rounds empty rather than copying local fixture data into a real League.
 
 Post-bootstrap role administration follows the same authority boundary. Exact registered email resolves a provisioned target Account inside the transaction; the service owns current administrator authorization, idempotency, final-administrator preservation, atomic captain reassignment, and audit; PostgreSQL independently serializes final-administrator revocations and permits at most one active captain per Season Team. Team Captain assignments remain markers and do not grant new mutation paths.
+
+Unused Season deletion follows the same delivery and transaction boundaries. The service owns exact
+typed-name confirmation, current scoped authorization, dependency rejection, idempotency, and the
+deletion audit. The PostgreSQL adapter locks the Season, checks current dependent records, deletes no
+related rows, and relies on restrictive foreign keys to reject a racing or alternate-path delete that
+would orphan history. League Setup exposes only the server-mediated operation.
 
 Team setup extends that boundary with batch reconciliation of durable League Teams and Season Team participation. The service serializes changes through the affected Season or Season Team, reuses existing Team identity, audits each material creation or removal, and rejects removal when authoritative dependencies exist. PostgreSQL independently enforces Team-name and Season-participation uniqueness plus dependent-record referential integrity.
 
