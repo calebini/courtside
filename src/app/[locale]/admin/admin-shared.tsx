@@ -27,6 +27,10 @@ const resultMessageKeys: Record<string, string> = {
   venue_rejected: 'venueRejected',
   configuration_updated: 'configurationUpdated',
   configuration_rejected: 'configurationRejected',
+  league_admin_granted: 'leagueAdminGranted',
+  league_admin_revoked: 'leagueAdminRevoked',
+  captain_assigned: 'captainAssigned',
+  captain_revoked: 'captainRevoked',
   rejected: 'rejected',
   unexpected: 'unexpected'
 };
@@ -48,7 +52,12 @@ const errorMessageKeys: Record<string, string> = {
   invalid_season: 'invalidSeason',
   invalid_team: 'invalidTeam',
   invalid_venue: 'invalidVenue',
-  invalid_configuration: 'invalidConfiguration'
+  invalid_configuration: 'invalidConfiguration',
+  invalid_role: 'invalidRole',
+  account_not_registered: 'accountNotRegistered',
+  final_admin: 'finalAdministratorProtected',
+  role_no_change: 'roleNoChange',
+  role_rejected: 'roleRejected'
 };
 
 export function formatSchedule(date: Date, locale: string, timeZone: string) {

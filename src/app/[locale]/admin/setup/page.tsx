@@ -1,6 +1,7 @@
 import {getTranslations} from 'next-intl/server';
 
 import {PostgresAdminDashboardStore} from '@/courtside/adapters/postgres/admin-dashboard-store';
+import {PostgresRoleAdministrationDashboardStore} from '@/courtside/adapters/postgres/role-administration-dashboard-store';
 
 import {selectAdminContext} from '../admin-context';
 import {
@@ -13,6 +14,7 @@ import {requireAdminSession} from '../admin-session';
 import {
   SeasonConfigurationPanel,
   SeasonSetupForm,
+  RoleAdministrationPanel,
   TeamParticipationPanel,
   VenueManagementPanel
 } from '../setup-controls';
@@ -34,6 +36,9 @@ export default async function SetupPage({
   const {pool, account} = await requireAdminSession(locale);
   const leagues = account ? await new PostgresAdminDashboardStore(pool).load(account.id) : [];
   const {league, season} = selectAdminContext(leagues, query.season, query.league);
+  const roles = account && league
+    ? await new PostgresRoleAdministrationDashboardStore(pool).load(account.id, league.id, season?.id ?? null)
+    : null;
   const gameCount = season
     ? season.scheduledGames.length + season.postponedGames.length + season.inProgressGames.length + season.completedGames.length
     : 0;
@@ -117,6 +122,37 @@ export default async function SetupPage({
               removalSummary: t('teamRemovalSummary')
             }}
             locale={locale}
+            season={season}
+          />
+        </section>
+      ) : null}
+
+      {league && account && roles ? (
+        <section className="setup-group authority-setup-group">
+          <div className="section-heading"><div><p className="panel-kicker">{t('authoritySetupGroupKicker')}</p><h2>{t('authoritySetupGroupTitle')}</h2></div></div>
+          <RoleAdministrationPanel
+            actorAccountId={account.id}
+            labels={{
+              kicker: t('roleAdministrationKicker'),
+              title: t('roleAdministrationTitle'),
+              summary: t('roleAdministrationSummary'),
+              administrators: t('leagueAdministrators'),
+              registeredEmail: t('registeredAccountEmail'),
+              optionalReason: t('optionalReason'),
+              grant: t('grantAdministrator'),
+              revoke: t('revokeAuthority'),
+              you: t('currentAccount'),
+              finalProtected: t('finalAdministratorProtectedShort'),
+              captains: t('teamCaptains'),
+              captainSummary: t('teamCaptainMarkerSummary'),
+              seasonTeam: t('seasonTeam'),
+              assignCaptain: t('assignCaptain'),
+              noTeams: t('captainNeedsTeams'),
+              noCaptains: t('noTeamCaptains')
+            }}
+            leagueId={league.id}
+            locale={locale}
+            roles={roles}
             season={season}
           />
         </section>

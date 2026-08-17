@@ -2,13 +2,18 @@ import type {
   AdminSeason,
   AdminVenue
 } from '@/courtside/adapters/postgres/admin-dashboard-store';
+import type {RoleAdministrationView} from '@/courtside/adapters/postgres/role-administration-dashboard-store';
 
 import {
   addSeasonTeamsAction,
   archiveVenueAction,
   createSeasonAction,
   createVenueAction,
+  grantLeagueAdministratorAction,
   removeSeasonTeamAction,
+  revokeLeagueAdministratorAction,
+  revokeTeamCaptainAction,
+  assignTeamCaptainAction,
   updateSeasonConfigurationAction,
   updateVenueAction
 } from './actions';
@@ -241,6 +246,97 @@ export function TeamParticipationPanel({
           )}
           <p className="empty-copy">{labels.removalSummary}</p>
         </div>
+      </div>
+    </section>
+  );
+}
+
+export function RoleAdministrationPanel({
+  leagueId,
+  season,
+  roles,
+  locale,
+  actorAccountId,
+  labels
+}: {
+  leagueId: string;
+  season: AdminSeason | null;
+  roles: RoleAdministrationView;
+  locale: string;
+  actorAccountId: string;
+  labels: {
+    kicker: string;
+    title: string;
+    summary: string;
+    administrators: string;
+    registeredEmail: string;
+    optionalReason: string;
+    grant: string;
+    revoke: string;
+    you: string;
+    finalProtected: string;
+    captains: string;
+    captainSummary: string;
+    seasonTeam: string;
+    assignCaptain: string;
+    noTeams: string;
+    noCaptains: string;
+  };
+}) {
+  return (
+    <section className="panel role-admin-panel">
+      <div className="panel-heading"><div><p className="panel-kicker">{labels.kicker}</p><h3>{labels.title}</h3></div></div>
+      <p className="empty-copy">{labels.summary}</p>
+      <div className="role-admin-grid">
+        <section>
+          <h4>{labels.administrators}</h4>
+          <div className="role-holder-list">
+            {roles.administrators.map((administrator) => (
+              <article className="role-holder" key={administrator.assignmentId}>
+                <div><strong>{administrator.displayName}</strong>{administrator.accountId === actorAccountId ? <span className="status-pill">{labels.you}</span> : null}<small>{administrator.contactEmail}</small></div>
+                {roles.administrators.length > 1 ? (
+                  <form action={revokeLeagueAdministratorAction}>
+                    <CommandFields contextSeasonId={season?.id} locale={locale} />
+                    <input name="assignmentId" type="hidden" value={administrator.assignmentId} />
+                    <button className="button-danger" type="submit">{labels.revoke}</button>
+                  </form>
+                ) : <small>{labels.finalProtected}</small>}
+              </article>
+            ))}
+          </div>
+          <form action={grantLeagueAdministratorAction} className="stack-form compact-form role-grant-form">
+            <CommandFields contextSeasonId={season?.id} locale={locale} />
+            <input name="leagueId" type="hidden" value={leagueId} />
+            <label><span>{labels.registeredEmail}</span><input autoComplete="email" name="targetEmail" required type="email" /></label>
+            <label><span>{labels.optionalReason}</span><input name="reason" type="text" /></label>
+            <button type="submit">{labels.grant}</button>
+          </form>
+        </section>
+        <section>
+          <h4>{labels.captains}</h4>
+          <p className="empty-copy">{labels.captainSummary}</p>
+          {!season || season.teams.length === 0 ? <p className="empty-copy">{labels.noTeams}</p> : (
+            <form action={assignTeamCaptainAction} className="stack-form compact-form role-grant-form">
+              <CommandFields contextSeasonId={season.id} locale={locale} />
+              <label><span>{labels.seasonTeam}</span><select name="seasonTeamId" required><option value="">—</option>{season.teams.map((team) => <option key={team.id} value={team.id}>{team.name}</option>)}</select></label>
+              <label><span>{labels.registeredEmail}</span><input autoComplete="email" name="targetEmail" required type="email" /></label>
+              <label><span>{labels.optionalReason}</span><input name="reason" type="text" /></label>
+              <button type="submit">{labels.assignCaptain}</button>
+            </form>
+          )}
+          <div className="role-holder-list captain-list">
+            {roles.captains.length === 0 ? <p className="empty-copy">{labels.noCaptains}</p> : roles.captains.map((captain) => (
+              <article className="role-holder" key={captain.assignmentId}>
+                <div><strong>{captain.teamName}</strong><span>{captain.displayName}</span><small>{captain.contactEmail}</small></div>
+                <form action={revokeTeamCaptainAction}>
+                  <CommandFields contextSeasonId={season?.id} locale={locale} />
+                  <input name="assignmentId" type="hidden" value={captain.assignmentId} />
+                  <button className="button-danger" type="submit">{labels.revoke}</button>
+                </form>
+              </article>
+            ))}
+          </div>
+        </section>
       </div>
     </section>
   );

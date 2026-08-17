@@ -43,6 +43,7 @@ League Setup owns infrequent configuration:
 - creation of another Season;
 - active-Season standings configuration; and
 - active-Season Team participation.
+- League Administrator and active-Season Team Captain assignments.
 
 The setup page shows a derived readiness checklist for Season existence, minimum Team participation, optional reusable Venue availability, and first scheduled Game. The checklist does not create new lifecycle state and is not an authoritative completion record. Frozen Season configuration remains read-only under the accepted configuration lifecycle.
 

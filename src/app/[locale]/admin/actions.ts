@@ -5,6 +5,7 @@ import {redirect} from 'next/navigation';
 
 import {PostgresGameResultStore} from '@/courtside/adapters/postgres/finalize-game-store';
 import {PostgresGameOperationStore} from '@/courtside/adapters/postgres/game-operation-store';
+import {PostgresRoleAssignmentStore} from '@/courtside/adapters/postgres/role-assignment-store';
 import {getRuntimePostgresPool} from '@/courtside/adapters/postgres/runtime-pool';
 import {PostgresCreateSeasonStore} from '@/courtside/adapters/postgres/season-setup-store';
 import {PostgresSeasonTeamStore} from '@/courtside/adapters/postgres/season-team-store';
@@ -24,6 +25,11 @@ import {
   GameOperationRejected,
   type GameOperationCommand
 } from '@/courtside/services/manage-game';
+import {
+  createRoleAssignmentService,
+  RoleAssignmentRejected,
+  type RoleAssignmentCommand
+} from '@/courtside/services/manage-role-assignments';
 import {
   createSeasonService,
   CreateSeasonRejected
@@ -59,6 +65,12 @@ type PendingGameResultCommand = GameResultCommand extends infer Command
 type PendingVenueCommand = VenueCommand extends infer Command
   ? Command extends VenueCommand
     ? Omit<Command, 'actorAccountId'>
+    : never
+  : never;
+
+type PendingRoleAssignmentCommand = RoleAssignmentCommand extends infer Command
+  ? Command extends RoleAssignmentCommand
+    ? Omit<Command, 'actorAccountId' | 'commandId' | 'reason'>
     : never
   : never;
 
@@ -560,4 +572,72 @@ export async function correctGameResultAction(formData: FormData) {
     winningSeasonTeamId,
     reason
   }, formData);
+}
+
+function roleError(error: unknown) {
+  if (!(error instanceof RoleAssignmentRejected)) return 'unexpected';
+  if (error.report.violatedRule === 'account.email') return 'invalid_role';
+  if (error.report.violatedRule === 'user_account.exists') return 'account_not_registered';
+  if (error.report.violatedRule === 'league_admin.final_active_preserved') return 'final_admin';
+  if (error.report.violatedRule === 'league_admin.active_unique' || error.report.violatedRule === 'team_captain.no_op') return 'role_no_change';
+  return 'role_rejected';
+}
+
+async function runRoleAssignment(formData: FormData, command: PendingRoleAssignmentCommand) {
+  const locale = supportedLocale(formData.get('locale'));
+  const commandId = commandIdentity(formData.get('commandId'));
+  if (!commandId) redirect(adminLocation(locale, 'setup', formData, {error: 'invalid_role'}));
+  const {pool, account} = await authenticatedAccount();
+  if (!account) redirect(`/${locale}/sign-in`);
+
+  let outcome: string;
+  try {
+    const result = await createRoleAssignmentService(new PostgresRoleAssignmentStore(pool))({
+      ...command,
+      commandId,
+      actorAccountId: account.id,
+      reason: String(formData.get('reason') ?? '')
+    } as RoleAssignmentCommand);
+    outcome = result.operation === 'grant_league_admin'
+      ? 'league_admin_granted'
+      : result.operation === 'revoke_league_admin'
+        ? 'league_admin_revoked'
+        : result.operation === 'assign_team_captain'
+          ? 'captain_assigned'
+          : 'captain_revoked';
+  } catch (error) {
+    redirect(adminLocation(locale, 'setup', formData, {error: roleError(error)}));
+  }
+  revalidateAdmin(locale);
+  redirect(adminLocation(locale, 'setup', formData, {result: outcome}));
+}
+
+export async function grantLeagueAdministratorAction(formData: FormData) {
+  const leagueId = entityIdentity(formData.get('leagueId'));
+  const targetEmail = String(formData.get('targetEmail') ?? '');
+  const locale = supportedLocale(formData.get('locale'));
+  if (!leagueId || !targetEmail.trim()) redirect(adminLocation(locale, 'setup', formData, {error: 'invalid_role'}));
+  await runRoleAssignment(formData, {type: 'grant_league_admin', leagueId, targetEmail});
+}
+
+export async function revokeLeagueAdministratorAction(formData: FormData) {
+  const assignmentId = entityIdentity(formData.get('assignmentId'));
+  const locale = supportedLocale(formData.get('locale'));
+  if (!assignmentId) redirect(adminLocation(locale, 'setup', formData, {error: 'invalid_role'}));
+  await runRoleAssignment(formData, {type: 'revoke_league_admin', assignmentId});
+}
+
+export async function assignTeamCaptainAction(formData: FormData) {
+  const seasonTeamId = entityIdentity(formData.get('seasonTeamId'));
+  const targetEmail = String(formData.get('targetEmail') ?? '');
+  const locale = supportedLocale(formData.get('locale'));
+  if (!seasonTeamId || !targetEmail.trim()) redirect(adminLocation(locale, 'setup', formData, {error: 'invalid_role'}));
+  await runRoleAssignment(formData, {type: 'assign_team_captain', seasonTeamId, targetEmail});
+}
+
+export async function revokeTeamCaptainAction(formData: FormData) {
+  const assignmentId = entityIdentity(formData.get('assignmentId'));
+  const locale = supportedLocale(formData.get('locale'));
+  if (!assignmentId) redirect(adminLocation(locale, 'setup', formData, {error: 'invalid_role'}));
+  await runRoleAssignment(formData, {type: 'revoke_team_captain', assignmentId});
 }
