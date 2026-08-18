@@ -6,6 +6,7 @@ import {redirect} from 'next/navigation';
 import {PostgresGameResultStore} from '@/courtside/adapters/postgres/finalize-game-store';
 import {PostgresGameOperationStore} from '@/courtside/adapters/postgres/game-operation-store';
 import {PostgresRoleAssignmentStore} from '@/courtside/adapters/postgres/role-assignment-store';
+import {PostgresPlayerPointsStore} from '@/courtside/adapters/postgres/player-points-store';
 import {getRuntimePostgresPool} from '@/courtside/adapters/postgres/runtime-pool';
 import {PostgresDeleteSeasonStore} from '@/courtside/adapters/postgres/season-deletion-store';
 import {PostgresCreateSeasonStore} from '@/courtside/adapters/postgres/season-setup-store';
@@ -31,6 +32,10 @@ import {
   RoleAssignmentRejected,
   type RoleAssignmentCommand
 } from '@/courtside/services/manage-role-assignments';
+import {
+  createPlayerPointsService,
+  PlayerPointsRejected
+} from '@/courtside/services/manage-player-points';
 import {
   createSeasonService,
   CreateSeasonRejected
@@ -90,6 +95,15 @@ function nonnegativeInteger(value: FormDataEntryValue | null) {
   }
   const number = Number(text);
   return Number.isSafeInteger(number) ? number : null;
+}
+
+function unknownOrNonnegativeInteger(value: FormDataEntryValue | null) {
+  const text = String(value ?? '').trim();
+  if (text === '') return {valid: true as const, value: null};
+  const number = nonnegativeInteger(text);
+  return number === null
+    ? {valid: false as const, value: null}
+    : {valid: true as const, value: number};
 }
 
 function commandIdentity(value: FormDataEntryValue | null) {
@@ -609,6 +623,63 @@ export async function correctGameResultAction(formData: FormData) {
     winningSeasonTeamId,
     reason
   }, formData);
+}
+
+export async function recordPlayerPointsAction(formData: FormData) {
+  const locale = supportedLocale(formData.get('locale'));
+  const commandId = commandIdentity(formData.get('commandId'));
+  const gameId = entityIdentity(formData.get('gameId'));
+  const verificationStatus = formData.get('verificationStatus') === 'confirmed'
+    ? 'confirmed' as const
+    : formData.get('verificationStatus') === 'provisional'
+      ? 'provisional' as const
+      : null;
+  const membershipValues = formData.getAll('rosterMembershipId');
+  const entries = membershipValues.map((value) => {
+    const rosterMembershipId = entityIdentity(value);
+    const points = rosterMembershipId
+      ? unknownOrNonnegativeInteger(formData.get(`points-${rosterMembershipId}`))
+      : {valid: false as const, value: null};
+    return {rosterMembershipId, points};
+  });
+
+  if (
+    !commandId ||
+    !gameId ||
+    !verificationStatus ||
+    entries.length === 0 ||
+    entries.some((entry) => !entry.rosterMembershipId || !entry.points.valid)
+  ) {
+    redirect(adminLocation(locale, 'games', formData, {error: 'invalid_player_points'}));
+  }
+
+  const {pool, account} = await authenticatedAccount();
+  if (!account) redirect(`/${locale}/sign-in`);
+
+  let outcome = 'player_points_saved';
+  try {
+    await createPlayerPointsService(new PostgresPlayerPointsStore(pool))({
+      type: 'record_player_points',
+      commandId,
+      actorAccountId: account.id,
+      gameId,
+      verificationStatus,
+      entries: entries.map((entry) => ({
+        rosterMembershipId: entry.rosterMembershipId!,
+        points: entry.points.value
+      })),
+      reason: String(formData.get('reason') ?? '').trim() || null
+    });
+  } catch (error) {
+    outcome = error instanceof PlayerPointsRejected
+      ? error.report.violatedRule === 'player_stat_line.material_change'
+        ? 'player_points_unchanged'
+        : 'player_points_rejected'
+      : 'unexpected';
+  }
+
+  revalidateAdmin(locale);
+  redirect(adminLocation(locale, 'games', formData, {result: outcome}));
 }
 
 function roleError(error: unknown) {

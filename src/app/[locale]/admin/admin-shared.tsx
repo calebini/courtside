@@ -33,6 +33,9 @@ const resultMessageKeys: Record<string, string> = {
   league_admin_revoked: 'leagueAdminRevoked',
   captain_assigned: 'captainAssigned',
   captain_revoked: 'captainRevoked',
+  player_points_saved: 'playerPointsSaved',
+  player_points_unchanged: 'playerPointsUnchanged',
+  player_points_rejected: 'playerPointsRejected',
   rejected: 'rejected',
   unexpected: 'unexpected'
 };
@@ -44,6 +47,8 @@ const rejectedResults = new Set([
   'team_rejected',
   'venue_rejected',
   'configuration_rejected',
+  'player_points_unchanged',
+  'player_points_rejected',
   'unexpected'
 ]);
 
@@ -61,7 +66,8 @@ const errorMessageKeys: Record<string, string> = {
   account_not_registered: 'accountNotRegistered',
   final_admin: 'finalAdministratorProtected',
   role_no_change: 'roleNoChange',
-  role_rejected: 'roleRejected'
+  role_rejected: 'roleRejected',
+  invalid_player_points: 'invalidPlayerPoints'
 };
 
 export function formatSchedule(date: Date, locale: string, timeZone: string) {

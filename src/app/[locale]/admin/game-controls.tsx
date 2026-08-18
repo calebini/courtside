@@ -3,6 +3,7 @@ import type {
   AdminGame,
   AdminVenue
 } from '@/courtside/adapters/postgres/admin-dashboard-store';
+import type {AdminPlayerPointEntry} from '@/courtside/adapters/postgres/player-points-dashboard-store';
 
 import {
   cancelGameAction,
@@ -11,6 +12,7 @@ import {
   forfeitGameAction,
   postponeGameAction,
   rescheduleGameAction,
+  recordPlayerPointsAction,
   scheduleGameAction,
   startGameAction
 } from './actions';
@@ -35,6 +37,21 @@ export interface CompletedLabels {
   readonly score: string;
   readonly versus: string;
   readonly winner: string;
+}
+
+export interface PlayerPointLabels {
+  readonly summary: string;
+  readonly help: string;
+  readonly noEligiblePlayers: string;
+  readonly points: string;
+  readonly unknown: string;
+  readonly provisional: string;
+  readonly confirmed: string;
+  readonly verification: string;
+  readonly saveProvisional: string;
+  readonly saveConfirmed: string;
+  readonly optionalReason: string;
+  readonly submit: string;
 }
 
 export function VenueFields({
@@ -170,14 +187,24 @@ export function CompletedGameCard({
   locale,
   contextSeasonId,
   timeZone,
-  labels
+  labels,
+  playerPoints,
+  playerPointLabels
 }: {
   game: AdminCompletedGame;
   locale: string;
   contextSeasonId: string;
   timeZone: string;
   labels: CompletedLabels;
+  playerPoints: readonly AdminPlayerPointEntry[];
+  playerPointLabels: PlayerPointLabels;
 }) {
+  const playerPointsByTeam = new Map<string, AdminPlayerPointEntry[]>();
+  for (const entry of playerPoints) {
+    const teamEntries = playerPointsByTeam.get(entry.seasonTeamId) ?? [];
+    teamEntries.push(entry);
+    playerPointsByTeam.set(entry.seasonTeamId, teamEntries);
+  }
   return (
     <article className="game-card completed-card">
       <div className="completed-heading">
@@ -193,6 +220,61 @@ export function CompletedGameCard({
         timeZone={timeZone}
         versus={labels.versus}
       />
+      <details className="player-points-details">
+        <summary>{playerPointLabels.summary}</summary>
+        {playerPoints.length === 0 ? (
+          <p className="empty-copy">{playerPointLabels.noEligiblePlayers}</p>
+        ) : (
+          <form action={recordPlayerPointsAction} className="stack-form compact-form player-points-form">
+            <CommandFields contextSeasonId={contextSeasonId} gameId={game.id} locale={locale} />
+            <p className="form-help">{playerPointLabels.help}</p>
+            {[game.homeSeasonTeamId, game.awaySeasonTeamId].map((seasonTeamId) => {
+              const teamEntries = playerPointsByTeam.get(seasonTeamId) ?? [];
+              if (teamEntries.length === 0) return null;
+              return (
+                <fieldset className="player-points-team" key={seasonTeamId}>
+                  <legend>{teamEntries[0].teamName}</legend>
+                  {teamEntries.map((entry) => (
+                    <label className="player-point-row" key={entry.rosterMembershipId}>
+                      <input name="rosterMembershipId" type="hidden" value={entry.rosterMembershipId} />
+                      <span className="player-point-name">{entry.playerName}</span>
+                      <input
+                        aria-label={`${entry.playerName} ${playerPointLabels.points}`}
+                        defaultValue={entry.points ?? ''}
+                        inputMode="numeric"
+                        min="0"
+                        name={`points-${entry.rosterMembershipId}`}
+                        placeholder="—"
+                        step="1"
+                        type="number"
+                      />
+                      <span className={`stat-verification ${entry.verificationStatus ?? 'unknown'}`}>
+                        {entry.verificationStatus === 'confirmed'
+                          ? playerPointLabels.confirmed
+                          : entry.verificationStatus === 'provisional'
+                            ? playerPointLabels.provisional
+                            : playerPointLabels.unknown}
+                      </span>
+                    </label>
+                  ))}
+                </fieldset>
+              );
+            })}
+            <label>
+              <span>{playerPointLabels.verification}</span>
+              <select defaultValue="provisional" name="verificationStatus">
+                <option value="provisional">{playerPointLabels.saveProvisional}</option>
+                <option value="confirmed">{playerPointLabels.saveConfirmed}</option>
+              </select>
+            </label>
+            <label>
+              <span>{playerPointLabels.optionalReason}</span>
+              <input name="reason" type="text" />
+            </label>
+            <button type="submit">{playerPointLabels.submit}</button>
+          </form>
+        )}
+      </details>
       <details className="result-details">
         <summary>{labels.correctResult}</summary>
         <form action={correctGameResultAction} className="stack-form compact-form">

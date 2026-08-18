@@ -94,5 +94,9 @@ The seventh slice adds Player Management Relationships, account-requested access
 
 The sixteenth slice adds exact-name-confirmed deletion of a dependency-free Season while retaining
 audit history and protecting used Seasons from destructive removal.
+The seventeenth slice adds points-first Player Stat Lines attributed through Game-time roster
+eligibility, with unknown distinct from zero, partial provisional or confirmed values, atomic
+League Administrator batch entry, and append-only audit history. Public Player statistics remain
+deferred behind a visibility policy.
 
 Production authorization for the bootstrap command, production email and abuse-control setup, persisted random draws, playoff correction conflicts, and the remaining domain surfaces are later slices.

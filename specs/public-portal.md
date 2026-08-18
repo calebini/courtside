@@ -26,4 +26,4 @@ The initial implementation renders fresh database-backed Server Components on ea
 
 ## Deferred Privacy Surface
 
-Public Player profiles, profile photos, Player Stat Lines, Media, and member identity are not part of this slice. Their publication requires an accepted privacy and visibility policy before delivery. Private Leagues or Seasons, tenant hostnames, League slugs, and custom public branding are also deferred.
+Public Player profiles, profile photos, Player Stat Lines, Player game logs, Media, and member identity are not part of this slice. The authenticated points-entry workflow does not change that boundary. Their publication requires an accepted privacy and visibility policy before delivery. Private Leagues or Seasons, tenant hostnames, League slugs, and custom public branding are also deferred.

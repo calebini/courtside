@@ -29,7 +29,7 @@ The Desk exposes direct links to the corresponding complete workflows. It shows 
 
 ## Games
 
-Games owns the recurring competition workflow: scheduling, starting, postponing, rescheduling, cancelling, forfeiting, finalizing, correcting authoritative results, viewing standings, and inspecting completed history. State requiring attention appears before ordinary upcoming work. Existing server actions, application services, and audit behavior remain unchanged.
+Games owns the recurring competition workflow: scheduling, starting, postponing, rescheduling, cancelling, forfeiting, finalizing, correcting authoritative results, entering and verifying Player points, viewing standings, and inspecting completed history. Player points remain subordinate to a completed Game disclosure rather than creating another top-level destination. State requiring attention appears before ordinary upcoming work. Existing server actions, application services, and audit behavior remain unchanged.
 
 ## People
 

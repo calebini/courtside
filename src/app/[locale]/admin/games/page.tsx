@@ -2,6 +2,7 @@ import {getTranslations} from 'next-intl/server';
 import Link from 'next/link';
 
 import {PostgresAdminDashboardStore} from '@/courtside/adapters/postgres/admin-dashboard-store';
+import {PostgresPlayerPointsDashboardStore} from '@/courtside/adapters/postgres/player-points-dashboard-store';
 
 import {selectAdminContext} from '../admin-context';
 import {
@@ -36,6 +37,9 @@ export default async function GamesPage({
   const {pool, account} = await requireAdminSession(locale);
   const leagues = account ? await new PostgresAdminDashboardStore(pool).load(account.id) : [];
   const {league, season} = selectAdminContext(leagues, query.season);
+  const playerPointsByGame = account && season
+    ? await new PostgresPlayerPointsDashboardStore(pool).loadForSeason(account.id, season.id)
+    : new Map();
   const forfeitLabels = {
     forfeit: t('forfeit'),
     forfeitGame: t('forfeitGame'),
@@ -54,6 +58,20 @@ export default async function GamesPage({
     score: t('score'),
     versus: t('versus'),
     winner: t('winner')
+  };
+  const playerPointLabels = {
+    summary: t('playerPoints'),
+    help: t('playerPointsHelp'),
+    noEligiblePlayers: t('noEligiblePlayers'),
+    points: t('individualPoints'),
+    unknown: t('pointsUnknown'),
+    provisional: t('pointsProvisional'),
+    confirmed: t('pointsConfirmed'),
+    verification: t('pointsVerification'),
+    saveProvisional: t('savePointsProvisional'),
+    saveConfirmed: t('savePointsConfirmed'),
+    optionalReason: t('optionalReason'),
+    submit: t('savePlayerPoints')
   };
 
   return (
@@ -209,7 +227,7 @@ export default async function GamesPage({
           <section className="panel completed-panel" id="completed">
             <div className="panel-heading"><div><p className="panel-kicker">{t('completedKicker')}</p><h3>{t('completedGames')}</h3></div><span className="status-pill">{season.completedGames.length}</span></div>
             {season.completedGames.length === 0 ? <p className="empty-copy">{t('noCompletedGames')}</p> : (
-              <div className="completed-grid">{[...season.completedGames].reverse().map((game) => <CompletedGameCard contextSeasonId={season.id} game={game} key={game.id} labels={completedLabels} locale={locale} timeZone={league.timezone} />)}</div>
+              <div className="completed-grid">{[...season.completedGames].reverse().map((game) => <CompletedGameCard contextSeasonId={season.id} game={game} key={game.id} labels={completedLabels} locale={locale} playerPointLabels={playerPointLabels} playerPoints={playerPointsByGame.get(game.id) ?? []} timeZone={league.timezone} />)}</div>
             )}
           </section>
         </>

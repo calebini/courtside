@@ -63,6 +63,27 @@ test('a League Administrator manages a Game through finalization, correction, an
 
   let completedCard = page.locator('.completed-card').filter({hasText: 'Court 3'});
   await expect(completedCard).toContainText('81–77');
+  let playerPoints = completedCard.locator('details.player-points-details');
+  await playerPoints.locator('summary').click();
+  await playerPoints.getByLabel('Avery Chen points').fill('0');
+  await playerPoints.getByLabel('Jordan Lee points').fill('12');
+  await playerPoints.getByLabel('Verification for submitted values').selectOption('confirmed');
+  await playerPoints.getByLabel('Reason or note (optional)').fill('Verified score sheet');
+  await playerPoints.getByRole('button', {name: 'Save Player points'}).click();
+  await expect(page.getByText(/Player points were saved/)).toBeVisible();
+
+  completedCard = page.locator('.completed-card').filter({hasText: 'Court 3'});
+  playerPoints = completedCard.locator('details.player-points-details');
+  await playerPoints.locator('summary').click();
+  await expect(playerPoints.getByLabel('Avery Chen points')).toHaveValue('0');
+  await expect(playerPoints.getByLabel('Jordan Lee points')).toHaveValue('12');
+  await expect(playerPoints.getByText('Confirmed')).toHaveCount(2);
+  await playerPoints.getByLabel('Jordan Lee points').fill('14');
+  await playerPoints.getByLabel('Verification for submitted values').selectOption('provisional');
+  await playerPoints.getByLabel('Reason or note (optional)').fill('Score sheet correction');
+  await playerPoints.getByRole('button', {name: 'Save Player points'}).click();
+  await expect(page.getByText(/Player points were saved/)).toBeVisible();
+
   const correction = completedCard.locator('details.result-details');
   await correction.locator('summary').click();
   await correction.getByLabel('Harbour Hawks score').fill('70');
