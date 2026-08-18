@@ -63,7 +63,7 @@ npm run dev
 
 The localized public portal is available at `/en` and `/fr`, with schedule, results, and standings at `/{locale}/schedule`, `/{locale}/results`, and `/{locale}/standings`. These routes require no login and render fresh authoritative data in the League timezone.
 
-The authenticated slices add localized registration, sign-in, password recovery, the protected `/{locale}/players` portal, and a shared administrator shell. `/{locale}/admin` is the recurring-work overview, `/{locale}/admin/games` owns complete Game operations, `/{locale}/admin/setup` contains infrequent League and Season setup, and the People workflows remain at `/{locale}/admin/rosters` and `/{locale}/admin/player-access`. Registration confirmation and password-recovery messages are visible in local Inbucket at `http://127.0.0.1:54324`. Resetting the local database loads disposable fixtures:
+The authenticated slices add localized registration, sign-in, password recovery, the protected `/{locale}/players` profile portal, the League-wide `/{locale}/stats` member destination, and a shared administrator shell. `/{locale}/admin` is the recurring-work overview, `/{locale}/admin/games` owns complete Game operations, `/{locale}/admin/setup` contains infrequent League and Season setup, and the People workflows remain at `/{locale}/admin/rosters` and `/{locale}/admin/player-access`. Registration confirmation and password-recovery messages are visible in local Inbucket at `http://127.0.0.1:54324`. Resetting the local database loads disposable fixtures:
 
 ```text
 Email: admin@courtside.local
@@ -97,6 +97,12 @@ audit history and protecting used Seasons from destructive removal.
 The seventeenth slice adds points-first Player Stat Lines attributed through Game-time roster
 eligibility, with unknown distinct from zero, partial provisional or confirmed values, atomic
 League Administrator batch entry, and append-only audit history. Public Player statistics remain
-deferred behind a visibility policy.
+deferred behind the accepted authenticated-member visibility policy.
+
+The eighteenth slice adds the localized, read-only member statistics destination. Active League
+Administrators, active Team Captains, and Accounts with an approved Player management relationship
+can see confirmed scoring ranks and coverage, every Season Player's eligibility-based Game log, and
+completed-Game points-first box scores. Provisional and unknown values remain visible without
+affecting confirmed aggregates, and official Team scores remain independent of Player point sums.
 
 Production authorization for the bootstrap command, production email and abuse-control setup, persisted random draws, playoff correction conflicts, and the remaining domain surfaces are later slices.

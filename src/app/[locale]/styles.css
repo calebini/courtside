@@ -1658,6 +1658,176 @@ tbody tr:last-child td {
   flex-wrap: wrap;
 }
 
+.member-stats-shell {
+  max-width: 1240px;
+}
+
+.member-stats-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.member-stats-heading > div {
+  max-width: 760px;
+}
+
+.member-stats-shell .empty-state .primary-link {
+  margin-top: 1rem;
+}
+
+.member-leaderboard {
+  margin-bottom: 1rem;
+}
+
+.member-stats-grid {
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.72fr) minmax(32rem, 1.28fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.member-directory-grid {
+  grid-template-columns: minmax(18rem, 0.62fr) minmax(32rem, 1.38fr);
+}
+
+.member-game-list ol,
+.member-player-directory ol {
+  display: grid;
+  gap: 0.65rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.member-game-list li,
+.member-player-directory li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding: 0.75rem;
+  border: 1px solid #e1d8c8;
+  border-radius: 0.55rem;
+  background: #fffdf8;
+  font-size: 0.78rem;
+}
+
+.member-game-list li.selected,
+.member-player-directory li.selected {
+  border-color: #b44f32;
+  box-shadow: 0 0 0 2px rgb(180 79 50 / 10%);
+}
+
+.member-game-list li div,
+.member-player-directory li div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.member-game-list li span,
+.member-player-directory li span {
+  color: #697183;
+  font-size: 0.72rem;
+}
+
+.member-game-list li a,
+.member-player-directory li a,
+.member-stats-shell table a {
+  color: #9a4932;
+  font-weight: 750;
+}
+
+.official-score {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 1rem 0;
+  padding: 0.9rem 1rem;
+  border-radius: 0.55rem;
+  background: #f4eee3;
+}
+
+.official-score span {
+  color: #697183;
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.official-score strong {
+  font-size: 1.05rem;
+}
+
+.box-score-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.2rem;
+}
+
+.box-score-team {
+  min-width: 0;
+}
+
+.box-score-team h3 {
+  margin: 0;
+}
+
+.box-score-team th:first-child,
+.box-score-team td:first-child,
+.member-player-summary th:first-child,
+.member-player-summary td:first-child {
+  text-align: left;
+}
+
+.member-search {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.member-search label {
+  display: grid;
+  gap: 0.35rem;
+  color: #17223b;
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.player-stat-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 1.2rem 0;
+}
+
+.player-stat-metrics div {
+  padding: 0.85rem;
+  border-radius: 0.55rem;
+  background: #f4eee3;
+}
+
+.player-stat-metrics dt {
+  min-height: 2.3em;
+  color: #697183;
+  font-size: 0.68rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.player-stat-metrics dd {
+  margin: 0.4rem 0 0;
+  color: #17223b;
+  font: 700 1.5rem/1 Georgia, serif;
+}
+
 @media (max-width: 850px) {
   .season-grid,
   .operations-grid,
@@ -1668,6 +1838,16 @@ tbody tr:last-child td {
   .admin-context-bar,
   .setup-prompt,
   .desk-overview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .member-stats-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .member-stats-grid,
+  .box-score-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1787,5 +1967,14 @@ tbody tr:last-child td {
     align-items: flex-start;
     flex-direction: column;
     justify-content: center;
+  }
+
+  .member-search,
+  .player-stat-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .player-stat-metrics dt {
+    min-height: auto;
   }
 }

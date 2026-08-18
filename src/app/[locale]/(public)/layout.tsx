@@ -20,6 +20,7 @@ export default async function PublicLayout({
           <Link href={`/${locale}/schedule`}>{t('schedule')}</Link>
           <Link href={`/${locale}/results`}>{t('results')}</Link>
           <Link href={`/${locale}/standings`}>{t('standings')}</Link>
+          <Link href={`/${locale}/stats`}>{t('memberStats')}</Link>
         </nav>
         <Link className="admin-link" href={`/${locale}/admin`}>{t('leagueDesk')}</Link>
       </header>

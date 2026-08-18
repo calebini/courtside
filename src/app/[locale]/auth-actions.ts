@@ -3,6 +3,7 @@
 import {redirect} from 'next/navigation';
 
 import {getCourtsideSiteUrl, isRegistrationOpen} from '@/courtside/adapters/config/auth-config';
+import {PostgresMemberStatisticsStore} from '@/courtside/adapters/postgres/member-statistics-store';
 import {PostgresPlayerAccessDashboardStore} from '@/courtside/adapters/postgres/player-access-dashboard-store';
 import {getRuntimePostgresPool} from '@/courtside/adapters/postgres/runtime-pool';
 import {PostgresUserAccountDirectory} from '@/courtside/adapters/postgres/user-account-directory';
@@ -54,10 +55,12 @@ export async function signIn(formData: FormData) {
   let destination: string;
   try {
     const {account} = await provisionCurrentIdentity(locale);
-    const isAdmin = await new PostgresPlayerAccessDashboardStore(
-      getRuntimePostgresPool()
-    ).hasAdministrativeAccess(account.id);
-    destination = `/${account.preferredLocale}/${isAdmin ? 'admin' : 'players'}`;
+    const pool = getRuntimePostgresPool();
+    const isAdmin = await new PostgresPlayerAccessDashboardStore(pool)
+      .hasAdministrativeAccess(account.id);
+    const hasMemberStatisticsAccess = isAdmin || await new PostgresMemberStatisticsStore(pool)
+      .hasAccess(account.id);
+    destination = `/${account.preferredLocale}/${isAdmin ? 'admin' : hasMemberStatisticsAccess ? 'stats' : 'players'}`;
   } catch {
     await supabase.auth.signOut();
     redirect(`/${locale}/sign-in?error=account`);

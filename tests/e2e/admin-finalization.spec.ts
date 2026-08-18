@@ -143,4 +143,25 @@ test('a League Administrator manages a Game through finalization, correction, an
   await expect(page.getByText('c.', {exact: true}).first()).toBeVisible();
   await expect(page.getByText(/Harbour Community Centre/).first()).toBeVisible();
   await expect(page.getByText('America/Los_Angeles')).toBeVisible();
+
+  await page.goto('/en/players');
+  await page.getByRole('button', {name: 'Sign out'}).click();
+  await page.getByLabel('Email').fill('member@courtside.local');
+  await page.getByLabel('Password').fill('courtside-local-member');
+  await page.getByRole('button', {name: 'Sign in'}).click();
+
+  await expect(page).toHaveURL(/\/en\/stats/);
+  await expect(page.getByRole('heading', {name: 'Player statistics'})).toBeVisible();
+  const leaderboard = page.locator('.member-leaderboard');
+  await expect(leaderboard.getByRole('row', {name: /Avery Chen/})).toContainText('0');
+  await expect(leaderboard.getByText('Jordan Lee')).toHaveCount(0);
+
+  const correctedGame = page.locator('.member-game-list li').filter({hasText: '70–75'});
+  await correctedGame.getByRole('link', {name: 'View box score'}).click();
+  const boxScore = page.locator('.member-box-score');
+  await expect(boxScore.locator('.official-score')).toContainText('Harbour Hawks 70–75 Northside Comets');
+  await expect(boxScore.getByRole('row', {name: /Avery Chen/})).toContainText('0');
+  await expect(boxScore.getByRole('row', {name: /Avery Chen/})).toContainText('Confirmed');
+  await expect(boxScore.getByRole('row', {name: /Jordan Lee/})).toContainText('14');
+  await expect(boxScore.getByRole('row', {name: /Jordan Lee/})).toContainText('Provisional');
 });

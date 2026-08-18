@@ -20,6 +20,7 @@
     "schedule": "Schedule",
     "results": "Results",
     "standings": "Standings",
+    "memberStats": "Player stats",
     "leagueDesk": "League desk",
     "footer": "Official league information from Courtside.",
     "scheduleKicker": "Game calendar",
@@ -117,7 +118,7 @@
     }
   },
   "MyPlayers": {
-    "leagueDesk": "League desk", "signOut": "Sign out", "eyebrow": "Private player profiles",
+    "leagueDesk": "League desk", "memberStats": "Player stats", "signOut": "Sign out", "eyebrow": "Private player profiles",
     "title": "My Players", "summary": "Manage the Player profiles the league has approved for this account.",
     "requestKicker": "Access", "requestTitle": "Request a Player", "requestSummary": "Search the League directory and choose the existing Player profile you want to manage. An administrator must approve the request.",
     "searchPlayers": "Search by Player or team name", "selectPlayer": "Select a Player", "startTyping": "Start typing a Player or team name to reveal matching profiles.", "noCurrentTeam": "No current team", "noMatches": "No Players match that search.", "noRequestablePlayers": "There are no additional Player profiles available to request.",
@@ -125,6 +126,19 @@
     "requested": "Requested", "approved": "Approved", "revoked": "Revoked", "awaitingApproval": "A League Administrator must approve this request before the profile becomes available.",
     "displayName": "Display name", "saveName": "Save name", "profilePhoto": "Profile photo", "photoHelp": "JPEG, PNG, or WebP; maximum 1 MiB.", "uploadPhoto": "Set or replace photo", "clearPhoto": "Remove photo",
     "profileUpdated": "The Player display name was updated and audited.", "photoUpdated": "The private profile photo was updated and audited.", "photoCleared": "The profile photo was removed and audited.", "invalidReference": "Select an available Player from the League directory.", "invalidProfile": "Enter a supported display name.", "invalidPhoto": "Choose a valid JPEG, PNG, or WebP image.", "photoTooLarge": "That image is larger than 1 MiB. Choose a smaller file.", "unsupportedPhoto": "Choose a JPEG, PNG, or WebP image whose contents match its format.", "photoUploadFailed": "The image is valid, but Storage could not save it. Try again.", "rejected": "That change was not authorized or conflicts with current Player access."
+  },
+  "MemberStats": {
+    "leagueDesk": "League desk", "myPlayers": "My Players", "signOut": "Sign out",
+    "eyebrow": "Member view", "title": "Player statistics", "summary": "Follow every player’s confirmed scoring totals, game log, and points-first box scores.",
+    "season": "Season", "viewSeason": "View season",
+    "noAccessTitle": "Player statistics access is not active", "noAccessSummary": "Join this league through an approved Player relationship, Team Captain assignment, or League Administrator assignment.", "requestAccess": "Request Player access",
+    "noSeasonTitle": "No season configured yet", "noSeasonSummary": "Player statistics will appear after the league creates its first season.",
+    "leaderboardKicker": "Confirmed scoring", "leaderboardTitle": "Player leaderboard", "leaderboardSummary": "Totals and averages use confirmed, recorded point values only. Unknown and provisional values do not affect rank.", "emptyLeaderboard": "No confirmed player points have been recorded in this season yet.",
+    "rank": "Rank", "player": "Player", "team": "Team", "totalPoints": "Total points", "recordedGames": "Recorded points games", "average": "Points per recorded game",
+    "gamesKicker": "Completed games", "gamesTitle": "Box scores", "emptyGames": "No final or forfeited games are available in this season.", "viewBoxScore": "View box score", "officialScore": "Official score", "final": "Final", "forfeit": "Forfeit", "regular": "Regular season", "playoff": "Playoffs",
+    "boxScore": "Points-first box score", "boxScoreNote": "Rows show roster eligibility at the game’s competition anchor, not proof of appearance. The official score is independent of player point totals.", "points": "Points", "status": "Status", "notRecorded": "Not recorded", "provisional": "Provisional", "confirmed": "Confirmed",
+    "directoryKicker": "Season directory", "directoryTitle": "Players", "directorySummary": "Browse every player rostered in this season, including historical team attribution after a transfer.", "searchPlayers": "Search players", "search": "Search", "noPlayers": "No players match this view.", "viewPlayer": "View player",
+    "playerSummary": "Player summary", "seasonTeams": "Season teams", "gameLog": "Game log", "opponent": "Opponent", "result": "Result", "gameLogNote": "A row means the player was roster-eligible for the game; it does not assert an appearance.", "noGameLog": "No completed-game eligibility is recorded for this player."
   },
   "PlayerAccessAdmin": {
     "myPlayers": "My Players", "leagueDesk": "League desk", "signOut": "Sign out", "eyebrow": "Player access requests", "title": "Review Player access", "summary": "Review member requests and decide who may manage each private Player profile.",

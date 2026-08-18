@@ -36,4 +36,4 @@ PostgreSQL integration setup and test commands are documented in [`docs/developm
 
 ## Local Demo
 
-The current end-to-end workflow provides a bilingual public schedule, results, and standings portal plus registration, email/password sign-in and recovery, private Player access requests, and protected League Administrator desks for timezone-safe Game operations, authoritative results, live standings, durable Players, and audited roster history. Start the local Supabase stack, reset its disposable fixtures, and run the web application using [`docs/development.md`](docs/development.md).
+The current end-to-end workflow provides a bilingual public schedule, results, and standings portal plus registration, email/password sign-in and recovery, private Player access requests, authenticated League-wide Player statistics and box scores, and protected League Administrator desks for timezone-safe Game operations, authoritative results, live standings, durable Players, and audited roster history. Start the local Supabase stack, reset its disposable fixtures, and run the web application using [`docs/development.md`](docs/development.md).

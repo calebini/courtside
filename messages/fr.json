@@ -20,6 +20,7 @@
     "schedule": "Horaire",
     "results": "Résultats",
     "standings": "Classement",
+    "memberStats": "Stats des joueurs",
     "leagueDesk": "Bureau de la ligue",
     "footer": "Renseignements officiels de la ligue fournis par Courtside.",
     "scheduleKicker": "Calendrier des matchs",
@@ -117,7 +118,7 @@
     }
   },
   "MyPlayers": {
-    "leagueDesk": "Bureau de la ligue", "signOut": "Se déconnecter", "eyebrow": "Profils privés des joueurs",
+    "leagueDesk": "Bureau de la ligue", "memberStats": "Stats des joueurs", "signOut": "Se déconnecter", "eyebrow": "Profils privés des joueurs",
     "title": "Mes joueurs", "summary": "Gérez les profils de joueurs approuvés par la ligue pour ce compte.",
     "requestKicker": "Accès", "requestTitle": "Demander un joueur", "requestSummary": "Recherchez dans le répertoire de la ligue et choisissez le profil existant à gérer. Un administrateur doit approuver la demande.",
     "searchPlayers": "Rechercher par nom de joueur ou d’équipe", "selectPlayer": "Sélectionner un joueur", "startTyping": "Commencez à saisir un nom de joueur ou d’équipe pour afficher les profils correspondants.", "noCurrentTeam": "Aucune équipe actuelle", "noMatches": "Aucun joueur ne correspond à cette recherche.", "noRequestablePlayers": "Aucun autre profil de joueur ne peut être demandé.",
@@ -125,6 +126,19 @@
     "requested": "Demandé", "approved": "Approuvé", "revoked": "Révoqué", "awaitingApproval": "Un administrateur de ligue doit approuver cette demande avant que le profil soit accessible.",
     "displayName": "Nom affiché", "saveName": "Enregistrer le nom", "profilePhoto": "Photo de profil", "photoHelp": "JPEG, PNG ou WebP; maximum 1 Mio.", "uploadPhoto": "Définir ou remplacer la photo", "clearPhoto": "Supprimer la photo",
     "profileUpdated": "Le nom affiché du joueur a été modifié et audité.", "photoUpdated": "La photo de profil privée a été modifiée et auditée.", "photoCleared": "La photo de profil a été supprimée et auditée.", "invalidReference": "Sélectionnez un joueur disponible dans le répertoire de la ligue.", "invalidProfile": "Saisissez un nom affiché pris en charge.", "invalidPhoto": "Choisissez une image JPEG, PNG ou WebP valide.", "photoTooLarge": "Cette image dépasse 1 Mio. Choisissez un fichier plus petit.", "unsupportedPhoto": "Choisissez une image JPEG, PNG ou WebP dont le contenu correspond au format.", "photoUploadFailed": "L’image est valide, mais le stockage n’a pas pu l’enregistrer. Réessayez.", "rejected": "Cette modification n’est pas autorisée ou entre en conflit avec l’accès actuel."
+  },
+  "MemberStats": {
+    "leagueDesk": "Bureau de la ligue", "myPlayers": "Mes joueurs", "signOut": "Se déconnecter",
+    "eyebrow": "Vue des membres", "title": "Statistiques des joueurs", "summary": "Suivez les totaux confirmés, le journal de matchs et les feuilles de pointage axées d’abord sur les points de chaque joueur.",
+    "season": "Saison", "viewSeason": "Afficher la saison",
+    "noAccessTitle": "L’accès aux statistiques n’est pas actif", "noAccessSummary": "Rejoignez cette ligue par une relation de joueur approuvée, une affectation de capitaine d’équipe ou une affectation d’administrateur de ligue.", "requestAccess": "Demander l’accès à un joueur",
+    "noSeasonTitle": "Aucune saison configurée", "noSeasonSummary": "Les statistiques apparaîtront après la création de la première saison.",
+    "leaderboardKicker": "Pointage confirmé", "leaderboardTitle": "Classement des joueurs", "leaderboardSummary": "Les totaux et moyennes utilisent uniquement les points connus et confirmés. Les valeurs inconnues ou provisoires n’affectent pas le rang.", "emptyLeaderboard": "Aucun point confirmé n’a encore été enregistré cette saison.",
+    "rank": "Rang", "player": "Joueur", "team": "Équipe", "totalPoints": "Total des points", "recordedGames": "Matchs avec points consignés", "average": "Points par match consigné",
+    "gamesKicker": "Matchs terminés", "gamesTitle": "Feuilles de pointage", "emptyGames": "Aucun match final ou perdu par forfait n’est disponible cette saison.", "viewBoxScore": "Voir la feuille", "officialScore": "Pointage officiel", "final": "Final", "forfeit": "Forfait", "regular": "Saison régulière", "playoff": "Séries éliminatoires",
+    "boxScore": "Feuille de pointage axée sur les points", "boxScoreNote": "Les lignes indiquent l’admissibilité à l’alignement au point d’ancrage du match, et non une preuve de présence. Le pointage officiel est indépendant des totaux des joueurs.", "points": "Points", "status": "État", "notRecorded": "Non consigné", "provisional": "Provisoire", "confirmed": "Confirmé",
+    "directoryKicker": "Répertoire de la saison", "directoryTitle": "Joueurs", "directorySummary": "Parcourez tous les joueurs inscrits cette saison, y compris leur équipe historique après un transfert.", "searchPlayers": "Rechercher des joueurs", "search": "Rechercher", "noPlayers": "Aucun joueur ne correspond à cette vue.", "viewPlayer": "Voir le joueur",
+    "playerSummary": "Résumé du joueur", "seasonTeams": "Équipes de la saison", "gameLog": "Journal de matchs", "opponent": "Adversaire", "result": "Résultat", "gameLogNote": "Une ligne signifie que le joueur était admissible à l’alignement; elle ne confirme pas sa présence.", "noGameLog": "Aucune admissibilité à un match terminé n’est enregistrée pour ce joueur."
   },
   "PlayerAccessAdmin": {
     "myPlayers": "Mes joueurs", "leagueDesk": "Bureau de la ligue", "signOut": "Se déconnecter", "eyebrow": "Demandes d’accès aux joueurs", "title": "Examiner l’accès aux joueurs", "summary": "Examinez les demandes des membres et décidez qui peut gérer chaque profil privé.",
