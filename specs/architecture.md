@@ -70,6 +70,8 @@ read-only League-scoped projection from authoritative Games, Roster Membership a
 Player Stat Lines. It admits only Accounts with a current trusted League relationship, exposes no
 browser database access, and keeps public League projections Team-level. Confirmed known points
 drive totals and rank; provisional and unknown values retain their distinct states at delivery.
+The same projection supplies completed-Game box scores grouped by eligibility-attributed Season
+Team while preserving the authoritative Game score independently of Player-stat coverage.
 
 Initial Season setup follows the same delivery shape: pure name validation and normative defaults in core, current scoped authorization and idempotent orchestration in a service, one PostgreSQL transaction for Season, Audit Record, and Command Receipt persistence, and a server-derived actor at the bilingual administrator boundary. It deliberately leaves Team participation and playoff Rounds empty rather than copying local fixture data into a real League.
 

@@ -1,0 +1,46 @@
+{
+  "audit_notes_hash": "f5bb8834ade133ab750060bb5a85e50ed2ef3b80d412affb7903765026dae02a",
+  "audit_notes_path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/whetstone_runs/member-box-score-audit-001/audit-notes.md",
+  "client": {
+    "model": "gpt-5.5",
+    "name": "codex",
+    "version": "unknown"
+  },
+  "generated_at": "2026-08-18T04:14:50.451426+00:00",
+  "profile": "consistency",
+  "schema_version": "change-audit-manifest-v1",
+  "specs": [
+    {
+      "hash": "74d14979bc9a8e33565b66d5cec43adce1a9413c61990037e8b4328c976e9a99",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/member-statistics.md"
+    },
+    {
+      "hash": "24ce43bccb0e01a2d8ce59a95534042e3272ee828317405721348c98dc975109",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/decisions/0019-deliver-member-player-statistics.md"
+    },
+    {
+      "hash": "170536661d43dab83e3598c5947898ba79244be031d99758ca0fe3092a01c9c0",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/invariants.md"
+    },
+    {
+      "hash": "86ad4027f0fb9db3a4e02d831a83d93bfc1fa21e5e0a1f7fe343b8e763223ed1",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/player-stat-lines.md"
+    },
+    {
+      "hash": "5845c283b9ec441a854201e1729faf8c72f0d6bbdf073c3297e8b5b5e29fef35",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/architecture.md"
+    },
+    {
+      "hash": "a3b8aada9d4b9b24f152d43d0678f46f8b5f537e0d63b36748f0f57a1404886a",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/lifecycle.md"
+    },
+    {
+      "hash": "3cecf79cfc74ee5d8c7bfbd14f67b2c786760ba3bb1e42708a10f5ba8e32482c",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/rosters.md"
+    },
+    {
+      "hash": "692f56c6e79427c3b97c6b3d194b6d37b70bcf901aedc9040065c7fa327d71e7",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/public-portal.md"
+    }
+  ]
+}

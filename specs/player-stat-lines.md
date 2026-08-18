@@ -62,4 +62,5 @@ member visibility is separately governed by [`member-statistics.md`](member-stat
 
 Detailed statistics, complete-line marking, live entry, spreadsheet import, Player aggregation,
 and public Player pages remain deferred. The accepted member read experience may aggregate and
-rank the delivered points field without changing this mutation boundary.
+rank the delivered points field and present eligibility-aware completed-Game box scores without
+changing this mutation boundary or deriving the authoritative Team score from Player values.

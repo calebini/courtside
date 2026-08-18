@@ -2,6 +2,7 @@
 
 - Status: accepted
 - Date: 2026-08-17
+- Last amended: 2026-08-18
 
 ## Context
 
@@ -17,10 +18,11 @@ with a trusted relationship to the League may view every Player's member-visible
 that League. Initially, a trusted relationship is an active League Administrator Assignment, an
 active Team Captain Assignment, or an approved Player Management Relationship.
 
-Deliver points-first Season leaderboards, Player discovery, Player summaries, and per-Game logs.
-Use confirmed known values for totals, rates, and rank; expose known provisional values only as
-clearly provisional. Preserve unknown separately from known zero and label the denominator as
-recorded points games rather than inferred Games played.
+Deliver points-first Season leaderboards, Player discovery, Player summaries, per-Game logs, and
+completed-Game box scores grouped by participating Season Team. Use confirmed known values for
+totals, rates, and rank; expose known provisional values only as clearly provisional. Preserve
+unknown separately from known zero and label the denominator as recorded points games rather than
+inferred Games played.
 
 ## Consequences
 
@@ -28,5 +30,9 @@ recorded points games rather than inferred Games played.
 - Open registration and pending access requests do not expose member statistics.
 - Individual Player statistics remain absent from the unauthenticated public portal.
 - The initial leaderboard ranks confirmed total points and preserves statistical ties.
+- Box-score rows describe statistic-recording coverage for Players eligible at the Game competition
+  anchor and do not assert appearance.
+- The authoritative Game score remains independent of Player Stat Line sums, and the initial box
+  score exposes no derived Player-points Team total.
 - Stage Two detailed statistics extend Player Stat Lines additively and require a separate accepted
   vocabulary and aggregation policy before delivery.

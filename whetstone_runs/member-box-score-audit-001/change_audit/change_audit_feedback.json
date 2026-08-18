@@ -1,0 +1,35 @@
+{
+  "draft_hash": "642fce85fa389c1c5d0a8105ec98d84045d880f70b49cfd6638949e914357f39",
+  "feedback": [
+    {
+      "affected_sections": [
+        "Spec 1: Completed-Game Box Scores",
+        "Spec 1: Unknown, Zero, and Aggregation",
+        "Expected Boundary"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "minor",
+      "claim": "The box-score row-state wording makes known zero overlap with provisional and confirmed verification states, even though the expected boundary requires known provisional and confirmed values to remain distinguishable.",
+      "determinism_impact": "minor",
+      "evidence": "Spec 1 says each Player row displays exactly one points recording state, then lists `known zero displays as 0`, `known provisional points display the value with a clear provisional label`, and `known confirmed points display the value as confirmed`. A known zero can also be provisional or confirmed under the Player Stat Line lifecycle, and the Expected Boundary separately says `known zero displays as 0` while `known provisional and confirmed values remain distinguishable`.",
+      "feedback_id": "fb_0001",
+      "in_scope": true,
+      "invariant_violated": "deterministic_behavior",
+      "issue_fingerprint": "b4cb649777c7a8d6b19f57509c57fd1011d555aceb37120438c4fbc2b1381153",
+      "issue_id": "iss_b4cb649777c7a8d6",
+      "issue_type": "terminology_consistency",
+      "normalized_severity": "minor",
+      "oscillation_key": null,
+      "recommended_change": "Clarify that zero is the numeric display value, not a mutually exclusive verification state: for example, known zero displays as `0` and still carries the applicable provisional or confirmed verification label; absent or unknown remains `not recorded`.",
+      "rubric_impact": null,
+      "severity_rationale": "This is a narrow consistency problem in the new box-score display contract. It does not change authorization or source-of-truth boundaries, but it can lead implementations to hide verification state for zero-point lines."
+    }
+  ],
+  "profile": "consistency",
+  "reviewer": {
+    "model": "gpt-5-codex",
+    "name": "Codex Whetstone Consistency Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 1
+}
