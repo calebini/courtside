@@ -24,6 +24,8 @@ may be managed by several User Accounts.
   capability for exceptional administration but is not the primary product workflow.
 - Only an approved relationship grants the Account authority to view and update that Player's
   private profile. League Administrators retain equivalent authority for Players in their League.
+  This private-profile authority is distinct from the League-wide authenticated statistics
+  visibility defined in [`member-statistics.md`](member-statistics.md).
 - Initial managed fields are `display_name` and `profile_photo` only.
 - Requests, approvals, declines, revocations, display-name changes, and photo changes are audited.
 - The League desk may approve or decline selected pending requests as a batch. Each request is

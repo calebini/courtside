@@ -57,8 +57,9 @@ The initial UI is an expandable Player-points form attached to each completed Ga
 authenticated Games workspace. It groups eligible Players by participating Team, shows unknown as
 a blank input and known zero as `0`, and shows the saved verification state. This slice does not
 publish Player names, profile photos, Player Stat Lines, or game logs to the public portal and does
-not grant Team Captains or approved Player managers statistics authority. Public or member-facing
-game logs require a separately accepted visibility policy.
+not grant Team Captains or approved Player managers statistics mutation authority. Authenticated
+member visibility is separately governed by [`member-statistics.md`](member-statistics.md).
 
 Detailed statistics, complete-line marking, live entry, spreadsheet import, Player aggregation,
-leaderboards, and public Player pages remain deferred.
+and public Player pages remain deferred. The accepted member read experience may aggregate and
+rank the delivered points field without changing this mutation boundary.

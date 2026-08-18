@@ -27,3 +27,7 @@ The initial implementation renders fresh database-backed Server Components on ea
 ## Deferred Privacy Surface
 
 Public Player profiles, profile photos, Player Stat Lines, Player game logs, Media, and member identity are not part of this slice. The authenticated points-entry workflow does not change that boundary. Their publication requires an accepted privacy and visibility policy before delivery. Private Leagues or Seasons, tenant hostnames, League slugs, and custom public branding are also deferred.
+
+The authenticated member visibility defined in [`member-statistics.md`](member-statistics.md) does
+not expand this public boundary. Member Player statistics require an authenticated, provisioned
+Account with a trusted League relationship.

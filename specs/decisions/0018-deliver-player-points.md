@@ -24,5 +24,6 @@ and standings exclusively from authoritative Game results.
 - Confirmed values may be corrected without losing history; replacements become provisional unless
   explicitly confirmed in the same command.
 - The schema can add detailed nullable statistics later without redefining Player Stat Line identity.
-- Public and member-facing Player statistics remain unavailable until a visibility policy is
-  accepted.
+- Public and member-facing Player statistics remain unavailable under this decision alone. Decision
+  0019 separately accepts the authenticated member visibility policy while preserving the public
+  boundary.

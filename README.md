@@ -12,6 +12,7 @@ Courtside is a seed-stage project in the Cortext ecosystem. Its core domain and 
 - [`specs/architecture.md`](specs/architecture.md) defines dependency direction and the first transactional vertical slice.
 - [`specs/authentication.md`](specs/authentication.md) defines registration, login, recovery, session verification, account provisioning, authorization delivery, and bootstrap boundaries.
 - [`specs/public-portal.md`](specs/public-portal.md) defines the unauthenticated schedule, results, standings, and public-data boundary.
+- [`specs/member-statistics.md`](specs/member-statistics.md) defines authenticated League-wide Player statistics and the points-first aggregation boundary.
 - [`specs/rosters.md`](specs/rosters.md) defines durable Player identity and historical Season roster participation.
 - [`specs/role-administration.md`](specs/role-administration.md) defines post-bootstrap League Administrator and Team Captain assignment workflows.
 - [`specs/season-deletion.md`](specs/season-deletion.md) defines the protected removal of an unused Season created in error.

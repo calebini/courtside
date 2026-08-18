@@ -1,0 +1,22 @@
+{
+  "audit_brief_hash": "8482989a77337933d7b506ed02d5a6dcd5507f334da3919e611638f77254d5c0",
+  "audit_manifest_path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/whetstone_runs/member-statistics-audit-001/recheck/change_audit/audit_manifest.json",
+  "boundary_preserved": true,
+  "failure_reason": null,
+  "feedback_counts": {
+    "blocker": 0,
+    "major": 0,
+    "minor": 1,
+    "nit": 0
+  },
+  "generated_at": "2026-08-18T03:36:05.022073+00:00",
+  "in_scope_feedback_ids": [
+    "fb_001"
+  ],
+  "out_of_scope_feedback_ids": [],
+  "profile": "consistency",
+  "recommended_next_action": "manual_patch",
+  "schema_version": "change-audit-report-v1",
+  "source_feedback_path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/whetstone_runs/member-statistics-audit-001/recheck/change_audit/change_audit_feedback.json",
+  "verdict": "pass_with_minor_clarification"
+}

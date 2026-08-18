@@ -1,0 +1,50 @@
+{
+  "audit_notes_hash": "050b4e87413cd8162b361877a86b12638b2229726ca8537996aa060da0267fbc",
+  "audit_notes_path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/whetstone_runs/member-statistics-audit-001/audit-notes.md",
+  "client": {
+    "model": "gpt-5.5",
+    "name": "codex",
+    "version": "unknown"
+  },
+  "generated_at": "2026-08-18T03:17:07.290624+00:00",
+  "profile": "consistency",
+  "schema_version": "change-audit-manifest-v1",
+  "specs": [
+    {
+      "hash": "f12e116bb58e833abccd14baf282c285fb473d7156136d26f74f6be9193882e1",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/member-statistics.md"
+    },
+    {
+      "hash": "9bcf2b0cd198fb15d216e3af96605ca005a9fba17aefbec8d5ce80337c06922e",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/decisions/0019-deliver-member-player-statistics.md"
+    },
+    {
+      "hash": "f1a76c8703604f6ffe0230390e8f79d5fbd497a97e5017bf6c6341eb67bb58b1",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/authentication.md"
+    },
+    {
+      "hash": "17c57056e6e72f081e9208b7b7fbda5c9009d0090d5392d3411d3407f9c0e4d7",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/player-management.md"
+    },
+    {
+      "hash": "c0d8f78b544823fadf98cce746e2429f1f061b22d090a5db72e2cf26a2396ecd",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/role-administration.md"
+    },
+    {
+      "hash": "c214ff8e94db748fa5b0a1bc90ceab78644009ad6c1d1363566069799f21248f",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/player-stat-lines.md"
+    },
+    {
+      "hash": "692f56c6e79427c3b97c6b3d194b6d37b70bcf901aedc9040065c7fa327d71e7",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/public-portal.md"
+    },
+    {
+      "hash": "2acdfa00a4962edb42f48cf81bd89ab6514b2ab2cd67f29fe61b93f65b32ac0a",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/invariants.md"
+    },
+    {
+      "hash": "54e3bcced9355fb8db23d52cf433266e24fb7281a4e87bb857fcecaee2dd476a",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/decisions/0018-deliver-player-points.md"
+    }
+  ]
+}

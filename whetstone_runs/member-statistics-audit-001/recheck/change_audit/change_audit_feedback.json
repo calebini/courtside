@@ -1,0 +1,35 @@
+{
+  "draft_hash": "8482989a77337933d7b506ed02d5a6dcd5507f334da3919e611638f77254d5c0",
+  "feedback": [
+    {
+      "affected_sections": [
+        "specs/member-statistics.md#Points-First Member Experience",
+        "specs/member-statistics.md#Unknown, Zero, and Aggregation",
+        "specs/decisions/0019-deliver-member-player-statistics.md#Decision"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "minor",
+      "claim": "The denominator terminology is inconsistent between `recorded-game count`, `recorded points games`, and `recorded points Game`, which can lead implementations or UI labels to treat the denominator as a generic game count instead of the narrower count of confirmed known points observations.",
+      "determinism_impact": "minor",
+      "evidence": "`member-statistics.md` first requires a Player summary containing `confirmed recorded points and recorded-game count`, then later says the UI uses `recorded points games`, defines points per recorded game as divided by `confirmed recorded points games`, and says a confirmed zero contributes `one recorded points Game`. Decision 0019 also uses `recorded points games`.",
+      "feedback_id": "fb_001",
+      "in_scope": true,
+      "invariant_violated": "deterministic_behavior",
+      "issue_fingerprint": "bb595fafc5ddae9c7d6a85b0beaf1cc6a144d37d54ba4eae4f6dff3db46147f6",
+      "issue_id": "iss_bb595fafc5ddae9c",
+      "issue_type": "terminology_consistency",
+      "normalized_severity": "minor",
+      "oscillation_key": null,
+      "recommended_change": "Use one canonical term throughout the member-statistics spec and decision, preferably `recorded points games`, and adjust the Player summary bullet and zero-handling sentence to match it.",
+      "rubric_impact": null,
+      "severity_rationale": "This is an in-scope consistency issue because the audit boundary explicitly depends on deterministic denominator handling without inventing appearance data. It is minor because the intended policy is clear and likely needs only wording alignment."
+    }
+  ],
+  "profile": "consistency",
+  "reviewer": {
+    "model": "gpt-5-codex",
+    "name": "Codex Whetstone Consistency Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 1
+}

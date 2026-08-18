@@ -12,6 +12,8 @@ This specification family is authoritative for domain terminology and behavior. 
 
 Private Player profile access, photo handling, and the User Account relationship lifecycle are
 further constrained by [`player-management.md`](player-management.md).
+Authenticated League-wide Player-stat visibility and points aggregation are further constrained by
+[`member-statistics.md`](member-statistics.md).
 
 ## Scope
 

@@ -1,0 +1,11 @@
+{
+  "draft_hash": "24bf957107f3f93fe7ab954a790fd2c84f9027c670e43f1e760ac59d55f896ea",
+  "feedback": [],
+  "profile": "consistency",
+  "reviewer": {
+    "model": "gpt-5",
+    "name": "Codex Whetstone Consistency Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 1
+}

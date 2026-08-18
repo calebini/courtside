@@ -1,0 +1,59 @@
+{
+  "draft_hash": "9147ff8daaffd2a782ef2f9df0b89594c370b2c36e73b20dcb5b8e212d7c4c0c",
+  "feedback": [
+    {
+      "affected_sections": [
+        "Whetstone Change Audit Brief",
+        "Audit Mode",
+        "Reviewer instructions"
+      ],
+      "authority_impact": "major",
+      "baseline_severity": "major",
+      "claim": "The brief contains conflicting workflow and phase instructions: the wrapper identifies this as Phase 1, while the audit notes require audit-change mode and explicitly prohibit Phase 1.",
+      "determinism_impact": "major",
+      "evidence": "The top-level draft says `Workflow: audit_change`, while the supplied review context says `Phase: phase_1`. The audit notes then state: `Run a lightweight Whetstone audit-change consistency review, not Phase 1, Phase 2, a convergence review, or an Editor workflow.`",
+      "feedback_id": "fb_phase_workflow_mismatch",
+      "in_scope": true,
+      "invariant_violated": "scope_control",
+      "issue_fingerprint": "2d20fdef1945680f8b324d2df6dbd0d7234e9993067f4764b329e6d846710cd4",
+      "issue_id": "iss_2d20fdef1945680f",
+      "issue_type": "command_option_consistency",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Align the invocation metadata and brief so they name a single active workflow. For this contained audit, mark the phase/mode consistently as audit-change rather than Phase 1, or remove the audit-change prohibition if Phase 1 is actually intended.",
+      "rubric_impact": null,
+      "severity_rationale": "This directly affects the expected review boundary and could cause reviewers or automation to apply the wrong workflow semantics."
+    },
+    {
+      "affected_sections": [
+        "Expected Boundary",
+        "Spec 1: Member Audience and Authorization",
+        "Spec 4: Authority and lifecycle",
+        "Spec 8: Authorization"
+      ],
+      "authority_impact": "minor",
+      "baseline_severity": "minor",
+      "claim": "The member-access denial terms mix lifecycle states and user-facing outcomes for Player Management Relationships, which can make the admitted-member test look like it must check a non-existent `declined` persisted state.",
+      "determinism_impact": "minor",
+      "evidence": "`player-management.md` defines exactly one of `requested`, `approved`, or `revoked`, and says `A declined request uses the terminal revoked persistence state.` In contrast, `member-statistics.md`, `invariants.md`, and the Expected Boundary deny access for `pending, declined, and revoked` or `requested, declined, or revoked` relationships.",
+      "feedback_id": "fb_relationship_state_terms",
+      "in_scope": true,
+      "invariant_violated": "state_legality",
+      "issue_fingerprint": "6ee00841ebf4bc64f8f9d2cebf0525907e0ec0a24d8e98d4cb959d91e4196820",
+      "issue_id": "iss_6ee00841ebf4bc64",
+      "issue_type": "terminology_consistency",
+      "normalized_severity": "minor",
+      "oscillation_key": null,
+      "recommended_change": "Use the persisted lifecycle terms consistently for authorization checks, for example `requested/pending and revoked relationships, including declined requests persisted as revoked, do not grant access.` Keep `declined` only as an action/outcome label where needed.",
+      "rubric_impact": null,
+      "severity_rationale": "The intended policy is clear, but inconsistent state naming can lead implementations or tests to search for a separate declined state."
+    }
+  ],
+  "profile": "consistency",
+  "reviewer": {
+    "model": "gpt-5-codex",
+    "name": "Codex Whetstone Consistency Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 1
+}
