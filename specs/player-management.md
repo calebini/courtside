@@ -1,7 +1,7 @@
 # Player Management and Private Profiles
 
 - Status: accepted
-- Last updated: 2026-08-08
+- Last updated: 2026-08-24
 
 ## Scope
 
@@ -37,17 +37,23 @@ may be managed by several User Accounts.
 ## Profile photos
 
 - Profile photos are private and are not part of public schedules, results, standings, or rosters.
-- Accepted uploads are JPEG, PNG, or WebP images from 1 byte through 1 MiB inclusive.
-- Validation checks both the declared media type and the file signature. Original filenames are
-  not authoritative and are not retained in object keys.
+- Accepted uploads are JPEG, PNG, or WebP images from 1 byte through 1 MiB inclusive. The server
+  decodes the image, rejects malformed or excessive-pixel input, applies encoded orientation,
+  strips metadata, re-encodes it in the detected canonical format, and rechecks the resulting size.
+  The declared media type must agree with the decoded format. Original filenames are not
+  authoritative and are not retained in object keys.
 - Object keys are generated as `<player-id>/<random-id>.<canonical-extension>` in the private
   `player-profile-photos` bucket.
 - The database owns the stable object reference, content type, byte size, and update timestamp.
-- Delivery uses short-lived signed URLs after application authorization succeeds.
+- Browser sessions have no direct Storage policy. A server-only adapter performs upload, deletion,
+  reconciliation, and short-lived signed delivery only after application authorization succeeds.
+- Signed delivery references only the exact current object key stored by PostgreSQL. A Player has
+  at most one authoritative current profile-photo reference.
 - Upload is completed before the database transaction. If the database write fails, the new
   object is deleted on a best-effort basis. The prior object is deleted only after the new
   database reference commits, also on a best-effort basis. Storage reconciliation remains an
-  operational responsibility.
+  operational responsibility. Server-mediated replacement and clear operations also prune known
+  objects in the Player folder other than the authoritative current reference.
 
 ## Initial delivery boundary
 

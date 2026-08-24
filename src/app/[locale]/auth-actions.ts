@@ -3,7 +3,9 @@
 import {redirect} from 'next/navigation';
 
 import {getCourtsideSiteUrl, isRegistrationOpen} from '@/courtside/adapters/config/auth-config';
+import {clearPasswordRecoveryCookie, readPasswordRecoveryCookie} from '@/courtside/adapters/next/password-recovery-cookie';
 import {PostgresMemberStatisticsStore} from '@/courtside/adapters/postgres/member-statistics-store';
+import {PostgresPasswordRecoveryAuthorizationStore} from '@/courtside/adapters/postgres/password-recovery-authorization-store';
 import {PostgresPlayerAccessDashboardStore} from '@/courtside/adapters/postgres/player-access-dashboard-store';
 import {getRuntimePostgresPool} from '@/courtside/adapters/postgres/runtime-pool';
 import {PostgresUserAccountDirectory} from '@/courtside/adapters/postgres/user-account-directory';
@@ -16,6 +18,7 @@ import {
   validateRegistration
 } from '@/courtside/core/account-onboarding';
 import {provisionAuthenticatedUserAccount} from '@/courtside/services/provision-user-account';
+import {consumePasswordRecoveryAuthorization} from '@/courtside/services/password-recovery-authorization';
 
 function supportedLocale(value: FormDataEntryValue | null) {
   return normalizeAccountLocale(value);
@@ -148,9 +151,23 @@ export async function updatePassword(formData: FormData) {
 
   const supabase = await createSupabaseServerClient();
   const {data: verified} = await supabase.auth.getUser();
-  if (!verified.user) redirect(`/${locale}/sign-in?error=recovery`);
+  const recoveryToken = await readPasswordRecoveryCookie();
+  const authorized = verified.user && await consumePasswordRecoveryAuthorization(
+    new PostgresPasswordRecoveryAuthorizationStore(getRuntimePostgresPool()),
+    verified.user.id,
+    recoveryToken
+  );
+  if (!verified.user || !authorized) {
+    await clearPasswordRecoveryCookie();
+    await supabase.auth.signOut();
+    redirect(`/${locale}/sign-in?error=recovery`);
+  }
   const {error} = await supabase.auth.updateUser({password});
-  if (error) redirect(`/${locale}/update-password?error=unavailable`);
+  await clearPasswordRecoveryCookie();
+  if (error) {
+    await supabase.auth.signOut();
+    redirect(`/${locale}/sign-in?error=recovery`);
+  }
   await supabase.auth.signOut();
   redirect(`/${locale}/sign-in?result=password_updated`);
 }

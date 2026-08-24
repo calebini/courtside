@@ -1,4 +1,5 @@
 import {expect, test} from '@playwright/test';
+import {createClient} from '@supabase/supabase-js';
 
 const validPng = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
@@ -12,7 +13,8 @@ test('a member manages approved Players while the League desk controls authority
   await member.getByLabel('Email').fill('member@courtside.local');
   await member.getByLabel('Password').fill('courtside-local-member');
   await member.getByRole('button', {name: 'Sign in'}).click();
-  await expect(member).toHaveURL(/\/en\/players$/);
+  await expect(member).toHaveURL(/\/en\/(players|stats)$/);
+  await member.goto('/en/players');
   await expect(member.getByRole('heading', {name: 'My Players'})).toBeVisible();
 
   const jordan = member.locator('.managed-player-card').filter({hasText: 'Jordan Lee'});
@@ -38,6 +40,24 @@ test('a member manages approved Players while the League desk controls authority
   await updatedJordan.getByRole('button', {name: 'Set or replace photo'}).click();
   await expect(member.getByText('The private profile photo was updated and audited.')).toBeVisible();
   await expect(member.locator('.profile-photo').first()).toHaveAttribute('src', /storage\/v1\/object\/sign/);
+
+  const directStorageClient = createClient(
+    'http://127.0.0.1:54321',
+    'sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH',
+    {auth: {persistSession: false}}
+  );
+  const directSignIn = await directStorageClient.auth.signInWithPassword({
+    email: 'member@courtside.local',
+    password: 'courtside-local-member'
+  });
+  expect(directSignIn.error).toBeNull();
+  const directUpload = await directStorageClient.storage.from('player-profile-photos').upload(
+    '40000000-0000-4000-8000-000000000061/direct-browser-bypass.png',
+    validPng,
+    {contentType: 'image/png', upsert: false}
+  );
+  expect(directUpload.data).toBeNull();
+  expect(directUpload.error).not.toBeNull();
 
   await expect(member.locator('.request-player-option')).toHaveCount(0);
   await expect(member.getByText('Start typing a Player or team name to reveal matching profiles.')).toBeVisible();

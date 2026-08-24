@@ -1,23 +1,21 @@
 'use server';
 
-import {randomUUID} from 'node:crypto';
-
 import {revalidatePath} from 'next/cache';
 import {redirect} from 'next/navigation';
 
+import {processProfilePhoto} from '@/courtside/adapters/images/sharp-profile-photo-processor';
 import {PostgresPlayerAccessStore} from '@/courtside/adapters/postgres/player-access-store';
 import {PostgresPlayerProfileStore} from '@/courtside/adapters/postgres/player-profile-store';
 import {getRuntimePostgresPool} from '@/courtside/adapters/postgres/runtime-pool';
 import {PostgresUserAccountDirectory} from '@/courtside/adapters/postgres/user-account-directory';
 import {SupabaseVerifiedIdentityProvider} from '@/courtside/adapters/supabase/identity-provider';
 import {createSupabaseServerClient} from '@/courtside/adapters/supabase/server-client';
+import {SupabasePlayerPhotoStorage} from '@/courtside/adapters/supabase/player-photo-storage';
 import {RuleViolation} from '@/courtside/core/errors';
-import {validateProfilePhoto} from '@/courtside/core/player-profile';
 import {createPlayerAccessService} from '@/courtside/services/manage-player-access';
+import {clearPlayerPhoto, replacePlayerPhoto} from '@/courtside/services/manage-player-photo';
 import {createPlayerProfileService} from '@/courtside/services/manage-player-profile';
 import {resolveAuthenticatedAccount} from '@/courtside/services/resolve-authenticated-account';
-
-const BUCKET = 'player-profile-photos';
 
 function localeOf(value: FormDataEntryValue | null) { return value === 'fr' ? 'fr' : 'en'; }
 function uuid(value: FormDataEntryValue | null) {
@@ -29,7 +27,7 @@ async function actor() {
   const pool = getRuntimePostgresPool();
   const supabase = await createSupabaseServerClient();
   const {account} = await resolveAuthenticatedAccount(new SupabaseVerifiedIdentityProvider(supabase), new PostgresUserAccountDirectory(pool));
-  return {pool, supabase, account};
+  return {pool, account};
 }
 
 function finish(locale: string, result: string): never {
@@ -66,14 +64,14 @@ export async function uploadPlayerPhotoAction(formData: FormData) {
   const locale = localeOf(formData.get('locale'));
   const playerId = uuid(formData.get('playerId'));
   const fileValue = formData.get('photo');
-  const {pool, supabase, account} = await actor();
+  const {pool, account} = await actor();
   if (!account) redirect(`/${locale}/sign-in`);
   if (!playerId || !(fileValue instanceof File)) finish(locale, 'invalid_photo');
   const file = fileValue;
 
-  let validated: ReturnType<typeof validateProfilePhoto>;
+  let validated: Awaited<ReturnType<typeof processProfilePhoto>>;
   try {
-    validated = validateProfilePhoto(new Uint8Array(await file.arrayBuffer()), file.type);
+    validated = await processProfilePhoto(new Uint8Array(await file.arrayBuffer()), file.type);
   } catch (error) {
     if (error instanceof RuleViolation && error.rule === 'player_profile.photo_size') {
       finish(locale, 'photo_too_large');
@@ -84,22 +82,14 @@ export async function uploadPlayerPhotoAction(formData: FormData) {
     finish(locale, 'invalid_photo');
   }
 
-  const objectKey = `${playerId}/${randomUUID()}.${validated.extension}`;
-  const uploaded = await supabase.storage.from(BUCKET).upload(objectKey, validated.bytes, {
-    contentType: validated.contentType,
-    upsert: false
-  });
-  if (uploaded.error) {
-    await supabase.storage.from(BUCKET).remove([objectKey]);
-    finish(locale, 'photo_upload_failed');
-  }
-
   try {
-    const result = await createPlayerProfileService(new PostgresPlayerProfileStore(pool))({type: 'set_photo', actorAccountId: account.id, playerId, objectKey, contentType: validated.contentType, byteSize: validated.bytes.byteLength});
-    if (result.previousPhotoObjectKey) await supabase.storage.from(BUCKET).remove([result.previousPhotoObjectKey]);
+    await replacePlayerPhoto(
+      new PostgresPlayerProfileStore(pool),
+      new SupabasePlayerPhotoStorage(),
+      {actorAccountId: account.id, playerId, photo: validated}
+    );
   } catch {
-    await supabase.storage.from(BUCKET).remove([objectKey]);
-    finish(locale, 'rejected');
+    finish(locale, 'photo_upload_failed');
   }
   finish(locale, 'photo_updated');
 }
@@ -107,12 +97,15 @@ export async function uploadPlayerPhotoAction(formData: FormData) {
 export async function clearPlayerPhotoAction(formData: FormData) {
   const locale = localeOf(formData.get('locale'));
   const playerId = uuid(formData.get('playerId'));
-  const {pool, supabase, account} = await actor();
+  const {pool, account} = await actor();
   if (!account) redirect(`/${locale}/sign-in`);
   if (!playerId) finish(locale, 'rejected');
   try {
-    const result = await createPlayerProfileService(new PostgresPlayerProfileStore(pool))({type: 'clear_photo', actorAccountId: account.id, playerId});
-    if (result.previousPhotoObjectKey) await supabase.storage.from(BUCKET).remove([result.previousPhotoObjectKey]);
+    await clearPlayerPhoto(
+      new PostgresPlayerProfileStore(pool),
+      new SupabasePlayerPhotoStorage(),
+      {actorAccountId: account.id, playerId}
+    );
   } catch { finish(locale, 'rejected'); }
   finish(locale, 'photo_cleared');
 }

@@ -82,4 +82,7 @@ test('registers a confirmed Account and completes non-enumerating recovery', asy
   await page.getByLabel('Password').fill(nextPassword);
   await page.getByRole('button', {name: 'Sign in'}).click();
   await expect(page).toHaveURL(/\/en\/players$/);
+
+  await page.goto('/en/update-password');
+  await expect(page).toHaveURL(/\/en\/sign-in\?error=recovery$/);
 });

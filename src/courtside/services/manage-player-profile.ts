@@ -31,6 +31,21 @@ export type PlayerProfileCommand =
   | {type: 'set_photo'; actorAccountId: string; playerId: string; objectKey: string; contentType: ProfilePhotoType; byteSize: number}
   | {type: 'clear_photo'; actorAccountId: string; playerId: string};
 
+export function authorizePlayerProfileManagement(
+  store: PlayerProfileStore,
+  actorAccountId: string,
+  playerId: string
+) {
+  return store.transaction(async (transaction) => {
+    const player = await transaction.findPlayer(playerId);
+    if (!player) throw new RuleViolation('player.exists', 'Player not found');
+    if (!await transaction.canManage(player.id, player.leagueId, actorAccountId)) {
+      throw new RuleViolation('player_profile.approved_authority', 'Approved Player management authority required');
+    }
+    return player;
+  });
+}
+
 export function createPlayerProfileService(
   store: PlayerProfileStore,
   dependencies: {now?: () => Date; newId?: () => string} = {}

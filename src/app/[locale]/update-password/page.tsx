@@ -2,6 +2,10 @@ import {getTranslations} from 'next-intl/server';
 import {redirect} from 'next/navigation';
 
 import {createSupabaseServerClient} from '@/courtside/adapters/supabase/server-client';
+import {readPasswordRecoveryCookie} from '@/courtside/adapters/next/password-recovery-cookie';
+import {PostgresPasswordRecoveryAuthorizationStore} from '@/courtside/adapters/postgres/password-recovery-authorization-store';
+import {getRuntimePostgresPool} from '@/courtside/adapters/postgres/runtime-pool';
+import {hasActivePasswordRecoveryAuthorization} from '@/courtside/services/password-recovery-authorization';
 
 import {updatePassword} from '../auth-actions';
 
@@ -18,7 +22,13 @@ export default async function UpdatePasswordPage({params, searchParams}: {
   ]);
   const supabase = await createSupabaseServerClient();
   const {data} = await supabase.auth.getUser();
-  if (!data.user) redirect(`/${locale}/sign-in?error=recovery`);
+  const recoveryToken = await readPasswordRecoveryCookie();
+  const authorized = data.user && await hasActivePasswordRecoveryAuthorization(
+    new PostgresPasswordRecoveryAuthorizationStore(getRuntimePostgresPool()),
+    data.user.id,
+    recoveryToken
+  );
+  if (!data.user || !authorized) redirect(`/${locale}/sign-in?error=recovery`);
   const errors: Record<string, string> = {
     invalid: 'invalidPassword',
     password_match: 'passwordMatch',

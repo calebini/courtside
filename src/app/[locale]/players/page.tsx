@@ -7,6 +7,7 @@ import {getRuntimePostgresPool} from '@/courtside/adapters/postgres/runtime-pool
 import {PostgresUserAccountDirectory} from '@/courtside/adapters/postgres/user-account-directory';
 import {SupabaseVerifiedIdentityProvider} from '@/courtside/adapters/supabase/identity-provider';
 import {createSupabaseServerClient} from '@/courtside/adapters/supabase/server-client';
+import {SupabasePlayerPhotoStorage} from '@/courtside/adapters/supabase/player-photo-storage';
 import {resolveAuthenticatedAccount} from '@/courtside/services/resolve-authenticated-account';
 
 import {signOut} from '../auth-actions';
@@ -14,7 +15,6 @@ import {clearPlayerPhotoAction, renameManagedPlayerAction, requestPlayerAccessAc
 import {PlayerRequestPicker} from './player-request-picker';
 
 export const dynamic = 'force-dynamic';
-const BUCKET = 'player-profile-photos';
 
 export default async function PlayersPage({params, searchParams}: {params: Promise<{locale: string}>; searchParams: Promise<{result?: string}>}) {
   const [{locale}, query, t] = await Promise.all([params, searchParams, getTranslations('MyPlayers')]);
@@ -29,10 +29,17 @@ export default async function PlayersPage({params, searchParams}: {params: Promi
     store.hasAdministrativeAccess(account.id)
   ]);
   const signedPhotos = new Map<string, string>();
-  await Promise.all(players.filter((player) => player.status === 'approved' && player.profilePhotoObjectKey).map(async (player) => {
-    const result = await supabase.storage.from(BUCKET).createSignedUrl(player.profilePhotoObjectKey!, 300);
-    if (result.data?.signedUrl) signedPhotos.set(player.playerId, result.data.signedUrl);
-  }));
+  const playersWithPhotos = players.filter((player) => player.status === 'approved' && player.profilePhotoObjectKey);
+  if (playersWithPhotos.length > 0) {
+    const photoStorage = new SupabasePlayerPhotoStorage();
+    await Promise.all(playersWithPhotos.map(async (player) => {
+      try {
+        signedPhotos.set(player.playerId, await photoStorage.createSignedUrl(player.profilePhotoObjectKey!, 300));
+      } catch {
+        // A missing object does not expose Storage details or prevent the profile page from loading.
+      }
+    }));
+  }
   const messages: Record<string, string> = {requested: 'requested', profile_updated: 'profileUpdated', photo_updated: 'photoUpdated', photo_cleared: 'photoCleared', invalid_reference: 'invalidReference', invalid_profile: 'invalidProfile', invalid_photo: 'invalidPhoto', photo_too_large: 'photoTooLarge', unsupported_photo: 'unsupportedPhoto', photo_upload_failed: 'photoUploadFailed', rejected: 'rejected'};
 
   return <main className="dashboard-shell player-portal">

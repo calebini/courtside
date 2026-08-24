@@ -14,7 +14,13 @@ cp .env.example .env.local
 npm run verify
 ```
 
-The committed example contains only project-local connection details, Supabase's public browser key, the local site URL, and open local registration mode. Deployed environments must supply their own database connection, public project key, canonical site URL, and explicit registration mode; server credentials must never use a `NEXT_PUBLIC_` variable.
+The committed example contains project-local connection details, Supabase's public browser key, a
+placeholder for the local server-only service-role key, the local site URL, and open local
+registration mode. After starting Supabase, copy the `SERVICE_ROLE_KEY` reported by
+`npx supabase status -o env` into `SUPABASE_SERVICE_ROLE_KEY` in `.env.local`. Deployed environments
+must supply their own database connection, public project key, private service-role key, canonical
+site URL, and explicit registration mode. Server credentials must never use a `NEXT_PUBLIC_`
+variable.
 
 `npm run verify` checks repository invariants, lint, TypeScript, unit tests, and the production Next.js build. Integration tests are separate because they require PostgreSQL.
 

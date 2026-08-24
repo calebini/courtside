@@ -1,8 +1,8 @@
 # Courtside Authentication Delivery
 
 - Status: accepted
-- Spec version: 0.3.0
-- Last updated: 2026-08-15
+- Spec version: 0.4.0
+- Last updated: 2026-08-24
 
 ## Purpose
 
@@ -36,7 +36,14 @@ An authenticated but unprovisionable identity is signed out and receives a gener
 
 Password recovery accepts an email and always returns the same check-email response for invalid syntax, an unknown account, provider rejection, and an accepted request. Recovery links return through a fixed configured Courtside site origin and an allowlisted localized destination. The callback exchanges the single-use provider code for a verified server session; arbitrary `next` destinations are rejected.
 
-Updating a password requires the active recovery session, repeats the registration password policy, and signs out after success. Missing, invalid, or expired recovery state sends the user back to sign-in without revealing account existence or provider details.
+Updating a password requires both the verified provider session created by the recovery callback and
+a Courtside recovery authorization. The callback creates a cryptographically random authorization,
+stores only its hash, binds it to the verified external identity, expires it after fifteen minutes,
+and delivers the opaque value in an HttpOnly same-site cookie. The update atomically consumes that
+authorization before one provider password mutation, then signs out. Ordinary authenticated
+sessions, missing or mismatched cookies, expired authorizations, and replayed authorizations return
+to sign-in without revealing account existence or provider details. A provider failure after
+consumption requires a new recovery request.
 
 ## Authorization
 
