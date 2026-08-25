@@ -12,7 +12,7 @@ test('a League Administrator manages a Game through finalization, correction, an
 
   await expect(page).toHaveURL(/\/en\/admin/);
   await expect(
-    page.getByRole('heading', {name: 'What needs attention now.'})
+    page.getByRole('heading', {name: 'League desk'})
   ).toBeVisible();
   await expect(page.getByText('Courtside Rec League')).toBeVisible();
   await expect(page.locator('.schedule-panel')).toHaveCount(0);

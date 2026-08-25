@@ -12,7 +12,7 @@ test('a League Administrator preserves Player identity and roster history', asyn
   await page.getByRole('link', {name: 'People & rosters'}).click();
   await expect(page).toHaveURL(/\/en\/admin\/rosters/);
   await expect(
-    page.getByRole('heading', {name: 'Keep every roster move in the record.'})
+    page.getByRole('heading', {name: 'Players and rosters'})
   ).toBeVisible();
 
   const createPanel = page.locator('.create-player-panel');
@@ -76,7 +76,7 @@ test('a League Administrator preserves Player identity and roster history', asyn
 
   await page.goto('/fr/admin/rosters');
   await expect(
-    page.getByRole('heading', {name: 'Conservez chaque mouvement d’alignement au dossier.'})
+    page.getByRole('heading', {name: 'Joueurs et alignements'})
   ).toBeVisible();
   await expect(page.getByText('Joueurs', {exact: true})).toBeVisible();
   await expect(page.getByText('Terminé').first()).toBeVisible();
