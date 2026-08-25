@@ -1,9 +1,19 @@
 import {getTranslations} from 'next-intl/server';
 import Link from 'next/link';
 
+import {InstallApp, type InstallAppLabels} from './install-app';
+
 export default async function HomePage({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
   const t = await getTranslations('Home');
+  const installLabels: InstallAppLabels = {
+    button: t('installButton'),
+    iosInstructions: t('installIosInstructions'),
+    kicker: t('installKicker'),
+    manualInstructions: t('installManualInstructions'),
+    summary: t('installSummary'),
+    title: t('installTitle')
+  };
 
   return (
     <main className="public-main public-home">
@@ -29,6 +39,7 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
           <p>{t('standingsSummary')}</p>
         </Link>
       </section>
+      <InstallApp labels={installLabels} />
     </main>
   );
 }

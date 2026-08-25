@@ -12,7 +12,13 @@
     "resultsSummary": "Final scores and recorded forfeits from authoritative league records.",
     "standingsKicker": "Team rankings",
     "standingsTitle": "Standings",
-    "standingsSummary": "Wins, losses, league points, scoring, and point differential."
+    "standingsSummary": "Wins, losses, league points, scoring, and point differential.",
+    "installKicker": "Courtside app",
+    "installTitle": "Keep the league close",
+    "installSummary": "Install Courtside for quick home-screen access to schedules, results, and standings.",
+    "installButton": "Install Courtside",
+    "installIosInstructions": "On iPhone or iPad, tap Share, then Add to Home Screen.",
+    "installManualInstructions": "Use your browser menu and choose Install app or Add to Home Screen."
   },
   "Public": {
     "primaryNavigation": "League navigation",

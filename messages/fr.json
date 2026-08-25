@@ -12,7 +12,13 @@
     "resultsSummary": "Pointages finaux et forfaits consignés dans les dossiers officiels de la ligue.",
     "standingsKicker": "Classement des équipes",
     "standingsTitle": "Classement",
-    "standingsSummary": "Victoires, défaites, points de ligue, pointage et différentiel."
+    "standingsSummary": "Victoires, défaites, points de ligue, pointage et différentiel.",
+    "installKicker": "Application Courtside",
+    "installTitle": "Gardez la ligue à portée de main",
+    "installSummary": "Installez Courtside pour accéder rapidement à l’horaire, aux résultats et au classement depuis l’écran d’accueil.",
+    "installButton": "Installer Courtside",
+    "installIosInstructions": "Sur iPhone ou iPad, touchez Partager, puis Sur l’écran d’accueil.",
+    "installManualInstructions": "Utilisez le menu de votre navigateur, puis choisissez Installer l’application ou Ajouter à l’écran d’accueil."
   },
   "Public": {
     "primaryNavigation": "Navigation de la ligue",

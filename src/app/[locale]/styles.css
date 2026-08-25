@@ -164,6 +164,52 @@ nav {
   font-size: 0.9rem;
 }
 
+.install-app {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) minmax(12rem, 20rem);
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: 1rem;
+  padding: 1.4rem;
+  border: 1px solid #d8d0c0;
+  border-radius: 0.85rem;
+  background: #17223b;
+  color: #fff8e8;
+  box-shadow: 0 0.5rem 2rem rgb(23 34 59 / 10%);
+}
+
+.install-app-icon {
+  border-radius: 1rem;
+  box-shadow: 0 0.4rem 1.2rem rgb(0 0 0 / 20%);
+}
+
+.install-app .eyebrow {
+  color: #f09a72;
+}
+
+.install-app h2 {
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.install-app-copy > p:last-child,
+.install-app-action p {
+  margin: 0.5rem 0 0;
+  color: #d9dce4;
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.install-app-action {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.install-app-action button {
+  padding: 0 1.15rem;
+  background: #d85d36;
+  color: #fff;
+}
+
 .public-page-heading {
   margin-bottom: 3rem;
 }
@@ -1872,6 +1918,15 @@ tbody tr:last-child td {
   .public-route-grid > a {
     min-height: auto;
   }
+
+  .install-app {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .install-app-action {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
 }
 
 @media (max-width: 560px) {
@@ -1967,6 +2022,14 @@ tbody tr:last-child td {
     align-items: flex-start;
     flex-direction: column;
     justify-content: center;
+  }
+
+  .install-app {
+    grid-template-columns: 1fr;
+  }
+
+  .install-app-action {
+    grid-column: auto;
   }
 
   .member-search,

@@ -1,8 +1,8 @@
 # Courtside Public Portal
 
 - Status: accepted
-- Spec version: 0.1.0
-- Last updated: 2026-08-08
+- Spec version: 0.2.0
+- Last updated: 2026-08-25
 
 ## Purpose
 
@@ -31,3 +31,15 @@ Public Player profiles, profile photos, Player Stat Lines, Player game logs, Med
 The authenticated member visibility defined in [`member-statistics.md`](member-statistics.md) does
 not expand this public boundary. Member Player statistics require an authenticated, provisioned
 Account with a trusted League relationship.
+
+## Installable Web App
+
+The public home offers Courtside as an installable web app. Supporting browsers may launch their
+native installation prompt; platforms without a programmatic prompt receive platform-appropriate
+home-screen instructions. Once installed, Courtside launches in standalone display mode and enters
+through locale negotiation before returning to the public portal.
+
+Installation does not create a second data authority or weaken the portal's freshness promise.
+This phase remains online-first and does not cache rendered League, Season, Game, Venue, or standings
+data for offline reuse. The installed surface reads the same fresh server-rendered public records as
+the browser surface.
