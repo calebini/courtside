@@ -218,6 +218,8 @@ starting points are:
 - [`specs/authentication.md`](specs/authentication.md) — accounts, authorization, and recovery
 - [`specs/public-portal.md`](specs/public-portal.md) — unauthenticated information boundary
 - [`specs/member-statistics.md`](specs/member-statistics.md) — authenticated Player-stat visibility
+- [`specs/statkeeper.md`](specs/statkeeper.md) — proposed video-linked event capture and stat projection
+- [`specs/statkeeper-initial-delivery.md`](specs/statkeeper-initial-delivery.md) — proposed implementable Statkeeper vertical slice
 
 Accepted implementation decisions are recorded in [`specs/decisions/`](specs/decisions/).
 

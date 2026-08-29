@@ -1,0 +1,70 @@
+{
+  "audit_notes_hash": "24efe0dc009329b2d6bc9fce6e88f650045ae1918bfd9595428b70e50aa1db2d",
+  "audit_notes_path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/whetstone_runs/statkeeper-bounded-audit-004/audit-notes.md",
+  "client": {
+    "model": "gpt-5.5",
+    "name": "codex",
+    "version": "unknown"
+  },
+  "generated_at": "2026-08-28T22:42:08.959931+00:00",
+  "profile": "consistency",
+  "schema_version": "change-audit-manifest-v1",
+  "specs": [
+    {
+      "hash": "0773a5c024d634ba780b7d3df7880034d24006a026f1fb518b7603f9280b61b9",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/statkeeper.md"
+    },
+    {
+      "hash": "72a0bab87fcb09281682e57828a75043502fa3bd248180d87fece3e8dcc2aed1",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/statkeeper-initial-delivery.md"
+    },
+    {
+      "hash": "05331723f3ac2159f97ececa1f328f92e84f76758fc07bea09fd5fac5478c4dd",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/overview.md"
+    },
+    {
+      "hash": "170536661d43dab83e3598c5947898ba79244be031d99758ca0fe3092a01c9c0",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/invariants.md"
+    },
+    {
+      "hash": "a3b8aada9d4b9b24f152d43d0678f46f8b5f537e0d63b36748f0f57a1404886a",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/lifecycle.md"
+    },
+    {
+      "hash": "b37ec41c6c0373581b0b0d3d4628e5ebcd6403eeef059bb76d3062f80a1d495e",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/config.md"
+    },
+    {
+      "hash": "5845c283b9ec441a854201e1729faf8c72f0d6bbdf073c3297e8b5b5e29fef35",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/architecture.md"
+    },
+    {
+      "hash": "debec3454308687da4c4b7abf0b5c10db466422f5d3e007caec7e874f62d0a32",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/tech-stack.md"
+    },
+    {
+      "hash": "953068fb5be61102d0b083d1d1ba0424eabb319fe6d62ecc3334ebf9159fc126",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/authentication.md"
+    },
+    {
+      "hash": "c0d8f78b544823fadf98cce746e2429f1f061b22d090a5db72e2cf26a2396ecd",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/role-administration.md"
+    },
+    {
+      "hash": "3cecf79cfc74ee5d8c7bfbd14f67b2c786760ba3bb1e42708a10f5ba8e32482c",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/rosters.md"
+    },
+    {
+      "hash": "86ad4027f0fb9db3a4e02d831a83d93bfc1fa21e5e0a1f7fe343b8e763223ed1",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/player-stat-lines.md"
+    },
+    {
+      "hash": "eb774a925e5259ce2e5dc11d3f9bf6ee6d93e9dfa28ad88d94717e4eb0cf142e",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/member-statistics.md"
+    },
+    {
+      "hash": "ee9037130703264c0858c9e94c4916bf20708eb165cea92a6fd8c617b85638d2",
+      "path": "/Users/Shared/Agent-Workspace/repos/personal/courtside/specs/public-portal.md"
+    }
+  ]
+}

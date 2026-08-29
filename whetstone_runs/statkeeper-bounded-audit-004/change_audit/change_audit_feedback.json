@@ -1,0 +1,36 @@
+{
+  "draft_hash": "4eda032fa4a9ab16f6085a58267544d5f32bc231525a7eb50b74d52d7a94ca6d",
+  "feedback": [
+    {
+      "affected_sections": [
+        "statkeeper.md: Game Occurrences and Statistical Events",
+        "statkeeper.md: League Statkeeping Profile and Localization",
+        "statkeeper.md: Deferred Decisions and Non-goals",
+        "statkeeper-initial-delivery.md: Capture Action"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "minor",
+      "claim": "The general capability spec still uses present-tense language that allows profile-required relationships between Statistical Events, while the initial-delivery spec requires any direct event-to-event graph to be rejected. This leaves a narrow terminology conflict for implementers deriving initial profile validation.",
+      "determinism_impact": "minor",
+      "evidence": "`statkeeper.md` says each Statistical Event owns `relationships to other Statistical Events in the same occurrence when the vocabulary requires them` and that the profile must define `relationships to another event, when required`. The same spec later defers `direct event-to-event relationship graphs in the initial delivery`, and `statkeeper-initial-delivery.md` says `The initial delivery represents compound relationships through shared occurrence identity and does not add a separate event-to-event graph` and validators `must reject` a profile requiring a direct relationship from one emitted Statistical Event to another.",
+      "feedback_id": "fb_001",
+      "in_scope": true,
+      "invariant_violated": "deterministic_behavior",
+      "issue_fingerprint": "615362f833b8cf462f0c3b03777e042543e7b45ec40aee6d5f27be525248a522",
+      "issue_id": "iss_615362f833b8cf46",
+      "issue_type": "artifact_reference_consistency",
+      "normalized_severity": "minor",
+      "oscillation_key": null,
+      "recommended_change": "Align the capability spec wording so the present-tense relationship fields are explicitly future-scope or explicitly limited to shared Game Occurrence grouping for initial delivery. For example, state that initial profiles may express compound actions only by emitting multiple events in one Game Occurrence, and any direct Statistical Event relationship requirement is a future capability rejected by the initial validator.",
+      "rubric_impact": null,
+      "severity_rationale": "This directly affects the expected boundary around shared-occurrence-only compound events and profile validation, but it appears resolvable by a narrow wording correction rather than a product decision."
+    }
+  ],
+  "profile": "consistency",
+  "reviewer": {
+    "model": "gpt-5-codex",
+    "name": "Codex Whetstone Consistency Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 1
+}

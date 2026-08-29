@@ -1,0 +1,37 @@
+{
+  "draft_hash": "a924a4c18e43a604904ea72020c3a90ac6669839838148ce26a4441ca5484ffb",
+  "feedback": [
+    {
+      "affected_sections": [
+        "specs/statkeeper.md > Game Occurrences and Statistical Events",
+        "specs/statkeeper.md > League Statkeeping Profile and Localization",
+        "specs/statkeeper.md > Deferred Decisions and Non-goals",
+        "specs/statkeeper-initial-delivery.md > Capture Action",
+        "specs/statkeeper-initial-delivery.md > Explicitly Deferred"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "minor",
+      "claim": "The target specs still mix future-capable direct Statistical Event relationship language with the initial-delivery shared-occurrence-only boundary, leaving the initial validator's unsupported direct relationship rule less consistently framed than the audit intent requires.",
+      "determinism_impact": "minor",
+      "evidence": "`statkeeper.md` says each Statistical Event owns `relationships to other Statistical Events in the same occurrence when the vocabulary requires them` and profile definitions include `relationships to another event, when required`; later it defers `direct event-to-event relationship graphs in the initial delivery` and says compound initial-delivery relationships use shared Game Occurrence identity. `statkeeper-initial-delivery.md` correctly says the initial delivery represents compound relationships through shared occurrence identity and must reject direct event relationships, but the broader target spec's unqualified relationship wording can still be read as allowing vocabulary-required direct event relationships in the active Statkeeper model.",
+      "feedback_id": "fb_001",
+      "in_scope": true,
+      "invariant_violated": "deterministic_behavior",
+      "issue_fingerprint": "e7e9b4bf158a5376df0e9018cee63070ea4bd65ea2b80f3602f1e26ee123b8c5",
+      "issue_id": "iss_e7e9b4bf158a5376",
+      "issue_type": "terminology_consistency",
+      "normalized_severity": "minor",
+      "oscillation_key": null,
+      "recommended_change": "Qualify the two relationship bullets in `statkeeper.md` as future/deferred capability, or replace them for the initial boundary with shared Game Occurrence identity terminology. Keep `statkeeper-initial-delivery.md` as the source for the initial validator rejecting direct event-to-event relationship requirements.",
+      "rubric_impact": null,
+      "severity_rationale": "This is within the bounded audit because it directly concerns whether the prior event-relationship finding remains. It is minor because the initial-delivery spec and deferred list contain the correct rejection rule, but terminology in the companion target spec can still mislead implementation of profile validation and action expansion."
+    }
+  ],
+  "profile": "consistency",
+  "reviewer": {
+    "model": "gpt-5-codex",
+    "name": "Codex Whetstone Consistency Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 1
+}

@@ -28,6 +28,8 @@ REQUIRED_FILES = (
     "specs/season-deletion.md",
     "specs/player-stat-lines.md",
     "specs/member-statistics.md",
+    "specs/statkeeper.md",
+    "specs/statkeeper-initial-delivery.md",
     "specs/lifecycle.md",
     "specs/invariants.md",
     "specs/config.md",

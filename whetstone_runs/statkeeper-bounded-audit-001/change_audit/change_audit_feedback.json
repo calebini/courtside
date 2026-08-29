@@ -1,0 +1,58 @@
+{
+  "draft_hash": "94748a81b91e7a422a5f47c105b415c6a19b856cc5880d84ef9e968c693a618a",
+  "feedback": [
+    {
+      "affected_sections": [
+        "specs/statkeeper.md: Session and Publication Lifecycle",
+        "specs/statkeeper-initial-delivery.md: Capture Session Identity and State",
+        "specs/statkeeper-initial-delivery.md: Correction and Abandonment"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "major",
+      "claim": "The two target specs use the `abandoned` lifecycle term inconsistently for a post-publication correction working revision.",
+      "determinism_impact": "major",
+      "evidence": "`statkeeper.md` lists `capturing | in_review | verified -> abandoned` and says abandoned closes an unpublished working revision while not removing an earlier published revision. The delivery spec says `abandoned` applies only when the Game has no published revision, and abandoning an unpublished correction returns the session to `published`.",
+      "feedback_id": "fb_lifecycle_abandon_correction",
+      "in_scope": true,
+      "invariant_violated": "state_legality",
+      "issue_fingerprint": "62e7827f82e88f1f1f83a0d5c751d59e2e5333eadbb0124673c3f676ff01fb05",
+      "issue_id": "iss_62e7827f82e88f1f",
+      "issue_type": "terminology_consistency",
+      "normalized_severity": "major",
+      "oscillation_key": null,
+      "recommended_change": "Align the lifecycle wording so `abandoned` is only a terminal state for never-published sessions, and use a distinct phrase such as `discard correction working revision` for returning a published session from correction review back to `published`.",
+      "rubric_impact": null,
+      "severity_rationale": "An implementation could persist different terminal states for the same correction-abandonment action, which directly affects legal transitions and member-read continuity."
+    },
+    {
+      "affected_sections": [
+        "specs/statkeeper.md: Game Occurrences and Statistical Events",
+        "specs/statkeeper.md: League Statkeeping Profile and Localization",
+        "specs/statkeeper-initial-delivery.md: Capture Action"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "minor",
+      "claim": "The capability spec requires profile-defined relationships between Statistical Events when needed, but the initial delivery excludes a separate event-to-event graph without explicitly saying how such profile definitions are handled.",
+      "determinism_impact": "minor",
+      "evidence": "`statkeeper.md` says each Statistical Event owns relationships to other Statistical Events in the same occurrence when the vocabulary requires them, and that the profile must define relationships to another event when required. `statkeeper-initial-delivery.md` says compound relationships are represented through shared occurrence identity and does not add a separate event-to-event graph.",
+      "feedback_id": "fb_event_relationship_primitive",
+      "in_scope": true,
+      "invariant_violated": "artifact_integrity",
+      "issue_fingerprint": "6c2eedb33e428676f0c3dea41c519c7d56fe0fe6d01bbab7282155045047a057",
+      "issue_id": "iss_6c2eedb33e428676",
+      "issue_type": "artifact_reference_consistency",
+      "normalized_severity": "minor",
+      "oscillation_key": null,
+      "recommended_change": "State that the initial delivery profile validator rejects event definitions requiring event-to-event relationships beyond shared occurrence identity, or move explicit event-to-event relationship support to the initial delivery primitives.",
+      "rubric_impact": null,
+      "severity_rationale": "This is a bounded terminology/artifact mismatch that could cause schema or validator divergence, but it can be corrected with a narrow alignment statement."
+    }
+  ],
+  "profile": "consistency",
+  "reviewer": {
+    "model": "gpt-5-codex",
+    "name": "Codex Whetstone Consistency Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 1
+}

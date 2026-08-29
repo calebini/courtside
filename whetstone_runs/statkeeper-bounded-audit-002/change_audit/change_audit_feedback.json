@@ -1,0 +1,34 @@
+{
+  "draft_hash": "a160d107c427021ce0ac23b16c1d78f9bafc6b25ad5663f664b667fce3ac7a6d",
+  "feedback": [
+    {
+      "affected_sections": [
+        "Spec 2: Capture Session Identity and State",
+        "Spec 2: Correction and Abandonment"
+      ],
+      "authority_impact": null,
+      "baseline_severity": "minor",
+      "claim": "The initial-delivery spec mostly models abandonment against Capture Session publication state, but one lifecycle sentence says `abandoned` applies only when the `Game has no published revision`, introducing an inconsistent artifact reference for the abandonment precondition.",
+      "determinism_impact": "minor",
+      "evidence": "In `Capture Session Identity and State`, the draft says: \"`abandoned` applies only when the Game has no published revision.\" In `Correction and Abandonment`, the command is defined as requiring \"an unpublished `capturing`, `in_review`, or `verified` session with no Publication.\" The expected boundary also says `abandoned` must be reachable only when no Publication exists and must never conceal or replace an earlier Publication.",
+      "feedback_id": "fb_001",
+      "in_scope": true,
+      "invariant_violated": "state_legality",
+      "issue_fingerprint": "ffab617fb217e021922750c3d0387f3beac403d5ed7ba66a5b334291c4663f33",
+      "issue_id": "iss_ffab617fb217e021",
+      "issue_type": "artifact_reference_consistency",
+      "normalized_severity": "minor",
+      "oscillation_key": null,
+      "recommended_change": "Replace the Game-scoped wording with the same Capture Session and Publication terminology used elsewhere, for example: \"`abandoned` applies only when the Capture Session has no latest published revision or Publication.\"",
+      "rubric_impact": null,
+      "severity_rationale": "This is a narrow terminology/artifact-reference inconsistency directly on the abandonment correction. The surrounding command definition is clear enough to avoid a blocker, but the conflicting Game-scoped phrase can cause implementation ambiguity about which artifact owns the precondition."
+    }
+  ],
+  "profile": "consistency",
+  "reviewer": {
+    "model": "GPT-5",
+    "name": "Codex Whetstone Consistency Reviewer",
+    "version": "1.0.0"
+  },
+  "round_number": 1
+}
