@@ -1,7 +1,7 @@
 # Courtside Statkeeper Event Capture
 
 - Status: proposed
-- Spec version: 0.3.2
+- Spec version: 0.3.4
 - Last updated: 2026-08-29
 
 ## Purpose
@@ -28,6 +28,10 @@ training.
 
 The proposed first production-oriented vertical slice is specified in
 [`statkeeper-initial-delivery.md`](statkeeper-initial-delivery.md).
+The normative operator and member experience invariants for that slice are specified in
+[`statkeeper-capture-experience.md`](statkeeper-capture-experience.md). Those invariants protect the
+high-throughput video-linked workflow from being weakened by an otherwise valid implementation
+refinement.
 
 ## Relationship to Existing Authority
 
@@ -426,8 +430,10 @@ an edited copy. Spreadsheet export is not part of the initial delivery.
 
 The event ledger is intentionally suitable for future model development. It preserves occurrence
 evidence, Statistical Event labels, period and clock annotations, possession context, human
-corrections, source provenance, coverage, and negative or uneventful reviewed intervals rather than
-retaining only clips around positive events.
+corrections, source provenance, and the coverage basis needed to identify negative or uneventful
+reviewed spans rather than retaining only clips around positive events. In the initial delivery,
+that basis is the canonical Media timeline together with accepted occurrences and Coverage Group
+declarations, including supplied gap ranges; it is not a separately materialized training dataset.
 
 Operational collection does not by itself authorize model training. Dataset admission requires a
 separately accepted policy covering video rights, Player privacy, minors where applicable,

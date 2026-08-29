@@ -29,6 +29,7 @@ REQUIRED_FILES = (
     "specs/player-stat-lines.md",
     "specs/member-statistics.md",
     "specs/statkeeper.md",
+    "specs/statkeeper-capture-experience.md",
     "specs/statkeeper-initial-delivery.md",
     "specs/lifecycle.md",
     "specs/invariants.md",
@@ -206,6 +207,9 @@ ACCEPTED_SPECS = (
     "specs/decisions/0019-deliver-member-player-statistics.md",
     "specs/decisions/0020-contain-storage-and-recovery.md",
 )
+STATKEEPER_EXPERIENCE_SPEC = "specs/statkeeper-capture-experience.md"
+STATKEEPER_DELIVERY_SPEC = "specs/statkeeper-initial-delivery.md"
+STATKEEPER_EXPERIENCE_IDS = tuple(f"CX-{number:02d}" for number in range(1, 15))
 TEMPLATE_MARKERS = tuple(
     "{{" + name + "}}" for name in ("component_slug", "package_name", "Component Name")
 )
@@ -230,6 +234,25 @@ def main() -> int:
         path = ROOT / relative_path
         if path.is_file() and "- Status: accepted" not in path.read_text(encoding="utf-8"):
             errors.append(f"accepted source of truth lost accepted status: {relative_path}")
+
+    experience_path = ROOT / STATKEEPER_EXPERIENCE_SPEC
+    delivery_path = ROOT / STATKEEPER_DELIVERY_SPEC
+    if experience_path.is_file() and delivery_path.is_file():
+        experience_content = experience_path.read_text(encoding="utf-8")
+        delivery_content = delivery_path.read_text(encoding="utf-8")
+        for invariant_id in STATKEEPER_EXPERIENCE_IDS:
+            if experience_content.count(f"`{invariant_id}`") != 1:
+                errors.append(
+                    f"Statkeeper experience invariant must be declared exactly once: {invariant_id}"
+                )
+            if f"`{invariant_id}`" not in delivery_content:
+                errors.append(
+                    f"Statkeeper delivery traceability is missing experience invariant: {invariant_id}"
+                )
+        if "## Deferred Experience Scope" not in experience_content:
+            errors.append("Statkeeper experience spec lost its explicit deferred boundary")
+        if "## Explicitly Deferred" not in delivery_content:
+            errors.append("Statkeeper delivery spec lost its explicit deferred boundary")
 
     for path in ROOT.rglob("*"):
         if not path.is_file() or any(part in IGNORED_DIRECTORY_NAMES for part in path.parts):

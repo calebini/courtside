@@ -1,7 +1,7 @@
 # Courtside Statkeeper Initial Delivery
 
 - Status: proposed
-- Spec version: 0.1.2
+- Spec version: 0.2.1
 - Last updated: 2026-08-29
 
 ## Purpose
@@ -18,6 +18,32 @@ projection, member-visible evidence navigation, and audited correction.
 
 This specification does not prescribe any League's concrete statistic terms. A fixture profile may
 be used for development and tests; a real League supplies its own validated profile configuration.
+
+## Product Experience Authority
+
+[`statkeeper-capture-experience.md`](statkeeper-capture-experience.md) is normative for the
+operator and member experience delivered by this slice. The command, persistence, or projection
+design in this specification is incomplete when it satisfies a backend invariant by weakening a
+`CX-*` experience invariant without a separately accepted product decision.
+
+The initial delivery maintains this traceability:
+
+| Experience invariant | Delivery mechanism | Required acceptance evidence |
+|---|---|---|
+| `CX-01` one video-linked workspace | Delivery Surface and YouTube Media boundaries | Playwright capture without spreadsheet or timestamp transcription |
+| `CX-02` Game-derived preflight | `start_statkeeper_session` and participation declaration | DNP and eligible-roster preflight scenario |
+| `CX-03` possession-aware prominence | Possession Sequence and profile possession effect | Prominent-Team, opponent override, and reversible switch scenario |
+| `CX-04` Player-then-action default | Capture Action expansion into one Game Occurrence | Pointer and keyboard paths produce the same durable event set |
+| `CX-05` automatic evidence timestamp | Browser playback capture plus immutable occurrence evidence | Deterministic player test double captures current Media Time without a timestamp field |
+| `CX-06` mandatory basketball time | Period and Game-clock Annotation | Exact, estimated, unavailable, regulation, and overtime tests |
+| `CX-07` minimal compound input | Required and optional participant slots and Event Emissions | Optional compound credit appears only when configured and supplied |
+| `CX-08` durable resume | `save_statkeeper_progress` and `progress_version` | Reload restores acknowledged playback, clock, Period, and possession context |
+| `CX-09` visible persistence state | Command Receipt, optimistic concurrency, and retry behavior | Saved, pending, retryable failure, and preserved rejection states |
+| `CX-10` direct review and correction | Occurrence revision, void, evidence seek, and correction Publication | Review and published-correction scenarios retain lineage |
+| `CX-11` honest coverage and reconciliation | Coverage Group review and discrepancy acceptance on publication | Missing-video partial publication with nonblank reason |
+| `CX-12` League vocabulary and localization | Snapshotted bilingual Profile Version | English and French labels preserve canonical identities |
+| `CX-13` evidence navigation | Publication contribution mapping and authenticated member evidence navigation with provider seek or link generation | Member value-to-occurrence navigation and unavailable evidence state |
+| `CX-14` training-ready human capture | Human source, evidence lineage, canonical Media timeline, and retained Coverage declarations and gap ranges | Model-input rejection and deterministic negative-evidence derivation tests without a training dataset |
 
 ## Authority and Compatibility
 
@@ -68,6 +94,11 @@ without changing statistical meaning.
 A configured localized label contains nonblank `en` and `fr` values after trimming. An action or
 statistic label is at most 80 Unicode scalar values. Optional help text is at most 240. Proper Player
 and Team names remain language-neutral under the existing localization rules.
+
+Canonical comparison and hashing trim configured localized strings and normalize them to Unicode
+NFC before deterministic serialization. Canonically equivalent English or French strings with
+different submitted byte sequences therefore cannot create a distinct Profile Version. This
+normalization changes neither the displayed locale nor the canonical identity of the definition.
 
 ## League Statkeeping Profile Version
 
@@ -287,9 +318,15 @@ The service transaction:
     `not_reviewed`; and
 12. stores the receipt before commit.
 
-An existing session is returned only for an identical idempotent retry. A different attempt to
-start another session for the Game is rejected and directs the operator to resume the canonical
-session.
+An existing session is returned as an accepted command result only for an identical retry using the
+same command identity and canonical content; that retry returns the original Capture Session and
+Command Receipt identities. A different command identity for a Game that already has a canonical
+session cannot create another session or another accepted start receipt. It returns
+`existing_session_conflict`, the canonical Capture Session identity when the actor remains
+authorized to access it, and safe resume guidance. If the submitted Media or DNP basis differs, the
+report identifies that the existing preflight basis must be reviewed without disclosing private
+operator identity. The rejection preserves the existing session and creates no material mutation,
+Audit Record, or Command Receipt.
 
 ## Participation Declaration
 
@@ -321,6 +358,12 @@ contains nonnegative start and end offsets satisfying:
 ```text
 start <= evidence_timestamp <= end
 ```
+
+The canonical Media Time representation is the JSON integer millisecond value. Decimal seconds,
+floating-point values, formatted timestamp strings, frame numbers, generated YouTube query values,
+and implementation-local player positions are not accepted as canonical Media Time. Provider-link
+generation may round or convert the value as required by YouTube, but that URL form is not part of
+the occurrence, receipt, ledger, or projection identity.
 
 The browser reads the current player position and submits it with the occurrence command. The
 server validates the value but cannot independently prove that it exactly matches the client player
@@ -403,8 +446,10 @@ attribution rather than trusting Team or membership values from the browser.
 The pure profile engine expands the action into one occurrence revision and its Statistical Events.
 It validates participant requirements and Team relationships, emits conditional events, applies
 fixed outcome contributions, and calculates the possession effect. The initial command records
-source `human` from the authenticated operator; source is not accepted from the browser. The
-accepted transaction persists the occurrence, contained events, possession change, new ledger
+source `human` from the authenticated operator; source is not accepted from the browser. A command
+that supplies `model`, model confidence, or model provenance is rejected as
+`deferred_inference_input` without mutation in the initial delivery. The accepted transaction
+persists the occurrence, contained events, possession change, new ledger
 version, operational attribution, and Command Receipt atomically.
 
 Reusing an occurrence identity within the session returns the existing result only when canonical
@@ -432,9 +477,25 @@ invalidates the prior projection hash.
 UI-selected participant Team without changing ledger content. It uses `progress_version`, does not
 invalidate review, and does not create a core Audit Record or Player-stat correction.
 
-The client supplies expected progress version. A stale save is rejected or ignored with an explicit
-stale result; it must not overwrite newer progress silently. Progress state never supplies authority
-for publication and may be lost without changing authoritative occurrences or statistics.
+The command accepts command identity, Capture Session identity, expected progress version,
+nonnegative playback Media Time, active Period and structurally valid Game-clock context, and the
+selected participating Season Team or current Possession Sequence identity when present. It is
+available while the canonical session is resumable, including an opened correction revision, and
+requires current League Statkeeper or League Administrator authority.
+
+The service locks the Capture Session progress record independently from the material ledger,
+compares the expected progress version, persists the complete replacement progress state, increments
+`progress_version` exactly once, and stores the operational receipt atomically. An identical retry
+returns the same accepted progress version and state. A stale save returns `stale_progress_version`
+with the current safe progress version and does not overwrite newer progress; a reused command
+identity with different content returns `stale_command_identity` without mutation.
+
+The workspace must restore the most recently acknowledged playback offset, Period, clock context,
+and selected Team or possession context on reload or authorized handoff. Locally cached progress may
+be offered as a clearly provisional recovery draft, but it cannot replace the last acknowledged
+server state silently. Progress state never supplies authority for publication, projection,
+coverage, or occurrence evidence, and losing only unacknowledged progress cannot change
+authoritative occurrences or statistics.
 
 The initial delivery requires network connectivity and server acknowledgement for material event
 writes. Offline capture and later merge are outside scope.
@@ -459,6 +520,25 @@ the prior declarations only as stale guidance. A gap may use reason `missing_vid
 `obscured_play`, `operator_uncertainty`, or `other`; `other` requires explanatory text. An occurrence
 with `unavailable` clock creates a temporal warning but does not by itself force statistical
 coverage partial when the play remains visible.
+
+The complete replacement declaration set is canonicalized by Coverage Group key in ascending byte
+order. Within one partial declaration, gap entries are ordered by Period kind and ordinal, then
+clock-range start and end, then Media-range start and end, then reason key, with absent ranges after
+concrete ranges and normalized explanatory text as the final tie-breaker. Duplicate canonical gap
+entries are rejected. Overlapping or adjacent ranges remain separate assertions rather than being
+merged implicitly; two submissions with different boundaries are therefore different reviewed
+bases even when their union would be equal. This closed ordering is used by unchanged-content
+comparison, coverage-basis hashing, Command Receipt content, projection preview, verification, and
+publication. Implementations cannot choose their own interval-union or merge policy.
+
+The initial delivery does not persist a separate uneventful-interval or negative-example artifact.
+For future provenance, it retains the canonical Media timeline, active occurrence evidence, and the
+accepted Coverage Group declaration basis. A `complete` declaration supports later identification
+of reviewed scope for that group. A `partial` declaration supports interval-level derivation only
+where its canonical gap ranges bound the excluded evidence; a partial declaration containing only
+coarse reasons cannot be reinterpreted as interval-level negative evidence. Any later dataset
+builder must derive candidate reviewed uneventful spans from these retained artifacts under a
+separately accepted dataset policy rather than treating event absence alone as a negative label.
 
 The scoring Coverage Group is the group containing the `player_points` Statistic. A mismatch
 between the projected recorded Player subtotal and the authoritative participant-Team score creates
@@ -580,6 +660,14 @@ partial as already represented by the verified projection, even if the reviewer 
 observed video complete. When no mismatch exists, discrepancy acceptance is ignored and does not
 create an audit reason.
 
+Discrepancy acceptance is part of the publication command and the resulting immutable Publication,
+Audit Record, and Command Receipt; the initial delivery does not create a separately mutable
+acceptance lifecycle. The transaction recomputes the authoritative score comparison, ledger basis,
+coverage basis, and projection hash. If the submitted acceptance refers to a different basis, the
+publication is rejected as `stale_discrepancy_basis` without changing an earlier Publication,
+Player Stat Line, session state, Audit Record, or receipt. An identical retry of an accepted
+publication returns the original artifacts.
+
 The publication transaction:
 
 1. serializes command identity and identical retry handling;
@@ -623,6 +711,15 @@ unpublished occurrences.
 YouTube links are shown only through the authenticated member-statistics surface. Courtside does not
 claim to control a public or unlisted YouTube video after its URL is copied or shared.
 
+If the embedded player cannot load, the provider link cannot be generated, or the canonical video
+is no longer available, the member read retains the published statistic, Publication identity,
+contribution identities, and occurrence evidence metadata and returns `evidence_unavailable` for
+the affected target. The localized surface explains that video evidence is temporarily unavailable
+or no longer accessible without exposing provider credentials, raw provider errors, private
+Account data, operator notes, or unpublished correction state. Provider recovery may make the same
+evidence navigable again without republishing; changing the Media identity, timestamp, or
+contribution set requires the normal correction flow.
+
 ## Correction and Abandonment
 
 `begin_statkeeper_correction` requires a `published` session, expected latest Publication identity,
@@ -633,8 +730,27 @@ on the published snapshot. State becomes `in_review`.
 The ordinary revise, void, participation, possession, coverage, verification, preview, and publish
 commands operate on the correction revision. Published evidence voiding requires a reason.
 
-`abandon_statkeeper_session` requires an unpublished `capturing`, `in_review`, or `verified`
-session with no Publication and changes it to terminal state `abandoned`.
+`abandon_statkeeper_session` accepts command identity, Capture Session identity, expected ledger
+version, expected absence of a latest Publication, and an optional reason while `capturing`. A
+nonblank reason is required while `in_review` or `verified`. Actor identity comes from the verified
+server session.
+
+The service rechecks current League Statkeeper or League Administrator authority, locks the Capture
+Session and latest-Publication slot, verifies the expected ledger version and that no Publication
+has ever been produced, and changes an unpublished `capturing`, `in_review`, or `verified` session to
+terminal state `abandoned`. The accepted transaction writes one abandonment terminal report and
+Command Receipt atomically and increments the ledger version exactly once. It does not create,
+replace, or delete Player Stat Lines, occurrences,
+Statistical Events, participation, Media, possession, coverage, or review history.
+
+The terminal report contains report, command, Capture Session, Game, working-revision, actor, and
+receipt identities; prior lifecycle state; accepted time; reason when supplied or required;
+confirmation that no Publication exists and no Player Stat Line changed; retained-history outcome;
+and safe operator next action. The command returns the terminal report identity, receipt identity,
+final ledger version, and `abandoned` state. Identical retries return the same report and receipt.
+Unauthorized authority, stale ledger version, a missing required reason, any existing Publication,
+an already terminal state with different command content, or a reused command identity rejects
+without mutation using a stable rejection report.
 
 `discard_statkeeper_correction` requires an `in_review` or `verified` correction working revision
 based on a latest Publication. It discards only that working revision and returns the session to
@@ -651,6 +767,36 @@ Every material command carries a globally unique command identity. Canonical pay
 includes actor, target identities, expected versions, normalized strings, ordered definition
 content, semantically unordered identity sets in ascending byte order, and explicit nulls where
 absence differs from a value.
+
+Canonical hashes use SHA-256 over UTF-8 minified JSON with no byte-order mark. Object members are
+ordered by normalized property name; the normative property names are ASCII. Configured localized
+strings use trim-then-NFC normalization. Integers use exact base-10 JSON integer form, and Media
+Time uses nonnegative safe-integer milliseconds. Semantically unordered identity sets are sorted by
+immutable identity byte order. Arrays retain submitted order only when the specification assigns
+that order meaning. Explicit null is retained when it differs from absence; an absent optional field
+is omitted. Generated provider URLs, request time, cache state, database row order, transient UI
+state, and raw provider errors are excluded.
+
+For ledger and projection folding, active occurrence revisions are ordered with regulation Periods
+before overtime Periods and ordinal ascending within each kind, then evidence Media Time ascending,
+evidence-window start and end ascending with absent values after concrete values, clock state
+`exact`, `estimated`, then `unavailable`, remaining clock milliseconds descending for the initial
+countdown clock, stable occurrence identity byte order, and immutable active revision identity byte
+order. Superseded revisions do not contribute, and void revisions contribute lineage but no active
+Statistical Events. Profile definitions use display order with canonical-key byte order as the
+tie-breaker; semantically unordered references use canonical-key byte order. The database, capture
+UI, or adapter cannot supply another tie-breaker.
+
+The verified ledger-basis hash includes the session and working revision, Game, snapshotted Profile
+Version and content hash, canonical Media identity, participation, active possession and occurrence
+revisions, evidence and clock annotations, contained Statistical Events, eligible membership
+assignments, canonical Coverage declarations, and effective scoring coverage. The projection hash
+includes that ledger-basis hash, projector identity, ordered Player and Statistic values including
+explicit zero or unknown, coverage state, contribution identities, reconciliation result, and
+whether discrepancy acceptance is required. The acceptance value and reason belong to the
+publication command, Publication, Audit Record, and receipt rather than changing the projected
+Player values or preview hash. Fixtures publish expected digest values so independent
+implementations can reproduce them.
 
 An accepted retry with the same command identity and canonical content returns the prior receipt.
 Reusing that identity for different content is rejected. Rejected attempts create no material state
@@ -773,6 +919,13 @@ The implementation proceeds in dependency order:
 No migration drops existing points, audits, or member projections before the replacement reads and
 rollback strategy have been exercised locally and in staging.
 
+Migration verification replays committed migrations from an empty database and from a
+representative manual-points fixture. It records applied migration identities, preserved manual
+points and audit counts or hashes, first-publication conversion results, rollback exercise result,
+and the failed step and state-preservation outcome when any check fails. Failure before the first
+Statkeeper publication leaves the existing manual-points read and mutation path available. Failure
+inside first publication rolls back the entire publication transaction to its pre-attempt state.
+
 ## Verification Requirements
 
 Unit tests cover:
@@ -782,7 +935,11 @@ Unit tests cover:
 - exact, estimated, unavailable, regulation, and overtime clocks;
 - DNP and eligibility enforcement;
 - occurrence revision and void behavior;
+- canonical occurrence ordering and rejection of deferred `model` source input;
 - complete, partial, unknown, and known-zero projection;
+- canonical Coverage declaration and gap ordering without implicit interval merging;
+- deterministic identification of derivable reviewed scope and rejection of coarse partial coverage
+  as interval-level negative evidence;
 - scoring reconciliation and discrepancy acceptance;
 - deterministic projection hashes; and
 - published correction, never-published abandonment, and correction-discard transitions.
@@ -790,13 +947,16 @@ Unit tests cover:
 PostgreSQL integration tests cover:
 
 - active-profile, active-role, one-session, revision, participation, and publication constraints;
+- different-command preflight conflict and identical-retry receipt behavior;
 - current Statkeeper and League Administrator authorization;
 - revoked-role rejection;
 - command retry and payload-conflict behavior;
+- acknowledged progress save, stale progress rejection, and reload restoration;
 - stale ledger and Player Stat Line version rejection;
 - atomic publication and rollback at every material failure point;
 - manual-points coexistence and first Statkeeper conversion;
 - append-only published evidence and audit;
+- abandonment terminal report, identical retry, and existing-Publication rejection;
 - no direct `anon` or `authenticated` domain-table writes; and
 - migration replay from an empty database and from representative manual-points fixtures.
 
@@ -808,8 +968,11 @@ Playwright coverage includes:
 - YouTube timestamp capture through a deterministic player test double where provider automation is
   unreliable;
 - Player/action compound occurrence entry and possession switching;
+- reload restoration of acknowledged playback, Period, clock, possession, recent history, and
+  visible pending or retryable state;
 - review, coverage, reconciliation, verification, and publication;
-- member aggregate-to-evidence navigation; and
+- missing-video partial publication with `unavailable` clock and explicit discrepancy reason;
+- member aggregate-to-evidence navigation including `evidence_unavailable`; and
 - published correction while the prior Publication remains visible until commit.
 
 The repository's standard lint, typecheck, unit tests, production build, and structure verification
