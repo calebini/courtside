@@ -1,8 +1,8 @@
 # Courtside Statkeeper Event Capture
 
 - Status: proposed
-- Spec version: 0.3.4
-- Last updated: 2026-08-29
+- Spec version: 0.3.5
+- Last updated: 2026-08-30
 
 ## Purpose
 
@@ -299,13 +299,27 @@ Capture favors speed; review establishes accuracy. An authorized reviewer can:
 - seek to and replay the evidence around an occurrence;
 - adjust the evidence timestamp or window;
 - change occurrence clock state, event type, outcome, Team, Player, or participant role;
-- attach, split, merge, void, or supersede occurrences and Statistical Events under profile rules;
+- revise or void occurrences and their Statistical Events while preserving supersession lineage
+  under profile rules;
 - correct possession boundaries and ending reasons;
 - resolve unidentified participants;
 - inspect source and correction lineage;
 - correct the preflight participation declaration;
 - declare capture coverage; and
 - compare projected values with the authoritative Game score.
+
+The MVP correction surface uses record, revise, and void. It does not expose standalone attach,
+split, or merge actions, and its audit history must describe only the commands and immutable
+revisions that actually occurred. A sequence of MVP corrections may produce the intended corrected
+ledger, but Courtside must not label that sequence as an attach, split, or merge or invent
+cross-occurrence lineage or contribution mappings that the MVP does not create.
+
+Standalone attach, split, and merge remain candidates for explicit future promotion under
+[`decisions/0021-defer-statkeeper-review-restructuring.md`](decisions/0021-defer-statkeeper-review-restructuring.md).
+Promotion must define source and replacement lineage, contribution mappings, profile legality,
+possession boundaries and transition causes, review and verification invalidation, effects on prior
+and replacement Publications, member evidence navigation, atomicity, audit attribution,
+concurrency, and idempotent retry before any such action is exposed or recorded.
 
 The initial recorded value and every material accepted correction remain attributable to an actor
 and timestamp. Published-value corrections follow the existing Player Stat Line rule: a changed
@@ -521,5 +535,8 @@ The following remain deferred from this proposal:
 - replacing the authoritative Game score with an event-derived score;
 - direct event-to-event relationship graphs in the initial delivery; compound initial-delivery
   relationships use shared Game Occurrence identity;
+- standalone review-time attach, split, and merge operations until the promotion contract in
+  [`decisions/0021-defer-statkeeper-review-restructuring.md`](decisions/0021-defer-statkeeper-review-restructuring.md)
+  is accepted in a successor delivery;
 - a separate Statkeeper repository or service; and
 - external or cross-League Statkeeper integrations.

@@ -1,8 +1,8 @@
 # Courtside Statkeeper Initial Delivery
 
 - Status: proposed
-- Spec version: 0.2.1
-- Last updated: 2026-08-29
+- Spec version: 0.2.3
+- Last updated: 2026-08-30
 
 ## Purpose
 
@@ -70,7 +70,8 @@ The implementation uses the following aggregate boundaries:
 - **League Statkeeper Assignment** owns League-scoped operational authority.
 - **Capture Session** owns participation, Media, possession, working ledger revision, coverage,
   review state, and the latest publication identity for exactly one Game.
-- **Game Occurrence Revision** owns one observed moment, its temporal evidence, and its contained
+- **Game Occurrence Revision** owns one observed moment, its temporal evidence, its `recorded` or
+  `verified` verification state, its separate `active` or `void` disposition, and its contained
   Statistical Events.
 - **Statkeeper Publication** is an immutable snapshot of one verified ledger revision and its
   deterministic Player Stat Line projection.
@@ -99,6 +100,10 @@ Canonical comparison and hashing trim configured localized strings and normalize
 NFC before deterministic serialization. Canonically equivalent English or French strings with
 different submitted byte sequences therefore cannot create a distinct Profile Version. This
 normalization changes neither the displayed locale nor the canonical identity of the definition.
+After these domain normalizations, every canonical JSON value in this specification uses the JSON
+Canonicalization Scheme in RFC 8785. The complete string-escaping and UTF-8 byte rules are defined
+under Idempotency, Canonicalization, and Concurrency; adapters cannot substitute a serializer with
+different escaping or byte output.
 
 ## League Statkeeping Profile Version
 
@@ -406,6 +411,15 @@ A Possession Sequence identifies the possessing participant Team, start Media of
 offset, optional ending reason, and the occurrence that caused an automatic transition when one
 exists. At most one sequence is open in a session.
 
+The current working revision's possession basis is the complete ordered sequence history, not only
+the open or most recent sequence. Its canonical form retains every current closed and open sequence,
+including stable sequence identity, possessing participant-Team identity, start offset, explicit
+end offset or null, explicit ending-reason key or null, transition kind `manual` or `automatic`, and
+the causing occurrence identity for `automatic` or null for `manual`. Sequences are ordered by start
+Media offset ascending and then stable sequence identity byte order. A correction replaces the
+working revision's possession basis while prior published and superseded bases remain immutable
+history.
+
 `set_statkeeper_possession` starts the first sequence, switches Teams by closing the open sequence
 and opening the other, or corrects the current state. It requires expected ledger version and a
 Media offset. It is allowed in `capturing`, `in_review`, or `verified`; an edit to verified content
@@ -449,7 +463,8 @@ fixed outcome contributions, and calculates the possession effect. The initial c
 source `human` from the authenticated operator; source is not accepted from the browser. A command
 that supplies `model`, model confidence, or model provenance is rejected as
 `deferred_inference_input` without mutation in the initial delivery. The accepted transaction
-persists the occurrence, contained events, possession change, new ledger
+persists the occurrence with verification state `recorded` and disposition `active`, contained
+events, possession change, new ledger
 version, operational attribution, and Command Receipt atomically.
 
 Reusing an occurrence identity within the session returns the existing result only when canonical
@@ -458,18 +473,37 @@ duplicate Statistical Events or possession transitions.
 
 ## Revising and Voiding Occurrences
 
+The initial correction surface consists of `record_statkeeper_occurrence`,
+`revise_statkeeper_occurrence`, and `void_statkeeper_occurrence`. The MVP exposes no standalone
+attach, split, or merge command or review action. Reviewers may use the available primitives to
+produce the correct active ledger, but the application, audit, and user interface must describe the
+commands and immutable revisions that actually occurred; they must not claim an attach, split, or
+merge relationship or fabricate cross-occurrence lineage or contribution mappings.
+
 `revise_statkeeper_occurrence` accepts a stable occurrence identity, expected current occurrence
 revision, expected session ledger version, and a complete replacement capture input. It runs the
 same validation and expansion as initial recording and creates another immutable occurrence
-revision. It never edits the prior revision in place.
+revision with verification state `recorded` and disposition `active`. It never edits the prior
+revision in place.
 
-`void_statkeeper_occurrence` creates a void revision that contributes no active Statistical Events.
-A reason is optional before the first publication and required when correcting published evidence.
+`void_statkeeper_occurrence` creates a replacement revision with verification state `recorded` and
+disposition `void`; void is not a third verification state. The revision contributes no active
+Statistical Events. A reason is optional before the first publication and required when correcting
+published evidence.
 
 The commands are allowed in `capturing`, `in_review`, or `verified`. Editing a `verified` working
 revision returns it to `in_review`. Editing a `published` session requires
 `begin_statkeeper_correction`. Every accepted material edit increments the ledger version and
-invalidates the prior projection hash.
+invalidates the prior verified ledger-basis and projection hashes. A material replacement of a
+verified occurrence never inherits `verified`; only successful session verification may verify the
+replacement revision.
+
+Every accepted correction retains its ordinary actor, accepted time, command receipt, immutable
+revision lineage, and required audit records. Recording an additional occurrence creates only the
+identity and evidence defined by the record command; it does not imply that another occurrence was
+split or that their Statistical Events were attached or merged. Standalone restructuring requires
+the separately promoted contract in
+[`decisions/0021-defer-statkeeper-review-restructuring.md`](decisions/0021-defer-statkeeper-review-restructuring.md).
 
 ## Operational Resume State
 
@@ -555,12 +589,18 @@ projection.
 Every Coverage declaration must identify the current ledger version as its reviewed basis. Stale
 coverage rejects verification without changing state.
 
-Verification rejects structural errors but may retain warnings. It records verifier, verified time,
-canonical ledger basis hash, canonical projection hash, scoring reconciliation result, and every
-warning. The state becomes `verified` without mutating Player Stat Lines.
+Verification rejects structural errors but may retain warnings. In the accepted transaction it
+marks every current Game Occurrence Revision `verified`, preserving each revision's separate
+`active` or `void` disposition, and records verifier, verified time, canonical ledger basis hash,
+canonical projection hash, scoring reconciliation result, and every warning. The session state
+becomes `verified` without mutating Player Stat Lines. There is no standalone occurrence-
+verification command or additional review interaction in this delivery.
 
 Any later material change invalidates both hashes and returns the working revision to `in_review`.
-Saving operational progress does not.
+Its newly created occurrence revision, when any, is `recorded` until the whole working revision is
+verified again. Saving operational progress does not. Publication with any current `recorded`
+occurrence revision is rejected. Verification with a stale expected ledger version or stale Coverage
+basis is rejected without partial verification-state changes.
 
 ## Generic Player Stat Values
 
@@ -637,7 +677,7 @@ all historical points, but it cannot fabricate evidence.
 
 `preview_statkeeper_projection` is a read-only service over the current working revision. It returns:
 
-- ledger basis hash and projection hash;
+- ledger basis hash, projection hash, and projector identity;
 - Player lines and every projected value with coverage status;
 - contribution occurrence and Statistical Event identities for each numeric value;
 - Team recorded scoring subtotals;
@@ -647,6 +687,15 @@ all historical points, but it cannot fabricate evidence.
 
 The preview does not reserve its result. Publication re-reads and recomputes the complete basis in
 one transaction.
+
+The sole initial projector identity property is `projector_identity`, with the exact canonical
+string value `courtside.statkeeper.player-stat-projection/v1`. It identifies the deterministic
+projection algorithm independently of the snapshotted Profile Version. It does not vary by locale,
+deployment, database migration, transient application build, or mutable display label. Any later
+behavioral change that could alter projected values, coverage interpretation, contribution
+mapping, ordering, reconciliation, or projection hashing for the same canonical ledger basis
+requires a new explicit projector identity. Historical identities and their implementations remain
+available for replay of every Publication that references them.
 
 ## Publication Command
 
@@ -688,9 +737,26 @@ The publication transaction:
 13. saves the Command Receipt; and
 14. commits every change atomically.
 
-Any failure rolls back all Player Stat Lines, values, publication records, session state, audits, and
-receipt writes. Successful cache invalidation covers affected member Game logs, box scores,
-leaderboards, and evidence reads before the application intentionally confirms success.
+Any failure before transaction commit rolls back all Player Stat Lines, values, publication records,
+session state, audits, and receipt writes. Successful cache invalidation covers affected member Game
+logs, box scores, leaderboards, and evidence reads before the application intentionally confirms
+success.
+
+Transaction commit, not cache refresh, response delivery, or browser acknowledgement, establishes
+publication. If the transaction commits but a later step fails, the Publication, Player Stat Lines,
+session state, Audit Records, and Command Receipt remain authoritative and must not be rolled back or
+recreated. The client keeps the original command identity and represents the outcome as pending
+reconciliation or retryable transport failure, not as a domain rejection or a new Capture Session
+lifecycle state.
+
+Before any second publication attempt after an uncertain outcome, the application reads the
+canonical Capture Session and Command Receipt for the original command identity. An existing receipt
+is replayed and the browser reconciles to its Publication. If the canonical read is unavailable, the
+client remains pending and does not mint a replacement command identity. If no receipt exists and
+the canonical session still permits the command, the application may retry only the identical
+canonical command under the original identity. Cache invalidation is independently retryable and
+idempotent by Publication identity; its failure or repetition cannot duplicate a Publication,
+Player Stat Line mutation, Audit Record, contribution mapping, or receipt.
 
 ## Publication Evidence and Member Reads
 
@@ -768,14 +834,22 @@ includes actor, target identities, expected versions, normalized strings, ordere
 content, semantically unordered identity sets in ascending byte order, and explicit nulls where
 absence differs from a value.
 
-Canonical hashes use SHA-256 over UTF-8 minified JSON with no byte-order mark. Object members are
-ordered by normalized property name; the normative property names are ASCII. Configured localized
-strings use trim-then-NFC normalization. Integers use exact base-10 JSON integer form, and Media
-Time uses nonnegative safe-integer milliseconds. Semantically unordered identity sets are sorted by
-immutable identity byte order. Arrays retain submitted order only when the specification assigns
-that order meaning. Explicit null is retained when it differs from absence; an absent optional field
-is omitted. Generated provider URLs, request time, cache state, database row order, transient UI
-state, and raw provider errors are excluded.
+Canonical hashes use SHA-256 over the exact UTF-8 bytes, with no byte-order mark, of JSON serialized
+under RFC 8785 JSON Canonicalization Scheme after this specification's domain normalization and
+ordering rules. Object members follow RFC 8785 ordering; all normative property names are ASCII.
+Strings use RFC 8785 escaping: quotation mark, reverse solidus, and required control characters are
+escaped, printable non-ASCII scalar values such as French accented text are emitted as their UTF-8
+characters rather than optional `\u` escapes, solidus is not escaped, and lone UTF-16 surrogates or
+otherwise invalid Unicode input are rejected before hashing. The resulting JSON text is encoded to
+UTF-8 once, without a trailing newline or other framing bytes.
+
+Configured localized strings use trim-then-NFC normalization before serialization. Integers use the
+RFC 8785 number representation and remain restricted to the exact safe-integer domain defined by
+this specification; Media Time uses nonnegative safe-integer milliseconds. Semantically unordered
+identity sets are sorted by immutable identity byte order. Arrays retain submitted order only when
+the specification assigns that order meaning. Explicit null is retained when it differs from
+absence; an absent optional field is omitted before serialization. Generated provider URLs, request
+time, cache state, database row order, transient UI state, and raw provider errors are excluded.
 
 For ledger and projection folding, active occurrence revisions are ordered with regulation Periods
 before overtime Periods and ordinal ascending within each kind, then evidence Media Time ascending,
@@ -788,19 +862,31 @@ tie-breaker; semantically unordered references use canonical-key byte order. The
 UI, or adapter cannot supply another tie-breaker.
 
 The verified ledger-basis hash includes the session and working revision, Game, snapshotted Profile
-Version and content hash, canonical Media identity, participation, active possession and occurrence
-revisions, evidence and clock annotations, contained Statistical Events, eligible membership
-assignments, canonical Coverage declarations, and effective scoring coverage. The projection hash
-includes that ledger-basis hash, projector identity, ordered Player and Statistic values including
-explicit zero or unknown, coverage state, contribution identities, reconciliation result, and
-whether discrepancy acceptance is required. The acceptance value and reason belong to the
-publication command, Publication, Audit Record, and receipt rather than changing the projected
-Player values or preview hash. Fixtures publish expected digest values so independent
-implementations can reproduce them.
+Version and content hash, canonical Media identity, participation, the complete canonical ordered
+Possession Sequence history and transition basis defined under Possession State, current occurrence
+revisions with verification state and disposition, evidence and clock annotations, contained
+Statistical Events, eligible membership assignments, canonical Coverage declarations, and effective
+scoring coverage. Closed Possession Sequences are never collapsed to the current possessing Team for
+this hash. Every accepted material possession correction changes the working revision and its ledger-
+basis hash even when projected Player values remain identical.
+
+The projection hash includes that ledger-basis hash, exact `projector_identity`, ordered Player and
+Statistic values including explicit zero or unknown, coverage state, contribution identities,
+reconciliation result, and whether discrepancy acceptance is required. The acceptance value and
+reason belong to the publication command, Publication, Audit Record, and receipt rather than
+changing the projected Player values or preview hash. Fixtures publish the canonical JSON text,
+exact UTF-8 bytes or hexadecimal byte representation, projector identity, and expected SHA-256
+digest so independent implementations can reproduce them. Required fixtures include composed and
+decomposed-equivalent French accented text after NFC normalization, quotation-mark and reverse-
+solidus escaping, a control character, printable non-ASCII output, explicit null, omitted optional
+fields, the complete closed-and-open possession basis, and at least one material possession
+correction that changes the ledger-basis hash without changing projected Player values.
 
 An accepted retry with the same command identity and canonical content returns the prior receipt.
 Reusing that identity for different content is rejected. Rejected attempts create no material state
-or receipt.
+or receipt. A committed publication whose response was not acknowledged follows the canonical
+receipt reconciliation and identical-retry procedure under Publication Command; transport and cache
+failures cannot convert that committed command into a rejection.
 
 Material Capture Session writes require expected `ledger_version`. The transaction locks the session
 and increments the version exactly once per accepted command. A stale writer receives a conflict
@@ -827,6 +913,10 @@ and publication rejections preserve authoritative state. Reports identify:
 Browser responses localize safe messages and do not expose database errors, provider credentials,
 private Account data, or another operator's identity.
 
+A response-delivery, browser-acknowledgement, or cache-refresh failure after publication commit is
+not a domain rejection. Its safe report identifies the original command identity and pending
+reconciliation guidance without claiming that the pre-command authoritative state was preserved.
+
 ## Persistence and Database Invariants
 
 The PostgreSQL adapter must independently protect at least:
@@ -838,12 +928,17 @@ The PostgreSQL adapter must independently protect at least:
 - immutable Game, League, Profile Version, and Media identity after capture begins;
 - one participation declaration per eligible Roster Membership and session;
 - one stable occurrence identity per session and ordered immutable revisions;
+- required `recorded` or `verified` occurrence verification state and separate `active` or `void`
+  disposition on every immutable occurrence revision;
 - contained-event ownership by exactly one occurrence revision;
 - nonnegative Media offsets and valid evidence windows;
 - valid Period and clock-state shapes;
 - one open Possession Sequence per session;
+- complete retained possession bases for every working and published ledger revision, including
+  closed sequences and canonical transition causes;
 - monotonic session ledger, progress, occurrence, and Player Stat Line versions;
 - immutable Publication identities, hashes, and contribution mappings;
+- canonical versioned projector identity on every projection and Publication;
 - one projected value per Player Stat Line and Profile Statistic;
 - Statkeeper publication provenance on every Statkeeper-controlled line; and
 - no direct browser grants for profile, assignment, capture, event, publication, or projected-value
@@ -878,6 +973,10 @@ The default pointer flow is Player then action. Optional participant prompts app
 selected action defines them. A successful action clears transient Player selection, applies the
 possession effect, and leaves playback controls usable. Failed persistence remains visibly unsaved
 and retries with the same command identity.
+
+An uncertain publication outcome remains visibly pending reconciliation. The workspace reads the
+canonical session and original command receipt before offering or performing an identical retry; it
+never presents a transport or cache failure as proof that publication rolled back.
 
 The initial delivery is online-only and optimized for desktop and tablet landscape use. Narrow
 screens remain functional for review and evidence navigation but need not match the high-throughput
@@ -935,13 +1034,20 @@ Unit tests cover:
 - exact, estimated, unavailable, regulation, and overtime clocks;
 - DNP and eligibility enforcement;
 - occurrence revision and void behavior;
+- occurrence verification-state and separate disposition transitions for record, revise, void,
+  session verification, stale verification rejection, and later material correction;
 - canonical occurrence ordering and rejection of deferred `model` source input;
 - complete, partial, unknown, and known-zero projection;
 - canonical Coverage declaration and gap ordering without implicit interval merging;
 - deterministic identification of derivable reviewed scope and rejection of coarse partial coverage
   as interval-level negative evidence;
 - scoring reconciliation and discrepancy acceptance;
-- deterministic projection hashes; and
+- deterministic projection hashes using exact
+  `courtside.statkeeper.player-stat-projection/v1` identity;
+- RFC 8785 canonical JSON fixtures covering NFC-equivalent French text, escaping, control
+  characters, printable non-ASCII UTF-8, explicit null, omitted fields, exact bytes, and digests;
+- complete possession-basis hashing, including closed sequences and a possession-only correction
+  that changes the ledger hash without changing projected values; and
 - published correction, never-published abandonment, and correction-discard transitions.
 
 PostgreSQL integration tests cover:
@@ -954,6 +1060,8 @@ PostgreSQL integration tests cover:
 - acknowledged progress save, stale progress rejection, and reload restoration;
 - stale ledger and Player Stat Line version rejection;
 - atomic publication and rollback at every material failure point;
+- committed-but-unacknowledged publication receipt replay, identical retry, idempotent cache
+  refresh, and absence of duplicate publication side effects;
 - manual-points coexistence and first Statkeeper conversion;
 - append-only published evidence and audit;
 - abandonment terminal report, identical retry, and existing-Publication rejection;
@@ -971,6 +1079,10 @@ Playwright coverage includes:
 - reload restoration of acknowledged playback, Period, clock, possession, recent history, and
   visible pending or retryable state;
 - review, coverage, reconciliation, verification, and publication;
+- uncertain post-commit publication recovery remains visibly pending until canonical receipt replay
+  confirms the committed Publication;
+- review correction exposes and records only record, revise, and void semantics, without standalone
+  attach, split, or merge actions or fabricated restructuring lineage;
 - missing-video partial publication with `unavailable` clock and explicit discrepancy reason;
 - member aggregate-to-evidence navigation including `evidence_unavailable`; and
 - published correction while the prior Publication remains visible until commit.
@@ -991,6 +1103,9 @@ The initial delivery excludes:
 - public Player statistics or public evidence navigation;
 - arbitrary formulas, derived rates, negative values, or cross-Game profile projection;
 - direct event-to-event relationship graphs beyond shared Game Occurrence identity;
+- standalone review-time attach, split, and merge operations; a successor delivery must satisfy
+  [`decisions/0021-defer-statkeeper-review-restructuring.md`](decisions/0021-defer-statkeeper-review-restructuring.md)
+  before exposing or recording them;
 - changing a session to a later Profile Version;
 - Media replacement or timeline remapping after the first occurrence;
 - automatic Game-clock recognition;
