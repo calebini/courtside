@@ -73,8 +73,12 @@ describeWithDatabase('PostgreSQL Statkeeper event ledger foundation', () => {
         statkeeper_statistical_event_assignments,
         statkeeper_statistical_events,
         statkeeper_occurrence_revisions,
+        statkeeper_capture_session_coverage,
         statkeeper_event_ledger_participants,
         statkeeper_event_ledger_heads,
+        statkeeper_capture_sessions,
+        game_media,
+        league_statkeeping_profile_versions,
         player_stat_lines,
         roster_memberships,
         players,
@@ -156,6 +160,44 @@ describeWithDatabase('PostgreSQL Statkeeper event ledger foundation', () => {
                '2026-08-30T18:05:00Z', '2026-08-30T20:00:00Z',
                80, 70, $3, $5)`,
       [ids.game, ids.season, ids.seasonTeamA, ids.seasonTeamB, ids.configurationVersion]
+    );
+    await pool.query(
+      `insert into league_statkeeping_profile_versions
+        (id, league_id, version_number, definition, event_definitions, coverage_group_keys,
+         content_hash, regulation_period_count, regulation_period_duration_ms,
+         overtime_period_duration_ms, created_by_account_id, created_at)
+       values ($1, $2, 1, '{}'::jsonb, $3::jsonb, '[]'::jsonb,
+               repeat('b', 64), 4, 600000, 300000, $4, '2026-08-30T20:05:00Z')`,
+      [ids.profile, ids.league, JSON.stringify(eventDefinitions), ids.actor]
+    );
+    await pool.query(
+      `insert into game_media
+        (id, league_id, game_id, provider, provider_asset_id, original_reference,
+         created_by_account_id, created_at)
+       values ($1, $2, $3, 'youtube', 'fixture_asset', 'fixture_asset', $4,
+               '2026-08-30T20:05:00Z')`,
+      [ids.media, ids.league, ids.game, ids.actor]
+    );
+    await pool.query(
+      `insert into statkeeper_capture_sessions
+        (id, game_id, league_id, season_id, home_season_team_id, away_season_team_id,
+         profile_version_id, media_id, lifecycle_status, working_revision_id,
+         progress_version, playback_offset_ms, active_period_kind, active_period_ordinal,
+         active_clock_state, active_clock_remaining_ms, created_by_account_id, created_at, updated_at)
+       values ($1, $2, $3, $4, $5, $6, $7, $8, 'capturing', gen_random_uuid(),
+               0, 0, 'regulation', 1, 'exact', 600000, $9,
+               '2026-08-30T20:05:00Z', '2026-08-30T20:05:00Z')`,
+      [
+        ids.session,
+        ids.game,
+        ids.league,
+        ids.season,
+        ids.seasonTeamA,
+        ids.seasonTeamB,
+        ids.profile,
+        ids.media,
+        ids.actor
+      ]
     );
     await pool.query(
       `insert into statkeeper_event_ledger_heads
