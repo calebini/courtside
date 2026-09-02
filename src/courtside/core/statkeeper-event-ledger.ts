@@ -46,6 +46,8 @@ export interface StatkeeperExpandedEventInput {
 
 export interface StatkeeperOccurrenceInput {
   readonly occurrenceId: string;
+  /** Present for the production Capture Action path; absent for the internal expanded-ledger port. */
+  readonly captureActionKey?: string | null;
   readonly evidenceTimestampMs: number;
   readonly evidenceWindow: StatkeeperEvidenceWindow | null;
   readonly period: StatkeeperPeriod;
@@ -94,6 +96,7 @@ export interface StatkeeperLedgerContext {
 
 export interface NormalizedStatkeeperOccurrenceInput {
   readonly occurrenceId: string;
+  readonly captureActionKey: string | null;
   readonly evidenceTimestampMs: number;
   readonly evidenceWindow: StatkeeperEvidenceWindow | null;
   readonly period: StatkeeperPeriod;
@@ -380,6 +383,13 @@ export function normalizeStatkeeperOccurrenceInput(
 
   return {
     occurrenceId,
+    captureActionKey: input.captureActionKey === null || input.captureActionKey === undefined
+      ? null
+      : requireCanonicalKey(
+          input.captureActionKey,
+          'statkeeper.occurrence.capture_action',
+          'Capture Action key'
+        ),
     evidenceTimestampMs,
     evidenceWindow,
     period,
@@ -397,6 +407,7 @@ export function normalizeStatkeeperOccurrenceInput(
 function canonicalInputValue(input: NormalizedStatkeeperOccurrenceInput): StatkeeperJsonValue {
   return {
     occurrence_id: input.occurrenceId,
+    ...(input.captureActionKey === null ? {} : {capture_action_key: input.captureActionKey}),
     evidence_timestamp_ms: input.evidenceTimestampMs,
     evidence_window: input.evidenceWindow
       ? {start_ms: input.evidenceWindow.startMs, end_ms: input.evidenceWindow.endMs}
@@ -776,6 +787,9 @@ export function buildStatkeeperOccurrenceLedgerRecord(
     profile_content_hash: context.profileContentHash,
     media_id: context.mediaId,
     occurrence_id: occurrenceInput.occurrenceId,
+    ...(occurrenceInput.captureActionKey === null
+      ? {}
+      : {capture_action_key: occurrenceInput.captureActionKey}),
     occurrence_revision_id: occurrenceRevisionId,
     revision_number: 1,
     evidence_timestamp_ms: occurrenceInput.evidenceTimestampMs,

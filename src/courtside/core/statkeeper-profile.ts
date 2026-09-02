@@ -403,6 +403,20 @@ export function normalizeStatkeeperProfileDefinition(input: unknown): Normalized
       eventRoleKeys.set(eventKey, roles);
       return {eventKey, outcomeKey, actorRoleKey, condition};
     });
+    if (!eventEmissions.some((emission) => emission.condition === 'always')) {
+      throw new RuleViolation(
+        'statkeeper.profile.action_expansion',
+        `${path} must emit at least one event when optional participants are absent`
+      );
+    }
+    const emittedRoleKeys = new Set(eventEmissions.map((emission) => emission.actorRoleKey));
+    const unrepresentedSlot = participantSlots.find((slot) => !emittedRoleKeys.has(slot.roleKey));
+    if (unrepresentedSlot) {
+      throw new RuleViolation(
+        'statkeeper.profile.action_expansion',
+        `${path} participant role ${unrepresentedSlot.roleKey} is not represented by an Event Emission`
+      );
+    }
     return {
       actionKey,
       label: localizedLabel(value.label, `${path}.label`),
