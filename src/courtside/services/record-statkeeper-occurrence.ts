@@ -118,6 +118,7 @@ export interface StatkeeperOccurrenceTransaction {
     createdAt: Date;
   }): Promise<void>;
   applyAutomaticPossessionSwitch(input: {
+    acceptedLedgerVersion: number;
     closingSequenceId: string;
     newSequenceId: string;
     captureSessionId: string;
@@ -593,6 +594,7 @@ export function createStatkeeperOccurrenceRecordService(
       if (expanded.possession.effect === 'switch') {
         possessionSequenceId = newId();
         await transaction.applyAutomaticPossessionSwitch({
+          acceptedLedgerVersion: nextLedgerVersion,
           closingSequenceId: expanded.possession.closingSequenceId,
           newSequenceId: possessionSequenceId,
           captureSessionId: session.captureSessionId,

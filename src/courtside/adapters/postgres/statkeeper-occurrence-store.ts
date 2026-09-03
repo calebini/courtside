@@ -1,8 +1,11 @@
+import {randomUUID} from 'node:crypto';
 import type {Pool, PoolClient} from 'pg';
 
 import {normalizeStatkeeperProfileDefinition} from '@/courtside/core/statkeeper-profile';
 import {hasStatkeeperAccess} from '@/courtside/core/statkeeper-authority';
 import {loadStatkeeperAuthority} from './statkeeper-authority';
+import {setCurrentPossession} from '@/courtside/core/statkeeper-possession';
+import {appendPossessionBasis, loadPossessionBasis} from './statkeeper-possession-basis';
 import type {
   RecordStatkeeperOccurrenceResult,
   StatkeeperOccurrenceStore,
@@ -100,18 +103,8 @@ class PostgresStatkeeperOccurrenceTransaction implements StatkeeperOccurrenceTra
         order by roster_membership_id`,
       [captureSessionId]
     );
-    const openPossession = await this.client.query<{
-      id: string;
-      possessing_season_team_id: string;
-      start_media_offset_ms: string;
-    }>(
-      `select id, possessing_season_team_id, start_media_offset_ms
-         from statkeeper_possession_sequences
-        where capture_session_id = $1
-          and end_media_offset_ms is null`,
-      [captureSessionId]
-    );
-    const possession = openPossession.rows[0];
+    const basis = await loadPossessionBasis(this.client, captureSessionId, row.working_revision_id);
+    const possession = basis.sequences.find((sequence) => sequence.endMediaOffsetMs === null);
     return {
       captureSessionId: row.capture_session_id,
       leagueId: row.league_id,
@@ -146,9 +139,9 @@ class PostgresStatkeeperOccurrenceTransaction implements StatkeeperOccurrenceTra
       })),
       openPossession: possession
         ? {
-            sequenceId: possession.id,
-            possessingSeasonTeamId: possession.possessing_season_team_id,
-            startMediaOffsetMs: Number(possession.start_media_offset_ms)
+            sequenceId: possession.sequenceId,
+            possessingSeasonTeamId: possession.possessingSeasonTeamId,
+            startMediaOffsetMs: possession.startMediaOffsetMs
           }
         : null
     };
@@ -184,33 +177,22 @@ class PostgresStatkeeperOccurrenceTransaction implements StatkeeperOccurrenceTra
                   filter (where event.id is not null),
                 array[]::uuid[]
               ) as event_ids,
-              (
-                select possession.id
-                  from statkeeper_possession_sequences possession
-                 where possession.capture_session_id = occurrence.capture_session_id
-                   and possession.causing_occurrence_revision_id = occurrence.occurrence_revision_id
-                   and possession.started_by_transition_kind = 'automatic'
-                 limit 1
-              ) as automatic_possession_sequence_id,
-              (
-                select possession.possessing_season_team_id
-                  from statkeeper_possession_sequences possession
-                 where possession.capture_session_id = occurrence.capture_session_id
-                   and possession.causing_occurrence_revision_id = occurrence.occurrence_revision_id
-                   and possession.started_by_transition_kind = 'automatic'
-                 limit 1
-              ) as automatic_possessing_season_team_id,
-              (
-                select possession.start_media_offset_ms
-                  from statkeeper_possession_sequences possession
-                 where possession.capture_session_id = occurrence.capture_session_id
-                   and possession.causing_occurrence_revision_id = occurrence.occurrence_revision_id
-                   and possession.started_by_transition_kind = 'automatic'
-                 limit 1
-              ) as automatic_start_media_offset_ms
+              automatic.sequence->>'sequenceId' as automatic_possession_sequence_id,
+              automatic.sequence->>'possessingSeasonTeamId' as automatic_possessing_season_team_id,
+              automatic.sequence->>'startMediaOffsetMs' as automatic_start_media_offset_ms
          from statkeeper_occurrence_revisions occurrence
          left join statkeeper_statistical_events event
            on event.occurrence_revision_id = occurrence.occurrence_revision_id
+         left join lateral (
+           select sequence
+             from statkeeper_possession_bases basis,
+                  jsonb_array_elements(basis.sequences) as sequence
+            where basis.capture_session_id = occurrence.capture_session_id
+              and basis.ledger_version >= occurrence.accepted_ledger_version
+              and sequence->>'causingOccurrenceRevisionId' = occurrence.occurrence_revision_id::text
+              and sequence->>'transitionKind' = 'automatic'
+            order by basis.ledger_version limit 1
+         ) automatic on true
         where occurrence.capture_session_id = $1
           and occurrence.occurrence_id = $2
           and occurrence.revision_number = 1
@@ -222,7 +204,8 @@ class PostgresStatkeeperOccurrenceTransaction implements StatkeeperOccurrenceTra
                  occurrence.accepted_lifecycle_status,
                  occurrence.capture_action_key,
                  occurrence.capture_input_hash,
-                 occurrence.capture_session_id`,
+                 occurrence.capture_session_id,
+                 automatic.sequence`,
       [captureSessionId, occurrenceId]
     );
     const row = result.rows[0];
@@ -335,42 +318,23 @@ class PostgresStatkeeperOccurrenceTransaction implements StatkeeperOccurrenceTra
   async applyAutomaticPossessionSwitch(
     input: Parameters<StatkeeperOccurrenceTransaction['applyAutomaticPossessionSwitch']>[0]
   ) {
-    const closed = await this.client.query(
-      `update statkeeper_possession_sequences
-          set end_media_offset_ms = $3,
-              ending_reason_key = 'automatic_switch'
-        where id = $1
-          and capture_session_id = $2
-          and possessing_season_team_id = $4
-          and end_media_offset_ms is null`,
-      [
-        input.closingSequenceId,
-        input.captureSessionId,
-        input.atMediaOffsetMs,
-        input.fromSeasonTeamId
-      ]
-    );
-    if (closed.rowCount !== 1) {
+    const basis = await loadPossessionBasis(this.client, input.captureSessionId, input.workingRevisionId);
+    const open = basis.sequences.find((sequence) => sequence.endMediaOffsetMs === null);
+    if (open?.sequenceId !== input.closingSequenceId || open.possessingSeasonTeamId !== input.fromSeasonTeamId) {
       throw new Error(`Open Possession Sequence ${input.closingSequenceId} changed concurrently`);
     }
-    await this.client.query(
-      `insert into statkeeper_possession_sequences
-        (id, capture_session_id, working_revision_id, possessing_season_team_id,
-         start_media_offset_ms, started_by_transition_kind, causing_occurrence_id,
-         causing_occurrence_revision_id, created_by_account_id, created_at)
-       values ($1, $2, $3, $4, $5, 'automatic', $6, $7, $8, $9)`,
-      [
-        input.newSequenceId,
-        input.captureSessionId,
-        input.workingRevisionId,
-        input.toSeasonTeamId,
-        input.atMediaOffsetMs,
-        input.occurrenceId,
-        input.occurrenceRevisionId,
-        input.actorAccountId,
-        input.createdAt
-      ]
-    );
+    const sequences = setCurrentPossession({
+      context: {homeSeasonTeamId: input.fromSeasonTeamId, awaySeasonTeamId: input.toSeasonTeamId},
+      sequences: basis.sequences, sequenceId: input.newSequenceId,
+      seasonTeamId: input.toSeasonTeamId, mediaOffsetMs: input.atMediaOffsetMs,
+      automaticCause: {occurrenceId: input.occurrenceId, occurrenceRevisionId: input.occurrenceRevisionId}
+    });
+    await appendPossessionBasis(this.client, {
+      id: randomUUID(), captureSessionId: input.captureSessionId, workingRevisionId: input.workingRevisionId,
+      ledgerVersion: input.acceptedLedgerVersion, previousBasisId: basis.basisId, sequences,
+      mediaOffsetMs: input.atMediaOffsetMs,
+      operation: 'automatic_switch', actorAccountId: input.actorAccountId, reason: null, createdAt: input.createdAt
+    });
   }
 
   async updateSessionAfterRecording(
