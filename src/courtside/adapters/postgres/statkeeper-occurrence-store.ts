@@ -155,6 +155,7 @@ class PostgresStatkeeperOccurrenceTransaction implements StatkeeperOccurrenceTra
     const result = await this.client.query<{
       occurrence_id: string;
       occurrence_revision_id: string;
+      revision_number: number;
       content_hash: string;
       accepted_ledger_version: string;
       accepted_lifecycle_status: 'capturing' | 'in_review';
@@ -167,6 +168,7 @@ class PostgresStatkeeperOccurrenceTransaction implements StatkeeperOccurrenceTra
     }>(
       `select occurrence.occurrence_id,
               occurrence.occurrence_revision_id,
+              occurrence.revision_number,
               occurrence.content_hash,
               occurrence.accepted_ledger_version,
               occurrence.accepted_lifecycle_status,
@@ -195,10 +197,15 @@ class PostgresStatkeeperOccurrenceTransaction implements StatkeeperOccurrenceTra
          ) automatic on true
         where occurrence.capture_session_id = $1
           and occurrence.occurrence_id = $2
-          and occurrence.revision_number = 1
+          and occurrence.revision_number = (
+            select max(latest.revision_number) from statkeeper_occurrence_revisions latest
+             where latest.capture_session_id = occurrence.capture_session_id
+               and latest.occurrence_id = occurrence.occurrence_id
+          )
           and occurrence.capture_action_key is not null
         group by occurrence.occurrence_id,
                  occurrence.occurrence_revision_id,
+                 occurrence.revision_number,
                  occurrence.content_hash,
                  occurrence.accepted_ledger_version,
                  occurrence.accepted_lifecycle_status,
@@ -213,6 +220,7 @@ class PostgresStatkeeperOccurrenceTransaction implements StatkeeperOccurrenceTra
       ? {
           occurrenceId: row.occurrence_id,
           occurrenceRevisionId: row.occurrence_revision_id,
+          revisionNumber: row.revision_number,
           contentHash: row.content_hash,
           eventIds: row.event_ids,
           acceptedLedgerVersion: Number(row.accepted_ledger_version),

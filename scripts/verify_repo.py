@@ -61,6 +61,7 @@ REQUIRED_FILES = (
     "specs/decisions/0024-deliver-statkeeper-occurrence-capture.md",
     "specs/decisions/0025-deliver-statkeeper-authority-and-game-queue.md",
     "specs/decisions/0026-deliver-statkeeper-possession-control.md",
+    "specs/decisions/0027-deliver-statkeeper-occurrence-corrections.md",
     "specs/repo-standard.md",
     "docs/development.md",
     "docs/operations.md",
@@ -86,6 +87,7 @@ REQUIRED_FILES = (
     "src/courtside/services/record-statkeeper-occurrence.ts",
     "src/courtside/services/read-statkeeper-game-queue.ts",
     "src/courtside/services/set-statkeeper-possession.ts",
+    "src/courtside/services/correct-statkeeper-occurrence.ts",
     "src/courtside/core/player-stat-line.ts",
     "src/courtside/core/statkeeper-canonical-json.ts",
     "src/courtside/core/statkeeper-event-ledger.ts",
@@ -117,6 +119,7 @@ REQUIRED_FILES = (
     "src/courtside/adapters/postgres/statkeeper-game-queue-store.ts",
     "src/courtside/adapters/postgres/statkeeper-possession-store.ts",
     "src/courtside/adapters/postgres/statkeeper-possession-basis.ts",
+    "src/courtside/adapters/postgres/statkeeper-occurrence-correction-store.ts",
     "src/courtside/adapters/postgres/player-points-dashboard-store.ts",
     "src/courtside/adapters/postgres/member-statistics-store.ts",
     "src/courtside/adapters/postgres/password-recovery-authorization-store.ts",
@@ -158,6 +161,7 @@ REQUIRED_FILES = (
     "supabase/migrations/20260902120000_statkeeper_occurrence_capture.sql",
     "supabase/migrations/20260903120000_statkeeper_assignment_identity.sql",
     "supabase/migrations/20260903130000_statkeeper_possession_bases.sql",
+    "supabase/migrations/20260904120000_statkeeper_occurrence_corrections.sql",
     "tests/unit/standings.test.ts",
     "tests/unit/roster.test.ts",
     "tests/unit/authentication.test.ts",
@@ -256,6 +260,7 @@ ACCEPTED_SPECS = (
     "specs/decisions/0024-deliver-statkeeper-occurrence-capture.md",
     "specs/decisions/0025-deliver-statkeeper-authority-and-game-queue.md",
     "specs/decisions/0026-deliver-statkeeper-possession-control.md",
+    "specs/decisions/0027-deliver-statkeeper-occurrence-corrections.md",
 )
 STATKEEPER_EXPERIENCE_SPEC = "specs/statkeeper-capture-experience.md"
 STATKEEPER_DELIVERY_SPEC = "specs/statkeeper-initial-delivery.md"

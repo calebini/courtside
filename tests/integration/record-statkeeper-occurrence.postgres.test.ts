@@ -5,12 +5,16 @@ import {afterAll, beforeAll, beforeEach, describe, expect, it} from 'vitest';
 
 import {createPostgresPool} from '@/courtside/adapters/postgres/pool';
 import {PostgresStatkeeperOccurrenceStore} from '@/courtside/adapters/postgres/statkeeper-occurrence-store';
+import {PostgresStatkeeperOccurrenceCorrectionStore} from '@/courtside/adapters/postgres/statkeeper-occurrence-correction-store';
 import {PostgresStatkeeperPreflightStore} from '@/courtside/adapters/postgres/statkeeper-preflight-store';
 import {PostgresStatkeeperPossessionStore} from '@/courtside/adapters/postgres/statkeeper-possession-store';
 import {possessionBasisHash, type StatkeeperPossessionSequence} from '@/courtside/core/statkeeper-possession';
 import {createStatkeeperPossessionService, type SetStatkeeperPossessionCommand} from '@/courtside/services/set-statkeeper-possession';
 import {createStatkeeperProfileActivationService} from '@/courtside/services/activate-statkeeper-profile';
 import {createStatkeeperOccurrenceRecordService} from '@/courtside/services/record-statkeeper-occurrence';
+import {
+  createStatkeeperOccurrenceCorrectionService, type CorrectStatkeeperOccurrenceCommand
+} from '@/courtside/services/correct-statkeeper-occurrence';
 import {createStatkeeperSessionStartService} from '@/courtside/services/start-statkeeper-session';
 import {statkeeperProfileFixture} from '../fixtures/statkeeper-profile';
 
@@ -276,6 +280,35 @@ describeWithDatabase('PostgreSQL Statkeeper occurrence capture and possession co
         newId: () => ids.switchedPossession
       }
     );
+  }
+
+  function correctionService(dependencies: {now?: () => Date; newId?: () => string} = {}) {
+    return createStatkeeperOccurrenceCorrectionService(
+      new PostgresStatkeeperOccurrenceCorrectionStore(pool),
+      {now: () => new Date('2026-08-30T20:05:00Z'), ...dependencies}
+    );
+  }
+
+  function correctionCommand(
+    operation: 'revise_statkeeper_occurrence' | 'void_statkeeper_occurrence',
+    previousRevisionId: string,
+    overrides: Partial<CorrectStatkeeperOccurrenceCommand> = {}
+  ): CorrectStatkeeperOccurrenceCommand {
+    const base = {
+      type: operation, commandId: randomUUID(), actorAccountId: ids.statkeeperAccount,
+      captureSessionId: ids.session, occurrenceId: ids.occurrence,
+      expectedOccurrenceRevisionId: previousRevisionId, expectedLedgerVersion: 3,
+      reason: 'Correction vidéo'
+    } as const;
+    return operation === 'revise_statkeeper_occurrence'
+      ? {...base, type: operation, replacement: {
+          actionKey: 'made_two', evidenceTimestampMs: 45_000,
+          evidenceWindow: {startMs: 44_000, endMs: 46_000},
+          period: {kind: 'regulation', ordinal: 1}, clock: {state: 'exact', remainingMs: 555_000},
+          participantSelections: [{roleKey: 'shooter', playerId: ids.playerA}],
+          operatorNote: 'Horodatage corrigé'
+        }, ...overrides} as CorrectStatkeeperOccurrenceCommand
+      : {...base, type: operation, ...overrides} as CorrectStatkeeperOccurrenceCommand;
   }
 
   it('atomically expands an authorized action, records its ledger facts, and switches possession', async () => {
@@ -633,5 +666,210 @@ describeWithDatabase('PostgreSQL Statkeeper occurrence capture and possession co
       expect((await client.query('select count(*)::int as count from statkeeper_occurrence_revisions')).rows[0].count).toBe(1);
     } finally { await client.query('rollback'); client.release(); }
     expect((await bases())[1]).toEqual(current);
+  });
+
+  it('revises through immutable lineage and deterministically replaces the latest automatic possession effect', async () => {
+    const original = await service()(command(randomUUID()));
+    const originalRows = (await pool.query('select * from statkeeper_occurrence_revisions order by revision_number')).rows;
+    const priorBases = await bases();
+    const submitted = correctionCommand('revise_statkeeper_occurrence', original.occurrenceRevisionId);
+    const revise = correctionService();
+    const accepted = await revise(submitted);
+    expect(accepted).toMatchObject({receiptReused: false, operation: 'revise_statkeeper_occurrence',
+      previousOccurrenceRevisionId: original.occurrenceRevisionId, revisionNumber: 2,
+      disposition: 'active', ledgerVersion: 4, lifecycleStatus: 'capturing',
+      possessionChanged: true, reviewInvalidated: true});
+    expect(accepted.occurrenceRevisionId).not.toBe(original.occurrenceRevisionId);
+    expect(accepted.eventIds).toHaveLength(1);
+    const revisions = (await pool.query(`select revision_number, previous_occurrence_revision_id,
+      disposition, verification_state, correction_reason, canonical_payload::jsonb as payload
+      from statkeeper_occurrence_revisions order by revision_number`)).rows;
+    expect(revisions).toHaveLength(2);
+    expect((await pool.query('select * from statkeeper_occurrence_revisions where revision_number = 1')).rows[0])
+      .toEqual(originalRows[0]);
+    expect(revisions[1]).toMatchObject({revision_number: 2, previous_occurrence_revision_id: original.occurrenceRevisionId,
+      disposition: 'active', verification_state: 'recorded', correction_reason: 'Correction vidéo'});
+    expect(revisions[1].payload).toMatchObject({previous_occurrence_revision_id: original.occurrenceRevisionId,
+      correction_reason: 'Correction vidéo', revision_number: 2, evidence_timestamp_ms: 45_000});
+    const history = await bases();
+    expect(history.slice(0, 2)).toEqual(priorBases);
+    expect(history[2]).toMatchObject({operation: 'occurrence_correction', previous_basis_id: priorBases[1].id});
+    expect(history[2].sequences).toHaveLength(2);
+    expect(history[2].sequences[1]).toMatchObject({startMediaOffsetMs: 45_000,
+      causingOccurrenceRevisionId: accepted.occurrenceRevisionId});
+    expect(history[2].sequences.some((sequence) => sequence.causingOccurrenceRevisionId === original.occurrenceRevisionId)).toBe(false);
+    const after = await state();
+    await expect(revise(submitted)).resolves.toEqual({...accepted, receiptReused: true});
+    await expect(revise({...submitted, reason: 'Autre raison'})).rejects.toMatchObject({report: {violatedRule: 'command.idempotency'}});
+    await expect(service()({...command(randomUUID()), expectedLedgerVersion: 4}))
+      .rejects.toMatchObject({report: {violatedRule: 'statkeeper.occurrence.identity'}});
+    expect(await state()).toEqual(after);
+    expect((await pool.query(`select count(*)::int as count from audit_records
+      where action = 'statkeeper.occurrence_revised'`)).rows[0].count).toBe(1);
+  });
+
+  it('voids by appending a zero-event replacement revision and reverses an unconsumed automatic switch', async () => {
+    const original = await service()(command(randomUUID()));
+    const priorEvents = (await pool.query('select * from statkeeper_statistical_events')).rows;
+    const priorBases = await bases();
+    const submitted = correctionCommand('void_statkeeper_occurrence', original.occurrenceRevisionId, {reason: '  Mauvaise saisie  '});
+    const accepted = await correctionService()(submitted);
+    expect(accepted).toMatchObject({operation: 'void_statkeeper_occurrence', revisionNumber: 2,
+      disposition: 'void', eventIds: [], ledgerVersion: 4, possessionChanged: true});
+    expect((await pool.query('select * from statkeeper_statistical_events')).rows).toEqual(priorEvents);
+    const revisions = (await pool.query(`select revision_number, disposition, correction_reason,
+      canonical_payload::jsonb as payload from statkeeper_occurrence_revisions order by revision_number`)).rows;
+    expect(revisions).toHaveLength(2);
+    expect(revisions[1]).toMatchObject({revision_number: 2, disposition: 'void', correction_reason: 'Mauvaise saisie'});
+    expect(revisions[1].payload).toMatchObject({events: [], disposition: 'void',
+      previous_occurrence_revision_id: original.occurrenceRevisionId});
+    await expect(pool.query(`insert into statkeeper_statistical_events
+      (id, occurrence_revision_id, capture_session_id, emission_ordinal, event_key, outcome_key,
+       season_team_id, content_hash)
+      select $1, $2, capture_session_id, emission_ordinal, event_key, outcome_key, season_team_id, content_hash
+        from statkeeper_statistical_events where occurrence_revision_id = $3`,
+    [randomUUID(), accepted.occurrenceRevisionId, original.occurrenceRevisionId]))
+      .rejects.toThrow(/Void occurrence revisions/);
+    const history = await bases();
+    expect(history.slice(0, 2)).toEqual(priorBases);
+    expect(history[2].sequences).toEqual(priorBases[0].sequences);
+    expect(await state()).toMatchObject({ledger_version: '4', occurrence_count: 2, progress_version: '0'});
+  });
+
+  it('requires explicit possession correction when later occurrence history depends on an automatic switch', async () => {
+    const first = await service()(command(randomUUID()));
+    const second = createStatkeeperOccurrenceRecordService(new PostgresStatkeeperOccurrenceStore(pool), {
+      now: () => new Date('2026-08-30T20:05:00Z')
+    });
+    await second({...command(randomUUID(), 'fa000000-0000-4000-8000-000000000044'),
+      expectedLedgerVersion: 3, actionKey: 'missed_two', evidenceTimestampMs: 43_000,
+      participantSelections: [{roleKey: 'shooter', playerId: ids.playerB}]});
+    const before = await state();
+    await expect(correctionService()(correctionCommand('void_statkeeper_occurrence', first.occurrenceRevisionId,
+      {expectedLedgerVersion: 4}))).rejects.toMatchObject({report: {
+        violatedRule: 'statkeeper.possession.review_conflict', authoritativeStatePreserved: true,
+        currentLedgerVersion: 4
+      }});
+    expect(await state()).toEqual(before);
+  });
+
+  it('does not introduce an automatic switch behind a later occurrence', async () => {
+    const record = createStatkeeperOccurrenceRecordService(new PostgresStatkeeperOccurrenceStore(pool), {
+      now: () => new Date('2026-08-30T20:04:00Z')
+    });
+    const first = await record({...command(randomUUID()), actionKey: 'missed_two',
+      participantSelections: [{roleKey: 'shooter', playerId: ids.playerA}]});
+    await record({...command(randomUUID(), 'fa000000-0000-4000-8000-000000000045'),
+      expectedLedgerVersion: 3, actionKey: 'missed_two', evidenceTimestampMs: 44_000,
+      evidenceWindow: null});
+    await expect(correctionService()(correctionCommand('revise_statkeeper_occurrence', first.occurrenceRevisionId,
+      {expectedLedgerVersion: 4}))).rejects.toMatchObject({report: {violatedRule: 'statkeeper.possession.review_conflict'}});
+  });
+
+  it('voids without changing possession after an explicit manual correction has already taken ownership', async () => {
+    const original = await service()(command(randomUUID()));
+    const base = (await bases())[0];
+    await possessionService()(possessionCommand({expectedLedgerVersion: 3,
+      change: {kind: 'replace_basis', mediaOffsetMs: 42_000, sequences: base.sequences}}));
+    const priorBases = await bases();
+    const accepted = await correctionService()(correctionCommand('void_statkeeper_occurrence', original.occurrenceRevisionId,
+      {expectedLedgerVersion: 4}));
+    expect(accepted).toMatchObject({ledgerVersion: 5, disposition: 'void', possessionChanged: false, possessionBasisId: null});
+    expect(await bases()).toEqual(priorBases);
+  });
+
+  it('reactivates a void occurrence only through a new complete active revision', async () => {
+    const original = await service()(command(randomUUID()));
+    const voided = await correctionService()(correctionCommand('void_statkeeper_occurrence', original.occurrenceRevisionId));
+    await expect(correctionService()(correctionCommand('void_statkeeper_occurrence', voided.occurrenceRevisionId,
+      {expectedLedgerVersion: 4}))).rejects.toMatchObject({report: {violatedRule: 'statkeeper.occurrence.no_change'}});
+    const revised = await correctionService()(correctionCommand('revise_statkeeper_occurrence', voided.occurrenceRevisionId,
+      {expectedLedgerVersion: 4, replacement: {
+        actionKey: 'made_two', evidenceTimestampMs: 45_000, evidenceWindow: null,
+        period: {kind: 'regulation', ordinal: 1}, clock: {state: 'exact', remainingMs: 555_000},
+        participantSelections: [{roleKey: 'shooter', playerId: ids.playerA}], operatorNote: null
+      }}));
+    expect(revised).toMatchObject({revisionNumber: 3, disposition: 'active', ledgerVersion: 5, possessionChanged: true});
+    expect((await pool.query('select disposition from statkeeper_occurrence_revisions order by revision_number')).rows)
+      .toEqual([{disposition: 'active'}, {disposition: 'void'}, {disposition: 'active'}]);
+  });
+
+  it('rejects alternate-path revision branches at the PostgreSQL boundary', async () => {
+    const original = await service()(command(randomUUID()));
+    await correctionService()(correctionCommand('void_statkeeper_occurrence', original.occurrenceRevisionId));
+    await expect(pool.query(`insert into statkeeper_occurrence_revisions
+      (occurrence_revision_id, capture_session_id, occurrence_id, revision_number,
+       previous_occurrence_revision_id, correction_reason, game_id, profile_version_id, media_id,
+       source, verification_state, disposition, canonical_payload, content_hash, recorded_by_account_id,
+       accepted_ledger_version, capture_action_key, capture_input_hash, working_revision_id,
+       accepted_lifecycle_status, created_at)
+      select $1, capture_session_id, occurrence_id, 2, $2, 'branch', game_id, profile_version_id, media_id,
+        source, verification_state, disposition, canonical_payload, content_hash, recorded_by_account_id,
+        4, capture_action_key, capture_input_hash, working_revision_id, accepted_lifecycle_status,
+        '2026-08-30T20:06:00Z'
+      from statkeeper_occurrence_revisions where revision_number = 1`,
+    [randomUUID(), original.occurrenceRevisionId])).rejects.toThrow(/latest immutable revision/);
+    expect((await pool.query('select count(*)::int as count from statkeeper_occurrence_revisions')).rows[0].count).toBe(2);
+  });
+
+  it('returns verified corrections to review and rejects direct published or abandoned correction', async () => {
+    const original = await service()(command(randomUUID()));
+    await pool.query(`update statkeeper_capture_sessions set lifecycle_status = 'verified', updated_at = '2026-08-30T20:04:30Z'`);
+    const accepted = await correctionService()(correctionCommand('void_statkeeper_occurrence', original.occurrenceRevisionId));
+    expect(accepted.lifecycleStatus).toBe('in_review');
+    for (const status of ['published', 'abandoned']) {
+      await pool.query(`update statkeeper_capture_sessions set lifecycle_status = $1, updated_at = '2026-08-30T20:06:00Z'`, [status]);
+      await expect(correctionService()(correctionCommand('revise_statkeeper_occurrence', accepted.occurrenceRevisionId,
+        {expectedLedgerVersion: 4}))).rejects.toMatchObject({report: {violatedRule: 'statkeeper.session.correction_state'}});
+    }
+  });
+
+  it('rejects revoked authority, stale ledger/current revision, no-op revise and repeated void without mutation', async () => {
+    const original = await service()(command(randomUUID()));
+    const before = await state();
+    await expect(correctionService()(correctionCommand('revise_statkeeper_occurrence', original.occurrenceRevisionId,
+      {expectedLedgerVersion: 2}))).rejects.toMatchObject({report: {violatedRule: 'statkeeper.ledger.stale_version'}});
+    await expect(correctionService()(correctionCommand('revise_statkeeper_occurrence', randomUUID())))
+      .rejects.toMatchObject({report: {violatedRule: 'statkeeper.occurrence.stale_revision'}});
+    await expect(correctionService()(correctionCommand('revise_statkeeper_occurrence', original.occurrenceRevisionId,
+      {replacement: {
+        actionKey: 'made_two', evidenceTimestampMs: 42_000, evidenceWindow: {startMs: 41_000, endMs: 43_000},
+        period: {kind: 'regulation', ordinal: 1}, clock: {state: 'exact', remainingMs: 558_000},
+        participantSelections: [{roleKey: 'shooter', playerId: ids.playerA}], operatorNote: 'Panier près du cercle'
+      }}))).rejects.toMatchObject({report: {violatedRule: 'statkeeper.occurrence.no_change'}});
+    expect(await state()).toEqual(before);
+    const ordinary = correctionCommand('revise_statkeeper_occurrence', original.occurrenceRevisionId);
+    const injected = {...ordinary, replacement: {
+      ...('replacement' in ordinary ? ordinary.replacement : {}), model: 'deferred-model'
+    }} as unknown as CorrectStatkeeperOccurrenceCommand;
+    await expect(correctionService()(injected)).rejects.toMatchObject({report: {
+      violatedRule: 'statkeeper.correction.replacement', authoritativeStatePreserved: true
+    }});
+    expect(await state()).toEqual(before);
+    await pool.query(`update league_statkeeper_assignments set revoked_by_account_id = $1,
+      revoked_at = '2026-08-30T20:05:00Z' where id = $2`, [ids.adminAccount, ids.statkeeperAssignment]);
+    await expect(correctionService()(correctionCommand('void_statkeeper_occurrence', original.occurrenceRevisionId)))
+      .rejects.toMatchObject({report: {violatedRule: 'authorization.statkeeper_or_league_admin_required'}});
+  });
+
+  it('serializes concurrent corrections so only one extends the expected revision and ledger', async () => {
+    const original = await service()(command(randomUUID()));
+    const outcomes = await Promise.allSettled([
+      correctionService()(correctionCommand('void_statkeeper_occurrence', original.occurrenceRevisionId)),
+      correctionService()(correctionCommand('void_statkeeper_occurrence', original.occurrenceRevisionId))
+    ]);
+    expect(outcomes.filter((outcome) => outcome.status === 'fulfilled')).toHaveLength(1);
+    expect(outcomes.find((outcome) => outcome.status === 'rejected')).toMatchObject({reason: {report: {violatedRule: 'statkeeper.ledger.stale_version'}}});
+  });
+
+  it('rolls back revision, possession, ledger, audit and receipt after a late audit failure', async () => {
+    const recorded = await service()(command(randomUUID()));
+    const before = await state();
+    const generated = [randomUUID(), ids.audit];
+    await expect(correctionService({newId: () => generated.shift()!})(
+      correctionCommand('void_statkeeper_occurrence', recorded.occurrenceRevisionId)
+    )).rejects.toMatchObject({code: '23505'});
+    expect(await state()).toEqual(before);
+    expect(await bases()).toHaveLength(2);
   });
 });

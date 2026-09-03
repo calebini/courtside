@@ -82,6 +82,7 @@ export interface StoredStatkeeperCaptureSession {
 export interface StoredCaptureOccurrence {
   readonly occurrenceId: string;
   readonly occurrenceRevisionId: string;
+  readonly revisionNumber: number;
   readonly contentHash: string;
   readonly eventIds: readonly string[];
   readonly acceptedLedgerVersion: number;
@@ -277,7 +278,7 @@ function normalizeCaptureEvidence(raw: RecordStatkeeperOccurrenceCommand) {
   return {evidenceTimestampMs, evidenceWindow, period, clock};
 }
 
-function normalizeCommand(
+export function normalizeRecordStatkeeperOccurrenceCommand(
   raw: RecordStatkeeperOccurrenceCommand
 ): RecordStatkeeperOccurrenceCommand {
   const runtime = raw as RecordStatkeeperOccurrenceCommand & Record<string, unknown>;
@@ -355,7 +356,7 @@ function commandValue(command: RecordStatkeeperOccurrenceCommand) {
   };
 }
 
-function captureInputValue(command: RecordStatkeeperOccurrenceCommand) {
+export function statkeeperCaptureInputValue(command: RecordStatkeeperOccurrenceCommand) {
   return {
     action_key: command.actionKey,
     capture_session_id: command.captureSessionId,
@@ -420,9 +421,9 @@ export function createStatkeeperOccurrenceRecordService(
     let payloadHash: string;
     let captureInputHash: string;
     try {
-      command = normalizeCommand(rawCommand);
+      command = normalizeRecordStatkeeperOccurrenceCommand(rawCommand);
       payloadHash = statkeeperCanonicalHash(commandValue(command));
-      captureInputHash = statkeeperCanonicalHash(captureInputValue(command));
+      captureInputHash = statkeeperCanonicalHash(statkeeperCaptureInputValue(command));
     } catch (error) {
       if (!(error instanceof RuleViolation)) throw error;
       throw rejection(rawCommand, {
@@ -477,6 +478,15 @@ export function createStatkeeperOccurrenceRecordService(
       );
       const acceptedAt = now();
       if (existing) {
+        if (existing.revisionNumber !== 1) {
+          throw rejection(command, {
+            entityType: 'GameOccurrence', entityId: command.occurrenceId,
+            currentStateOrCondition: `occurrence revision ${existing.revisionNumber}`,
+            violatedRule: 'statkeeper.occurrence.identity',
+            message: 'Existing occurrence identities can be changed only through revise or void',
+            currentLedgerVersion: session.ledger.ledgerVersion
+          });
+        }
         if (
           existing.captureInputHash !== captureInputHash
           || existing.captureActionKey !== command.actionKey

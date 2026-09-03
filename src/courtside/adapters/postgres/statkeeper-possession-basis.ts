@@ -17,7 +17,7 @@ export async function loadPossessionBasis(client: PoolClient, captureSessionId: 
 export async function appendPossessionBasis(client: PoolClient, input: {
   id: string; captureSessionId: string; workingRevisionId: string; ledgerVersion: number;
   previousBasisId: string | null; sequences: readonly StatkeeperPossessionSequence[];
-  operation: 'manual_set' | 'manual_correction' | 'automatic_switch';
+  operation: 'manual_set' | 'manual_correction' | 'automatic_switch' | 'occurrence_correction';
   mediaOffsetMs: number;
   actorAccountId: string; reason: string | null; createdAt: Date;
 }) {

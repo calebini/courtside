@@ -2,6 +2,7 @@ import {describe, expect, it} from 'vitest';
 
 import {
   buildStatkeeperOccurrenceLedgerRecord,
+  buildStatkeeperVoidRevision,
   normalizeStatkeeperOccurrenceInput,
   STATKEEPER_LEDGER_RECORD_FORMAT,
   type StatkeeperLedgerContext,
@@ -159,5 +160,39 @@ describe('Statkeeper occurrence ledger', () => {
       ...input(),
       source: 'model'
     } as StatkeeperOccurrenceInput)).toThrow(/not accepted/);
+  });
+
+  it('creates deterministic active correction and non-contributing void lineage', () => {
+    const first = buildStatkeeperOccurrenceLedgerRecord(context, ids.actor, normalizeStatkeeperOccurrenceInput(input()));
+    const revised = buildStatkeeperOccurrenceLedgerRecord(context, ids.actor, normalizeStatkeeperOccurrenceInput({
+      ...input(), evidenceTimestampMs: 124_000, evidenceWindow: null
+    }), {revisionNumber: 2, previousOccurrenceRevisionId: first.occurrenceRevisionId, correctionReason: '  Revu à la vidéo  '});
+    expect(revised).toMatchObject({revisionNumber: 2, previousOccurrenceRevisionId: first.occurrenceRevisionId,
+      disposition: 'active', occurrenceRevisionId: 'bdbf8664-f0a3-5bc6-b250-065033981646'});
+    expect(revised.events[0]!.id).not.toBe(first.events[0]!.id);
+    expect(JSON.parse(revised.canonicalPayload)).toMatchObject({
+      previous_occurrence_revision_id: first.occurrenceRevisionId,
+      correction_reason: 'Revu à la vidéo', verification_state: 'recorded', disposition: 'active'
+    });
+    const voided = buildStatkeeperVoidRevision({context, actorAccountId: ids.actor, current: revised,
+      revisionNumber: 3, reason: null});
+    expect(voided).toMatchObject({revisionNumber: 3, previousOccurrenceRevisionId: revised.occurrenceRevisionId,
+      disposition: 'void', events: []});
+    expect(JSON.parse(voided.canonicalPayload)).toMatchObject({events: [], disposition: 'void',
+      previous_occurrence_revision_id: revised.occurrenceRevisionId, correction_reason: null});
+    expect(buildStatkeeperVoidRevision({context, actorAccountId: ids.actor, current: revised,
+      revisionNumber: 3, reason: null})).toEqual(voided);
+  });
+
+  it('rejects skipped, detached, or malformed correction lineage', () => {
+    const first = buildStatkeeperOccurrenceLedgerRecord(context, ids.actor, normalizeStatkeeperOccurrenceInput(input()));
+    expect(() => buildStatkeeperOccurrenceLedgerRecord(context, ids.actor,
+      normalizeStatkeeperOccurrenceInput(input()), {revisionNumber: 2})).toThrow(/predecessor/);
+    expect(() => buildStatkeeperOccurrenceLedgerRecord(context, ids.actor,
+      normalizeStatkeeperOccurrenceInput(input()), {revisionNumber: 1, previousOccurrenceRevisionId: first.occurrenceRevisionId})).toThrow(/initial/);
+    expect(() => buildStatkeeperVoidRevision({context, actorAccountId: ids.actor, current: first,
+      revisionNumber: 3, reason: null})).toThrow(/immediately/);
+    expect(() => buildStatkeeperVoidRevision({context: {...context, mediaId: ids.game},
+      actorAccountId: ids.actor, current: first, revisionNumber: 2, reason: null})).toThrow(/envelope/);
   });
 });

@@ -135,7 +135,9 @@ export interface StatkeeperLedgerEventRecord {
 export interface StatkeeperOccurrenceLedgerRecord {
   readonly occurrenceId: string;
   readonly occurrenceRevisionId: string;
-  readonly revisionNumber: 1;
+  readonly revisionNumber: number;
+  readonly previousOccurrenceRevisionId: string | null;
+  readonly disposition: 'active' | 'void';
   readonly contentHash: string;
   readonly canonicalPayload: string;
   readonly events: readonly StatkeeperLedgerEventRecord[];
@@ -611,7 +613,12 @@ function definitionMap(definitions: readonly StatkeeperEventDefinition[]) {
 export function buildStatkeeperOccurrenceLedgerRecord(
   contextInput: StatkeeperLedgerContext,
   actorAccountIdInput: string,
-  occurrenceInput: NormalizedStatkeeperOccurrenceInput
+  occurrenceInput: NormalizedStatkeeperOccurrenceInput,
+  revision: {
+    readonly revisionNumber?: number;
+    readonly previousOccurrenceRevisionId?: string | null;
+    readonly correctionReason?: string | null;
+  } = {}
 ): StatkeeperOccurrenceLedgerRecord {
   if (!Array.isArray(contextInput.participants)) {
     throw new RuleViolation(
@@ -693,8 +700,21 @@ export function buildStatkeeperOccurrenceLedgerRecord(
     );
   }
 
+  const revisionNumber = revision.revisionNumber ?? 1;
+  if (!Number.isSafeInteger(revisionNumber) || revisionNumber < 1) {
+    throw new RuleViolation('statkeeper.occurrence.revision', 'Occurrence revision number must be a positive safe integer');
+  }
+  const previousOccurrenceRevisionId = revision.previousOccurrenceRevisionId == null
+    ? null
+    : requireUuid(revision.previousOccurrenceRevisionId, 'statkeeper.occurrence.revision', 'Previous occurrence revision identity');
+  if ((revisionNumber === 1) !== (previousOccurrenceRevisionId === null)) {
+    throw new RuleViolation('statkeeper.occurrence.revision', 'Only an initial occurrence revision may omit its predecessor');
+  }
+  const correctionReason = normalizeOptionalText(
+    revision.correctionReason, 'statkeeper.occurrence.correction_reason', 'Correction reason', 500
+  );
   const occurrenceRevisionId = deterministicUuid(
-    `${context.captureSessionId}:${occurrenceInput.occurrenceId}:revision:1`
+    `${context.captureSessionId}:${occurrenceInput.occurrenceId}:revision:${revisionNumber}`
   );
   const eventRecords: StatkeeperLedgerEventRecord[] = occurrenceInput.events.map(
     (event, emissionOrdinal) => {
@@ -791,7 +811,11 @@ export function buildStatkeeperOccurrenceLedgerRecord(
       ? {}
       : {capture_action_key: occurrenceInput.captureActionKey}),
     occurrence_revision_id: occurrenceRevisionId,
-    revision_number: 1,
+    revision_number: revisionNumber,
+    ...(previousOccurrenceRevisionId === null ? {} : {
+      previous_occurrence_revision_id: previousOccurrenceRevisionId,
+      correction_reason: correctionReason
+    }),
     evidence_timestamp_ms: occurrenceInput.evidenceTimestampMs,
     evidence_window: occurrenceInput.evidenceWindow
       ? {
@@ -835,9 +859,73 @@ export function buildStatkeeperOccurrenceLedgerRecord(
   return {
     occurrenceId: occurrenceInput.occurrenceId,
     occurrenceRevisionId,
-    revisionNumber: 1,
+    revisionNumber,
+    previousOccurrenceRevisionId,
+    disposition: 'active',
     contentHash: statkeeperCanonicalHash(payload),
     canonicalPayload: statkeeperCanonicalJson(payload),
     events: eventRecords
+  };
+}
+
+export function buildStatkeeperVoidRevision(input: {
+  readonly context: StatkeeperLedgerContext;
+  readonly actorAccountId: string;
+  readonly current: StatkeeperOccurrenceLedgerRecord;
+  readonly revisionNumber: number;
+  readonly reason: string | null;
+}): StatkeeperOccurrenceLedgerRecord {
+  const context = validateContext(input.context);
+  const actorAccountId = requireUuid(input.actorAccountId, 'statkeeper.ledger.actor', 'Voiding actor identity');
+  const revisionNumber = requirePositiveInteger(
+    input.revisionNumber, 'statkeeper.occurrence.revision', 'Occurrence revision number'
+  );
+  if (revisionNumber !== input.current.revisionNumber + 1) {
+    throw new RuleViolation('statkeeper.occurrence.revision', 'Void revision must immediately follow the current occurrence revision');
+  }
+  let currentPayload: Record<string, StatkeeperJsonValue>;
+  try {
+    const parsed = JSON.parse(input.current.canonicalPayload) as unknown;
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('not an object');
+    currentPayload = parsed as Record<string, StatkeeperJsonValue>;
+  } catch {
+    throw new RuleViolation('statkeeper.occurrence.lineage', 'Current occurrence payload is not canonical JSON');
+  }
+  if (currentPayload.format !== STATKEEPER_LEDGER_RECORD_FORMAT
+    || currentPayload.capture_session_id !== context.captureSessionId
+    || currentPayload.game_id !== context.gameId
+    || currentPayload.profile_version_id !== context.profileVersionId
+    || currentPayload.media_id !== context.mediaId
+    || currentPayload.occurrence_id !== input.current.occurrenceId
+    || currentPayload.occurrence_revision_id !== input.current.occurrenceRevisionId
+    || currentPayload.revision_number !== input.current.revisionNumber) {
+    throw new RuleViolation('statkeeper.occurrence.lineage', 'Current occurrence payload does not match its immutable envelope');
+  }
+  const reason = normalizeOptionalText(
+    input.reason, 'statkeeper.occurrence.correction_reason', 'Void reason', 500
+  );
+  const occurrenceRevisionId = deterministicUuid(
+    `${context.captureSessionId}:${input.current.occurrenceId}:revision:${revisionNumber}`
+  );
+  const payload: Record<string, StatkeeperJsonValue> = {
+    ...currentPayload,
+    occurrence_revision_id: occurrenceRevisionId,
+    revision_number: revisionNumber,
+    previous_occurrence_revision_id: input.current.occurrenceRevisionId,
+    correction_reason: reason,
+    verification_state: 'recorded',
+    disposition: 'void',
+    recorded_by_account_id: actorAccountId,
+    events: []
+  };
+  return {
+    occurrenceId: input.current.occurrenceId,
+    occurrenceRevisionId,
+    revisionNumber,
+    previousOccurrenceRevisionId: input.current.occurrenceRevisionId,
+    disposition: 'void',
+    contentHash: statkeeperCanonicalHash(payload),
+    canonicalPayload: statkeeperCanonicalJson(payload),
+    events: []
   };
 }
