@@ -96,7 +96,7 @@ export interface StatkeeperSessionTransaction {
   findCommandReceipt(commandId: string): Promise<StoredStatkeeperSessionReceipt | null>;
   findGameForUpdate(gameId: string): Promise<StoredStatkeeperPreflightGame | null>;
   lockLeague(leagueId: string): Promise<boolean>;
-  hasUserAccount(accountId: string): Promise<boolean>;
+  hasActiveCaptureAuthority(leagueId: string, accountId: string): Promise<boolean>;
   findCaptureSessionIdByGame(gameId: string): Promise<string | null>;
   listEligibleParticipants(game: StoredStatkeeperPreflightGame): Promise<EligibleStatkeeperParticipant[]>;
   findActiveProfile(leagueId: string): Promise<StoredActiveStatkeeperPreflightProfile | null>;
@@ -252,13 +252,11 @@ export function createStatkeeperSessionStartService(
       if (!await transaction.lockLeague(game.leagueId)) {
         throw new Error(`Game ${game.id} references missing League ${game.leagueId}`);
       }
-      if (!await transaction.hasUserAccount(command.actorAccountId)) {
+      if (!await transaction.hasActiveCaptureAuthority(game.leagueId, command.actorAccountId)) {
         throw rejected(command, {
-          entityType: 'UserAccount',
-          entityId: command.actorAccountId,
-          currentStateOrCondition: 'not provisioned',
-          violatedRule: 'statkeeper.session.actor',
-          message: 'Session actor must be a provisioned User Account'
+          currentStateOrCondition: 'actor lacks active capture authority',
+          violatedRule: 'authorization.statkeeper_or_league_admin_required',
+          message: 'Active League Statkeeper or League Administrator authority is required'
         });
       }
       const existingSessionId = await transaction.findCaptureSessionIdByGame(game.id);

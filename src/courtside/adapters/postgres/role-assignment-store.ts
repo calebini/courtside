@@ -7,6 +7,7 @@ import type {
   StoredCaptainAssignment,
   StoredCaptainScope,
   StoredLeagueAdminAssignment,
+  StoredLeagueStatkeeperAssignment,
   StoredRoleAccount,
   StoredRoleReceipt
 } from '@/courtside/services/manage-role-assignments';
@@ -112,6 +113,48 @@ class PostgresRoleAssignmentTransaction implements RoleAssignmentTransaction {
       [input.assignmentId, input.revokedAt]
     );
     if (result.rowCount !== 1) throw new Error('League Administrator assignment changed concurrently');
+  }
+
+  async findActiveLeagueStatkeeper(leagueId: string, accountId: string) {
+    const result = await this.client.query<StoredLeagueStatkeeperAssignment>(
+      `select id, league_id as "leagueId", user_account_id as "userAccountId",
+              assigned_by_account_id as "assignedByAccountId", assigned_at as "assignedAt",
+              revoked_by_account_id as "revokedByAccountId", revoked_at as "revokedAt"
+         from league_statkeeper_assignments
+        where league_id = $1 and user_account_id = $2 and revoked_at is null`,
+      [leagueId, accountId]
+    );
+    return result.rows[0] ?? null;
+  }
+
+  async findLeagueStatkeeperAssignment(assignmentId: string) {
+    const result = await this.client.query<StoredLeagueStatkeeperAssignment>(
+      `select id, league_id as "leagueId", user_account_id as "userAccountId",
+              assigned_by_account_id as "assignedByAccountId", assigned_at as "assignedAt",
+              revoked_by_account_id as "revokedByAccountId", revoked_at as "revokedAt"
+         from league_statkeeper_assignments where id = $1`,
+      [assignmentId]
+    );
+    return result.rows[0] ?? null;
+  }
+
+  async insertLeagueStatkeeper(input: Parameters<RoleAssignmentTransaction['insertLeagueStatkeeper']>[0]) {
+    await this.client.query(
+      `insert into league_statkeeper_assignments
+        (id, league_id, user_account_id, assigned_by_account_id, assigned_at)
+       values ($1, $2, $3, $4, $5)`,
+      [input.id, input.leagueId, input.userAccountId, input.actorAccountId, input.assignedAt]
+    );
+  }
+
+  async revokeLeagueStatkeeper(input: Parameters<RoleAssignmentTransaction['revokeLeagueStatkeeper']>[0]) {
+    const result = await this.client.query(
+      `update league_statkeeper_assignments
+          set revoked_by_account_id = $2, revoked_at = $3
+        where id = $1 and revoked_at is null`,
+      [input.assignmentId, input.actorAccountId, input.revokedAt]
+    );
+    if (result.rowCount !== 1) throw new Error('League Statkeeper assignment changed concurrently');
   }
 
   async findActiveCaptainForUpdate(seasonTeamId: string): Promise<StoredCaptainAssignment | null> {

@@ -13,6 +13,8 @@ interface BaseRoleCommand {
 export type RoleAssignmentCommand =
   | (BaseRoleCommand & {type: 'grant_league_admin'; leagueId: string; targetEmail: string})
   | (BaseRoleCommand & {type: 'revoke_league_admin'; assignmentId: string})
+  | (BaseRoleCommand & {type: 'grant_league_statkeeper'; leagueId: string; targetEmail: string})
+  | (BaseRoleCommand & {type: 'revoke_league_statkeeper'; assignmentId: string})
   | (BaseRoleCommand & {type: 'assign_team_captain'; seasonTeamId: string; targetEmail: string})
   | (BaseRoleCommand & {type: 'revoke_team_captain'; assignmentId: string});
 
@@ -25,7 +27,7 @@ export interface RoleAssignmentResult {
 }
 
 export interface RoleAssignmentRejectionReport {
-  readonly entityType: 'League' | 'LeagueAdministratorAssignment' | 'SeasonTeam' | 'TeamCaptainAssignment' | 'UserAccount' | 'Command';
+  readonly entityType: 'League' | 'LeagueAdministratorAssignment' | 'LeagueStatkeeperAssignment' | 'SeasonTeam' | 'TeamCaptainAssignment' | 'UserAccount' | 'Command';
   readonly entityId: string;
   readonly currentStateOrCondition: string;
   readonly requestedMutation: RoleAssignmentCommand['type'];
@@ -51,6 +53,15 @@ export interface StoredRoleAccount {readonly id: string}
 export interface StoredLeagueAdminAssignment {readonly id: string; readonly leagueId: string; readonly userAccountId: string}
 export interface StoredCaptainScope {readonly seasonTeamId: string; readonly seasonId: string; readonly leagueId: string}
 export interface StoredCaptainAssignment extends StoredCaptainScope {readonly id: string; readonly userAccountId: string}
+export interface StoredLeagueStatkeeperAssignment {
+  readonly id: string;
+  readonly leagueId: string;
+  readonly userAccountId: string;
+  readonly assignedByAccountId: string;
+  readonly assignedAt: Date;
+  readonly revokedByAccountId: string | null;
+  readonly revokedAt: Date | null;
+}
 
 export interface RoleAssignmentTransaction {
   lockCommand(commandId: string): Promise<void>;
@@ -64,6 +75,10 @@ export interface RoleAssignmentTransaction {
   countActiveLeagueAdministrators(leagueId: string): Promise<number>;
   insertLeagueAdministrator(input: {id: string; leagueId: string; userAccountId: string; assignedAt: Date}): Promise<void>;
   revokeLeagueAdministrator(input: {assignmentId: string; revokedAt: Date}): Promise<void>;
+  findActiveLeagueStatkeeper(leagueId: string, accountId: string): Promise<StoredLeagueStatkeeperAssignment | null>;
+  findLeagueStatkeeperAssignment(assignmentId: string): Promise<StoredLeagueStatkeeperAssignment | null>;
+  insertLeagueStatkeeper(input: {id: string; leagueId: string; userAccountId: string; actorAccountId: string; assignedAt: Date}): Promise<void>;
+  revokeLeagueStatkeeper(input: {assignmentId: string; actorAccountId: string; revokedAt: Date}): Promise<void>;
   findActiveCaptainForUpdate(seasonTeamId: string): Promise<StoredCaptainAssignment | null>;
   findCaptainAssignmentForUpdate(assignmentId: string): Promise<StoredCaptainAssignment | null>;
   insertCaptain(input: {id: string; seasonTeamId: string; userAccountId: string; actorAccountId: string; assignedAt: Date}): Promise<void>;
@@ -159,6 +174,34 @@ export function createRoleAssignmentService(store: RoleAssignmentStore, dependen
         await transaction.revokeLeagueAdministrator({assignmentId, revokedAt: acceptedAt});
         action = 'league_admin.revoked';
         entityType = 'LeagueAdministratorAssignment';
+      } else if (command.type === 'grant_league_statkeeper') {
+        const league = await transaction.findLeagueForUpdate(command.leagueId);
+        if (!league) throw reject(command, {entityType: 'League', entityId: command.leagueId, currentStateOrCondition: 'not found', violatedRule: 'league.exists', message: 'League not found'});
+        if (!await transaction.hasActiveLeagueAdministrator(league.id, command.actorAccountId)) throw reject(command, {entityType: 'League', entityId: league.id, currentStateOrCondition: 'actor lacks active assignment', violatedRule: 'authorization.league_admin_required', message: 'League Administrator authority required'});
+        const account = await transaction.findAccountByEmail(command.targetEmail);
+        if (!account) throw reject(command, {entityType: 'UserAccount', entityId: command.targetEmail, currentStateOrCondition: 'no unique provisioned account', violatedRule: 'user_account.exists', message: 'Exactly one provisioned account must match the registered email'});
+        if (await transaction.findActiveLeagueStatkeeper(league.id, account.id)) throw reject(command, {entityType: 'UserAccount', entityId: account.id, currentStateOrCondition: 'already an active League Statkeeper', violatedRule: 'league_statkeeper.active_unique', message: 'The account already has Statkeeper authority'});
+        assignmentId = newId();
+        leagueId = league.id;
+        await transaction.insertLeagueStatkeeper({id: assignmentId, leagueId, userAccountId: account.id, actorAccountId: command.actorAccountId, assignedAt: acceptedAt});
+        action = 'league_statkeeper.assigned';
+        entityType = 'LeagueStatkeeperAssignment';
+        newValue = {id: assignmentId, leagueId, userAccountId: account.id, assignedByAccountId: command.actorAccountId, assignedAt: acceptedAt, revokedByAccountId: null, revokedAt: null};
+      } else if (command.type === 'revoke_league_statkeeper') {
+        const scope = await transaction.findLeagueStatkeeperAssignment(command.assignmentId);
+        if (!scope) throw reject(command, {entityType: 'LeagueStatkeeperAssignment', entityId: command.assignmentId, currentStateOrCondition: 'not found', violatedRule: 'league_statkeeper.active_assignment', message: 'Active Statkeeper assignment not found'});
+        // Serialize grants and revocations through the League before inspecting current state.
+        await transaction.findLeagueForUpdate(scope.leagueId);
+        if (!await transaction.hasActiveLeagueAdministrator(scope.leagueId, command.actorAccountId)) throw reject(command, {entityType: 'League', entityId: scope.leagueId, currentStateOrCondition: 'actor lacks active assignment', violatedRule: 'authorization.league_admin_required', message: 'League Administrator authority required'});
+        const assignment = await transaction.findLeagueStatkeeperAssignment(command.assignmentId);
+        if (!assignment || assignment.revokedAt) throw reject(command, {entityType: 'LeagueStatkeeperAssignment', entityId: command.assignmentId, currentStateOrCondition: 'not active', violatedRule: 'league_statkeeper.active_assignment', message: 'Active Statkeeper assignment not found'});
+        assignmentId = assignment.id;
+        leagueId = assignment.leagueId;
+        previousValue = assignment;
+        newValue = {...assignment, revokedByAccountId: command.actorAccountId, revokedAt: acceptedAt};
+        await transaction.revokeLeagueStatkeeper({assignmentId, actorAccountId: command.actorAccountId, revokedAt: acceptedAt});
+        action = 'league_statkeeper.revoked';
+        entityType = 'LeagueStatkeeperAssignment';
       } else if (command.type === 'assign_team_captain') {
         const scope = await transaction.findSeasonTeamForUpdate(command.seasonTeamId);
         if (!scope) throw reject(command, {entityType: 'SeasonTeam', entityId: command.seasonTeamId, currentStateOrCondition: 'not found', violatedRule: 'season_team.exists', message: 'Season Team not found'});

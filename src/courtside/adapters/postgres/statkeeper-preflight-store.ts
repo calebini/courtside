@@ -1,6 +1,8 @@
 import type {Pool, PoolClient} from 'pg';
 
 import {normalizeStatkeeperProfileDefinition} from '@/courtside/core/statkeeper-profile';
+import {hasStatkeeperAccess} from '@/courtside/core/statkeeper-authority';
+import {loadStatkeeperAuthority} from './statkeeper-authority';
 import type {
   ActivateStatkeeperProfileResult,
   StatkeeperProfileStore,
@@ -206,9 +208,8 @@ implements StatkeeperProfileTransaction, StatkeeperSessionTransaction {
       : null;
   }
 
-  async hasUserAccount(accountId: string) {
-    const result = await this.client.query('select 1 from user_accounts where id = $1 limit 1', [accountId]);
-    return result.rowCount === 1;
+  async hasActiveCaptureAuthority(leagueId: string, accountId: string) {
+    return hasStatkeeperAccess(await loadStatkeeperAuthority(this.client, leagueId, accountId));
   }
 
   async findCaptureSessionIdByGame(gameId: string) {

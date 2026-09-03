@@ -1,6 +1,8 @@
 import type {Pool, PoolClient} from 'pg';
 
 import {normalizeStatkeeperProfileDefinition} from '@/courtside/core/statkeeper-profile';
+import {hasStatkeeperAccess} from '@/courtside/core/statkeeper-authority';
+import {loadStatkeeperAuthority} from './statkeeper-authority';
 import type {
   RecordStatkeeperOccurrenceResult,
   StatkeeperOccurrenceStore,
@@ -153,25 +155,7 @@ class PostgresStatkeeperOccurrenceTransaction implements StatkeeperOccurrenceTra
   }
 
   async hasActiveCaptureAuthority(leagueId: string, actorAccountId: string) {
-    const result = await this.client.query(
-      `select 1
-         where exists (
-           select 1
-             from league_admin_assignments
-            where league_id = $1
-              and user_account_id = $2
-              and revoked_at is null
-         )
-         or exists (
-           select 1
-             from league_statkeeper_assignments
-            where league_id = $1
-              and user_account_id = $2
-              and revoked_at is null
-         )`,
-      [leagueId, actorAccountId]
-    );
-    return result.rowCount === 1;
+    return hasStatkeeperAccess(await loadStatkeeperAuthority(this.client, leagueId, actorAccountId));
   }
 
   async findOccurrence(captureSessionId: string, occurrenceId: string) {

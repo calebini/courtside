@@ -134,6 +134,10 @@ export class PostgresMemberStatisticsStore {
            from league_admin_assignments laa
           where laa.user_account_id = $1 and laa.revoked_at is null
          union all
+         select lsa.league_id, false as is_admin
+           from league_statkeeper_assignments lsa
+          where lsa.user_account_id = $1 and lsa.revoked_at is null
+         union all
          select s.league_id, false as is_admin
            from season_team_captain_assignments stca
            join season_teams st on st.id = stca.season_team_id
