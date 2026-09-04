@@ -18,6 +18,7 @@ import {
   validateRegistration
 } from '@/courtside/core/account-onboarding';
 import {provisionAuthenticatedUserAccount} from '@/courtside/services/provision-user-account';
+import {resolveAccountLanding} from '@/courtside/services/resolve-account-landing';
 import {consumePasswordRecoveryAuthorization} from '@/courtside/services/password-recovery-authorization';
 
 function supportedLocale(value: FormDataEntryValue | null) {
@@ -55,19 +56,21 @@ export async function signIn(formData: FormData) {
     redirect(`/${locale}/sign-in?error=invalid`);
   }
 
-  let destination: string;
+  let account;
   try {
-    const {account} = await provisionCurrentIdentity(locale);
-    const pool = getRuntimePostgresPool();
-    const isAdmin = await new PostgresPlayerAccessDashboardStore(pool)
-      .hasAdministrativeAccess(account.id);
-    const hasMemberStatisticsAccess = isAdmin || await new PostgresMemberStatisticsStore(pool)
-      .hasAccess(account.id);
-    destination = `/${account.preferredLocale}/${isAdmin ? 'admin' : hasMemberStatisticsAccess ? 'stats' : 'players'}`;
+    ({account} = await provisionCurrentIdentity(locale));
   } catch {
     await supabase.auth.signOut();
     redirect(`/${locale}/sign-in?error=account`);
   }
+
+  const pool = getRuntimePostgresPool();
+  const playerAccess = new PostgresPlayerAccessDashboardStore(pool);
+  const memberStatistics = new PostgresMemberStatisticsStore(pool);
+  const destination = await resolveAccountLanding(account, {
+    hasAdministrativeAccess: (accountId) => playerAccess.hasAdministrativeAccess(accountId),
+    hasMemberStatisticsAccess: (accountId) => memberStatistics.hasAccess(accountId)
+  }, (error) => console.error('Could not resolve the post-sign-in destination', error));
   redirect(destination);
 }
 

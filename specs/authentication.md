@@ -1,8 +1,8 @@
 # Courtside Authentication Delivery
 
 - Status: accepted
-- Spec version: 0.4.0
-- Last updated: 2026-08-24
+- Spec version: 0.4.1
+- Last updated: 2026-09-04
 
 ## Purpose
 
@@ -31,6 +31,11 @@ Provisioning is a server-side, idempotent operation following successful registr
 Repeated provisioning reuses the existing User Account, synchronizes its verified contact email and the explicitly selected supported language, and does not overwrite its Courtside display name. Provisioning does not create a Player or any Player Management Relationship. A newly provisioned Account must use the request-and-approval workflow in `specs/player-management.md`.
 
 An authenticated but unprovisionable identity is signed out and receives a generic account-preparation failure. Server Components may resolve Accounts but do not provision them as a rendering side effect.
+
+Role-aware post-sign-in routing is advisory rather than part of Account provisioning. If Courtside
+cannot determine whether a successfully provisioned Account should land in League administration or
+member statistics, it retains the verified session and falls back to My Players. A routing lookup
+failure must not be presented as an Account-provisioning failure.
 
 ## Password Recovery
 
