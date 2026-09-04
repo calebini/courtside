@@ -62,6 +62,7 @@ REQUIRED_FILES = (
     "specs/decisions/0025-deliver-statkeeper-authority-and-game-queue.md",
     "specs/decisions/0026-deliver-statkeeper-possession-control.md",
     "specs/decisions/0027-deliver-statkeeper-occurrence-corrections.md",
+    "specs/decisions/0028-deliver-statkeeper-review-and-preview.md",
     "specs/repo-standard.md",
     "docs/development.md",
     "docs/operations.md",
@@ -88,6 +89,10 @@ REQUIRED_FILES = (
     "src/courtside/services/read-statkeeper-game-queue.ts",
     "src/courtside/services/set-statkeeper-possession.ts",
     "src/courtside/services/correct-statkeeper-occurrence.ts",
+    "src/courtside/services/review-statkeeper-session.ts",
+    "src/courtside/core/statkeeper-coverage.ts",
+    "src/courtside/core/statkeeper-projection.ts",
+    "src/courtside/adapters/postgres/statkeeper-review-store.ts",
     "src/courtside/core/player-stat-line.ts",
     "src/courtside/core/statkeeper-canonical-json.ts",
     "src/courtside/core/statkeeper-event-ledger.ts",
@@ -162,6 +167,10 @@ REQUIRED_FILES = (
     "supabase/migrations/20260903120000_statkeeper_assignment_identity.sql",
     "supabase/migrations/20260903130000_statkeeper_possession_bases.sql",
     "supabase/migrations/20260904120000_statkeeper_occurrence_corrections.sql",
+    "supabase/migrations/20260905120000_statkeeper_review_coverage.sql",
+    "tests/unit/statkeeper-projection.test.ts",
+    "tests/fixtures/statkeeper-projection.ts",
+    "tests/fixtures/statkeeper-projection-canonical.json",
     "tests/unit/standings.test.ts",
     "tests/unit/roster.test.ts",
     "tests/unit/authentication.test.ts",
@@ -261,6 +270,7 @@ ACCEPTED_SPECS = (
     "specs/decisions/0025-deliver-statkeeper-authority-and-game-queue.md",
     "specs/decisions/0026-deliver-statkeeper-possession-control.md",
     "specs/decisions/0027-deliver-statkeeper-occurrence-corrections.md",
+    "specs/decisions/0028-deliver-statkeeper-review-and-preview.md",
 )
 STATKEEPER_EXPERIENCE_SPEC = "specs/statkeeper-capture-experience.md"
 STATKEEPER_DELIVERY_SPEC = "specs/statkeeper-initial-delivery.md"

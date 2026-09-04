@@ -8,6 +8,9 @@ import {PostgresStatkeeperOccurrenceStore} from '@/courtside/adapters/postgres/s
 import {PostgresStatkeeperOccurrenceCorrectionStore} from '@/courtside/adapters/postgres/statkeeper-occurrence-correction-store';
 import {PostgresStatkeeperPreflightStore} from '@/courtside/adapters/postgres/statkeeper-preflight-store';
 import {PostgresStatkeeperPossessionStore} from '@/courtside/adapters/postgres/statkeeper-possession-store';
+import {PostgresStatkeeperReviewStore} from '@/courtside/adapters/postgres/statkeeper-review-store';
+import {createStatkeeperReviewService, createStatkeeperProjectionPreviewService} from '@/courtside/services/review-statkeeper-session';
+import type {StatkeeperCoverageDeclaration} from '@/courtside/core/statkeeper-coverage';
 import {possessionBasisHash, type StatkeeperPossessionSequence} from '@/courtside/core/statkeeper-possession';
 import {createStatkeeperPossessionService, type SetStatkeeperPossessionCommand} from '@/courtside/services/set-statkeeper-possession';
 import {createStatkeeperProfileActivationService} from '@/courtside/services/activate-statkeeper-profile';
@@ -871,5 +874,160 @@ describeWithDatabase('PostgreSQL Statkeeper occurrence capture and possession co
     )).rejects.toMatchObject({code: '23505'});
     expect(await state()).toEqual(before);
     expect(await bases()).toHaveLength(2);
+  });
+
+  function reviewService(newId?: () => string) {
+    return createStatkeeperReviewService(new PostgresStatkeeperReviewStore(pool), {
+      now: () => new Date('2026-08-30T21:00:00Z'), ...(newId ? {newId} : {})
+    });
+  }
+  function reviewCommand(expectedLedgerVersion: number) {
+    return {type: 'submit_statkeeper_for_review' as const, commandId: randomUUID(), captureSessionId: ids.session,
+      actorAccountId: ids.statkeeperAccount, expectedLedgerVersion};
+  }
+  const completeCoverage: readonly StatkeeperCoverageDeclaration[] = [{coverageGroupKey: 'scoring', status: 'complete', gaps: []}];
+  function coverageCommand(expectedLedgerVersion: number, declarations = completeCoverage) {
+    return {...reviewCommand(expectedLedgerVersion), type: 'replace_statkeeper_coverage' as const, declarations};
+  }
+  function preview() {
+    return createStatkeeperProjectionPreviewService(new PostgresStatkeeperReviewStore(pool))({captureSessionId: ids.session, actorAccountId: ids.statkeeperAccount});
+  }
+
+  it('submits, declares coverage, and previews current totals and evidence without publishing any stats', async () => {
+    const captured = await service()(command(randomUUID()));
+    const submit = reviewCommand(captured.ledgerVersion);
+    expect(await reviewService()(submit)).toMatchObject({ledgerVersion: 4, lifecycleStatus: 'in_review'});
+    expect(await reviewService()(submit)).toMatchObject({receiptReused: true, ledgerVersion: 4});
+    const coverage = coverageCommand(4);
+    expect(await reviewService()(coverage)).toMatchObject({ledgerVersion: 5, coverageBasisId: expect.any(String)});
+    const before = await state();
+    const result = await preview();
+    expect(result.coverageStale).toBe(false);
+    expect(result.readyForVerification).toBe(true);
+    expect(result.playerLines[0]!.values[0]).toMatchObject({recordedValue: 2, coverageStatus: 'partial',
+      contributions: [{occurrenceId: ids.occurrence, occurrenceRevisionId: captured.occurrenceRevisionId, eventId: captured.eventIds[0]}]});
+    expect(result.discrepancyAcceptanceRequired).toBe(true);
+    expect(result.warnings.filter((w) => w.code === 'scoring_discrepancy')).toHaveLength(2);
+    expect((await preview()).projectionHash).toBe(result.projectionHash);
+    expect(await state()).toEqual(before);
+    expect((await pool.query('select * from player_stat_lines')).rows).toHaveLength(0);
+    expect((await pool.query('select distinct verification_state from statkeeper_occurrence_revisions')).rows).toEqual([{verification_state: 'recorded'}]);
+    expect(await reviewService()(coverage)).toMatchObject({receiptReused: true, ledgerVersion: 5});
+    await expect(reviewService()(coverageCommand(5))).rejects.toMatchObject({report: {violatedRule: 'statkeeper.coverage.no_change'}});
+    expect(await state()).toEqual(before);
+  });
+
+  it('invalidates coverage after correction and allows an identical declaration to reaffirm the new ledger', async () => {
+    const captured = await service()(command(randomUUID()));
+    await reviewService()(reviewCommand(3));
+    await reviewService()(coverageCommand(4));
+    const beforeHash = (await preview()).ledgerBasisHash;
+    // Revising to a missed shot removes the earlier automatic possession switch.
+    const revise = correctionCommand('revise_statkeeper_occurrence', captured.occurrenceRevisionId);
+    await createStatkeeperOccurrenceCorrectionService(new PostgresStatkeeperOccurrenceCorrectionStore(pool), {
+      now: () => new Date('2026-08-30T21:01:00Z')
+    })({...revise, expectedLedgerVersion: 5});
+    const stale = await preview();
+    expect(stale.coverageStale).toBe(true);
+    expect(stale.playerLines[0]!.values[0].recordedValue).toBeNull();
+    expect(stale.ledgerBasisHash).not.toBe(beforeHash);
+    await createStatkeeperReviewService(new PostgresStatkeeperReviewStore(pool), {now: () => new Date('2026-08-30T21:02:00Z')})(coverageCommand(6));
+    expect((await preview()).coverageStale).toBe(false);
+    expect((await pool.query('select reviewed_ledger_version from statkeeper_coverage_bases order by reviewed_ledger_version')).rows)
+      .toEqual([{reviewed_ledger_version: '5'}, {reviewed_ledger_version: '7'}]);
+  });
+
+  it('rejects empty review, wrong state, incomplete coverage, and altered retries without writes', async () => {
+    const before = await state();
+    await expect(reviewService()(reviewCommand(2))).rejects.toMatchObject({report: {violatedRule: 'statkeeper.review.active_occurrence_required'}});
+    await expect(reviewService()(coverageCommand(2))).rejects.toMatchObject({report: {violatedRule: 'statkeeper.review.state'}});
+    expect(await state()).toEqual(before);
+    await service()(command(randomUUID()));
+    const submit = reviewCommand(3);
+    await reviewService()(submit);
+    const accepted = await state();
+    await expect(reviewService()({...submit, expectedLedgerVersion: 4})).rejects.toMatchObject({report: {violatedRule: 'command.idempotency'}});
+    await expect(reviewService()(coverageCommand(4, []))).rejects.toMatchObject({report: {violatedRule: 'statkeeper.coverage.invalid'}});
+    expect(await state()).toEqual(accepted);
+  });
+
+  it('serializes competing coverage replacements so the losing writer cannot create a receipt', async () => {
+    await service()(command(randomUUID()));
+    await reviewService()(reviewCommand(3));
+    const results = await Promise.allSettled([reviewService()(coverageCommand(4)), reviewService()(coverageCommand(4))]);
+    expect(results.filter((r) => r.status === 'fulfilled')).toHaveLength(1);
+    const rejected = results.find((r) => r.status === 'rejected') as PromiseRejectedResult;
+    expect(rejected.reason).toMatchObject({report: {violatedRule: 'statkeeper.ledger.stale_version', currentLedgerVersion: 5}});
+    expect((await pool.query('select count(*)::int as count from statkeeper_coverage_bases')).rows[0].count).toBe(1);
+  });
+
+  it('checks current authority for review and preview while acknowledging identical prior acceptance', async () => {
+    await service()(command(randomUUID()));
+    const submit = reviewCommand(3);
+    await reviewService()(submit);
+    await pool.query("update league_statkeeper_assignments set revoked_at = '2026-08-30T21:01:00Z', revoked_by_account_id = $2 where id = $1", [ids.statkeeperAssignment, ids.adminAccount]);
+    const before = await state();
+    expect(await reviewService()(submit)).toMatchObject({receiptReused: true, ledgerVersion: 4});
+    for (const work of [() => reviewService()(coverageCommand(4)), () => preview()]) {
+      await expect(work()).rejects.toMatchObject({report: {violatedRule: 'authorization.statkeeper_or_league_admin_required'}});
+      try { await work(); } catch (error) { expect((error as {report: object}).report).not.toHaveProperty('currentLedgerVersion'); }
+    }
+    expect(await state()).toEqual(before);
+    expect(await createStatkeeperProjectionPreviewService(new PostgresStatkeeperReviewStore(pool))({captureSessionId: ids.session, actorAccountId: ids.adminAccount}))
+      .toMatchObject({ledgerVersion: 4});
+  });
+
+  it('rolls back coverage, lifecycle, ledger, audit, and receipt on late persistence failure', async () => {
+    await service()(command(randomUUID()));
+    const beforeSubmit = await state();
+    await expect(reviewService(() => ids.audit)(reviewCommand(3))).rejects.toMatchObject({code: '23505'});
+    expect(await state()).toEqual(beforeSubmit);
+    await reviewService()(reviewCommand(3));
+    const beforeCoverage = await state();
+    const generated = [randomUUID(), ids.audit];
+    await expect(reviewService(() => generated.shift()!)(coverageCommand(4))).rejects.toMatchObject({code: '23505'});
+    expect(await state()).toEqual(beforeCoverage);
+    expect((await pool.query('select * from statkeeper_coverage_bases')).rows).toHaveLength(0);
+    expect((await pool.query('select review_status from statkeeper_capture_session_coverage')).rows).toEqual([{review_status: 'not_reviewed'}]);
+  });
+
+  it('stores canonical gap history immutably, replays normalized retries, and denies browser database access', async () => {
+    await service()(command(randomUUID()));
+    await reviewService()(reviewCommand(3));
+    const gap = {reasonKey: 'other' as const, explanation: '  Se\u0301quence floue  ', period: null, clockRange: null, mediaRange: {startMs: 100, endMs: 200}};
+    const coverage = coverageCommand(4, [{coverageGroupKey: 'scoring', status: 'partial', gaps: [gap]}]);
+    const accepted = await reviewService()(coverage);
+    expect(await reviewService()({...coverage, declarations: [{coverageGroupKey: 'scoring', status: 'partial', gaps: [{...gap, explanation: 'Séquence floue'}]}]}))
+      .toMatchObject({receiptReused: true, coverageHash: accepted.coverageHash});
+    await expect(pool.query('delete from statkeeper_coverage_bases where id = $1', [accepted.coverageBasisId])).rejects.toThrow();
+    await expect(pool.query('update statkeeper_coverage_bases set declarations = declarations where id = $1', [accepted.coverageBasisId])).rejects.toThrow();
+    const permissions = await pool.query("select has_table_privilege('anon', 'statkeeper_coverage_bases', 'select') as anon, has_table_privilege('authenticated', 'statkeeper_coverage_bases', 'insert') as authenticated");
+    expect(permissions.rows[0]).toEqual({anon: false, authenticated: false});
+  });
+
+  it('reads one consistent preview snapshot across concurrent committed ledger changes', async () => {
+    await service()(command(randomUUID()));
+    const store = new PostgresStatkeeperReviewStore(pool);
+    await store.transaction(async (transaction) => {
+      const before = await transaction.loadSession(ids.session);
+      await reviewService()(reviewCommand(3));
+      const after = await transaction.loadSession(ids.session);
+      expect(after).toEqual(before);
+      expect(after!.basis.context.ledgerVersion).toBe(3);
+    }, {readOnly: true});
+    expect((await preview()).ledgerVersion).toBe(4);
+  });
+
+  it('rejects review of a session whose only occurrence is void and rejects terminal-state review writes', async () => {
+    const recorded = await service()(command(randomUUID()));
+    await correctionService()(correctionCommand('void_statkeeper_occurrence', recorded.occurrenceRevisionId));
+    await expect(reviewService()(reviewCommand(4))).rejects.toMatchObject({report: {violatedRule: 'statkeeper.review.active_occurrence_required'}});
+    for (const status of ['published', 'abandoned', 'verified']) {
+      await pool.query('update statkeeper_capture_sessions set lifecycle_status = $2 where id = $1', [ids.session, status]);
+      const before = await state();
+      await expect(reviewService()(coverageCommand(4))).rejects.toMatchObject({report: {violatedRule: 'statkeeper.review.state'}});
+      await expect(reviewService()(reviewCommand(4))).rejects.toMatchObject({report: {violatedRule: 'statkeeper.review.state'}});
+      expect(await state()).toEqual(before);
+    }
   });
 });
